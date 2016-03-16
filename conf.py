@@ -2,7 +2,7 @@
 # This is your configuration file.  Please write valid python!
 # See http://posativ.org/acrylamid/conf.py.html
 
-SITENAME = 'A descriptive blog title'
+SITENAME = 'Elijah\'s Webiste'
 WWW_ROOT = 'http://example.com/'
 
 AUTHOR = 'Anonymous'
