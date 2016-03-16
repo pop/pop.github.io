@@ -1,3 +1,5 @@
 .cache/
 .venv/
 output/
+.sass-cache/
+style.css.map
