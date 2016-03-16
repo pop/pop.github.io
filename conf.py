@@ -8,7 +8,9 @@ WWW_ROOT = 'http://example.com/'
 AUTHOR = 'Anonymous'
 EMAIL = 'mail@example.com'
 
-FILTERS = ['markdown+codehilite(css_class=highlight)', 'hyphenate', 'h1']
+STATIC = 'static'
+
+FILTERS = ['rst+codehilite(css_class=highlight)', 'hyphenate', 'h1']
 VIEWS = {
     '/:slug/': {'view': 'page', 'template': 'page.html'},
     '/blog/:slug/': {'views': ['entry', 'draft'], 'template': 'post.html'},
@@ -24,4 +26,4 @@ VIEWS = {
 
 THEME = 'theme'
 ENGINE = 'acrylamid.templates.jinja2.Environment'
-DATE_FORMAT = '%d.%m.%Y, %H:%M'
+DATE_FORMAT = '%Y-%m-%d'

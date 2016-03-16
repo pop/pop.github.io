@@ -97,7 +97,9 @@ footer {
     {% endblock %}
 
     <footer>
-      <p>Written by Me</p>
+      {% block footer %}
+      Written by Me |
+      {% endblock %}
     </footer>
   </div>
 <body>
