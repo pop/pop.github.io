@@ -1,5 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  post
+  <article>
+    {{ entry.content }}
+  </article>
+{% endblock %}
+
+{% block footer %}
+  This page last updated on <time datetime="{{ entry.date.strftime("%Y-%m-%d") }}">{{ entry.date.strftime("%Y-%m-%d") }}</time> |
+  {{ super() }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ super() }}
+    <li><a href="/blog">blog</a></li>
+    <li class="active"><a href="{{ entry.permalink }}">{{ entry.slug }}</a></li>
 {% endblock %}

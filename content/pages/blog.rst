@@ -1,5 +1,5 @@
 ---
-title: blogroll
+title: blog
 tags: blog blogroll posts
 date: 2016-03-16
 type: page
