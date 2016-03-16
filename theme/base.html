@@ -1,43 +1,104 @@
 <!DOCTYPE html>
-<html lang="{{ entry.lang if entry else conf.lang }}">
+<html>
 <head>
-  {% block head -%}
-  <meta charset="utf-8" />
-  <title>{% block title %}{% endblock %}</title>
-  <link media="all" href="{{ env.path + '/style.css' }}" rel="stylesheet" />
-  <link href="/favicon.ico" rel="shortcut icon" />
-    {% if 'sitemap' in env.views -%}
-        <link href="{{ env.views.sitemap.path }}" type="application/xml" rel="sitemap" title="Sitemap">
-    {%- endif%}
-  <link href="{{ env.path + '/' }}" rel="home start" />
-  <link href="{{ env.path + '/atom/' }}" type="application/atom+xml" rel="alternate" title="Atom Feed" />
-  <link href="{{ env.path + '/rss/' }}" type="application/rss+xml" rel="alternate" title="RSS Feed" />
-  <!--[if lt IE 9]>
-    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
-  {%- endblock %}
+<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js ></script>
+<style>
+.main {
+  margin: 0 auto;
+  width: 95%;
+  max-width: 1000px;
+}
+nav {
+  padding-top: 1em;
+  width: 100%;
+}
+footer {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  border-top: .1em solid;
+}
+.banner {
+  margin: 0 0 0 0;
+}
+.banner img {
+  width: 100%;
+  position: relative;
+  z-index: -1;
+}
+.banner h1 {
+  position: absolute;
+  z-index: 1;
+  color: white;
+  opacity: 0.75;
+  font-size: 3em;
+}
+.banner:hover h1 {
+  position: absolute;
+  z-index: 1;
+  color: white;
+  opacity: 1;
+  font-size: 3em;
+}
+.my-buttons {
+  padding-right: 1em;
+}
+</style>
 </head>
-<body>
-  <header>
-    <h1><a href="{{ env.path + '/' }}" rel="home start" class="blogtitle">{{ conf.sitename }}</a></h1>
-    <nav>
-      <ul>
-        <li><a href="{{ env.path + '/' }}" rel="home start">blog</a></li>
-        <li><a href="{{ env.path + '/atom/' }}" rel="alternate">atom</a></li>
-        <li><a href="{{ env.path + '/rss/' }}" rel="alternate">rss</a></li>
-        <li><a href="{{ env.path + '/articles/' }}" rel="contents">articles</a></li>
-      </ul>
-    </nav>
-  </header>
-  {%- block content -%}
-  {%- endblock -%}
-  <footer>
-    {% block footer %}
-    <p>written by <a href="mailto:{{ conf.email }}">{{ conf.author }}</a></p>
-    <a href="http://creativecommons.org/licenses/by-nc-sa/2.0/de/" rel="copyright license">
-        <img src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" alt="by-nc-sa" />
-    </a>
-    {% endblock %}
-  </footer>
 </body>
+  <div class="main">
+    <a href="#">
+    <div class="banner">
+      <h1 class="banner">Elijah C. Voigt</h1>
+      <img src="https://farm6.staticflickr.com/5813/20476814090_97752519fb_o.jpg" class="banner"></img>
+    </div>
+    </a>
+    <nav>
+      <div class="dropdown navbar-right my-buttons">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default">Main</button>
+          <button type="button" class="btn btn-info">Blog</button>
+          <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuMore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            More
+          <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuMore">
+            <li><a  href="#">Reading</a></li>
+            <li><a  href="#">Liveblog</a></li>
+            <li><a  href="#">NaNoWriMo</a></li>
+            <li  role="separator"  class="divider"></li>
+            <li><a  href="#">Code</a></li>
+            <li><a  href="#">Video</a></li>
+            <li><a  href="#">Render</a></li>
+            <li  role="separator"  class="divider"></li>
+            <li><a  href="#">Open  Soruce  Lab</a></li>
+            <li><a  href="#">Linux  Users  Group</a></li>
+          </ul>
+        </div>
+        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuLinks" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          Links
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLinks">
+          <li><a href="#">Github</a></li>
+          <li role="separator" class="divider"></li>
+          <li><a href="#">Resume</a></li>
+        </ul>
+      </div>
+      <ol class="breadcrumb">
+        <li><a href="#">Elijah C.</a></li>
+        <li class="active">Main</li>
+      </ol>
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+
+    <footer>
+      <p>Written by Me</p>
+    </footer>
+  </div>
+<body>
 </html>
