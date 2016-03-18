@@ -2,17 +2,18 @@
 # This is your configuration file.  Please write valid python!
 # See http://posativ.org/acrylamid/conf.py.html
 
-SITENAME = 'Elijah\'s Webiste'
-WWW_ROOT = 'http://example.com/'
+SITENAME = 'Elijah\'s Website'
+WWW_ROOT = 'http://elijahcaine.me/'
 
-AUTHOR = 'Anonymous'
-EMAIL = 'mail@example.com'
+AUTHOR = 'Elijah Caine'
+EMAIL = 'elijahcainemv@gmail.com'
 
 STATIC = 'static'
+CONTENT_IGNORE = ['*.swp', '*.swo']
 
 FILTERS = ['rst+codehilite(css_class=highlight)', 'hyphenate', 'h1']
 VIEWS = {
-    '/:slug/': {'view': 'page', 'template': 'page.html'},
+    '/:slug/': {'filters': ['h2', 'nohyphenate'], 'view': 'page', 'template': 'page.html'},
     '/blog/:slug/': {'views': ['entry', 'draft'], 'template': 'post.html'},
 
     '/atom/': {'filters': ['h2', 'nohyphenate'], 'view': 'atom'},

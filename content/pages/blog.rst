@@ -7,7 +7,7 @@ filters: jinja2
 ---
 
 {% for entry in env.globals.entrylist %}
-* `{{ entry.title }}`_
+* {{ entry.date.strftime("%Y-%m-%d") }} `{{ entry.title }}`_
 {% endfor %}
 
 {% for entry in env.globals.entrylist %}
