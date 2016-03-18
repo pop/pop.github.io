@@ -1,0 +1,13 @@
+---
+title: 404
+date: 2016-03-18
+tags: page 404
+type: page
+permalink: 404.html
+---
+
+You seem to have found something you weren't supposed to.
+
+`Let's take you home now.`_
+
+.. _Let's take you home now.: /
