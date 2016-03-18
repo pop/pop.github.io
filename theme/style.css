@@ -16,6 +16,9 @@ footer {
 .banner {
   margin: 0 0 0 0; }
 
+.banner:hover {
+  margin: 0 0 0 0; }
+
 .banner img {
   width: 100%;
   position: relative;
@@ -25,15 +28,17 @@ footer {
   position: absolute;
   z-index: 1;
   color: white;
-  opacity: 0.75;
-  font-size: 3em; }
+  font-size: 3em;
+  margin: 1em;
+  opacity: 0.7; }
 
 .banner:hover h1 {
   position: absolute;
   z-index: 1;
   color: white;
   opacity: 1;
-  font-size: 3em; }
+  font-size: 3em;
+  margin: 1em; }
 
 .my-buttons {
   padding-right: 1em; }

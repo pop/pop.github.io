@@ -3,3 +3,5 @@
 output/
 .sass-cache/
 style.css.map
+.*.swo
+.*.swp
