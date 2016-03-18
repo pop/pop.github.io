@@ -28,7 +28,7 @@
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuMore">
             <li><a href="#">reading</a></li>
-            <li><a href="#">liveblog</a></li>
+            <li><a href="/liveblog/">liveblog</a></li>
             <!--li><a href="#">naNoWriMo</a></li-->
             <li role="separator"  class="divider"></li>
             <li><a href="/code/">code</a></li>
@@ -54,6 +54,12 @@
       <ol class="breadcrumb">
         {% block breadcrumb %}
         <li><a href="/">elijahcaine.me</a></li>
+        {% if env.type == 'entry' %}
+          <li class="active"><a href="/blog/">blog</a></li>
+        {% elif env.route.startswith('/liveblog/') %}
+          <li class="active"><a href="/liveblog/">liveblog</a></li>
+        {% endif %}
+        <li class="active"><a href="{{ entry.permalink }}">{{ entry.slug }}</a></li>
         {% endblock %}
       </ol>
     </nav>

@@ -13,7 +13,8 @@ CONTENT_IGNORE = ['*.swp', '*.swo']
 
 FILTERS = ['rst+codehilite(css_class=highlight)', 'hyphenate', 'h1']
 VIEWS = {
-    '/:slug/': {'filters': ['h2', 'nohyphenate'], 'view': 'page', 'template': 'page.html'},
+    '/:slug/': {'filters': ['h2', 'nohyphenate'], 'view': 'page', 'template': 'page.html', 'if': lambda e: not 'liveblog' in e.tags},
+    '/liveblog/:slug/': {'filters': ['h2', 'nohyphenate'], 'view': 'page', 'template': 'page.html', 'if': lambda e: 'liveblog' in e.tags},
     '/blog/:slug/': {'views': ['entry', 'draft'], 'template': 'post.html'},
 
     '/atom/': {'filters': ['h2', 'nohyphenate'], 'view': 'atom'},

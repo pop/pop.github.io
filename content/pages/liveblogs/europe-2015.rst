@@ -1,13 +1,9 @@
 ---
-title: liveblog
+title: Euro-trip Well-After-The-Fact Blog
 date: 2015-09-19
 type: page
 tags: liveblog
-permalink: /liveblog/europe-2015/
 ---
-
-Euro-trip Well-After-The-Fact Blog
-==================================
 
 `My`_ little liveblog / travelblog thing, covering everything 
 leading up to and including my trip to Amsterdam and Prague to 
@@ -33,10 +29,10 @@ a bit delayed getting finished.
 
 
 Saturday 2015-08-01
--------------------
+===================
 
 About the blog (this is a test)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------
 
 This blog was created in preparation for my trip to Europe in about 3 weeks. I
 wanted to see how difficult it would be to make a blog that could be updated on
@@ -64,7 +60,7 @@ character limit of Twitter.
 ----
 
 Sunday 2015-08-02
------------------
+=================
 
 All of my travel is booked, plane tickets are bought, and vacation time gotten.
 
@@ -73,10 +69,10 @@ The only thing left to do now is to write the talk. Easy-peasy.
 ----
 
 Sunday 2015-08-23
------------------
+=================
 
 All Packed
-~~~~~~~~~~
+----------
 
 So I'm all packed up and ready to go.
 
@@ -101,10 +97,10 @@ enough for you to ask.)
 ----
 
 Monday 2015-08-24 & Tuesday 2015-08-24
---------------------------------------
+======================================
 
 PDX -> AMS
-~~~~~~~~~~
+----------
 
 The flight was uneventful. It was the longest one I've ever been on, which is
 always a rough milestone to overcome, but actually one of the better flights
@@ -120,7 +116,7 @@ I've wanted to watch that show for ages...
 So good.
 
 Day 0: Part 1 
-~~~~~~~~~~~~~ 
+------------- 
 
 So I wrote down some thoughts about Amsterdam thus far: 
 
@@ -158,7 +154,7 @@ Here's some pictures I took:
 Aaaaaaaand naptime. 
 
 Day 0: Part 2 
-~~~~~~~~~~~~~ 
+------------- 
 
 I finished today by going to the Red Light District. There 
 were a lot of half naked ladies in windows. They kept winking 
@@ -180,10 +176,10 @@ It tasted `surprisingly good`_
 ----
 
 Wednesday 2015-08-26 
--------------------- 
+==================== 
 
 The Rijks Museum 
-~~~~~~~~~~~~~~~~ 
+---------------- 
 
 .. figure:: http://i.imgur.com/Dn4BeWt.jpg
     :align: center
@@ -219,7 +215,7 @@ And this is a classy restaurant I found with classy lamps.
 *They were closed, otherwise I would have gone in.*
 
 Some Travel Tips 
-~~~~~~~~~~~~~~~~ 
+---------------- 
 
 Although I have not completed my trip, I have some tips to share 
 with you about travel. 
@@ -239,7 +235,7 @@ with you about travel.
 ----
 
 Thursday 2015-08-27
--------------------
+===================
 
 Today I visited the Van Gough museum. I tried to get in using my mom's
 Amsterdam Museum Pass, but it didn't fly there like it did at the Rijks. 
@@ -256,10 +252,10 @@ of walking = ready for bed by 3pm.
 ----
 
 Friday 2015-08-28 
------------------ 
+================= 
 
 My Butt Hurts... 
-~~~~~~~~~~~~~~~~ 
+---------------- 
 
 Today I went on an awesome bike ride all the way to Haarlem (15km west of
 Amsterdam). I didn't actually do anything there; I just went, picked up snacks,
@@ -301,7 +297,7 @@ genius.*
 After the bike ride I was very tired. I slept a lot. And yet not enough... 
 
 Small (and Large) Appreciations 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------
 
 Here is a list of some of the traits of Amsterdam (and what I have experienced
 of the Netherlands at large) which I appreciate. 
@@ -318,10 +314,10 @@ and the country. You should visit if you haven't already.
 ----
 
 Saturday 2015-08-29 
-------------------- 
+=================== 
 
 I Strongly Dislike Travel 
-~~~~~~~~~~~~~~~~~~~~~~~~~ 
+------------------------- 
 
 I would say I hate travel, but that level of hyperbole is literally the worst
 thing on the planet... 
@@ -341,7 +337,7 @@ eat a proper meal the morning of.
 regret nothing. 
 
 Currency is Weird 
-~~~~~~~~~~~~~~~~~~
+------------------
 
 .. figure:: http://i.imgur.com/ggDSMW9.jpg 
     :align: center 
@@ -351,7 +347,7 @@ It is going to take me forever to remember *25 here monies is about 1 home
 monies*. Everything is gonna feel really expensive I bet... 
 
 I Made it to Prague
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
 I made it to Prague just fine. They have a cool train system.
 
@@ -364,10 +360,10 @@ Way cooler than the underground train systems I'm used to...
 ----
 
 Sunday 2015-08-30 
------------------
+=================
 
 Prague Day 1
-~~~~~~~~~~~~
+------------
 
 I went on a wonderful `city tour`_ of Prague provided by Write The Docs. We
 crossed some bridges, saw some castles, and experienced many wonderful parts of
@@ -414,10 +410,10 @@ I did not have a hard time falling asleep that night.
 ----
 
 Monday 2015-08-31
------------------
+=================
 
 Write the Docs: Day 1
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
 I spent most of today enjoying the Write the Docs talks and (air 
 conditioned) venue. I took some notes. 
@@ -463,10 +459,10 @@ conversations and laughs were had. I like this crowd.
 ----
 
 Tuesday 2015-08-31
-------------------
+==================
 
 Write the Docs: Day 2
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 Just like yesterday, I spent most of today enjoying some wonderful talks as
 well as stressing out -- I mean totally not stressing out -- about my own talk.
@@ -535,10 +531,10 @@ Network`_ writer, both very interesting people.
 ----
 
 Wednesday 2015-09-02.rst
-------------------------
+========================
 
 A Personal Day in Prague: (Almost) Just Pictures\*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------------------
 
 .. figure:: http://i.imgur.com/cK5h4Yp.jpg
     :alt: Charles Bridge
@@ -578,10 +574,10 @@ capture it better.
 ----
 
 Thursday 2015-09-03
--------------------
+===================
 
 Travel Travel Travel
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 Travel travel travel travel travel travel travel travel travel travel travel
 travel travel travel travel travel travel travel travel travel travel travel.

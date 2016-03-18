@@ -1,20 +1,29 @@
 ---
-title: liveblogs
-date: 2015-09-29
-tags: liveblog page
+title: liveblog
+date: 2016-03-17
+tags: meta-livebblog page
 type: page
 filters: jinja2
 ---
 
+When I do something exciting I try to document the experience in *Real Time™*
+to help reflect and articulate my thoughts and feelings about the experience.
+This page is a compilation of those *liveblogs* as I have chosen to call them.
 
-{% for page in env.globals.pages %}
-{% if env.permalink != page.permalink %}
-`{{ page.title }}`_
-{% endif %}
+Current Adventure
+=================
+
+.. class:: align-center
+
+    **HTTP Error 204: No Content**
+
+Past Adventure
+==============
+
+{% for page in env.globals.pages if 'liveblog' in page.tags %}
+* `{{ page.title }}`_
 {% endfor %}
 
-{% for page in env.globals.pages %}
-{% if env.permalink != page.permalink %}
+{% for page in env.globals.pages if 'liveblog' in page.tags %}
 .. _{{ page.title }}: {{ page.permalink }}
-{% endif %}
 {% endfor %}

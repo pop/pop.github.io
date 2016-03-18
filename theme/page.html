@@ -7,6 +7,12 @@
               <a href="{{ env.path + entry.permalink }}" rel="bookmark canonical">{{ entry.title }}</a>
           </h1>
       </header>
+
+  {% for tag in env.tags %}
+      {{ tag }}
+      {{ env.tags }}
+  {% endfor %}
+
       {{ entry.content }}
 
   </article>
@@ -15,9 +21,4 @@
 {% block footer %}
   This page last updated on <time datetime="{{ entry.date.strftime("%Y-%m-%d") }}">{{ entry.date.strftime("%Y-%m-%d") }}</time> |
   {{ super() }}
-{% endblock %}
-
-{% block breadcrumb %}
-    {{ super() }}
-    <li class="active"><a href="{{ entry.permalink }}">{{ entry.title }}</a></li>
 {% endblock %}
