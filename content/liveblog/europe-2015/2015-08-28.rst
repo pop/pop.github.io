@@ -1,6 +1,6 @@
 ---
 title: A Very Long Bike Ride
-date: 2016-08-28
+date: 2015-08-28
 tags: [liveblog, europe-2015]
 type: entry
 ---

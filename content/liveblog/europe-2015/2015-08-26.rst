@@ -1,7 +1,7 @@
 ---
 title: The Rijks Museum and Travel Tips
-date: 2016-08-26
-tags: [liveblog, europe-2015]
+date: 2015-08-26
+tags: [liveblog-entry, europe-2015]
 type: entry
 ---
 

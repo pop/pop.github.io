@@ -1,7 +1,7 @@
 ---
 title: Dominos are setup
-date: 2016-08-02
-tags: [liveblog, europe-2015]
+date: 2015-08-02
+tags: [liveblog-entry, europe-2015]
 type: entry
 ---
 

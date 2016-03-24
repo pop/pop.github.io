@@ -51,17 +51,6 @@
           <li><a href="/resume.pdf">Resume</a></li>
         </ul>
       </div>
-      <ol class="breadcrumb">
-        {% block breadcrumb %}
-        <li><a href="/">elijahcaine.me</a></li>
-        {% if env.type == 'entry' %}
-          <li class="active"><a href="/blog/">blog</a></li>
-        {% elif env.route.startswith('/liveblog/') %}
-          <li class="active"><a href="/liveblog/">liveblog</a></li>
-        {% endif %}
-        <li class="active"><a href="{{ entry.permalink }}">{{ entry.slug }}</a></li>
-        {% endblock %}
-      </ol>
     </nav>
 
     {% block content %}

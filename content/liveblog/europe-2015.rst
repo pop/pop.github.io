@@ -1,8 +1,8 @@
 ---
-title: Euro-trip Well-After-The-Fact Blog
+title: Europe 2015
 date: 2015-09-19
 type: page
-tags: [liveblog-meta, europe-2015-meta]
+tags: [liveblog-adventure]
 filters: jinja2
 ---
 

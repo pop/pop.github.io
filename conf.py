@@ -14,19 +14,61 @@ CONTENT_IGNORE = ['.*.swp', '.*.swo', '*.scss~', '.sass-cache/', '*.map']
 FILTERS = ['rst+codehilite(css_class=highlight)', 'hyphenate', 'h1']
 VIEWS = {
     # main pages
-    '/:slug/': {'filters': ['h2', 'nohyphenate'], 'view': 'page', 'template': 'page.html', 'if': lambda e: 'page' == e.type},
+    '/:slug/':
+    {
+        'filters': ['h2', 'nohyphenate'],
+        'view': 'page',
+        'template': 'page.html',
+        'if': lambda e: 'page' == e.type and 'liveblog-meta' not in e.tags,
+    },
 
-    # liveblog(s)
-    '/liveblog/:slug/': {'filters': ['h2', 'nohyphenate'], 'view': 'page', 'template': 'page.html', 'if': lambda e: 'liveblog-meta' in e.tags},
-    '/liveblog/europe-2015/:slug/': {'views': ['entry', 'draft'], 'template': 'post.html', 'if': lambda e: 'liveblog' in e.tags},
+    # blog posts pages
+    '/blog/:slug/':
+    {
+        'view': 'entry',
+        'template': 'post.html',
+        'if': lambda e: 'blogpost' in e.tags,
+    },
 
-    # blog posts
-    '/blog/:slug/': {'views': ['entry', 'draft'], 'template': 'post.html', 'if': lambda e: 'blog' in e.tags},
 
-    '/atom/': {'filters': ['h2', 'nohyphenate'], 'view': 'atom'},
-    '/rss/': {'filters': ['h2', 'nohyphenate'], 'view': 'rss'},
+    # liveblog related stuffs
+    '/liveblog/:slug/':
+    {
+        'filters': 'h2',
+        'view': 'page',
+        'template': 'page.html',
+        'if': lambda e: 'liveblog-adventure' in e.tags,
+    },
+    '/liveblog/europe-2015/:slug/':
+    {
+        'view': 'entry',
+        'template': 'post.html',
+        'if': lambda e: 'europe-2015' in e.tags,
+    },
 
-    '/sitemap.xml': {'view': 'sitemap'},
+    # comics related stuffs
+    '/comics/:slug/':
+    {
+        'view': 'entry',
+        'template': 'post.html',
+        'if': lambda e: 'comic' in e.tags,
+    },
+
+    '/atom/':
+    {
+        'filters': ['h2', 'nohyphenate'],
+        'view': 'atom',
+    },
+    '/rss/':
+    {
+        'filters': ['h2', 'nohyphenate'],
+        'view': 'rss',
+    },
+
+    '/sitemap.xml':
+    {
+        'view': 'sitemap',
+    },
 
     #'/tag/:name/': {'filters': 'summarize', 'view':'tag',
     #                'pagination': '/tag/:name/:num/'},
@@ -35,3 +77,7 @@ VIEWS = {
 THEME = 'theme'
 ENGINE = 'acrylamid.templates.jinja2.Environment'
 DATE_FORMAT = '%Y-%m-%d'
+DEPLOYMENT = {
+    'site': 'bash gh-build.sh',
+    'blog': 'bash gh-build.sh',
+}

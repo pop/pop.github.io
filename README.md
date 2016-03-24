@@ -33,6 +33,9 @@ $ acrylamid autocompile
 This will re-build new changes as they are made. You can access a live version
 of the site in your browser at localhost:8000.
 
+**Note:** The ``requirements.txt`` file currently installs a patched version of
+acrylamid. Just... know that in case it becomes important.
+
 ### Building CSS
 
 The CSS is generated using the [`sass` rubygem](http://sass-lang.com/). You can

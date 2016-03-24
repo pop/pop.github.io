@@ -1,7 +1,7 @@
 ---
 title: A Personal Day in Prague
-date: 2016-09-02
-tags: [liveblog, europe-2015]
+date: 2015-09-02
+tags: [liveblog-entry, europe-2015]
 type: entry
 ---
 

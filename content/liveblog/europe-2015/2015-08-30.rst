@@ -1,7 +1,7 @@
 ---
 title: WTD City Tour of Prague
-date: 2016-08-30
-tags: [liveblog, europe-2015]
+date: 2015-08-30
+tags: [liveblog-entry, europe-2015]
 type: entry
 ---
 
