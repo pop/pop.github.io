@@ -32,7 +32,7 @@ Posts from this Adventure:
 --------------------------
 
 {% for entry in env.globals.entrylist if 'europe-2015' in entry.tags %}
-* `{{ entry.title }}`_
+* {{ entry.date.strftime("%Y-%m-%d") }} `{{ entry.title }}`_
 {% endfor %}
 
 {% for entry in env.globals.entrylist if 'europe-2015' in entry.tags %}
