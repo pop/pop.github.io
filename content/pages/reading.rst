@@ -2,7 +2,7 @@
 title: reading
 date: 2016-03-17
 type: page
-tags: page reading
+tags: [reading]
 ---
 
 Books

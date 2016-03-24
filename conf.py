@@ -13,9 +13,15 @@ CONTENT_IGNORE = ['.*.swp', '.*.swo', '*.scss~', '.sass-cache/', '*.map']
 
 FILTERS = ['rst+codehilite(css_class=highlight)', 'hyphenate', 'h1']
 VIEWS = {
-    '/:slug/': {'filters': ['h2', 'nohyphenate'], 'view': 'page', 'template': 'page.html', 'if': lambda e: not 'liveblog' in e.tags},
-    '/liveblog/:slug/': {'filters': ['h2', 'nohyphenate'], 'view': 'page', 'template': 'page.html', 'if': lambda e: 'liveblog' in e.tags},
-    '/blog/:slug/': {'views': ['entry', 'draft'], 'template': 'post.html'},
+    # main pages
+    '/:slug/': {'filters': ['h2', 'nohyphenate'], 'view': 'page', 'template': 'page.html', 'if': lambda e: 'page' == e.type},
+
+    # liveblog(s)
+    '/liveblog/:slug/': {'filters': ['h2', 'nohyphenate'], 'view': 'page', 'template': 'page.html', 'if': lambda e: 'liveblog-meta' in e.tags},
+    '/liveblog/europe-2015/:slug/': {'views': ['entry', 'draft'], 'template': 'post.html', 'if': lambda e: 'liveblog' in e.tags},
+
+    # blog posts
+    '/blog/:slug/': {'views': ['entry', 'draft'], 'template': 'post.html', 'if': lambda e: 'blog' in e.tags},
 
     '/atom/': {'filters': ['h2', 'nohyphenate'], 'view': 'atom'},
     '/rss/': {'filters': ['h2', 'nohyphenate'], 'view': 'rss'},

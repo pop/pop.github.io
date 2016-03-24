@@ -2,7 +2,7 @@
 title: osl
 type: page
 date: 2016-03-16
-tags: foss open-source-lab page
+tags: [foss, open-source-lab]
 ---
 
 .. figure:: http://osuosl.org/sites/default/files/osllogo-print_0.png

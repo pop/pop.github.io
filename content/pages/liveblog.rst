@@ -1,7 +1,7 @@
 ---
 title: liveblog
 date: 2016-03-17
-tags: meta-livebblog page
+tags: [liveblog-home]
 type: page
 filters: jinja2
 ---
@@ -20,10 +20,10 @@ Current Adventure
 Past Adventure
 ==============
 
-{% for page in env.globals.pages if 'liveblog' in page.tags %}
+{% for page in env.globals.pages if 'liveblog-meta' in page.tags %}
 * `{{ page.title }}`_
 {% endfor %}
 
-{% for page in env.globals.pages if 'liveblog' in page.tags %}
+{% for page in env.globals.pages if 'liveblog-meta' in page.tags %}
 .. _{{ page.title }}: {{ page.permalink }}
 {% endfor %}

@@ -1,7 +1,7 @@
 ---
 title: How to Write a Book with reStructuredText
 date: 2016-04-01
-tags: writing reStructuredText nanowrimo
+tags: [blog, writing, technical]
 draft: true
 type: entry
 draft: true

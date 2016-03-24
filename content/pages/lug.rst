@@ -2,7 +2,7 @@
 title: lug
 type: page
 date: 2016-03-16
-tags: foss linux-users-group lug page
+tags: [foss, linux-users-group, lug]
 ---
 
 .. figure:: https://upload.wikimedia.org/wikipedia/commons/a/af/Tux.png

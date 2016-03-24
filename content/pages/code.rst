@@ -2,7 +2,7 @@
 title: code
 type: page
 date: 2016-03-16
-tags: code page
+tags: [code]
 ---
 
 Below is a curated list of my development endeavors:

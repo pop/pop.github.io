@@ -2,7 +2,7 @@
 title: renders
 type: page
 date: 2016-03-16
-tags: page cgi renders media
+tags: [cgi, renders media]
 ---
 
 .. raw:: html

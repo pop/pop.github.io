@@ -2,7 +2,7 @@
 title: other
 type: page
 date: 2016-03-16
-tags: other page miscellaneous
+tags: [other, miscellaneous]
 ---
 
 I'm really not sure this deserves it's own page, but here's a list of
