@@ -5,3 +5,4 @@ output/
 style.css.map
 .*.swo
 .*.swp
+dist/

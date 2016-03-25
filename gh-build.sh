@@ -1,6 +1,8 @@
 #!/bin/bash
 VENV='.venv'
 
+rm -rf output/ .cache/
+
 source $VENV/bin/activate
 acrylamid compile
 sass --update theme/style.scss:theme/style.css
