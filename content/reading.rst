@@ -8,20 +8,22 @@ tags: [reading]
 Books
 -----
 
-I am currently making my way through `The Name of the Rose`_ by `Umberto Eco`_.
+I am currently making my way through `The Stand`_ by `Stephen King`_.  I opted
+to get the 1990's updated version because I figure if I was already going to
+read 823 pages I might as well read the 200 more he added -- and enjoy the 90's
+pop culture references instead of stale old 80's references!  About 100 pages
+in I like it a lot.  Atmosphere building at it's best.
 
-.. figure:: https://upload.wikimedia.org/wikipedia/en/e/eb/The_Name_of_the_Rose.jpg
-    :target: https://en.wikipedia.org/wiki/The_Name_of_the_Rose
+.. figure:: https://upload.wikimedia.org/wikipedia/en/9/96/The_Stand_cover.jpg
     :align: center
-    :alt: The Name of the Rose Cover
+    :target: https://en.wikipedia.org/wiki/The_Stand
+    :alt: The Stand released 1978 by Stephen King
 
-Protip: read it with Sean Connery's voice. 10/10 enjoyment.
-
-.. _The Name of the Rose: https://en.wikipedia.org/wiki/The_Name_of_the_Rose
-.. _Umberto Eco: https://en.wikipedia.org/wiki/Umberto_Eco
+.. _The Stand: https://en.wikipedia.org/wiki/The_Stand
+.. _Stephen King: https://en.wikipedia.org/wiki/Stephen_King
 
 ----
 
 *If you are looking for the book club I used to run at this same URL, I'm sorry
-to say that it is currently defunct. If you would like to resurrect said book
+to say that it is currently defunct.  If you would like to resurrect said book
 club, contact me and we can try to make that happen.*
