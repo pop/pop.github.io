@@ -27,15 +27,16 @@ footer {
 
 .banner {
   margin: 0 0 0 0;
+  position: relative;
 }
 
 .banner:hover {
   margin: 0 0 0 0;
+  position: relative;
 }
 
 .banner img {
   width: 100%;
-  position: relative;
   z-index: -1;
 }
 
@@ -56,6 +57,18 @@ footer {
   font-size: 3em;
   margin: 1em;
 }
+
+.avatar {
+  position: absolute;
+  width: 20%;
+  height: 20%;
+  max-height: 200px;
+  max-width: 200px;
+  margin: 1em;
+  right: 0px;
+  z-index: 0;
+}
+
 
 .my-buttons {
   padding-right: 1em;
