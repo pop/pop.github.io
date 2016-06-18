@@ -1,6 +1,6 @@
 ---
 title: Working Remote - The Fresh Pot
-date: 2016-05-14
+date: 2016-05-16
 tags: [blogpost, working remote, cafe, scam story]
 type: entry
 draft: false
@@ -26,6 +26,7 @@ Stats
 - **Time-frame:** Thursday Afternoon.  ~2 hrs
 - **Service:** Good.
 - **Distractions:** Low volume music.  Minor chitchat.
+- **Pricing:** Medium black coffee (one full mug) was $2 and included a free refill.
 
 .. _The Fresh Pot: http://hawthornepdx.com/item/the-fresh-pot/
 
