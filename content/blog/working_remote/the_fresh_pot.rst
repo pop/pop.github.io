@@ -49,10 +49,10 @@ say the IRS? I meant some asshole scammers.  Here's that story, because why not?
 The IRS Scam Story
 ------------------
 
-**The scene:** The Fresh Pot Cafe, Wednesday afternoon.  Not loud but not quiet
+**The scene:** The Fresh Pot Cafe, Thursday afternoon.  Not loud but not quiet
 either.  I get a call from ``(360) 208-0783`` with a robotic voice claiming
 something along the lines of *"You are being super-audited. The IRS is going to
-rip you a financial new one uness you call back asap"*.  I am not jaded *yet*
+rip you a financial new one unless you call back asap"*.  I am not jaded *yet*
 so I call back right away.
 
 I end up reaching a man with an Indian accent claiming to be...  let me check
