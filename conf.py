@@ -30,7 +30,6 @@ VIEWS = {
         'if': lambda e: 'blogpost' in e.tags,
     },
 
-
     # liveblog related stuffs
     '/liveblog/:slug/':
     {

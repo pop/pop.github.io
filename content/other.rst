@@ -1,43 +1,60 @@
 ---
 title: other
 type: page
-date: 2016-03-16
-tags: [other, miscellaneous]
+date: 2016-06-17
+tags: [other, miscellaneous, scratch paper]
 ---
 
-I'm really not sure this deserves it's own page, but here's a list of
+Welcome to my scratch-paper on the web for things that neither deserve to be
+put front and center nor forgotten on a hard drive.  If you like something,
+tweet at me `@PastyWhiteNoise`_.
 
-A List of Awesome Things!\*
-===========================
+.. _@PastyWhiteNoise: https://twitter.com/PastyWhiteNoise
 
-This is an ever growing list of some things which I believe are the bees knees and are 100% worth sharing.
+Character Study: The *'Try New Things'* Couple
+----------------------------------------------
 
-\* Curated by myself, Elijah.
+Gwendolyn and Stefan love to try new things.  Not like... *sex things*, but
+like *lifestyle things*.  Take, for example, Gwendolyn decided last week that
+she would love to see what life was like if she and Stefan only shared **one**
+bowl, plate, cup, fork, knife, spoon, and pan for a month. She didn't really
+have a good reason for *why* at the time, it's not like she read it in a
+magazine or anything, but they're young and into wacky stuff like that.  Stefan
+always participates in these and likes talking about their *adventures* as
+they're happening, but never proposes ideas of his own.
 
-Programming is a pretty broad topic, with a huge range of guides and helpful
-information. Here's a list of resources I find to be especially useful.
+Gwendolyn requires that people use the full *Gwendolyn* and not *Gwen* and has
+been known to **halt** conversations if people don't. She feels was confident
+that she loves Stefan three times more than he loves her.  She wasn't sure why
+she felt that way, or where three times came from, but it had always been her
+hunch.  Since she's never been able to confirm or deny it, she has kept on
+believing it; this puts her in an artificially smug mood whenever she
+sacrifices something for Stefan, like the 5% markup on the organic foods
+because he prefers them.
 
-`Why's Poignant guide to Ruby`_
--------------------------------
+Stefan previously refereed to her as *Gwen* internally but forced himself to
+adapt after a few preventable meltdowns.  He hasn't ever really considered how
+much he loves Gwendolyn, but he regularly thinks about the house they'll buy
+together in a few years.  There isn't actually a specific house they're
+thinking about, but he still enjoys the fantasy; some women dream of their
+wedding day and Stefan dreams of his move-in day.  Year after year they've
+stayed in the same mid-town loft and will never did move into that house.
 
-I'm not a particularly big fan of Ruby, but I do enjoy this guide. For
-anybody looking for an introduction to programming at large or Ruby
-specifically, this is a great place to start.
+They both definitely **love** each other to the extent that any
+twenty-somethings can love one another while still collectively managing to
+avoid the question of marriage.  They will eventually break-up, not because of
+any one event or central cause, but because people grow up and grow apart.
+It's never anybody's fault, it's just how the wind blows.  Some people's
+connections are able to persevere that inevitable break, but this connection
+will not.  Gwendolyn knows this and in the back of her head is already thinking
+about why a breakup would be best for them.  Stefan has thought about it once
+or twice but doesn't really want things to change.  He likes spending his life
+with Gwendolyn and feels like they do share a really close bond, even if that
+bond is largely based on things like sharing one bowl, plate, cup, fork, knife,
+spoon, and pan for a month.
 
-`Learn you a Haskell for Great Good`_
--------------------------------------
-
-For something completely different, LyaHfGG is a great guide to Haskell as
-well as Functional Programming. Not as goofy as Why's Poignant guide, but a
-great introduction into a few new paradigms.
-
-`Clojure for the Brave and True`_
----------------------------------
-
-Just as the above guides, this book is very fun to read, accessible to a
-large range of audiences, and is of course a great place to start learning with
-Clojure.
-
-.. _Why's Poignant guide to Ruby: http://poignant.guide/book/
-.. _Learn you a Haskell for Great Good: http://learnyouahaskell.com/chapters
-.. _Clojure for the Brave and True: http://www.braveclojure.com/foreword/
+That said, the *sharing-one-of-everything* thing is working out pretty well.
+Gwendolyn hasn't gotten any of their friends to try it but she really feels
+like she's looking at food and meals in a whole new light.  Stefan thinks it's
+a neat idea, but is looking forward to the end of this month.  He would
+never tell her that though.  He loves her too much.
