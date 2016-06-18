@@ -77,6 +77,7 @@ THEME = 'theme'
 ENGINE = 'acrylamid.templates.jinja2.Environment'
 DATE_FORMAT = '%Y-%m-%d'
 DEPLOYMENT = {
+    'default': 'bash gh-build.sh',
     'site': 'bash gh-build.sh',
     'blog': 'bash gh-build.sh',
 }
