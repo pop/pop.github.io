@@ -1,7 +1,7 @@
 #!/bin/bash
 VENV='.venv'
 
-git stash --all
+git stash
 rm -rf output/ .cache/
 
 source $VENV/bin/activate
