@@ -11,7 +11,7 @@ filters: jinja2
 
 .. class:: align-center
 
-  **Newest Blogpost**: `{{ env.globals.entrylist[0].title }}`_
+  **Newest Post Thing:** `{{ env.globals.entrylist[0].title }}`_
 
 |
 
