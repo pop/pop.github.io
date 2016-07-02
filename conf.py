@@ -1,7 +1,4 @@
-# -*- encoding: utf-8 -*-
-# This is your configuration file.  Please write valid python!
-# See http://posativ.org/acrylamid/conf.py.html
-
+#!/usr/bin/env python
 SITENAME = 'Elijah\'s Website'
 WWW_ROOT = 'http://elijahcaine.me/'
 
@@ -53,6 +50,14 @@ VIEWS = {
         'if': lambda e: 'comic' in e.tags,
     },
 
+    # creative writing stuffs
+    '/creative-writing/:year/:month/:day/:slug/':
+    {
+        'view': 'entry',
+        'template': 'post.html',
+        'if': lambda e: 'creative-writing' in e.tags,
+    },
+
     '/atom/':
     {
         'filters': ['h2', 'nohyphenate'],
@@ -68,9 +73,6 @@ VIEWS = {
     {
         'view': 'sitemap',
     },
-
-    #'/tag/:name/': {'filters': 'summarize', 'view':'tag',
-    #                'pagination': '/tag/:name/:num/'},
 }
 
 THEME = 'theme'
