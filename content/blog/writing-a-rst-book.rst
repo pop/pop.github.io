@@ -2,7 +2,6 @@
 title: How to Write a Book with reStructuredText
 date: 2016-04-01
 tags: [blogpost, writing, technical]
-draft: true
 type: entry
 draft: true
 ---
