@@ -80,6 +80,10 @@ footer {
   float: left;
   text-align: left; }
 
+.literal {
+  background-color: #f5f5f5;
+  border: 1px solid #ccc; }
+
 /* Side notes for calling out things
 -------------------------------------------------- */
 /* Base styles (regardless of theme) */
@@ -125,5 +129,3 @@ footer {
 /* yellow */
 /* blue */
 /* brown */
-
-/*# sourceMappingURL=style.css.map */
