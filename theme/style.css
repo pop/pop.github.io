@@ -10,6 +10,9 @@ dd {
   width: 95%;
   max-width: 1000px; }
 
+.pager {
+  margin-top: -1em; }
+
 nav {
   padding-top: 1em;
   width: 100%; }
@@ -59,6 +62,10 @@ footer {
 
 .my-buttons {
   padding-right: 1em; }
+
+.name {
+  float: left;
+  font-weight: 900; }
 
 footer {
   font-size: 0.9em; }
@@ -129,3 +136,5 @@ footer {
 /* yellow */
 /* blue */
 /* brown */
+
+/*# sourceMappingURL=style.css.map */

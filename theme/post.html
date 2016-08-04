@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
+  {% if 'blogpost' in entry.tags %} 
+    <header>
+      <h1>
+        <a href="/blog/" rel="bookmark canonical">blog</a>
+      </h1>
+    </header>
+  {% endif %}
   <nav>
   <br>
     <ul class="pager">

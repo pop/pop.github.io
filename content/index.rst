@@ -11,22 +11,31 @@ filters: jinja2
 
 .. class:: align-center
 
-  **Newest Post Thing:** `{{ env.globals.entrylist[0].title }}`_
+  **Recent Post:** `{{ env.globals.entrylist[0].title }}`_
 
-|
+My name is *Elijah C. Voigt*. I wear a few hats including:
 
-.. figure:: https://media.giphy.com/media/IBMavwmu4KEEw/giphy.gif
-    :target: https://giphy.com/gifs/cheezburger-hello-waving-IBMavwmu4KEEw
-    :align: center
-    :alt: Whale Hello There!
+- `Software Developer`_
+- `OSU Open Source Lab Employee`_
+- Oregon State University Student
+- `OSU Linux Users Group President`_
+- `Media Creator`_
+- `Public Speaker`_
 
-|
+I'm not sure what you came here for. You might be looking for my `blog`_ which
+has a mishmash of tech tool write-ups, travel blogposts, and other creative
+endeavors.
 
-Thank's for vising my website. It's got the Bootstraps and the JQuerys, so it's
-pretty on all the things.
 
-If you find any problems or have feedback to give, email me at
-elijahcainemv@gmail.com.
+If you would like to get in contact with me I have a page
+for that too: `contact`_.
 
-.. _the blog: /blog/
 .. _{{ env.globals.entrylist[0].title }}: {{ env.globals.entrylist[0].permalink }}
+
+.. _Software Developer: /about/#code
+.. _OSU Open Source Lab Employee: /about/#osu-open-source-lab
+.. _OSU Linux Users Group President:
+.. _Media Creator: /about/#videos
+.. _Public Speaker: /about/#slides
+.. _blog: /blog/
+.. _contact: /about/#contact

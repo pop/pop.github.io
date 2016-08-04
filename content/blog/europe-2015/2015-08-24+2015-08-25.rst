@@ -1,7 +1,7 @@
 ---
 title: To Amsterdam!
 date: 2015-08-24
-tags: [liveblog-entry, europe-2015]
+tags: [europe-2015, blogpost]
 type: entry
 ---
 

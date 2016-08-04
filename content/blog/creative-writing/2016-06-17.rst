@@ -1,15 +1,10 @@
 ---
-title: other
-type: page
+title: Character Study The *'Try New Things'* Couple
 date: 2016-06-17
-tags: [other, miscellaneous, scratch paper]
+tags: [creative-writing, character study, blogpost]
+type: entry
+draft: false
 ---
-
-Welcome to my scratch-paper on the web for things that neither deserve to be
-put front and center nor forgotten on a hard drive.  If you like something,
-tweet at me `@PastyWhiteNoise`_.
-
-.. _@PastyWhiteNoise: https://twitter.com/PastyWhiteNoise
 
 Character Study: The *'Try New Things'* Couple
 ----------------------------------------------

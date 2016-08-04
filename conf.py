@@ -13,7 +13,7 @@ VIEWS = {
     # main pages
     '/:slug/':
     {
-        'filters': ['h2', 'nohyphenate'],
+        'filters': ['nohyphenate'],
         'view': 'page',
         'template': 'page.html',
         'if': lambda e: 'page' == e.type and 'liveblog-meta' not in e.tags,
@@ -25,29 +25,6 @@ VIEWS = {
         'view': 'entry',
         'template': 'post.html',
         'if': lambda e: 'blogpost' in e.tags,
-    },
-
-    # liveblog related stuffs
-    '/liveblog/:slug/':
-    {
-        'filters': 'h2',
-        'view': 'page',
-        'template': 'page.html',
-        'if': lambda e: 'liveblog-adventure' in e.tags,
-    },
-    '/liveblog/europe-2015/:slug/':
-    {
-        'view': 'entry',
-        'template': 'post.html',
-        'if': lambda e: 'europe-2015' in e.tags,
-    },
-
-    # comics related stuffs
-    '/comics/:slug/':
-    {
-        'view': 'entry',
-        'template': 'post.html',
-        'if': lambda e: 'comic' in e.tags,
     },
 
     # creative writing stuffs
