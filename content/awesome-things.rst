@@ -5,14 +5,17 @@ date: 2016-06-17
 tags: [awesome things, list]
 ---
 
-A List of Awesome Things!\*
-===========================
+Awesome Things Worth sharing
+============================
 
-This is an ever growing list of some things which I believe are the bees knees
-and are 100% worth sharing.
+Below is a list of things which I find think are awesome, 2kool4skool, and
+totally worth sharing.  The main purpose of this page is to make finding these
+easier for me, but if you like it and think there's something else worth
+sharing then you should `send it to me`_.  Think of it like a `Web 1.0
+Portal`_.
 
-\* Curated by myself, Elijah with the help of my friends, family, co-workers,
-and peers who turn me on to this stuff.
+.. _send it to me: /contact/
+.. _Web 1.0 Portal: https://en.wikipedia.org/wiki/Web_portal
 
 ----
 

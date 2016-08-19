@@ -5,20 +5,23 @@ date: 2016-08-04
 tags: [about, lug, osl, renders, videos, code]
 ---
 
+About
+=====
+
 .. image:: /static/avatar.png
     :align: right
     :alt: Photograph of Elijah
     :width: 35%
 
 Contact
-=======
+-------
 
 - Email: `elijahcainemv@gmail.com`_
 - Twitter: `@PastyWhiteNoise`_
 - irc.freenode.net: pop
 
-I also live in the wonderful state of Oregon. Hit me up if you want to hang
-out.
+| I also live in the wonderful state of Oregon.
+| Hit me up if you want to hang out.
 
 .. _elijahcainemv@gmail.com: mailto:elijahcainemv@gmail.com
 .. _@PastyWhiteNoise: http://twitter.com/pastywhitenoise
@@ -26,10 +29,10 @@ out.
 ----
 
 Professional Work
-=================
+-----------------
 
 OSU Open Source Lab
--------------------
+~~~~~~~~~~~~~~~~~~~
 
 .. figure:: http://osuosl.org/sites/default/files/osllogo-print_0.png
     :target: http://osuosl.org/
@@ -56,10 +59,10 @@ Projects I have worked on at the lab include:
 ----
 
 Outreach
-========
+--------
 
 OSU Linux Users Group
----------------------
+~~~~~~~~~~~~~~~~~~~~~
 
 .. figure:: https://upload.wikimedia.org/wikipedia/commons/a/af/Tux.png
     :align: center
@@ -95,12 +98,12 @@ check out the ``#osu-lug`` IRC channel on Freenode.
 ----
 
 Software Development
-====================
+--------------------
 
 Below is a curated list of notable development projects I have worked on:
 
 `TimeSync-Node`_
-----------------
+~~~~~~~~~~~~~~~~
 
 A `NodeJS`_ based project for keeping track of time for internal and externally
 funded projects at the `Open Source Lab`_. Uses `ExpressJS`_, `KnexJS`_
@@ -123,7 +126,7 @@ documentation.
 ----
 
 `HuRandom`_
------------
+~~~~~~~~~~~
 
 A Python `Flask`_ webapp with a `Sqlite`_ backend built to collect data in the
 pursuit of answering the question "When people think of a *random number* what
@@ -137,7 +140,7 @@ The short answer: Usually something between 1 and 100.
 ----
 
 `go-to-zzz`_
-------------
+~~~~~~~~~~~~
 
 A simple `Golang`_ application for calculating when one should go to sleep. Not
 the most exciting application on the planet, but it gave me an excute to write
@@ -161,10 +164,10 @@ some Go.
 ----
 
 Extra-Curricular Work
-=====================
+---------------------
 
 Slides
-------
+~~~~~~
 
 I give talks at conferences sometimes. I have every intention of posting the
 slides from those talks on this page. Unfortunately that has not happened yet.
@@ -174,7 +177,7 @@ It'll happen eventually. I promise.
 ----
 
 Videos
-------
+~~~~~~
 
 .. raw:: html
 
@@ -183,7 +186,7 @@ Videos
 ----
 
 Renders
--------
+~~~~~~~
 
 .. raw:: html
 
@@ -192,7 +195,7 @@ Renders
 ----
 
 Reading
--------
+~~~~~~~
 
 I am currently making my way through `The Stand`_ by `Stephen King`_.  I opted
 to get the 1990's updated version because I figure if I was already going to

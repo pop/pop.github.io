@@ -2,12 +2,6 @@
 
 {% block content %}
   <article>
-      <header>
-          <h1>
-              <a href="{{ env.path + entry.permalink }}" rel="bookmark canonical">{{ entry.title }}</a>
-          </h1>
-      </header>
-
   {% for tag in env.tags %}
       {{ tag }}
       {{ env.tags }}

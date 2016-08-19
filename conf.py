@@ -8,7 +8,7 @@ EMAIL = 'elijahcainemv@gmail.com'
 STATIC = 'static'
 CONTENT_IGNORE = ['.*.swp', '.*.swo', '*.scss~', '.sass-cache/', '*.map']
 
-FILTERS = ['rst+codehilite(css_class=highlight)', 'hyphenate', 'h1']
+FILTERS = ['rst+codehilite(css_class=highlight)', 'hyphenate']
 VIEWS = {
     # main pages
     '/:slug/':

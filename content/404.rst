@@ -6,6 +6,9 @@ type: page
 permalink: 404.html
 ---
 
+404
+===
+
 You seem to have found something you weren't supposed to.
 
 `Let's take you home now.`_
