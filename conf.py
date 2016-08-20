@@ -22,6 +22,7 @@ VIEWS = {
     # blog posts pages
     '/blog/:slug/':
     {
+        'filters': ['h1'],
         'view': 'entry',
         'template': 'post.html',
         'if': lambda e: 'blogpost' in e.tags,

@@ -6,14 +6,18 @@ type: entry
 draft: true
 ---
 
-TODO:
-- Numerous commentary on the music industry,
-    - Genuine appreciation for all artists.
-    - Contempt for fake artists and 'sellouts'
-- Attempting to reconcile success with feelings of becoming the thing you hate
-  (sellouts cited above).
-    - 200$ cannon joke.
-    - Straight talk toward the end of the show.
+Bo Burnham: Make Happy
+======================
+
+Numerous commentary on the music industry,
+  - Genuine appreciation for all artists.
+  - Contempt for fake artists and 'sellouts'
+
+Attempting to reconcile success with feelings of becoming the thing you hate
+   - (sellouts cited above).
+   - 200$ cannon joke.
+   - Straight talk toward the end of the show.
+
 Attempting to distance self from audience. Possible self-destructive behavior.
     - Explains jokes / disclaims jokes.
     - Personal problems, depression, reactions to fame.

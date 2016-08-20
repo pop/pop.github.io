@@ -1,5 +1,5 @@
 ---
-title: Working Remote - Stumptown Coffee Roasters (Belmont & Division)
+title: Working Remote - Stumptown Coffee Roasters (Belmont + Division)
 date: 2016-07-01
 tags: [blogpost, working remote, cafe]
 type: entry
@@ -11,6 +11,9 @@ cafes and other loctions with working remotely in mind. If you have any
 feedback, please contact me on twitter* `@PastyWhiteNoise`_
 
 .. _@PastyWhiteNoise: https://twitter.com/pastywhitenoise
+
+Working Remote - Stumptown Coffee Roasters (Belmont + Division)
+===============================================================
 
 Stats
 -----

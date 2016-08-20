@@ -6,6 +6,9 @@ type: entry
 draft: false
 ---
 
+MagicRealismBot Story: August 19, 2016
+======================================
+
 Prompt
 ------
 

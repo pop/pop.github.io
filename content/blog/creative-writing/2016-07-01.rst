@@ -6,9 +6,10 @@ type: entry
 draft: false
 ---
 
-Prompt
-------
+MagicRealismBot Story: August 19, 2016
+======================================
 
+Prompt
     An emperor owns a steam-powered device which allows him to destroy the
     past.  `MagicRealismBot`_
 

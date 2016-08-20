@@ -7,7 +7,7 @@ draft: false
 ---
 
 Git Does a Lot of Things
-------------------------
+========================
 
 I should make a tool that extends ``git`` to delete all of the files matched
 by the ``.gitginore``.  I spend way too much time crafting ``find <...> |
