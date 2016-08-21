@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8" />
-<title>{{ entry.title }} | {{ conf.sitename }}</title>
-<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js "></script>
-<link rel="stylesheet" href="/style.css">
+  <meta charset="utf-8" />
+  <title>{{ entry.title }} | {{ conf.sitename }}</title>
+  <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+  <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js "></script>
+  <link rel="stylesheet" href="/pygments.css">
+  <link rel="stylesheet" href="/style.css">
 </head>
 </body>
 <a href="https://github.com/elijahcaine/elijahcaine.github.io"><img style="z-index: 5; position: absolute; top: 0; right: 0; border: 0;" src="/static/gh-ribbon.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
@@ -20,8 +21,8 @@
           <li><a href="/about">about</a></li> |
           <li><a href="/contributions">contributions</a></li> |
           <li><a href="/awesome-things">awesome things</a></li> |
-          <li><a href="https://github.com/ElijahCaine">Github</a></li> |
-          <li><a href="/resume.pdf">Resume</a></li>
+          <li><a href="/resume.pdf">Resume</a></li> |
+          <li><a href="https://github.com/ElijahCaine">Github</a></li>
         </ul>
       </div>
     </nav>
@@ -31,14 +32,16 @@
 
     <footer>
       {% block footer %}
-      Photo Credit to <a href="https://www.flickr.com/photos/123432654@N05/">Sam Hall</a> |
+      This work is licensed under a
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+         Creative Commons Attribution 4.0 International License
+        </a>
       <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
         <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" />
       </a>
-      This work is licensed under a
-        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
-           Creative Commons Attribution 4.0 International License
-        </a>.
+      |
+      <a href="/rss/">rss feed <img src="/static/feed-icon-14x14.png"></img></a>
+      <!--a href="/atom/">atom feed <img src="/static/feed-icon-14x14.png"></img></a-->
       {% endblock %}
     </footer>
   </div>

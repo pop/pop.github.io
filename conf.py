@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-SITENAME = 'Elijah\'s Website'
+SITENAME = 'Elijah Caine .me'
 WWW_ROOT = 'http://elijahcaine.me/'
 
 AUTHOR = 'Elijah Caine'
