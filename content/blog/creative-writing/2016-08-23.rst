@@ -1,0 +1,30 @@
+---
+title: Lady Wangle
+date: 2016-08-23
+tags: [creative-writing, MagicRealismBot, blogpost]
+type: entry
+draft: true
+---
+
+MagicRealismBot Story: August 23, 2016
+======================================
+
+Prompt
+
+    A baroness looks at the Mona Lisa and sees her newborn baby in the
+    background.  `MagicRealismBot`_
+
+.. _MagicRealismBot: https://twitter.com/MagicRealismBot/status/768207599468634113
+
+----
+
+Lady Wangle (of the prestigious Canadian Royalty) flew to the Louvre for her
+27th birthday.  In visiting she marveled at the beautiful marble statutes,
+historic illustrations, and the grandiose building itself.  She always loved
+the glass pyramid, even if she didn't really see how it fit with the rest of
+the building.
+
+As an early riser, or a jet-lagged riser -- she always wanted to be an early
+riser but it wasn't in her genes.  Anyway she was up early.  She didn't like
+the dark of mid January mornings, but that was more or less evened out by her
+love of being alone in the quiet frigid air.

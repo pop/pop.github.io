@@ -1,9 +1,13 @@
 @import "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css";
 
-dd, dt, p, li, pre, .line {
+dd, dt, p, pre, .line {
   font-size: 20px;
   margin-top: 1em;
   margin-bottom: 1em;
+}
+
+li {
+  font-size: 20px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -86,10 +90,17 @@ footer {
 }
 
 .literal {
-    background-color: #f5f5f5;
-    border: 1px solid #ccc
+  background-color: #f5f5f5;
+  border: 1px solid #ccc
 }
 
+article {
+  font-family: Georgia,Cambria,"Times New Roman",Times,serif;
+}
+
+article h1, h2, h3, h4, h5 {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
 
 /* Side notes for calling out things
 -------------------------------------------------- */

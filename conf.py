@@ -28,14 +28,6 @@ VIEWS = {
         'if': lambda e: 'blogpost' in e.tags,
     },
 
-    # creative writing stuffs
-    '/creative-writing/:year/:month/:day/:slug/':
-    {
-        'view': 'entry',
-        'template': 'post.html',
-        'if': lambda e: 'creative-writing' in e.tags,
-    },
-
     '/atom/':
     {
         'filters': ['h2', 'nohyphenate'],
