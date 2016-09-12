@@ -6,7 +6,9 @@ dd, dt, p, pre, .line {
 
 li {
   font-size: 20px;
-  list-style-type: none;
+  list-style-type: none; }
+
+.blog-roll {
   text-align: center; }
 
 h1, h2, h3, h4, h5, h6 {

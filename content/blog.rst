@@ -8,10 +8,24 @@ filters: jinja2
 Blog
 ====
 
-{% for entry in env.globals.entrylist if 'blogpost' in entry.tags %}
-* `{{ entry.title }}`_ {% for t in entry.tags %} [ {{ t }} ] {% endfor %}
+{% for entry in env.globals.entrylist %}
+
+.. I know it's gross.
+
+.. raw:: html
+
+    <div class="blog-roll"
+          title="[ {{ entry.date.strftime("%Y-%m-%d") }} ] | {% for t in entry.tags %} [ {{ t }} ] {% endfor %}">
+
+- `{{ entry.title }}`_
+
+.. raw:: html
+
+    </div>
+
 {% endfor %}
 
-{% for entry in env.globals.entrylist if 'blogpost' in entry.tags %}
+
+{% for entry in env.globals.entrylist %}
 .. _{{ entry.title }}: {{ entry.permalink }}
 {% endfor %}
