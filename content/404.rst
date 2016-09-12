@@ -1,7 +1,6 @@
 ---
 title: 404
 date: 2016-03-18
-tags: [404]
 type: page
 permalink: 404.html
 ---

@@ -1,7 +1,7 @@
 ---
 title: A Rising Tide Lifts All Apps
 date: 2016-04-01
-tags: [blogpost, ansible, development]
+tags: [ansible, development, opinion]
 type: entry
 draft: true
 ---

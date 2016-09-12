@@ -1,7 +1,7 @@
 ---
 title: Van Gough Museum
 date: 2015-08-27
-tags: [europe-2015, blogpost]
+tags: [Europe 2015]
 type: entry
 ---
 

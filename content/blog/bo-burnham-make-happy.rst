@@ -1,7 +1,7 @@
 ---
-title: Bo Burnham: Make Happy; Mixed Feelings and Muddled Thoughts
+title: Bo Burnham: Make Happy (Mixed Feelings and Muddled Thoughts)
 date: 2016-05-14
-tags: [blogpost, review, bo burnham, comedy]
+tags: [bo burnham, comedy, review]
 type: entry
 draft: true
 ---

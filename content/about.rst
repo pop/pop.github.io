@@ -2,7 +2,6 @@
 title: about
 type: page
 date: 2016-08-04
-tags: [about, lug, osl, renders, videos, code]
 ---
 
 About

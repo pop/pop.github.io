@@ -1,7 +1,7 @@
 ---
 title: Working Remote - Stumptown Coffee Roasters (Belmont + Division)
 date: 2016-07-01
-tags: [blogpost, working remote, cafe]
+tags: [working Remote, cafe]
 type: entry
 draft: true
 ---

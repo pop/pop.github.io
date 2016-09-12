@@ -1,7 +1,7 @@
 ---
 title: Conceptual Hurdles in Programming
 date: 2016-08-21
-tags: [blogpost, programming, code]
+tags: [programming, reference]
 type: entry
 draft: false
 ---

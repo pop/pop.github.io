@@ -1,7 +1,7 @@
 ---
 title: Covertly Installing Packages with Docker
 date: 2015-10-07
-tags: [blogpost, docker, technical, code]
+tags: [docker, technical, guide]
 type: entry
 draft: false
 ---

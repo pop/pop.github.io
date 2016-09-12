@@ -1,7 +1,6 @@
 ---
 title: index
 permalink: index.html
-tags: [index]
 type: page
 date: 2016-08-19
 filters: jinja2

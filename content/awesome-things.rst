@@ -2,7 +2,6 @@
 title: awesome things
 type: page
 date: 2016-06-17
-tags: [awesome things, list]
 ---
 
 Awesome Things Worth sharing

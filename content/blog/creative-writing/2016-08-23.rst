@@ -1,7 +1,7 @@
 ---
 title: Lady Wangle
 date: 2016-08-23
-tags: [creative-writing, MagicRealismBot, blogpost]
+tags: [creative writing, MagicRealismBot]
 type: entry
 draft: true
 ---

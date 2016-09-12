@@ -2,7 +2,6 @@
 title: contributions
 type: page
 date: 2016-08-04
-tags: [open source, FOSS, contributions]
 ---
 
 Open Source Contributions

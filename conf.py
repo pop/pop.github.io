@@ -16,7 +16,6 @@ VIEWS = {
         'filters': ['nohyphenate'],
         'view': 'page',
         'template': 'page.html',
-        'if': lambda e: 'page' == e.type and 'liveblog-meta' not in e.tags,
     },
 
     # blog posts pages
@@ -25,7 +24,6 @@ VIEWS = {
         'filters': ['h1'],
         'view': 'entry',
         'template': 'post.html',
-        'if': lambda e: 'blogpost' in e.tags,
     },
 
     '/atom/':

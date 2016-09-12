@@ -1,7 +1,7 @@
 ---
 title: Setting up Secure Glowingbear with SSL
 date: 2016-06-29
-tags: [blogpost, tech, irc, glowingbear, weechat]
+tags: [tech, irc, glowingbear, weechat, guide]
 type: entry
 draft: true
 ---

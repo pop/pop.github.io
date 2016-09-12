@@ -1,7 +1,7 @@
 ---
 title: Self Censorship and Social Justice
 date: 2016-08-24
-tags: [creative-writing, blogpost, internet-culture, sjw]
+tags: [internet culture, sjw, opinion]
 type: entry
 draft: false
 ---

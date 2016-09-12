@@ -1,7 +1,7 @@
 ---
 title: How to Possibly Kinda Sorta Write a Travelblog
 date: 2015-09-29
-tags: [blogpost, travel, write-the-docs]
+tags: [travel, Write the Docs, Europe 2015]
 type: entry
 draft: false
 ---

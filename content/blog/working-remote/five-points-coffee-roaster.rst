@@ -1,7 +1,7 @@
 ---
 title: Working Remote - Five Points Coffee Roaster
 date: 2016-06-16
-tags: [blogpost, working remote, cafe]
+tags: [working Remote, cafe]
 type: entry
 draft: false
 ---

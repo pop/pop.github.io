@@ -1,7 +1,7 @@
 ---
-title: Character Study The *'Try New Things'* Couple
+title: The *'Try New Things'* Couple
 date: 2016-06-17
-tags: [creative-writing, character study, blogpost]
+tags: [creative writing, character study]
 type: entry
 draft: false
 ---

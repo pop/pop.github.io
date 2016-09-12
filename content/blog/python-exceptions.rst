@@ -1,7 +1,7 @@
 ---
 title: Python Exceptions
 date: 2016-04-03
-tags: [blogpost, python, technical, pythonic, code]
+tags: [technical, pythonic, guide]
 type: entry
 draft: false
 ---

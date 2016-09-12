@@ -1,7 +1,7 @@
 ---
 title: How to Develop a Site for the Web
 date: 2016-03-25
-tags: [blogpost, development, guide, pro-tip]
+tags: [development, guide, pro-tip, technical]
 type: entry
 draft: false
 ---

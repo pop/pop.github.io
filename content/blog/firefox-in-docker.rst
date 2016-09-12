@@ -1,7 +1,7 @@
 ---
 title: Running Firefox in Docker
 date: 2016-03-05
-tags: [blogpost, docker, code, technical]
+tags: [docker, guide, technical]
 type: entry
 draft: false
 ---

@@ -5,7 +5,9 @@ dd, dt, p, pre, .line {
   margin-bottom: 1em; }
 
 li {
-  font-size: 20px; }
+  font-size: 20px;
+  list-style-type: none;
+  text-align: center; }
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: 900; }

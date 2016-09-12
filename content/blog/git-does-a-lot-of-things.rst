@@ -1,7 +1,7 @@
 ---
 title: Git Does a Lot of Things
 date: 2016-07-27
-tags: [blogpost, git, tech]
+tags: [git, tech]
 type: entry
 draft: false
 ---
