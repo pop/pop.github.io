@@ -1,5 +1,5 @@
 @import "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css";
-dd, dt, p, pre, .line {
+dd, dt, p, pre, td, tr, .line {
   font-size: 20px;
   margin-top: 1em;
   margin-bottom: 1em; }
@@ -63,7 +63,7 @@ footer {
   display: block; }
 
 .align-center {
-  margin: 0 auto;
+  margin: auto;
   text-align: center; }
 
 .align-right {
@@ -88,8 +88,8 @@ article h1, h2, h3, h4, h5 {
 -------------------------------------------------- */
 /* Base styles (regardless of theme) */
 .bs-callout, .warning, .error, .caution, .danger, .attention, .important, .note, .hint, .admonition, .tip {
-  margin: 20px 0;
-  padding: 15px 30px 15px 15px;
+  margin: 15px 0;
+  padding: 15px 15px 15px 15px;
   border-left: 5px solid #eee; }
 
 .bs-callout h4, .warning h4, .error h4, .caution h4, .danger h4, .attention h4, .important h4, .note h4, .hint h4, .admonition h4, .tip h4 {

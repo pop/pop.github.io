@@ -1,6 +1,6 @@
 @import "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css";
 
-dd, dt, p, pre, .line {
+dd, dt, p, pre, td, tr, .line {
   font-size: 20px;
   margin-top: 1em;
   margin-bottom: 1em;
@@ -80,7 +80,7 @@ footer {
 }
 
 .align-center {
-  margin: 0 auto;
+  margin: auto;
   text-align: center;
 }
 
@@ -91,7 +91,7 @@ footer {
 
 .align-left {
   float: left;
-  text-align: left
+  text-align: left;
 }
 
 .literal {
@@ -112,8 +112,8 @@ article h1, h2, h3, h4, h5 {
 
 /* Base styles (regardless of theme) */
 .bs-callout {
-  margin: 20px 0;
-  padding: 15px 30px 15px 15px;
+  margin: 15px 0;
+  padding: 15px 15px 15px 15px;
   border-left: 5px solid #eee;
 }
 .bs-callout h4 {
