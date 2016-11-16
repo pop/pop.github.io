@@ -3,10 +3,6 @@
 <head>
   <meta charset="utf-8" />
   <title>{{ entry.title }} | {{ conf.sitename }}</title>
-  <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-  <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js "></script>
   <link rel="stylesheet" href="/pygments.css">
   <link rel="stylesheet" href="/style.css">
   <script>
@@ -20,26 +16,23 @@
   </script>
 </head>
 </body>
-<a href="https://github.com/elijahcaine/elijahcaine.github.io"><img style="z-index: 5; position: absolute; top: 0; right: 0; border: 0;" src="/static/gh-ribbon.png" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
   <div class="main">
     <nav>
-      <div class="text-right">
-        <ul class="list-inline">
-          <li class="name"><a href="/">Elijah Caine .me</a></li>
-          <li><a href="/blog">blog</a></li> |
-          <li><a href="/about">about</a></li> |
-          <li><a href="/contributions">contributions</a></li> |
-          <li><a href="/awesome-things">awesome things</a></li> |
-          <li><a href="/resume.pdf">Resume</a></li> |
-          <li><a href="https://github.com/ElijahCaine">Github</a></li>
-        </ul>
-      </div>
+      <ul class="list-inline">
+        [<li><a href="/">Elijah Caine .me</a></li>]
+        [<li><a href="/about">About</a></li>]
+        [<li><a href="http://slides.elijahcaine.me">Slides</a></li>]
+        [<li><a href="/resume.pdf">Resume</a></li>]
+        [<li><a href="https://github.com/ElijahCaine">Github</a></li>]
+        [<li><a href="https://github.com/elijahcaine/elijahcaine.github.io">Fork this Site</a></li>]
+      </ul>
     </nav>
 
     {% block content %}
     {% endblock %}
 
-    <footer class="align-center">
+    <div class="align-center">
+    <footer>
       {% block footer %}
       <a href="/rss/">rss feed <img src="/static/feed-icon-14x14.png"></img></a>
       <br>
@@ -57,6 +50,7 @@
       </br>
       {% endblock %}
     </footer>
+    </div>
   </div>
 <body>
 </html>

@@ -8,7 +8,7 @@ About
 =====
 
 .. image:: /static/avatar.png
-    :align: right
+    :align: center
     :alt: Photograph of Elijah
     :width: 35%
 

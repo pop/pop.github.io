@@ -1,133 +1,58 @@
-@import "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css";
-dd, dt, p, pre, td, tr, .line {
-  font-size: 20px;
-  margin-top: 1em;
-  margin-bottom: 1em; }
+body {
+    font-family: "DomaineText",Georgia,serif;;
+    max-width: 97%;
+    font-size: 110%;
+    width: 100ch;
+}
 
-li {
-  font-size: 20px;
-  list-style-type: none; }
-
-.blog-roll {
-  text-align: center; }
-
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 900; }
-
-dd {
-  padding-left: 5%; }
-
-.main {
-  margin: 0 auto;
-  width: 95%;
-  max-width: 1000px; }
-
-.pager {
-  margin-top: -1em; }
+h1, h2, h3, h4, h5, h6, {
+    font-family: "Lato", sans-serif; 
+}
 
 nav {
-  padding-top: 1em;
-  width: 100%; }
+    background-color: black;
+    color: white;
+    font-weight: 900;
+}
+
+nav a:link,
+nav a:visited,
+nav a:hover,
+nav a:active {
+    background-color: black;
+    color: white;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.blog-roll li {
+    list-style-type: none;
+}
+
+nav li {
+    display: inline;
+}
 
 footer {
-  margin-top: 1em;
-  margin-bottom: 1em;
-  border-top: .1em solid; }
-
-.avatar {
-  position: absolute;
-  width: 20%;
-  height: 20%;
-  max-height: 200px;
-  max-width: 200px;
-  margin: 1em;
-  right: 0px;
-  z-index: 0; }
-
-.my-buttons {
-  padding-right: 1em; }
-
-.name {
-  float: left;
-  font-weight: 900; }
-
-.section img {
-  padding: 10px; }
-
-footer {
-  font-size: 0.9em; }
-
-.figure {
-  max-width: 100%;
-  height: auto;
-  display: block; }
+    font-size: 75%;
+}
 
 .align-center {
-  margin: auto;
-  text-align: center; }
+    margin: 0 auto;
+}
 
-.align-right {
-  float: right;
-  text-align: right; }
+.next {
+    float: right;
+}
 
-.align-left {
-  float: left;
-  text-align: left; }
+.code {
+    background-color: #EEE;
+}
 
-.literal {
-  background-color: #f5f5f5;
-  border: 1px solid #ccc; }
-
-article {
-  font-family: Georgia,Cambria,"Times New Roman",Times,serif; }
-
-article h1, h2, h3, h4, h5 {
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; }
-
-/* Side notes for calling out things
--------------------------------------------------- */
-/* Base styles (regardless of theme) */
-.bs-callout, .warning, .error, .caution, .danger, .attention, .important, .note, .hint, .admonition, .tip {
-  margin: 15px 0;
-  padding: 15px 15px 15px 15px;
-  border-left: 5px solid #eee; }
-
-.bs-callout h4, .warning h4, .error h4, .caution h4, .danger h4, .attention h4, .important h4, .note h4, .hint h4, .admonition h4, .tip h4 {
-  margin-top: 0; }
-
-.bs-callout p:last-child, .warning p:last-child, .error p:last-child, .caution p:last-child, .danger p:last-child, .attention p:last-child, .important p:last-child, .note p:last-child, .hint p:last-child, .admonition p:last-child, .tip p:last-child {
-  margin-bottom: 0; }
-
-.bs-callout code, .warning code, .error code, .caution code, .danger code, .attention code, .important code, .note code, .hint code, .admonition code, .tip code,
-.bs-callout .highlight,
-.warning .highlight,
-.error .highlight,
-.caution .highlight,
-.danger .highlight,
-.attention .highlight,
-.important .highlight,
-.note .highlight,
-.hint .highlight,
-.admonition .highlight,
-.tip .highlight {
-  background-color: #fff; }
-
-/* Themes for different contexts */
-.bs-callout-danger, .error, .caution, .danger {
-  background-color: #fcf2f2;
-  border-color: #dFb5b4; }
-
-.bs-callout-warning, .warning {
-  background-color: #fefbed;
-  border-color: #f1e7bc; }
-
-.bs-callout-info, .attention, .important, .note {
-  background-color: #f0f7fd;
-  border-color: #d0e3f0; }
-
-/* red */
-/* yellow */
-/* blue */
-/* brown */
-
-/*# sourceMappingURL=style.css.map */
+body {
+    margin: 0 auto;
+}

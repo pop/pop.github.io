@@ -6,43 +6,27 @@ date: 2016-08-19
 filters: jinja2
 ---
 
-Homepage
-========
+Blog
+====
 
-My name is *Elijah C. Voigt*. I wear a few hats including `Software
-Developer`_, `OSU Open Source Lab Employee`_, Oregon State University Student,
-`OSU Linux Users Group President`_, `Media Creator`_, `Public Speaker`_, `Book
-Reader`_, and `Writer`_.
+{% for entry in env.globals.entrylist %}
 
-I'm not sure what you came here for. You might be looking for my `blog`_ which
-has a mishmash of tech tool write-ups, travel blogposts, and other creative
-endeavors. The most recent post is just down the page.
+.. I know it's gross.
 
-If you would like to get in contact with me I have a page for that too
-`Contact Me`_.
+.. raw:: html
 
-----
+    <div class="blog-roll"
+          title="{% for t in entry.tags %} [ {{ t }} ] {% endfor %}">
 
-.. class:: align-center
+- [ {{ entry.date.strftime("%Y-%m-%d") }} ] `{{ entry.title }}`_
 
-  [ `Recent Post`_ ]
+.. raw:: html
 
-{{ env.globals.entrylist[0].source }}
+    </div>
+
+{% endfor %}
 
 
-.. class:: align-center
-
-    [ `More Posts`_ ]
-
-.. _Recent Post: {{ env.globals.entrylist[0].permalink }}
-
-.. _Software Developer: /about/#code
-.. _OSU Open Source Lab Employee: /about/#osu-open-source-lab
-.. _OSU Linux Users Group President: http://lug.oregonstate.edu/contact/
-.. _Writer: /blog/
-.. _Media Creator: /about/#videos
-.. _Public Speaker: /about/#slides
-.. _Book Reader: /about/#reading
-.. _blog: /blog/
-.. _Contact Me: /about/#contact
-.. _More Posts: /blog/
+{% for entry in env.globals.entrylist %}
+.. _{{ entry.title }}: {{ entry.permalink }}
+{% endfor %}

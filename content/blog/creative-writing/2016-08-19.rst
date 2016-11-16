@@ -10,6 +10,8 @@ MagicRealismBot Story: August 19, 2016
 ======================================
 
 Prompt
+------
+
     By looking at a fireplace, a medieval sorcerer can turn stone into
     moonstones.  `MagicRealismBot`_
 

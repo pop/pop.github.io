@@ -10,6 +10,8 @@ MagicRealismBot Story: August 29, 2016
 ======================================
 
 Prompt
+------
+
     A paperweight whispers to a mathematician: "I feel so depressed." -
     `MagicRealismBot`_
 

@@ -6,7 +6,6 @@ rm -rf output/ .cache/
 
 source $VENV/bin/activate
 
-sass --update theme/style.scss:theme/style.css
 acrylamid compile
 
 rm -rf /tmp/build_output
