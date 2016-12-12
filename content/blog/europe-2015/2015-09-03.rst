@@ -1,7 +1,7 @@
 ---
 title: Travel travel travel...
 date: 2015-09-03
-tags: [Europe 2015]
+tags: [Europe 2015, archive]
 type: entry
 ---
 

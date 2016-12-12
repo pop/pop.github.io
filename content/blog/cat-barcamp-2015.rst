@@ -1,7 +1,7 @@
 ---
 title: Cat Barcamp 2015
 date: 2015-10-12
-tags: [catbarcamp, talks]
+tags: [catbarcamp, talks, archive]
 type: entry
 draft: false
 ---

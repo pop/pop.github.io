@@ -1,6 +1,6 @@
 ---
 title: induction
-tags: [comic, math, induction]
+tags: [comic, math, induction, archive]
 date: 2015-10-22
 type: entry
 draft: false

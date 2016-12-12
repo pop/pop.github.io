@@ -1,7 +1,7 @@
 ---
 title: Working Remote - The Fresh Pot
 date: 2016-06-16
-tags: [working Remote, cafe, scam story]
+tags: [working Remote, cafe, scam story, archive]
 type: entry
 draft: false
 ---

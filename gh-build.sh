@@ -18,6 +18,6 @@ mv /tmp/build_output/* ./
 
 git add .
 git commit -m "Site compiled on `date`"
-git push origin master
+git push -f origin master
 git checkout source
 git stash pop

@@ -9,6 +9,7 @@ Blog
 ====
 
 {% for entry in env.globals.entrylist %}
+{% if "archive" not in entry.tags %}
 
 .. I know it's gross.
 
@@ -17,15 +18,18 @@ Blog
     <div class="blog-roll"
           title="[ {{ entry.date.strftime("%Y-%m-%d") }} ] | {% for t in entry.tags %} [ {{ t }} ] {% endfor %}">
 
-- `{{ entry.title }}`_
+- [ {{ entry.date.strftime("%Y-%m-%d") }} ] `{{ entry.title }}`_
 
 .. raw:: html
 
     </div>
 
+{% endif %}
 {% endfor %}
 
 
 {% for entry in env.globals.entrylist %}
+{% if "archive" not in entry.tags %}
 .. _{{ entry.title }}: {{ entry.permalink }}
+{% endif %}
 {% endfor %}

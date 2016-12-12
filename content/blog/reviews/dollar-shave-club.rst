@@ -1,7 +1,7 @@
 ---
 title: Dollar Shave Club Impressions
 date: 2016-09-16
-tags: [dollar shave club, review, initial thoughts]
+tags: [dollar shave club, review, initial thoughts, archive]
 type: entry
 draft: false
 ---

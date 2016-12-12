@@ -1,8 +1,8 @@
 ---
 title: index
-permalink: index.html
+date: 2016-03-16
 type: page
-date: 2016-08-19
+permalink: index.html
 filters: jinja2
 ---
 
@@ -10,13 +10,14 @@ Blog
 ====
 
 {% for entry in env.globals.entrylist %}
+{% if "archive" not in entry.tags %}
 
 .. I know it's gross.
 
 .. raw:: html
 
-    <div class="blog-roll"
-          title="{% for t in entry.tags %} [ {{ t }} ] {% endfor %}">
+    <div class="index-roll"
+          title="[ {{ entry.date.strftime("%Y-%m-%d") }} ] | {% for t in entry.tags %} [ {{ t }} ] {% endfor %}">
 
 - [ {{ entry.date.strftime("%Y-%m-%d") }} ] `{{ entry.title }}`_
 
@@ -24,9 +25,12 @@ Blog
 
     </div>
 
+{% endif %}
 {% endfor %}
 
 
 {% for entry in env.globals.entrylist %}
+{% if "archive" not in entry.tags %}
 .. _{{ entry.title }}: {{ entry.permalink }}
+{% endif %}
 {% endfor %}

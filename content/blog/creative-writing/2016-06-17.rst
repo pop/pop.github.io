@@ -1,7 +1,7 @@
 ---
 title: The *'Try New Things'* Couple
 date: 2016-06-17
-tags: [creative writing, character study]
+tags: [creative writing, character study, archive]
 type: entry
 draft: false
 ---
