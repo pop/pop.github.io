@@ -16,7 +16,7 @@ Deploying Buildbot on Kubernetes
 Preamble
 --------
 
-So I'm learning Kubernetes (K8s) for work and decided to try my hand at deploying Buildbot with K8s because we all know the universal law discovered made by Science McSmartyPants in the 1758 which stated: **doing cool shit > reading docs** [#docs-should]_.
+I'm learning Kubernetes (K8s) for work and decided to try my hand at deploying Buildbot with K8s because we all know the universal law discovered made by Science McSmartyPants in the 1758 which stated: **doing cool shit > reading docs** [docs-should]_.
 I would describe K8s and Buildbot, but they each already did that:
 
     "Buildbot is an open-source framework for automating software build, test, and release processes."
@@ -42,7 +42,7 @@ This is a fun post.
 Squad Goals
 ~~~~~~~~~~~
 
-So here's a quick rundown of what I want to achieve:
+Here's a quick rundown of what I want to achieve:
 
 - Deploy an instance of Buildbot on K8s.
 - Have that instance scale it's number of workers automagically depending on the amount of work being asked of it.
@@ -54,7 +54,7 @@ Why?
 
 I have never deployed Buildbot ever for anything.
 I have also not really worked with K8s until starting my recent jorb at `CoreOS`_.
-So why Buildbot and why K8s?
+Why Buildbot and why K8s?
 
 1. I have to learn K8s sooner or later for work.
 #. I want to deploy something a little more complicated than Nginx.
@@ -71,21 +71,64 @@ My sick rig
 
 I'm using the latest version of K8s and `Minikube`_, which is backed by Virtualbox on a 2014 MacBook Pro running OSX.
 
+Minikube version and associated OS:
+
 .. code::
 
     $ minikube version
     minikube version: v0.13.1
+    $ minikube ssh
+    ...
+    Boot2Docker version 1.11.1, build master : 901340f - Fri Jul  1 22:52:19 UTC 2016
+    Docker version 1.11.1, build 5604cbe
+    docker@minikube:~$
+
+There's some Minikube-specific semantics in this post, but you can probably get by with whatever K8s back-end you want/have lying around.
+
+Kubernetes version:
+
+.. code::
+
     $ kubectl version
     Client Version: version.Info{Major:"1", Minor:"4", GitVersion:"v1.4.6", GitCommit:"e569a27d02001e343cb68086bc06d47804f62af6", GitTreeState:"clean", BuildDate:"2016-11-12T05:22:15Z", GoVersion:"go1.7.1", Compiler:"gc", Platform:"darwin/amd64"}
     Server Version: version.Info{Major:"1", Minor:"4", GitVersion:"v1.4.6", GitCommit:"e569a27d02001e343cb68086bc06d47804f62af6", GitTreeState:"clean", BuildDate:"1970-01-01T00:00:00Z", GoVersion:"go1.7.1", Compiler:"gc", Platform:"linux/amd64"}
 
-There's some Minikube-specific semitics in this post, but you can probably get by with whatever K8s back-end you want/have lying around.
-
 Between finishing editing and pushing this post the above versions will probably be out of date.
 *SHRUG*.
 What are you gonna do.
-Software, amiright?
+Software, amirite?
 
+Virtualbox version:
+
+.. code::
+
+    $ virtualbox --help
+    Oracle VM VirtualBox Manager 5.1.6
+    ...
+
+OSX Version and hardware:
+
+.. code::
+
+    $ sw_vers
+    ProductName:    Mac OS X
+    ProductVersion: 10.10.5
+    BuildVersion:   14F1912
+    $ system_profiler
+    ...
+        Hardware Overview:
+          Model Name: MacBook Pro
+          Model Identifier: MacBookPro11,1
+          Processor Name: Intel Core i5
+          Processor Speed: 2.6 GHz
+          Number of Processors: 1
+          Total Number of Cores: 2
+          ...
+          Memory: 16 GB
+          ...
+    ...
+
+The hardware and Virtualbox versions are a little less important, but might as well be included for completeness.
 
 First Pass
 ----------
@@ -94,8 +137,11 @@ The Buildbot project is nice enough to provide `some Buidlbot Docker infrastruct
 It uses a `Docker Compose`_ YAML file to deploy one worker container, one master service, and one PostgreSQL service, each of which is linked together and *just works™*
 
 Great!
-In theory [#theory-vs-practice]_ we can just translate the options in ``docker-compose.yml`` to K8s options to get a simple cluster up and running.
-Once we've got that running we can tweak the right nobs to get the persistent storage and auto-scaling working.
+In theory [theory-vs-practice]_ we can just translate the options in ``docker-compose.yml`` to K8s options to get a simple cluster up and running.
+Which, to clarify, isn't an established **thing**, it's just a process I'm guessing should work based on the fact that Docker Compose  and K8s are both orchestration tools.
+One is **way** more complicated and robust, but At least **some** of their features should over-lap in that Venn diagram.
+
+Once we've got a nieve translated-docker-compose k8s setup running then we can (hopefully) tweak some knobs and get persistent storage and auto-scaling working [why]_.
 
 
 Throw some containers at the wall and see what sticks
@@ -214,7 +260,7 @@ Welcome YAML config files to the class
 Running Command-Line Interface (CLI) commands is fun, but the easiest way to get this system running seems to be with configuration files.
 I'm sure I *can* use CLI commands to orchestrate this entire project, but... honestly all the tutorials talk about how to do things in YAML so we're doing it in YAML now.
 
-Some research later It looks like declaring a `Pod`_ is the way to go?
+Some research later it looks like declaring a `Pod`_ is the way to go?
 For context, here's where I got the idea from the K8s docs:
 
     A pod (as in a pod of whales or pea pod) is a group of one or more containers (such as Docker containers), the shared storage for those containers, and options about how to run the containers.
@@ -222,6 +268,12 @@ For context, here's where I got the idea from the K8s docs:
 Well that sounds *roughly* like what we're doing.
 I've got some containers, I want them to be able to talk to each other, and they're all logically connected to one another.
 Let's go down this rabbit hole.
+
+.. image:: /static/buildbot-on-k8s/alice-down.gif
+    :target: http://wifflegif.com/gifs/272040-alice-in-wonderland-adventure-time-gif
+    :align: center
+    :width: 100%
+    :alt: Alice down the rabbit hole...
 
 Here I have Frankensteined this config ``buildbot.yaml`` from examples in the configs:
 
@@ -276,7 +328,7 @@ Is the problem in:
 
 If you guessed **c** you would be right so let's start in ``buildbot.yaml``.
 
-Based on my experience with databases, specifically the startup time of database containers like Postgres and Mariadb, I'd *guess* that the database was taking too long to start.
+Based on my experience with databases, specifically the startup time of database containers like Postgres and MariaDB, I'd *guess* that the database was taking too long to start.
 After some digging around, I found out that Pods were the entirely wrong way to go.
 Here's how that discovery went:
 
@@ -386,7 +438,7 @@ Opens up this wonderful site:
     :align: center
     :width: 100%
 
-Great, they can talk [#same-app-note]_.
+Great, they can talk [same-app-note]_.
 
 
 Hire a worker
@@ -598,7 +650,7 @@ We request a volume of a given size, the volume exists and is the correct size, 
     Forwarding from 127.0.0.1:8080 -> 8080
     Forwarding from [::1]:8080 -> 8080
 
-That kinda works, but It kept getting weird arbitrary errors which looked suspicious.
+That kinda works, but it kept getting weird arbitrary errors which looked suspicious.
 
 .. image:: /static/buildbot-on-k8s/permissions-build-fail.png
     :alt: Permissions fail in buildbot
@@ -654,7 +706,7 @@ So if we try the build again with the correct permissions, what happens?
     :align: center
     :width: 100%
 
-Huzaahh
+Huzah
 
 
 Autoscaling
@@ -680,7 +732,7 @@ Creating a test-case
 
 For this we need to add a few projects to our instance of Buildbot, each of which will have a hefty workload.
 To do this we need to host a Buildbot ``master.cfg`` config file at some public location and refer to this in the ``master.yaml`` config file.
-I used the GitHub repo that accompanies this blogpost [#accompanying-repo]_, but you could use GitHub Gists or a pastebin; just make sure you're referring to the **raw** file or a ``.tar.gz`` with the ``master.cfg`` file at the base of the tarball.
+I used the GitHub repo that accompanies this blogpost [accompanying-repo]_, but you could use GitHub Gists or a pastebin; just make sure you're referring to the **raw** file or a ``.tar.gz`` with the ``master.cfg`` file at the base of the tarball.
 
 So let's pull a project out of a hat that takes a while to build, how about... `Cargo`_.
 Any objections?
@@ -750,13 +802,13 @@ I'll go East, you go West, and we'll meet back here in 20.
 
 Great, what did you find?
 Me?
-Oh I found a bunch of Github issues [#hpa-gh]_ and Stack Overflow posts [#hpa-so]_; lot of people mentioned this Heapster thing.
+Oh I found a bunch of Github issues [hpa-gh]_ and Stack Overflow posts [hpa-so]_; lot of people mentioned this Heapster thing.
 The `Heapster GitHub page`_ says it does *Compute Resource Usage Analysis and Monitoring of Container Clusters*, which sounds like what we want.
 I also found the `K8s Autoscaling`_ docs that point to a `K8s Autoscaling Tutorial`_.
 That sounds super useful and confirms the suspicion that Heapster is useful.
 **TLDR** things are pointing toward setting up Heapster.
 
-As it turns out there is a `Heapster addon for Minikube`_ [#heapster-release]_, so let's get that setup.
+As it turns out there is a `Heapster addon for Minikube`_ [heapster-release]_, so let's get that setup.
 
 .. code::
 
@@ -833,7 +885,7 @@ Great! Let's check up on Buildbot:
     :align: center
     :width: 100%
 
-Ruh-rohe that's not good...
+Ruh-roh that's not good...
 
 Let's dig in a bit.
 
@@ -906,7 +958,7 @@ Here's the big things I feel like I'm walking away with:
 
 - `kubectl <command> --dry-run -o yaml` is very useful for file-izing your infrastructure.
 - K8s is very well documented **if** you are a very patient individual.
-- Storage in K8s is still not a perfectly solved problem.
+- Storage in K8s is still not a perfectly solved problem [storage]_.
 - K8s applications share private networking.
 - K8s Pods are really just containers.
 
@@ -914,20 +966,41 @@ I'm sure there's a ton more I've internalized and can't recall.
 I tried to take thorough notes during this entire experience to capture the failures as well as the successes, which is a harder skill than I expected.
 
 
+Useful resources
+~~~~~~~~~~~~~~~~
+
+Beyond searching for specific answers these are *honestly* the websites I kept going back to throughout this project.
+
+- http://kubernetes.io/docs/
+  The main K8s docs.
+  A bit dense and sparse in key areas, a problem I'm actively I'm working on.
+  Includes API docs and user-guides which are useful for those patient enough to read them.
+
+- http://k8s.info/
+  A community-run resource with some useful links and a 'cheat sheet'.
+
+- https://github.com/kubernetes/community
+  Includes a bunch of very useful design documentation.
+  I'm not usually the kind of person that enjoys reading design docs, but sometimes a feature is too new to have a usable user-guide.
+  When it's the best you've got, take it.
+
+As far as Buildbot-specific stuff I honestly just used the `official Buildbot docs`_ which were more than enough.
+
+
 Whats next?
 ~~~~~~~~~~~
 
 I'm sure I'll be posting more about K8s going forward.
-It is a very useful tool because of and despite it's complexities.
+It is a very useful tool because of/despite it's complexities.
 As I use it I'll post more about it.
 
-If you have any feedback on this post feel free to get in contact with me `@PastyWhiteNoise`_ on Twitter, ``pop`` on `irc.freenode.net`_ [#irc]_, you can make an issue on `this website's Github Repository`_, and of course I can be reached by Carrier Pigeon..
+If you have any feedback on this post feel free to get in contact with me `@PastyWhiteNoise`_ on Twitter, ``pop`` on `irc.freenode.net`_ [irc]_, you can make an issue on `this website's Github Repository`_, and of course I can be reached by Carrier Pigeon..
 
 
 Errata
 ------
 
-.. [#docs-should]
+.. [docs-should]
     My job, at least a big part of it, is writing documentation.
     Docs are a notable part of my identify, and I have a belief in the power of good documentation, but at the end of the day they **are** just a means to an end.
 
@@ -938,34 +1011,76 @@ Errata
 
     It's also fun to play with toys! Even if those toys are software.
 
-.. [#theory-vs-practice]
+.. [theory-vs-practice]
     If you read that and thought "You know what they say about theory versus practice!" then *yes* -- but you're getting ahead of me.
 
-.. [#same-app-note]
+.. [same-app-note]
     It wasn't painfully obvious to me so it's worth elaborating that for K8s services to communicate with one-another they need to be part of the same ``app``.
     In the example the ``postgres``, ``worker``, and ``master`` containers are all part of the same ``buildbot`` app.
 
     It's not a terribly well documented **key** piece of information so it seemed worth mentioning.
 
-.. [#hpa-gh]
+.. [hpa-gh]
     - https://github.com/openshift/origin/issues/6239
     - https://github.com/kubernetes/kubernetes/issues/18652
 
-.. [#hpa-so]
+.. [hpa-so]
     - http://stackoverflow.com/questions/38874145/autoscaling-hpa-failed-to-get-cpu-consumption-cannot-unmarshal-object-into-go
     - http://stackoverflow.com/questions/37631008/kubernetes-hpa-cannot-get-cpu-consumption
 
-.. [#heapster-release]
+.. [heapster-release]
     | Authors Note:
     | The heapster addon was added to Minikube **during the writing of this post**.
       How convenient!
 
-.. [#accompanying-repo]
+.. [accompanying-repo]
     https://github.com/ElijahCaine/buildbot-on-kubernetes
 
-.. [#irc]
+.. [irc]
     I usually hang out in the ``#osu-lug`` channel.
     They're cool people, you should hang out with us! 
+
+.. [why]
+    Might as well clarify *why* we want persistent storage and auto-scaling since these are usually desired features in an orchestrator but nobody explains *why* they're desireable.
+
+    Autoscaling:
+        Autoscaling is important is because we've got a whole data-center (in theory) and we want to maximize how we use that data-center's computational abilities.
+        In a perfect world we would use exactly as much of the data-center as is demanded by users, but in practice this is super hard!
+
+        Say your website gets linked on Hacker News, you get tons of requests pouring in, but your poor little 2004 server falls on it's face when you *look* at it wrong, and **that** is where the exact page was hosted.
+        If you don't **know** that server fell down you'll never fix the problem or even **know** about the problem.
+
+        With an orchestrator we can (in theory) specify how much we want to utilize a our data-center's resources and under what conditions we want to use more or less resources.
+        If our service is creating a light load, only have one container up; if it's got a metric fuck-ton then spin up 20 containers across our entire cluster.
+        You say what you want and the load-balancer + scheduler + monitor take care of the rest.
+
+    Persistent Storage:
+        The reason persistent storage is a useful feature is for two reasons
+
+        The first is that containers are ephemeral.
+        They can be created, destroyed, and upgraded *all* the time, basically making them the polar opposite of a 'Special Snowflake' service.
+
+        This is nice, but what about state?
+        As nice as it'd be to make an entirely stateless data-center, cat pictures and builds aren't going to store themselves!
+
+        The solution to this problem is -- well it's not solved, but there's a clear direction things are going in.
+        The TLDR is that we create some block device in the cloud and mount it to each identical container at the same mount-point, so each container (K8s 'Pod') shares some amount of state.
+        Sorta like... I'm bad at examples actually. I'll think of one eventually.
+
+        Piggy-backing off of this, not only do we preserve state between container upgrades/deletes/additions, but we can also share state between scaled services (i.e., a set of identical containers across a datacenter).
+        Essentially we can have one worker pod carry out a build and another pod perform some action on that build (uploading it, verify it, archive it, etc).
+        When the first worker pod gets deleted the build lives on in the shared state.
+
+        This allows us to treat our state the same way we treat computing resources in the world of GIFFEE [GIFEE]_.
+        Create some block device for the service, mount it to this point, and let your orchestrator take care of the rest.
+
+
+.. [GIFEE]
+    Google Infrastructure for Everyone Else
+
+.. [storge]
+    But neither is storage in general so who can blame 'em?
+    
 
 .. _Buildbot.net: http://buildbot.net/
 .. _Cargo: https://github.com/rust-lang/cargo
@@ -985,3 +1100,4 @@ Errata
 .. _@PastyWhiteNoise: https://twitter.com/pastywhitenoise
 .. _irc.freenode.net: https://webchat.freenode.net/
 .. _this website's Github Repository: https://github.com/elijahcaine/elijahcaine.github.io
+.. _official buildbot docs: https://docs.buildbot.net/current/

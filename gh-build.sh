@@ -6,7 +6,7 @@ rm -rf output/ .cache/
 
 source $VENV/bin/activate
 
-acrylamid compile
+acrylamid compile -f
 
 rm -rf /tmp/build_output
 mv output /tmp/build_output
