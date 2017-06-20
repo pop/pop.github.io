@@ -1,7 +1,0 @@
-https://github.com/ElijahCaine/acrylamid/archive/many-entries-permalinks.zip
-docutils==0.12
-Jinja2==2.6
-Markdown==2.6.5
-Pygments==2.1.3
-translitcodec==0.4.0
-Unidecode==0.4.19

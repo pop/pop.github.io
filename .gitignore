@@ -6,3 +6,5 @@ style.css.map
 .*.swo
 .*.swp
 dist/
+__pycache__/
+*.pid
