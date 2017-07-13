@@ -13,7 +13,8 @@ TIMEZONE = 'America/Los_Angeles'
 DEFAULT_LANG = 'en'
 
 # Feed generation is usually not desired when developing
-FEED_ALL_ATOM = None
+FEED_ALL_ATOM = "atom.xml"
+FEED_ALL_RSS = "rss.xml"
 CATEGORY_FEED_ATOM = None
 TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
@@ -44,6 +45,7 @@ STATIC_PATHS = ['assets']
 EXTRA_PATH_METADATA = {
   'assets/CNAME': {'path': 'CNAME'},
   'assets/resume.pdf': {'path': 'resume.pdf'},
+  'assets/hobbes.ico': {'path': 'favicon.ico'},
 }
 
 # Author
