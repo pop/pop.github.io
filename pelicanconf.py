@@ -53,9 +53,9 @@ AUTHOR_URL = 'author/{slug}'
 AUTHOR_SAVE_AS = 'author/{slug}/index.html'
 AUTHORS_SAVE_AS = 'authors.html'
 
-THEME = "theme/attila"
+THEME = "theme/mnmlist"
 
-HEADER_COVER = '/assets/images/cover.png'
+# HEADER_COVER = '/assets/images/cover.png'
 
 SOCIAL = (('github', 'https://github.com/elijahcaine'), ('mailbox', 'mailto:elijahcainemv@gmail.com'))
 
