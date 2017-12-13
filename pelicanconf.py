@@ -46,6 +46,7 @@ EXTRA_PATH_METADATA = {
   'assets/CNAME': {'path': 'CNAME'},
   'assets/resume.pdf': {'path': 'resume.pdf'},
   'assets/hobbes.ico': {'path': 'favicon.ico'},
+  'assets/garbled-circuits-game.html.out': {'path': 'garbled-circuits-game.html'},
 }
 
 # Author
@@ -54,8 +55,6 @@ AUTHOR_SAVE_AS = 'author/{slug}/index.html'
 AUTHORS_SAVE_AS = 'authors.html'
 
 THEME = "theme/mnmlist"
-
-# HEADER_COVER = '/assets/images/cover.png'
 
 SOCIAL = (('github', 'https://github.com/elijahcaine'), ('mailbox', 'mailto:elijahcainemv@gmail.com'))
 
