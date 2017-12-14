@@ -4,12 +4,12 @@ Independent Crypto Conclusion
 :date: 2017-11-27
 :status: published
 :summary: Sit back and ponder how much we've learned these past few weeks.
-:tags: crytpo, independent-crypto
+:tags: Crytpo, Independent Crypto
 
 .. note::
 
     This is a part of a series of blog posts I wrote for an Independent Study on cryptography at Oregon State University.
-    To read all of the posts, check out the 'independent-crypto' tag.
+    To read all of the posts, check out the 'Independent Crypto' tag.
 
 Wait, is it over already?
 It feels like we just started!

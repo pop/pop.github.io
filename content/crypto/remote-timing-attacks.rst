@@ -4,12 +4,12 @@ Remote Timing Attacks
 :date: 2017-11-20
 :status: published
 :summary: Or yet another reason you should never roll your own crypto.
-:tags: crytpo, independent-crypto
+:tags: Crytpo, Independent Crypto
 
 .. note::
 
     This is a part of a series of blog posts I wrote for an Independent Study on cryptography at Oregon State University.
-    To read all of the posts, check out the 'independent-crypto' tag.
+    To read all of the posts, check out the 'Independent Crypto' tag.
 
 Fade in.
 

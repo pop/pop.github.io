@@ -6,7 +6,7 @@ Prague Day 1
 :slug: 2015-08-30
 :status: published
 :summary: Sunday, August 30. Prague day 1 in which I meet the other speakers of Write the Docs EU 2015.
-:tags: Europe 2015, travel, Prague
+:tags: Europe 2015, Travel, Prague
 
 I went on a wonderful `city tour`_ of Prague provided by Write The Docs. We
 crossed some bridges, saw some castles, and experienced many wonderful parts of

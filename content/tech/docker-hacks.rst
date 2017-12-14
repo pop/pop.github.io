@@ -5,7 +5,7 @@ Covertly Installing Packages with Docker
 :slug: covertly-install-packages-with-docker
 :status: published
 :summary: A simple guide on install $PACKAGE with $CONTAINER_RUNTIME.
-:tags: docker, guide
+:tags: Docker, Guide
 
 `Jump to the codey bits`_
 

@@ -5,7 +5,7 @@ Conceptual hurdles in programming
 :slug: programming-hurdles
 :status: published
 :summary: Sage advice for myself in Freshman year.
-:tags: programming, reference
+:tags: Programming, Reference
 
 I've been actively learning programming for almost five years now. I started
 by taking a C++ class at Portland Community College.  That class was the best

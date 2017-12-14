@@ -4,7 +4,7 @@ About
 :date: 2017-07-06
 :save_as: about/index.html
 :slug: about
-:summary: Some metadata.  :url: about/
+:summary: Some metadata.
 :url: about/
 
 ========= ============ ==========

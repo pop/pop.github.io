@@ -5,7 +5,7 @@ Building a Cloud Platform: v0
 :slug: cloud-platform-v0
 :status: draft
 :summary: Let's put this shit through the wash.
-:tags: CoreOS, kubernetes, terraform, cloud, adventure
+:tags: CoreOS, Kubernetes, Terraform, Cloud, Adventure
 
 If you go to a tech-ey container centric conference you'll probably hear something about how ephemeral Kubernetes (K8s) is.
 It can scale up, scale down, self heal, and *in theory* recover from losing entire nodes if you've got enough redundancy.

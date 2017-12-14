@@ -5,7 +5,7 @@ How to Get the Most out of Your Python Exceptions
 :slug: python-exceptions
 :status: published
 :summary: One of the most useful features of Python are exceptions-- but how the heck do they work? Let's find out.
-:tags: technical, pythonic, guide
+:tags: Technical, Pythonic, Guide
 
 .. code-block:: python
 

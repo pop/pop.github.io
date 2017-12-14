@@ -5,7 +5,7 @@ CatBarcamp 2015
 :slug: cat-barcamp-2015
 :status: published
 :summary: Another great unconference sponsored by the PSU Computer Action Team.
-:tags: Cat Barcamp, talks, PSU CAT
+:tags: Cat Barcamp, Talks, PSU CAT
 
 This weekend I went to `Cat Barcamp 2015`_, an unconference run by the PSU
 `Computer Action Team`_. I went to some awesome talks (and gave one myself).

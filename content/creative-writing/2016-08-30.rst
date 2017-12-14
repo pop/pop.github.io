@@ -5,7 +5,7 @@ Paperweight on my shoulders
 :slug: paperweight-on-my-shoulders
 :status: published
 :summary: A paperweight whispers to a mathematician: "I feel so depressed."
-:tags: creative writing, MagicRealismBot
+:tags: Creative Writing, MagicRealismBot
 
 Prompt
 ------

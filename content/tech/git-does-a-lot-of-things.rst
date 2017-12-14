@@ -5,7 +5,7 @@ Git Does a Lot of Things
 :slug: git-does-a-lot-of-things
 :status: published
 :summary: The title is really an understatement...
-:tags: git, fun fact
+:tags: Git, Fun Facts
 
 I should make a tool that extends ``git`` to delete all of the files matched
 by the ``.gitginore``.  I spend way too much time crafting ``find <...> |

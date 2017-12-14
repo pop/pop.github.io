@@ -5,7 +5,7 @@ How to develop a site for the web
 :slug: how-to-develop-a-site-for-the-web
 :status: published
 :summary: Testing your website with a web-server is important! Here's how to start testing ``http://localhost:8000`` and stop testing ``file:///home/me/projects/website/site.html``.
-:tags: development, guide, pro-tip, technical
+:tags: Development, Guide, Pro-Tip, Technical
 
 .. note::
 

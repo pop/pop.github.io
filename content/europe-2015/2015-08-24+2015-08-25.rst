@@ -6,7 +6,7 @@ To Amsterdam!
 :slug: 2015-08-25
 :status: published
 :summary: Tuesday August 25, 2015. PDX -> AMS.
-:tags: Europe 2015, travel
+:tags: Europe 2015, Travel
 
 PDX -> AMS
 ----------

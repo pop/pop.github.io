@@ -5,7 +5,7 @@ Self Censorship and the Social Justice Warrior
 :slug: self-censorship-and-social-justice
 :status: published
 :summary: Thoughts and opinions about our relation with the media we consume. Or something like that...
-:tags: internet culture, social justice warrior, sjw, opinion
+:tags: Internet Culture, Social Justice Warrior, Opinion
 
 This post is an articulation of *feelings* I have been mulling over about
 internet media and culture, a subject I have no academic qualification to speak

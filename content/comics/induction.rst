@@ -5,7 +5,7 @@ Induction
 :slug: induction
 :status: published
 :summary: This is literally all I know about proof by induction.
-:tags: comic, math, induction
+:tags: Comic, Math, Induction
 
 .. raw:: html
 

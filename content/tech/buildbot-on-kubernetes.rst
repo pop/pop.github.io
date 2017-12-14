@@ -6,7 +6,9 @@ Deploying Buildbot on Kubernetes
 :slug: buildbot-on-kubernetes
 :status: published
 :summary: An adventure where we learn [Kubernetes] by doing [a very straight forward project]; documenting every success, failure, and quip along the way.
-:tags: CoreOS, kubernetes, buildbot, adventure
+:tags: CoreOS, Kubernetes, Buildbot, Adventure
+
+----
 
     **TLDR:** If you just want to see the end-result of this post, the results can be found at this GitHub Repository: https://github.com/ElijahCaine/buildbot-on-kubernetes
 

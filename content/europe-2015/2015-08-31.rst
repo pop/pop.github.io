@@ -5,7 +5,7 @@ Write the Docs Day 1
 :slug: 2015-08-31
 :status: published
 :summary: Monday August 31, 2015. 
-:tags: Europe 2015, travel, Prague, WTD
+:tags: Europe 2015, Travel, Prague, Write the Docs
 
 I spent most of today enjoying the Write the Docs talks and (air 
 conditioned) venue. I took some notes. 

@@ -5,7 +5,7 @@ Lady Wangle
 :slug: lady-wangle
 :status: published
 :summary: A baroness looks at the Mona Lisa and sees her newborn baby in the background.
-:tags: creative writing, MagicRealismBot
+:tags: Creative Writing, MagicRealismBot
 
 Prompt
 ------

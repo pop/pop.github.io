@@ -4,12 +4,12 @@ Garbled Circuits
 :date: 2017-10-30
 :status: published
 :summary: I know those words seperately but...
-:tags: crytpo, independent-crypto
+:tags: Crytpo, Independent Crypto
 
 .. note::
 
     This is a part of a series of blog posts I wrote for an Independent Study on cryptography at Oregon State University.
-    To read all of the posts, check out the 'independent-crypto' tag.
+    To read all of the posts, check out the 'Independent Crypto' tag.
 
 Let's imagine you are a billionaire.
 You want to know if you have more money than your billionaire friend Bob, but for some reason it's *very* faux pas to let anybody how much money you have, even your good friend Bob.

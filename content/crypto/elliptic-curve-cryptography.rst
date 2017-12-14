@@ -4,12 +4,12 @@
 :date: 2017-10-04
 :status: published
 :summary: The low-down on Elliptic Curve Cryptography.
-:tags: crytpo, independent-crypto
+:tags: Crytpo, Independent Crypto
 
 .. note::
 
     This is a part of a series of blog posts I wrote for an Independent Study on cryptography at Oregon State University.
-    To read all of the posts, check out the 'independent-crypto' tag.
+    To read all of the posts, check out the 'Independent Crypto' tag.
 
 .. warning::
 

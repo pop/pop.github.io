@@ -5,7 +5,7 @@ Running Firefox in Docker
 :slug: running-firefox-in-docker
 :status: published
 :summary: You got Firefox in my Docker! You got Docker in my Firefox!
-:tags: docker, guide
+:tags: Docker, Guide
 
 Turns out you can run Firefox in Docker. It's actually pretty easy:
 

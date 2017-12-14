@@ -1,12 +1,12 @@
-Awesome things to share
-=======================
+Awesome things
+==============
 
 :date: 2016-06-17
 :save_as: awesome-things/index.html
 :slug: awesome-things
 :status: published
 :summary: Awesome guides, resources, open source projects including Why's Poignant guide to Ruby, Learn you a Haskell for Great Good, and Clojure for the Brave and True.
-:tags: reference, awesome
+:tags: Reference, Awesome Things
 :url: awesome-things/
 
 Below is a list of things which I find think are awesome, 2kool4skool, and

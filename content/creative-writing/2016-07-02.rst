@@ -5,7 +5,7 @@ Debra the ghoul
 :slug: debra-the-ghoul
 :status: published
 :summary: A ghoul and an archbishop are fighting over custody of their children.
-:tags: creative writing, MagicRealismBot
+:tags: Creative Writing, MagicRealismBot
 
 Prompt
 ------

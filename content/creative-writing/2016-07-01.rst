@@ -5,7 +5,7 @@ Emperor Stan of Stantinople
 :slug: emperor-stan-of-stantinople
 :status: published
 :summary: An emperor owns a steam-powered device which allows him to destroy the past.
-:tags: creative writing, MagicRealismBot
+:tags: Creative Writing, MagicRealismBot
 
 Prompt
 ------

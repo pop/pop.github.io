@@ -5,7 +5,7 @@ A Personal Day in Prague: (Almost) Just Pictures\*
 :slug: 2015-09-02
 :status: published
 :summary: Wednesday September 02, 2015. I adventure Prague alone. I enjoy it quite a bit!
-:tags: Europe 2015, travel, Prague
+:tags: Europe 2015, Travel, Prague
 
 .. image:: /assets/images/europe-2015/prague-charles-bridge.jpg
     :alt: Charles Bridge.

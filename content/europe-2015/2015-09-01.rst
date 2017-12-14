@@ -5,7 +5,7 @@ Write the Docs Day 2
 :slug: 2015-09-01
 :status: published
 :summary: Tuesday September 01, 2015. Write the docs Day 2 is just as educational as the first.
-:tags: Europe 2015, travel, Prague
+:tags: Europe 2015, Travel, Prague
 
 Just like yesterday, I spent most of today enjoying some wonderful talks as
 well as stressing out -- I mean totally not stressing out -- about my own talk.

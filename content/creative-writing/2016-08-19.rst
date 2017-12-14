@@ -5,7 +5,7 @@ The MoonStone discovery
 :slug: the-moonstone-discovery
 :status: published
 :summary: By looking at a fireplace, a medieval sorcerer can turn stone into moonstones.
-:tags: creative writing, MagicRealismBot
+:tags: Creative Writing, MagicRealismBot
 
 Prompt
 ------

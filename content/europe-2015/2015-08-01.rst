@@ -5,7 +5,7 @@ About the blog (this is a test)
 :slug: 2015-08-01
 :status: published
 :summary: Is this thing on? Starting the travel blog strong.
-:tags: Europe 2015, travel, Portland
+:tags: Europe 2015, Travel, Portland
 
 This blog was created in preparation for my trip to Europe in about 3 weeks. I
 wanted to see how difficult it would be to make a blog that could be updated on
