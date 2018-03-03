@@ -248,7 +248,7 @@ Errata
 
 .. raw:: html
 
-  <iframe src="garbled-circuits-game.html" height="400px" width="100%"></iframe>
+  <iframe src="/garbled-circuits-game.html" height="400px" width="100%"></iframe>
 
 .. note::
 
