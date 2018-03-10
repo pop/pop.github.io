@@ -7,48 +7,58 @@ About
 :summary: Some metadata.
 :url: about/
 
-========= ============ ==========
-`Resume`_ `Portfolio`_ `Contact`_
-========= ============ ==========
+`Contact`_ | `Resume´`_
 
-Who *is* Elijah?
-----------------
+Work
+----
 
-Here's some stuff you can ask me about, in no particular order.
+From order of most to least recent:
 
-I'm an aspiring...
+- `Nordstrom Tech`_ (2017-Present) doing Unix/Linux DevOps engineering. Mostly working on Chef, Monitoring, and tooling/automation.
+- `CoreOS`_ (2016-2017) writing documentation for Open Source projects like `rkt`_, `etcd`_, and `Kubernetes`_.
+- `Open Source Lab`_ (2014-2016) developing small open source software, writing chef, maintaining legacy projects, teaching DevOps, and evangelizing when possible.
 
-- Writer.
-- Game developer.
-- Film Maker.
-- Programmer.
-- Magical DevOps cloud wizard.
-- Open Source advocate.
-- Container orchestration buzzword expert.
-- Networking. Just networking.
+Talks
+-----
 
-I have done...
+You can find slides for all my talks at `slides.elijahcaine.me`_
 
-- School at Oregon State University (OSU).
-- A bunch of talks at conferences like SeaGL, SCALE, and Write the Docs EU.
+I've spoken at some conferences including:
 
-I have worked at...
+- Scale (2015,2017): *An introduction to Blender 3D*, *Crypto: Practical Math*
+- SeAGL (2016): *An introduction to git*
+- Beaver Barcamp (Unconference 2015,2017): *Various topics*
+- Cat Barcamp (Unconference 2017): *A practical introduction to Kubernetes*
 
-- The `OSU Open Source Lab`_ as a developer during school.
-- `CoreOS`_ as a documentation writer working part time during school.
-- `Nordstrom`_ as a DevOps Engineer in their intern program. Yes [really]_.
+School
+------
 
-I've gotten a *lot* out of each of these including...
+I graduated from *Oregon State University* with a four(ish)-year degree in *Computer Science*, a focus toward *Cryptography*, and a minor in *Mathematics* on December of 2017.
 
-- I learned how to learn.
-- I learned how to work well with others.
-- I did little bit of programming here and there too.
+Play
+----
 
-.. _Resume: /resume.pdf
-.. _Portfolio: /portfolio/
+For about 3 years I ran and mentored the Oregon State University Linux Users Group (`osulug`_).
+We hosted
+
+- *Industry Professionals* like CoreOS and Nordstrom engineers to speak with students about internships and 
+- *Student Talks* where club members gave talks on Raspberry Pi projects, software projects, Thesis Defense practice.
+- *Install Festivals* where we helped people install Linux.
+- *Coding Puzzles* where we are challenged to finish coding puzzles and rewarded for completing the most.
+- *Game Hackathon* where we teamed up to complete a small working game in under an hour.
+- *Languages Night* where we had a round-table to talk about software development.
+
+We stayed busy.
+
+.. _osulug: http://lug.oregonstate.edu/
+.. _Resume´: /resume.pdf
 .. _Contact: /contact/
-.. _OSU Open Source Lab: https://osuosl.org
+.. _Open Source Lab: https://osuosl.org
 .. _CoreOS: https://coreos.com
-.. _Nordstrom: https://github.com/nordstrom/
+.. _Nordstrom Tech: https://github.com/nordstrom/
 
-.. [really] Yeah... that Nordstrom. You're thinking of the right one. Trust me, I was suprised too.
+.. _rkt:  https://github.com/rkt/rkt
+.. _etcd: https://github.com/coreos/etcd
+.. _Kubernetes: https://github.com/kubernetes
+
+.. _slides.elijahcaine.me: http://slides.elijahcaine.me
