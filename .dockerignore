@@ -1,0 +1,7 @@
+output/
+__pycache__/
+.*
+Dockerfile
+develop_server.sh
+Makefile
+publishconf.py
