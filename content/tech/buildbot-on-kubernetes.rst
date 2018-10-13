@@ -277,7 +277,7 @@ Let's go down this rabbit hole.
 
 Here I have Frankensteined this config ``buildbot.yaml`` from examples in the configs:
 
-.. include:: .code/buildbot-on-k8s/initial-buildbot.yaml
+.. include:: ../.code/buildbot-on-k8s/initial-buildbot.yaml
     :code: yaml
 
 What happens when we run it?
@@ -401,12 +401,12 @@ Don't forget: we're not doing anything fancy yet.
 
 ``master.yaml``:
 
-.. include:: .code/buildbot-on-k8s/initial-master.yaml
+.. include:: ../.code/buildbot-on-k8s/initial-master.yaml
     :code: yaml
 
 ``postgres.yaml:``
 
-.. include:: .code/buildbot-on-k8s/initial-postgres.yaml
+.. include:: ../.code/buildbot-on-k8s/initial-postgres.yaml
     :code: yaml
 
 And with a flick of my wand:
@@ -451,7 +451,7 @@ Based on what the ``docker-compose.yml`` says we should be able to throw this to
 
 ``worker.yaml``:
 
-.. include:: .code/buildbot-on-k8s/initial-worker.yaml
+.. include:: ../.code/buildbot-on-k8s/initial-worker.yaml
     :code: yaml
 
 .. code::
@@ -535,7 +535,7 @@ What's the problem then?
 My best guess is that the ``master`` pod needs to have it's special worker port (``9989``) exposed.
 So let's add those lines to ``master.yaml``:
 
-.. include:: .code/buildbot-on-k8s/updated-master.yaml.diff
+.. include:: ../.code/buildbot-on-k8s/updated-master.yaml.diff
     :code: diff
 
 And after tearing everything down and bringing it back up:
@@ -589,27 +589,27 @@ So let's add the storage bits back in that we ignored before. This results in co
 
 ``volumes.yaml``:
 
-.. include:: .code/buildbot-on-k8s/volumes.yaml
+.. include:: ../.code/buildbot-on-k8s/volumes.yaml
     :code: yaml
 
 ``master.yaml``:
 
-.. include:: .code/buildbot-on-k8s/volumes-master.yaml.diff
+.. include:: ../.code/buildbot-on-k8s/volumes-master.yaml.diff
     :code: diff
 
 ``postgres.yaml``:
 
-.. include:: .code/buildbot-on-k8s/volumes-postgres.yaml.diff
+.. include:: ../.code/buildbot-on-k8s/volumes-postgres.yaml.diff
     :code: diff
 
 ``worker.yaml``:
 
-.. include:: .code/buildbot-on-k8s/volumes-worker.yaml.diff
+.. include:: ../.code/buildbot-on-k8s/volumes-worker.yaml.diff
     :code: diff
 
 And of lastly we edit the Buildbot ``master.cfg`` to use our custom paths for storing and carrying out builds:
 
-.. include:: .code/buildbot-on-k8s/volumes-master.cfg.diff
+.. include:: ../.code/buildbot-on-k8s/volumes-master.cfg.diff
     :code: diff
 
 This is just an edited version of the original ``master.cfg`` you can find in the original Buildbot docker-compose example repository.
@@ -741,7 +741,7 @@ Great, let's roll.
 To get started we'll need a custom ``worker`` container can build Cargo.
 A small adventure later and we have this Dockerfile which has all of the dependencies to build what we want:
 
-.. include:: .code/buildbot-on-k8s/Dockerfile
+.. include:: ../.code/buildbot-on-k8s/Dockerfile
     :code:
 
 I set this to auto-build on `quay.io`_, hosted at the docker-pull url ``quay.io/elijahcaine/buidlbot-rust-worker``.
@@ -749,12 +749,12 @@ I set this to auto-build on `quay.io`_, hosted at the docker-pull url ``quay.io/
 Now that we have a capable worker container, we need to create an arbitrary workload.
 To do that we'll use this Buildbot ``master.cfg``: 
 
-.. include:: .code/buildbot-on-k8s/robust-master.cfg.diff
+.. include:: ../.code/buildbot-on-k8s/robust-master.cfg.diff
     :code: diff
 
 And deploy it with this ``master.yaml``:
 
-.. include:: .code/buildbot-on-k8s/robust-master.yaml.diff
+.. include:: ../.code/buildbot-on-k8s/robust-master.yaml.diff
     :code: diff
 
 When we look at our setup in Buildbot it looks like this:
@@ -854,7 +854,7 @@ Which we can appropriate to get some YAML to shove in our ``worker.yaml`` to get
 
 So I added that section to ``worker.yaml``...
 
-.. include:: .code/buildbot-on-k8s/robust-worker.yaml.diff
+.. include:: ../.code/buildbot-on-k8s/robust-worker.yaml.diff
     :code: diff
 
 ... and ran ``kubectl replace -f worker.yaml``, but did it work?

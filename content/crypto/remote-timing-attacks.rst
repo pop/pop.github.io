@@ -355,7 +355,7 @@ True, I did say that... so we'll do a small demonstration.
 
 Below is a bit of Python code that checks a user's input against some hard-coded secret.
 
-.. include:: .code/independent-crypto/secret.py
+.. include:: ../.code/independent-crypto/secret.py
     :code: python
 
 The thing that makes the above code particularly useful for our purposes is that it exaggerates the time it takes to evaluate the ``is_equal`` function.
@@ -364,7 +364,7 @@ Most important [for the author] we don't need to use Statistics\ :sup:`TM` to fi
 
 Next we've got the attack code.
 
-.. include:: .code/independent-crypto/attack.py
+.. include:: ../.code/independent-crypto/attack.py
     :code: python
 
 It's a bit convoluted in parts but if you stare at it for a while and read the enlightening comments you should see why this gets the right answer.
