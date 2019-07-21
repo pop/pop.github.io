@@ -54,7 +54,7 @@ AUTHOR_URL = 'author/{slug}'
 AUTHOR_SAVE_AS = 'author/{slug}/index.html'
 AUTHORS_SAVE_AS = 'authors.html'
 
-THEME = "theme/mnmlist"
+THEME = "theme/mnmlist-fork"
 
 SOCIAL = (('github', 'https://github.com/elijahcaine'), ('mailbox', 'mailto:elijahcainemv@gmail.com'))
 
