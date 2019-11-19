@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
 
-AUTHOR = 'Elijah Caine'
+AUTHOR = 'Elijah Voigt'
 SITENAME = 'elijahcaine.me'
 SITEURL = 'elijahcaine.me'
 
@@ -13,32 +13,18 @@ TIMEZONE = 'America/Los_Angeles'
 DEFAULT_LANG = 'en'
 
 # Feed generation is usually not desired when developing
-FEED_ALL_ATOM = "atom.xml"
-FEED_ALL_RSS = "rss.xml"
-CATEGORY_FEED_ATOM = None
-TRANSLATION_FEED_ATOM = None
-AUTHOR_FEED_ATOM = None
-AUTHOR_FEED_RSS = None
-
-# Blogroll
-LINKS = (('Pelican', 'http://getpelican.com/'),
-         ('Python.org', 'http://python.org/'),
-         ('Jinja2', 'http://jinja.pocoo.org/'),
-         ('You can modify those links in your config file', '#'),)
-
-# Social widget
-# SOCIAL = (('You can add links in your config file', '#'),
-#           ('Another social link', '#'),)
+FEED_ATOM = "atom.xml"
+FEED_RSS = "rss.xml"
 
 DEFAULT_PAGINATION = 10
 
 # Uncomment following line if you want document-relative URLs when developing
 RELATIVE_URLS = True
 
-ARTICLE_URL = '{category}/{slug}'
-ARTICLE_SAVE_AS = '{category}/{slug}/index.html'
-DRAFT_URL = "drafts/{category}/{slug}"
-DRAFT_SAVE_AS = 'drafts/{category}/{slug}/index.html'
+ARTICLE_URL = '{slug}'
+ARTICLE_SAVE_AS = '{slug}/index.html'
+DRAFT_URL = "drafts/{slug}"
+DRAFT_SAVE_AS = 'drafts/{slug}/index.html'
 DEFAULT_CATEGORY = 'misc'
 DISPLAY_PAGE_ON_MENU = True
 STATIC_PATHS = ['assets']
@@ -54,21 +40,36 @@ AUTHOR_URL = 'author/{slug}'
 AUTHOR_SAVE_AS = 'author/{slug}/index.html'
 AUTHORS_SAVE_AS = 'authors.html'
 
-THEME = "theme/mnmlist-fork"
+THEME = "theme/porterjamesj-fork"
 
 SOCIAL = (('github', 'https://github.com/elijahcaine'), ('mailbox', 'mailto:elijahcainemv@gmail.com'))
 
-COLOR_SCHEME_CSS = 'monokai.css'
-
 AUTHORS_BIO = {
   "elijah": {
-    "name": "Elijah Caine",
+    "name": "Elijah C. Voigt",
     "cover": "/assets/images/hobbes.jpg",
     "image": "/assets/images/calvin-and-hobbes.jpg",
     "website": "http://elijahcaine.me",
     "location": "Silicon Forest",
-    "bio": "Elijah Caine is an Orego State University alumni who has interned at the Open Source Lab, CoreOS, and Nordstrom. In his free time he creates problems he can regret not solving."
+    "bio": (
+        "Elijah Caine is an Oregon State University alumni who has interned at the Open Source Lab, CoreOS, and Nordstrom. "
+        "He has worked as a full time employee at Nordstrom as a 'Unix DevOps Engineer' and now works at CloudBolt software as a Django developer. "
+        "In his free time he creates starts projects he can't seem to finish."
+    ),
   }
 }
 
-GOOGLE_ANALYTICS = "UA-48615202-3"
+from datetime import datetime
+NOW = datetime.now()
+
+LICENSE_NAME = "Creative Commons Attribution 4.0 International"
+LICENSE_URL = "http://creativecommons.org/licenses/by/4.0/"
+LICENSE_IMG = '<img alt="Creative Commons License" style="border-width:0" src="/assets/images/CCA4IL.png" />'
+MENUITEMS = [("(🏠 elijahcaine.me)", "/"),("(🐙 github 🐱)", "https://github.com/pop/"),("(👔 resume)", "/resume.pdf")]
+FOOTER_WHIMSY = (
+    "This website made with locally sourced bits, "
+    "built with Python 🐍 via Pelican 🐦, "
+    "developed on Fedora 👒 GNU/Linux 🐃🐧, "
+    "<a href='https://github.com/pop/elijahcaine.me'>hosted</a> and deployed on GitHub 🐙🐱, "
+    "and served from clouds ⛅."
+)
