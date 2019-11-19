@@ -12,6 +12,9 @@ jobs:
 
     steps:
       - name: Get env info
-        run: env && pwd
+        run: |
+          env
+          ls -a -l -h
+          pwd
       - name: Pelican for GitHub Pages
         uses: nelsonjchen/gh-pages-pelican-action@0.1.4
