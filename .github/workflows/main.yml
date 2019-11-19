@@ -11,5 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Get env info
+        run: env && pwd
       - name: Pelican for GitHub Pages
         uses: nelsonjchen/gh-pages-pelican-action@0.1.4
