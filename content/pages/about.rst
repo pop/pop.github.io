@@ -7,16 +7,17 @@ About
 :summary: Some metadata.
 :url: about/
 
-`Contact`_ | `Resume´`_
+`Contact`_ | `Resume`_
 
 Work
 ----
 
 From order of most to least recent:
 
-- `Nordstrom Tech`_ (2017-Present) doing Unix/Linux DevOps engineering. Mostly working on Chef, Monitoring, and tooling/automation.
-- `CoreOS`_ (2016-2017) writing documentation for Open Source projects like `rkt`_, `etcd`_, and `Kubernetes`_.
-- `Open Source Lab`_ (2014-2016) developing small open source software, writing chef, maintaining legacy projects, teaching DevOps, and evangelizing when possible.
+- `CloudBolt`_ (April 2019 - Present) writing Python `Django`_ apps, integrating the core product with tools like `Terraform`_.
+- `Nordstrom Tech`_ (Summer 2017, Feb 2018 - April 2019) doing Unix/Linux DevOps engineering. Mostly working on Chef, Monitoring, and pipeline automation.
+- `CoreOS`_ (August 2016 - May 2017) writing documentation for Open Source projects like `rkt`_, `etcd`_, and `Kubernetes`_.
+- `Open Source Lab`_ (May 2014 - August 2016) developed small open source software, writing Chef, maintaining legacy projects, teaching DevOps, and evangelizing when possible.
 
 Talks
 -----
@@ -48,14 +49,18 @@ We hosted
 - *Game Hackathon* where we teamed up to complete a small working game in under an hour.
 - *Languages Night* where we had a round-table to talk about software development.
 
-We stayed busy.
+The LUG stayed busy.
 
 .. _osulug: http://lug.oregonstate.edu/
-.. _Resume´: /resume.pdf
+.. _Resume: /resume.pdf
 .. _Contact: /contact/
 .. _Open Source Lab: https://osuosl.org
 .. _CoreOS: https://coreos.com
 .. _Nordstrom Tech: https://github.com/nordstrom/
+.. _CloudBolt: https://cloudbolt.io
+
+.. _Django: https://djangoproject.com/
+.. _Terraform: https://terraform.io
 
 .. _rkt:  https://github.com/rkt/rkt
 .. _etcd: https://github.com/coreos/etcd

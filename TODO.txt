@@ -1,0 +1,7 @@
+- Figure out how to add pubdate to articles
+- fix categories page missing shit
+- decide to keep categories or get rid of them
+- prune articles, get rid of old shit
+- write lunchables article
+- right vowells article
+- just get rid of tags, they're not useful
