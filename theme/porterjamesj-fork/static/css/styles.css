@@ -115,6 +115,11 @@ video {
     height: auto;
     margin-left: auto;
     margin-right: auto;
+    /* Pixel-art friendly properties */
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
 }
 
 .article ul, .article ol {
@@ -156,6 +161,14 @@ h1 {
 table, th, td {
     border: 1px solid black;
     padding: 1px;
+}
+
+table.highlighttable {
+    border-style: hidden;
+}
+
+table.highlighttable * {
+    border-style: hidden;
 }
 
 table.docutils {
