@@ -12,6 +12,10 @@ Let's Build a Game with Rust
     This is the outline for a talk I gave at the Seattle GNU Linux conference (SeaGL) 2020.
     Once the video is posted I will link it here.
 
+.. note::
+
+    The code for this post can be found at https://github.com/pop/lets-make-games-with-rust
+
 Like many of you, I really like games.
 I enjoy playing games, talking about games, and a few times I've even tried making games.
 I enjoy making games for a few reasons:
