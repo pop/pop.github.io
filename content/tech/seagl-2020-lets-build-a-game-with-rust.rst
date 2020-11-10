@@ -3,7 +3,7 @@ Let's Build a Game with Rust
 
 :date: 2020-11-13
 :slug: seagl-2020-lets-build-a-game-with-rust
-:status: draft
+:status: published
 :summary: A talk I gave at Seattle GNU Linux Conference 2020
 :tags: Rust, Amethyst, Games
 
