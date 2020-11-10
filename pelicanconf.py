@@ -32,7 +32,9 @@ EXTRA_PATH_METADATA = {
   'assets/CNAME': {'path': 'CNAME'},
   'assets/resume.pdf': {'path': 'resume.pdf'},
   'assets/hobbes.ico': {'path': 'favicon.ico'},
-  'assets/garbled-circuits-game.html.out': {'path': 'garbled-circuits-game.html'},
+  'assets/garbled-circuits-game.html.out': {
+    'path': 'garbled-circuits-game.html'
+  },
 }
 
 # Author
@@ -42,7 +44,10 @@ AUTHORS_SAVE_AS = 'authors.html'
 
 THEME = "theme/porterjamesj-fork"
 
-SOCIAL = (('github', 'https://github.com/elijahcaine'), ('mailbox', 'mailto:elijahcainemv@gmail.com'))
+SOCIAL = (
+  ('github', 'https://github.com/elijahcaine'),
+  ('mailbox', 'mailto:elijahcainemv@gmail.com')
+)
 
 AUTHORS_BIO = {
   "elijah": {
@@ -65,7 +70,12 @@ NOW = datetime.now()
 LICENSE_NAME = "Creative Commons Attribution 4.0 International"
 LICENSE_URL = "http://creativecommons.org/licenses/by/4.0/"
 LICENSE_IMG = '<img alt="Creative Commons License" style="border-width:0" src="/assets/images/CCA4IL.png" />'
-MENUITEMS = [("(🏠 elijahcaine.me)", "/"),("(🐙 github 🐱)", "https://github.com/pop/"),("(👔 resume)", "/resume.pdf")]
+MENUITEMS = [
+  ("(🏠 elijahcaine.me)", "/"),
+  ("(🐙 github 🐱)", "https://github.com/pop/"),
+  ("(👔 resume)", "/resume.pdf"),
+  ("(📰 feed)", "/atom.xml"),
+]
 FOOTER_WHIMSY = (
     "This website made with locally sourced bits, "
     "built with Python 🐍 via Pelican 🐦, "
