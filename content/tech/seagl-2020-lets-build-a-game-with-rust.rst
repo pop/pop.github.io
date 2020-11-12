@@ -472,6 +472,12 @@ Add this code to a file in ``assets/texture/spritesheet.ron``:
                 width: 16,
                 height: 16,
             ),
+            ( // Burger
+                x: 16,
+                y: 0,
+                width: 10,
+                height: 8,
+            ),
         ],
     ))
 
@@ -512,7 +518,7 @@ First, we need to create a System struct and implement ``System`` on it.
 
 Our System's run function looks like this in psuedocode:
 
-.. code:: text
+.. code-block:: text
 
     for every seagl that can move:
         If the user input was to move horizontal:
@@ -522,7 +528,7 @@ Our System's run function looks like this in psuedocode:
 
 This doesn't look _exactly_ the same in Rust, but it's pretty close.
 
-.. code:: rust
+.. code-block:: rust
 
     [derive(SystemDesc)]
     pub struct MoveSystem;
@@ -599,6 +605,10 @@ Instead of hard-coding "Up arrow means move up, down arrow means down" we put th
         actions: {},
     )
 
+.. image:: /assets/images/seagl-2020/SeaGL-move.gif
+    :alt: It moves!
+    :align: center
+
 This is a good start, but you'll notice the Seagl doesn't turn left and right, this _totally_ breaks my suspension of disbelief so we're gonna need to fix that in our ``run`` method:
 
 .. code-block:: diff
@@ -635,6 +645,10 @@ This makes it look like our Seagl is facing the direction they're moving which s
     Do you ever feel like a 2D sprite in a 3D world?
     I know I do...
 
+.. image:: /assets/images/seagl-2020/SeaGL-move-look.gif
+    :alt: It moves!
+    :align: center
+
 
 Step 4: Eat some food! 🍔
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -655,7 +669,7 @@ First we need to add a food Component.
 
 Add this component anywhere that feels right:
 
-.. code:: rust
+.. code-block:: rust
 
     #[derive(Default)]
     pub struct Food;
@@ -669,7 +683,7 @@ It's structurally identical to our Seagl, but with a different ``struct`` it's a
 With a Food component we can add our Burger entity.
 Add this code to our ``on_setup`` function at the end:
 
-.. code:: rust
+.. code-block:: rust
 
     let burger_sprite = SpriteRender::new(sprite_sheet_handle.clone(), 1);
     let mut transform = Transform::default();
@@ -705,7 +719,7 @@ And finally an "eat" system.
 
 This system's pseudocode looks like this:
 
-.. code:: text
+.. code-block:: text
 
     For each seagl with a location:
         For each Food with a location:
@@ -715,7 +729,7 @@ This system's pseudocode looks like this:
 This is a bit of a hack.
 If this were a real game we would keep track of how many burgers the Seagl ate, but for this demo, we'll be lazy:
 
-.. code:: rust
+.. code-block:: rust
 
     pub struct EatSystem;
     
@@ -745,7 +759,7 @@ If this were a real game we would keep track of how many burgers the Seagl ate, 
 
 And last but not least, we need to register this system with our game:
 
-.. code:: diff
+.. code-block:: diff
 
     +++ main.rs
     @@ fn main() -> amethyst::Result<()>
@@ -755,6 +769,10 @@ And last but not least, we need to register this system with our game:
              .with_bundle(inputs)?
              .with(MoveSystem, "move_system", &["input_system"])
     +        .with(EatSystem, "eat_system", &["move_system"]);
+
+.. image:: /assets/images/seagl-2020/SeaGL-move-look-burger.gif
+    :alt: It moves!
+    :align: center
 
 Conclusions
 -----------
