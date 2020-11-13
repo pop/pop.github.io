@@ -583,7 +583,7 @@ Because we are using Inputs we also need to register the inputs bundle with the 
     +
          let game_data = GameDataBuilder::default()
              .with_bundle(transform)?
-             .with_bundle(renderer)?;
+             .with_bundle(renderer)?
     +        .with_bundle(inputs)?
     +        .with(MoveSystem, "move_system", &["input_system"]);
 
@@ -737,7 +737,7 @@ If this were a real game we would keep track of how many burgers the Seagl ate, 
         type SystemData = (
             ReadStorage<'s, Transform>,
             ReadStorage<'s, Seagl>,
-            WriteStorage<'s, Food>,
+            ReadStorage<'s, Food>,
             Entities<'s>,
         );
     
@@ -765,7 +765,7 @@ And last but not least, we need to register this system with our game:
     @@ fn main() -> amethyst::Result<()>
          let game_data = GameDataBuilder::default()
              .with_bundle(transform)?
-             .with_bundle(renderer)?;
+             .with_bundle(renderer)?
              .with_bundle(inputs)?
              .with(MoveSystem, "move_system", &["input_system"])
     +        .with(EatSystem, "eat_system", &["move_system"]);
