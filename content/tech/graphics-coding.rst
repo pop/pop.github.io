@@ -2,7 +2,6 @@ Deploying Buildbot on Kubernetes
 ================================
 
 :date: 2021-04-19
-.. :os_image: 
 :slug: graphics-coding
 :status: draft
 :summary: Taking a complete departure from my backend web knowledge to learn how to make pretty pictures with pixels.
@@ -65,6 +64,28 @@ Some people might say to play to your strengths to maximize your profitability a
 I agree with that, if I were maximizing my life for money.
 I have decided that I am maximizing my life for daily average joy.
 This means work should be enjoyable, but it also means persuing whatever hobby brings the most joy or endorphis, not the hobby that brings in the most cash money.
+I also think people that are soly focused on one thing for that reason are boring as hell.
+If you do one thing becuase that's the most logical way to maximize personal profits, that's boring as hell.
+If you do one thing becuase that brings you the most pure joy and you hadn't even thought of brancing out because you were having so much fun -- hell yeah keep riding that high dude.
+
+Ultimately I like the open source Rust engines, but I don't have any prior knowledge developing engineso I can't be more than a user.
+But I want to be a contributor.
+I want to be the kind of expert that is able to make Rust a games programming language.
+I want to be the kind of expert that gives talks on how to write performant code and inspire others like I have been inspired.
+
+I'm not going to quit my job just to persue this, I've flaked out of other ideas like this in the past, but it is my main hobby at the moment.
+If it becomes my passion maybe I will persue it to try to make a living off of this notion.
+
+.. I write rust. I don't write C++/C/Java/C#/ObjC/.Net.
+   Sometimes I write go, sometimes I write python, sometimes I write javascript.
 
 .. making the audio sampler.
+..   learnig graphcs: Graphics Shaders: Theory and Practice Second Edition
 .. making a game + engine.
+.. "From Scratch" means different things to different people.
+   Why not using Amethyst/Bevy? I gave a talk on Amethyst!
+   Rust b/c I hate bugs.
+   wgpu because I'm lazy and want it to work.
+   rodio for similar reasons.
+   most other stuff is roll your own.
+   using libraries when the library doesn't get in my way.

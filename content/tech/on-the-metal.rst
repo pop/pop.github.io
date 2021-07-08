@@ -31,8 +31,6 @@ I don't even know enough about circuit boards and hardware to make a glib guess 
 Developers and Programmers
 --------------------------
 
-.. quote::
-
     OK, that's cool but like what's your point?
 
 I've been a back-end web developer and DevOps™ engineer since before I graduated in 2017.
@@ -53,14 +51,14 @@ where I think "Hmm, that's going to be slow if ``some_queryset`` is like big".
 
 I call working at this higher level of abstraction "developing".
 
-|Developer|
+Developer
     A devleoper turns compute into value, abstracted away the details of that compute.
 
 This is in contrast with a _programmer_ who is focused on the physical computer.
 A Programmer not only catches obvious bugs like calculating unecessary values, but asks "Is this program written for a computer".
 Programmers think about cache hits and misses, context switches, byte allignment, and in squeezing computers for all their worth.
 
-|Programmer|
+Programmer
     A programmer writes software with the computer it runs on in mind.
 
 Growing up, and even after I started working full time, I considered these two words interchangable.

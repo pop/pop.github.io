@@ -1,38 +1,38 @@
 [[package]]
-category = "main"
-description = "Fast, simple object-to-object and broadcast signaling"
 name = "blinker"
-optional = false
-python-versions = "*"
 version = "1.4"
+description = "Fast, simple object-to-object and broadcast signaling"
+category = "main"
+optional = false
+python-versions = "*"
 
 [[package]]
-category = "main"
-description = "Docutils -- Python Documentation Utilities"
 name = "docutils"
+version = "0.15"
+description = "Docutils -- Python Documentation Utilities"
+category = "main"
 optional = false
 python-versions = "*"
-version = "0.15"
 
 [[package]]
-category = "main"
-description = "Standalone version of django.utils.feedgenerator"
 name = "feedgenerator"
+version = "1.9.1"
+description = "Standalone version of django.utils.feedgenerator"
+category = "main"
 optional = false
 python-versions = "*"
-version = "1.9"
 
 [package.dependencies]
 pytz = ">=0a"
 six = "*"
 
 [[package]]
-category = "main"
-description = "A very fast and expressive template engine."
 name = "jinja2"
+version = "2.10.3"
+description = "A very fast and expressive template engine."
+category = "main"
 optional = false
 python-versions = "*"
-version = "2.10.3"
 
 [package.dependencies]
 MarkupSafe = ">=0.23"
@@ -41,20 +41,20 @@ MarkupSafe = ">=0.23"
 i18n = ["Babel (>=0.8)"]
 
 [[package]]
-category = "main"
-description = "Implements a XML/HTML/XHTML Markup safe string for Python"
 name = "markupsafe"
+version = "1.0"
+description = "Implements a XML/HTML/XHTML Markup safe string for Python"
+category = "main"
 optional = false
 python-versions = "*"
-version = "1.0"
 
 [[package]]
-category = "main"
-description = "Static site generator supporting reStructuredText and Markdown source content."
 name = "pelican"
+version = "4.2.0"
+description = "Static site generator supporting reStructuredText and Markdown source content."
+category = "main"
 optional = false
 python-versions = "*"
-version = "4.2.0"
 
 [package.dependencies]
 blinker = "*"
@@ -71,59 +71,60 @@ unidecode = "*"
 markdown = ["markdown (>=3.1.1,<3.2.0)"]
 
 [[package]]
-category = "main"
-description = "Pygments is a syntax highlighting package written in Python."
 name = "pygments"
-optional = false
-python-versions = "*"
 version = "2.3.1"
-
-[[package]]
-category = "dev"
-description = "Linux filesystem events monitoring"
-name = "pyinotify"
-optional = false
-python-versions = "*"
-version = "0.9.6"
-
-[[package]]
+description = "Pygments is a syntax highlighting package written in Python."
 category = "main"
-description = "Extensions to the standard Python datetime module"
-name = "python-dateutil"
 optional = false
 python-versions = "*"
+
+[[package]]
+name = "pyinotify"
+version = "0.9.6"
+description = "Linux filesystem events monitoring"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "python-dateutil"
 version = "2.6.1"
+description = "Extensions to the standard Python datetime module"
+category = "main"
+optional = false
+python-versions = "*"
 
 [package.dependencies]
 six = ">=1.5"
 
 [[package]]
-category = "main"
-description = "World timezone definitions, modern and historical"
 name = "pytz"
+version = "2021.1"
+description = "World timezone definitions, modern and historical"
+category = "main"
 optional = false
 python-versions = "*"
-version = "2019.3"
 
 [[package]]
-category = "main"
-description = "Python 2 and 3 compatibility utilities"
 name = "six"
+version = "1.11.0"
+description = "Python 2 and 3 compatibility utilities"
+category = "main"
 optional = false
 python-versions = "*"
-version = "1.11.0"
 
 [[package]]
-category = "main"
-description = "ASCII transliterations of Unicode text"
 name = "unidecode"
+version = "1.0.23"
+description = "ASCII transliterations of Unicode text"
+category = "main"
 optional = false
 python-versions = "*"
-version = "1.0.23"
 
 [metadata]
-content-hash = "cbad595093f03066c5955de02b1194c04a02824d83d3f0f601c380f021749cb3"
+lock-version = "1.1"
 python-versions = "^3"
+content-hash = "3ffec1aa8639919944d1dac79eb80ed7dc4a24fa6cbae1f9b2aa02753d02382b"
 
 [metadata.files]
 blinker = [
@@ -135,7 +136,8 @@ docutils = [
     {file = "docutils-0.15.tar.gz", hash = "sha256:54a349c622ff31c91cbec43b0b512f113b5b24daf00e2ea530bb1bd9aac14849"},
 ]
 feedgenerator = [
-    {file = "feedgenerator-1.9.tar.gz", hash = "sha256:5ae05daa9cfa47fa406ee4744d0b7fa1c8a05a7a47ee0ad328ddf55327cfb106"},
+    {file = "feedgenerator-1.9.1-py3-none-any.whl", hash = "sha256:a81d240a2c74a2ae80c393cfe374aff1a19ed3fe41a488eacc66edbe46d3f422"},
+    {file = "feedgenerator-1.9.1.tar.gz", hash = "sha256:a28a5add781509390d1a6a52d017829853ee4bef1d2e7b4d5da0e9d1b395ce54"},
 ]
 jinja2 = [
     {file = "Jinja2-2.10.3-py2.py3-none-any.whl", hash = "sha256:74320bb91f31270f9551d46522e33af46a80c3d619f4a4bf42b3164d30b5911f"},
@@ -160,8 +162,8 @@ python-dateutil = [
     {file = "python_dateutil-2.6.1-py2.py3-none-any.whl", hash = "sha256:95511bae634d69bc7329ba55e646499a842bc4ec342ad54a8cdb65645a0aad3c"},
 ]
 pytz = [
-    {file = "pytz-2019.3-py2.py3-none-any.whl", hash = "sha256:1c557d7d0e871de1f5ccd5833f60fb2550652da6be2693c1e02300743d21500d"},
-    {file = "pytz-2019.3.tar.gz", hash = "sha256:b02c06db6cf09c12dd25137e563b31700d3b80fcc4ad23abb7a315f2789819be"},
+    {file = "pytz-2021.1-py2.py3-none-any.whl", hash = "sha256:eb10ce3e7736052ed3623d49975ce333bcd712c7bb19a58b9e2089d4057d0798"},
+    {file = "pytz-2021.1.tar.gz", hash = "sha256:83a4a90894bf38e243cf052c8b58f381bfe9a7a483f6a9cab140bc7f702ac4da"},
 ]
 six = [
     {file = "six-1.11.0-py2.py3-none-any.whl", hash = "sha256:832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb"},
