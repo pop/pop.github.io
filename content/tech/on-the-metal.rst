@@ -2,7 +2,7 @@ On the Metal
 ============
 
 :date: 2021-01-18
-:status: published
+:status: draft
 :summary: Let's learn computer graphics
 :tags: math, cgi, graphics, 3d
 
