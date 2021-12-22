@@ -14,7 +14,7 @@ This four part series will equip you, a first-time home buyer, with a bunch of k
 Here's the road-map:
 
 1. `Part 1: 🛒 Let's Go Shopping! <buying-a-house-01-lets-go-shopping>`_ in which we start looking for houses.
-2. Part 2: **💸 Show Me the Money!** in which we buy a freaking house.
+2. `Part 2: 💸 Show Me the Money! <buying-a-house-02-show-me-the-money>`_ in which we buy a freaking house.
 3. Part 3: **👷 Renovation Station.** in which we live in the freaking house.
 4. Part 4: **📈 Is This Investing?** where we figure out if we made a huge financial mistake (or achievement!)
 
@@ -240,4 +240,4 @@ It will get better.
 Your patience will be rewarded.
 
 Good luck.
-See you in the next part where we get to buy a freaking house!
+See you in the `part 2 <buying-a-house-02-show-me-the-money>`_ where we get to buy a freaking house!
