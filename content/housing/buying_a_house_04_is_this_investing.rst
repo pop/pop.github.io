@@ -1,8 +1,8 @@
 Buying a House Part 4: Is this investing?
 =========================================
 
-:date: 2021-09-23
-:slug: buying-a-house-03-is-this-investing
+:date: 2022-01-18
+:slug: buying-a-house-04-is-this-investing
 :status: published
 :summary: Everybody says it is, so I guess it is?
 :tags: housing, life, HGTV
