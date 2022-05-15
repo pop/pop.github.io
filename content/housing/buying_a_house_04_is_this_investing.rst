@@ -100,7 +100,7 @@ This is a 111% return over 10 years, or 7.82% annually.
 So if Finley sold their house after 10 years they would make a profit of ~290k.
 
 I neglected to calculate what Finely's index fund strategy would return after only 10 years, so let's do that now.
-Using the above code, but limiting it to just 10 years instead of 30, we get a ~363k total which does beat the housing investment by a fair margin. `citation needed<https://www.calculator.net/roi-calculator.html?beginbalance=259000&endbalance=550000&investmenttime=date&investmentlength=2.5&beginbalanceday=08%2F01%2F2011&endbalanceday=08%2F01%2F2021&ctype=1&x=69&y=36>`_
+Using the above code, but limiting it to just 10 years instead of 30, we get a ~363k total which does beat the housing investment by a fair margin. `citation needed <https://www.calculator.net/roi-calculator.html?beginbalance=259000&endbalance=550000&investmenttime=date&investmentlength=2.5&beginbalanceday=08%2F01%2F2011&endbalanceday=08%2F01%2F2021&ctype=1&x=69&y=36/>`_
 
 Note that I am omitting all of the nickles and dimes that add up on both sides.
 Capital gains tax makes your index fund strategy less appealing.
