@@ -30,7 +30,7 @@ DISPLAY_PAGE_ON_MENU = True
 STATIC_PATHS = ['assets']
 EXTRA_PATH_METADATA = {
   'assets/CNAME': {'path': 'CNAME'},
-  'assets/resume.pdf': {'path': 'resume.pdf'},
+  'assets/Elijah Voigt.pdf': {'path': 'Elijah Voigt.pdf'},
   'assets/hobbes.ico': {'path': 'favicon.ico'},
   'assets/garbled-circuits-game.html.out': {
     'path': 'garbled-circuits-game.html'
@@ -73,7 +73,7 @@ LICENSE_IMG = '<img alt="Creative Commons License" style="border-width:0" src="/
 MENUITEMS = [
   ("(🏠 elijahcaine.me)", "/"),
   ("(🐙 github 🐱)", "https://github.com/pop/"),
-  ("(👔 resume)", "/resume.pdf"),
+  ("(👔 resume)", "/Elijah Voigt.pdf"),
   ("(📰 feed)", "/atom.xml"),
 ]
 FOOTER_WHIMSY = (

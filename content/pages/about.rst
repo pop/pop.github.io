@@ -42,7 +42,7 @@ Play
 For about 3 years I ran and mentored the Oregon State University Linux Users Group (`osulug`_).
 We hosted
 
-- *Industry Professionals* like CoreOS and Nordstrom engineers to speak with students about internships and 
+- *Industry Professionals* like CoreOS and Nordstrom engineers to speak with students about internships and
 - *Student Talks* where club members gave talks on Raspberry Pi projects, software projects, Thesis Defense practice.
 - *Install Festivals* where we helped people install Linux.
 - *Coding Puzzles* where we are challenged to finish coding puzzles and rewarded for completing the most.
@@ -52,7 +52,7 @@ We hosted
 The LUG stayed busy.
 
 .. _osulug: http://lug.oregonstate.edu/
-.. _Resume: /resume.pdf
+.. _Resume: /Elijah Voigt.pdf
 .. _Contact: /contact/
 .. _Open Source Lab: https://osuosl.org
 .. _CoreOS: https://coreos.com
