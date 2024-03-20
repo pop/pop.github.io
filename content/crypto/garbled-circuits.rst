@@ -12,7 +12,7 @@ Garbled Circuits
     To read all of the posts, check out the 'Independent Crypto' tag.
 
 Let's imagine you are a billionaire.
-You want to know if you have more money than your billionaire friend Bob, but for some reason it's *very* faux pas to let anybody how much money you have, even your good friend Bob.
+You want to know if you have more money than your billionaire friend Bob, but for some reason it's *very* faux pas to let anybody know how much money you have, even your good friend Bob.
 
 But you're a billionaire!
 You're not used to the phrase "that isn't possible".
@@ -61,7 +61,7 @@ How does Alice actually... 'garble' a circuit?
 It sounds kinda dirty.
 
 Each gate (OR, AND, XOR, etc) has two inputs.
-Sick with me.
+Stick with me.
 Each input is encrypted.
 Keeping up?
 So you need a *key* to use *each gate*.
@@ -75,10 +75,10 @@ Remember truth-tables for OR?
 Here's a reminder:
 
 ===== === ===
- OR    0   1  
+ OR    0   1
 ===== === ===
-**0**  0   1  
-**1**  1   1  
+**0**  0   1
+**1**  1   1
 ===== === ===
 
 This table is going to be important for Alice's part of this dance.
@@ -122,7 +122,7 @@ Bob's input
 Bob has enough information to get one of the four possible outputs of the circuit, but doesn't know if Alice's input is a 1 or a 0.
 
 Importantly, while Bob can share the output of the circuit, he should **not** share his input.
-That would make using OT (step 6) obtuse. 
+That would make using OT (step 6) obtuse.
 
 Extending the garbled gate
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -131,7 +131,7 @@ Extending the garbled gate
     :align: center
     :width: 100%
     :alt: Garbled circuit example diagram.
- 
+
 .. note::
 
     The UTF-8 Padlock symbol doesn't render on my browser because I seem to have gone back in the time to the late 90s.
@@ -297,7 +297,7 @@ Errata
 
 .. [5]
   Oblivious Transfer has been described to me as:
-  
+
   - Alice sends two possible options to a box labeled OT.
   - Bob sends a choice to the box labeled OT.
   - Bob gets back one of the two options, without knowledge of the other.

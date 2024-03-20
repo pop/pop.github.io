@@ -7,6 +7,14 @@ Self Censorship and the Social Justice Warrior
 :summary: Thoughts and opinions about our relation with the media we consume. Or something like that...
 :tags: Internet Culture, Social Justice Warrior, Opinion
 
+---
+
+**Authors note from 2024**
+I don't *disagree* with the thesis of this piece (something about the internet being overzealous in it's negative feedback to creators?) but a lot of my claims are over-reaching and (more importantly) I don't think my voice contributes much to this converstaion -- then and now.
+I am leaving it up because I don't feel that it is problematic, but I do suggest you find a different post to read because honestly it's not very good.
+
+---
+
 This post is an articulation of *feelings* I have been mulling over about
 internet media and culture, a subject I have no academic qualification to speak
 on but have strong feelings about.  I don't intend for this to be inflammatory
@@ -100,9 +108,9 @@ on The A.V. Club:
     [...]
 
     The online backlash was apparently quick, powerful, and seemingly coming
-    from two different directions: â€™shippers, irritated and outraged by what
+    from two different directions: "shippers, irritated and outraged by what
     they saw as Zuke pushing the agenda of her preferred pairing, and others
-    who accused the Cartoon Network show of engaging in â€œqueer baiting.â€
+    who accused the Cartoon Network show of engaging in 'queer baiting.'
     Among other definitions, the term refers to TV and film producers
     introducing perceived sexual tension between two same-sex characters with
     no intent of ever bringing the relationship to fruition, and is decried by
@@ -112,7 +120,7 @@ on The A.V. Club:
     The criticism and attackers were apparently strong and frequent enough that
     Zuke decided to shut down her social media presence, and close herself off
     to â€œthousands of people who think because I work on a TV show that I owe
-    them myself all the time.â€ Her account has since been deleted, but a
+    them myself all the time." Her account has since been deleted, but a
     screenshot of her last tweets is currently making the rounds online.
 
 In this instance the writer of a very progressive kids show (which I proudly
