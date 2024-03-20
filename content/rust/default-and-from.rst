@@ -306,22 +306,22 @@ We need to cast it up to a Bevy ``NodeBundle`` with an implementation of ``From<
                 BottomLeft  => Rect {
                     bottom: percent(0.0),
                     left: percent(0.0),
-                    ..default::default()
+                    ..Default::default()
                 },
                 BottomRight => Rect {
                     bottom: percent(0.0),
                     right: percent(0.0),
-                    ..default::default()
+                    ..Default::default()
                 },
                 TopLeft     => Rect {
                     top: percent(0.0),
                     left: percent(0.0),
-                    ..default::default()
+                    ..Default::default()
                 },
                 TopRight    => Rect {
                     top: percent(0.0),
                     right: percent(0.0),
-                    ..default::default()
+                    ..Default::default()
                 },
             }
         }
