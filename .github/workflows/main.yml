@@ -3,37 +3,16 @@ name: Publish Blog
 on:
   push:
     branches:
-    - source
+      - source
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v4
 
-    - name: Setup Python
-      uses: actions/setup-python@v1
-      with:
-        python-version: '3.12'
-        architecture: 'x64'
-
-    - name: Cache dependencies
-      uses: actions/cache@v1
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
-
-    - name: Install dependencies
-      run: |
-        python3 -m pip install --upgrade pip
-        python3 -m pip install -r ./requirements.txt
-
-    - run: pelican ./content -o ./output -s ./pelicanconf.py --fatal errors
-
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3.9.3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./output
+    - name: build_and_deploy
+      uses: shalzz/zola-deploy-action@master
+      env:
+        PAGES_BRANCH: gh-pages
+        TOKEN: ${{ secrets.GITHUB_TOKEN }}
