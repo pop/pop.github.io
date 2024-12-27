@@ -1,46 +1,27 @@
-# elijahcaine.me
+# blog.elijah.run
 
-This is the git repo for my blog.
-Thanks for checkit it out!
+This site contains my primary blog and personal site.
+It can be accessed on a few domains:
 
-## theme
+* https://elijah.run
+* https://elijahcaine.me (legacy)
 
-First off, big thanks to [porterjamesj] on GitHub for letting me fork his theme for this blog.
-I like the theme a lot.
+## Developing
 
-## getting started
+I use NixOS for devleopment, but you don't have to!
+You just need the following programs installed:
 
-To run the website locally, you should probably first install [Poetry].
+* zola
+* make
 
-Once you've done that, run the following to get your environment in order:
+Then run the following to run the website locally:
 
-```sh
-$ poetry install
-Creating virtualenv elijahcaine.me-kmgybYzN-py3.7 in /home/myuser/.cache/pypoetry/virtualenvs
-Installing dependencies from lock file
-
-
-Package operations: 11 installs, 0 updates, 0 removals
-
-  - Installing markupsafe (1.0)
-... snip ...
-  - Installing pelican (4.2.0)
+```
+make dev
 ```
 
-Great! Now just run this to get the dev server running:
+This will build a local copy of the website you can view at a URL printed by the command, usually http://localhost:1111/ or something like that.
 
-```sh
-poetry run devserver
-```
+## Copyright
 
-This will auto-reload the server every time you update a content file.
-How cool!
-
-## contributing
-
-If you'd like to contribute by suggesting edits or even adding an article to the blog, make an issue or pull request.
-
-Thanks!
-
-[Poetry]: https://poetry.eustace.io
-[porterjamesj]: https://github.com/porterjamesj/
+All original works are is licensed under CC BY 4.0 unless otherwise stated.

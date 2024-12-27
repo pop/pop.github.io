@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% import "macros.html" as macros %}
+
+{%- block main -%}
+  <main>
+
+    {{ section.content | safe }}
+
+    <h1>Recent Posts</h1>
+
+    <ul class="posts">
+      {%- for page in section.pages %}
+        {%- if page.date and not page.draft and page.taxonomies.tags and page.taxonomies.tags is not containing("archive") %}
+          {{ macros::post_item(page=page) }}
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+
+    <a href={{ get_url(path="atom.xml") }}>📰 feed</a>
+    <a href={{ get_url(path="/tags/archive") }}>📼 archive</a>
+  </main>
+{% endblock %}

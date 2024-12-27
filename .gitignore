@@ -8,3 +8,5 @@ style.css.map
 dist/
 __pycache__/
 *.pid
+public/
+.direnv/
