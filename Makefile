@@ -1,8 +1,8 @@
 dev:
-	zola serve
+	zola serve --drafts
 
 build:
-	zola build
+	zola build --drafts
 
 check/links:
 	@wget --directory-prefix=/tmp/check-links \
