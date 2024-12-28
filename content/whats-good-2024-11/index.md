@@ -1,5 +1,5 @@
 +++
-title = "What's good: October 2024"
+title = "What's good: November 2024"
 
 description = "batman and toontown"
 

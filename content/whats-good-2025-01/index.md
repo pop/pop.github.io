@@ -12,4 +12,6 @@ taxonomies.tags = [
 draft = true
 +++
 
-Whose to say!
+# Starter Villian
+
+A novel by John Scalzi, one of my current favorites.
