@@ -14,8 +14,6 @@ taxonomies.tags = [
 draft = true
 +++
 
-Animated gif of the game goes here.
-
 Intentions with the game:
 * Support multiple platforms (desktop, web, phones)
 * Get up to date on the latest Bevy (v0.15)

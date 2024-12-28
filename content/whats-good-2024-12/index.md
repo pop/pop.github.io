@@ -25,7 +25,7 @@ Folks shared a variety of ARTifacts:
 * Stamps they just got into making (all fall-themed)
 * A poem made for the event
 * A piano cover many months in the works
-* I used the deadline to light a fire under my ass to [make a small game](@/set-game.md)
+* I used the deadline to light a fire under my ass to make a small game.
 
 It was really nice that everybody was able to share a piece of themselves that doesn't come up often and which is usually (at best) just hanging up at their home.
 It was an open invitation to share a part of yourself you have put time and effort into, but don't usually feel  you can brag or show off without it being an "all-eyes-on-me-big-deal" thing.
