@@ -20,3 +20,17 @@ crawl:
 		 --reject livereload.js \
 		 -rp http://127.0.0.1:1111 \
 		| less
+
+# If the first argument is "new"...
+ifeq (new,$(firstword $(MAKECMDGOALS)))
+  # use the rest as arguments for "new"
+  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  # ...and turn them into do-nothing targets
+  $(eval $(RUN_ARGS):;@:)
+endif
+
+.PHONY: new
+new:
+	mkdir content/$(RUN_ARGS)
+	cp content/template content/$(RUN_ARGS)/index.md
+	echo content/$(RUN_ARGS)/index.md

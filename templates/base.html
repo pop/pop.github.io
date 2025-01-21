@@ -22,7 +22,13 @@
 </head>
 <body>
   {% include "header.html" ignore missing %}
+  {%- if page.draft -%}
+      <div class=draft><p>DRAFT</p></div>
+  {%- endif -%}
   {%- block main -%}{%- endblock -%}
+  {%- if page.draft -%}
+      <div class=draft><p>DRAFT</p></div>
+  {%- endif -%}
   {%- include "footer.html" ignore missing -%}
   {%- include "custom_body.html" ignore missing -%}
 </body>
