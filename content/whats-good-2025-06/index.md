@@ -3,6 +3,8 @@ title = "What's Good #9 (June 2025)"
 
 description = "I read a very interesting and unpleasent book"
 
+extra.image = "/whats-good-2025-06/preview.png"
+
 date = "2025-06-27"
 
 taxonomies.tags = [

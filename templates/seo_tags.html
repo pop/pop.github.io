@@ -1,0 +1,16 @@
+<meta name="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ config.title }}{% endif %}">
+<meta name="title" content="{% if page.title %}{{ page.title }}{% else %}{{ config.title }}{% endif %}">
+
+<meta name="og:type" content="article">
+
+{% if page.extra.image %}
+<meta name="og:image" content={{ page.extra.image }}>
+{% endif %}
+
+{% if page.description %}
+<meta name="description" content="{{ page.description }}">
+<meta name="og:description" content="{{ page.description }}">
+{% else %}
+<meta name="description" content="{{ config.description }}">
+<meta name="og:description" content="{{ config.description }}">
+{% endif %}
