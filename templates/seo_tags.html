@@ -1,10 +1,11 @@
-<meta name="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ config.title }}{% endif %}">
 <meta name="title" content="{% if page.title %}{{ page.title }}{% else %}{{ config.title }}{% endif %}">
+<meta name="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ config.title }}{% endif %}">
 
 <meta name="og:type" content="article">
 
 {% if page.extra.image %}
 <meta name="og:image" content={{ page.extra.image }}>
+<meta property="twitter:image" content="{{ config.base_url }}{{ page.extra.image }}"/>
 {% endif %}
 
 {% if page.description %}

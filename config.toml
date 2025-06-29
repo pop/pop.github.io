@@ -1,5 +1,5 @@
 title = "elijah.run"
-base_url = "/"
+base_url = "https://elijah.run"
 description = "A blog about tech, media, and art"
 
 # Whether to automatically compile all Sass files in the sass directory
