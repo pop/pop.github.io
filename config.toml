@@ -57,5 +57,10 @@ name = "(🐙 github 🐱)"
 url = "https://github.com/pop"
 
 [[extra.main_menu]]
+name = "(🦋 bluesky)"
+url = "https://bsky.app/profile/elijah.run"
+
+[[extra.main_menu]]
 name = "(👔 resume)"
 url = "/Elijah Voigt.pdf"
+
