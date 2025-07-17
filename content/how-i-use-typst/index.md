@@ -15,22 +15,15 @@ draft = false
 
 This week I re-wrote [my resume](/Elijah%20Voigt.pdf)  in [typst](https://typst.app/).
 
-<div style="width:100%;">
-    <iframe
-        id="pdf-js-viewer"
-        src="/how-i-use-typst/old.pdf#zoom=page-width"
-        style="float:left;width:49%"
-        >
-    </iframe>
-    <iframe
-        id="pdf-js-viewer"
-        src="/how-i-use-typst/new.pdf"
-        style="float:right;width:49%"
-        >
-    </iframe>
-</div>
+[Old](/how-i-use-typst/old.pdf):
+![old resume](/how-i-use-typst/old.png)
 
-Since graduating college I don't write a lot of LaTeX, but so far and I prefer typst.
+[New](/how-i-use-typst/new.pdf):
+![new resume](/how-i-use-typst/new.png)
+
+*Can you tell the difference? No? Excellent!*
+
+Since graduating college I don't write a lot of LaTeX, but so far I prefer typst!
 
 # 😧 typst is not (just) a better LaTeX
 
