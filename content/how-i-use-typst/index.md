@@ -3,7 +3,7 @@ title = "How I use typst"
 
 date = "2025-07-17"
 
-description = "TODO"
+description = "Is typst objectively better than LaTeX? Maybe!"
 
 taxonomies.tags = [
     "how i use",
