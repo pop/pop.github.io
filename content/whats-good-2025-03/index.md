@@ -6,7 +6,7 @@ description = "Not being sick is pretty good!"
 date = "2025-03-31"
 
 taxonomies.tags = [
-    "what's good"
+    "whats good"
 ]
 
 draft = false

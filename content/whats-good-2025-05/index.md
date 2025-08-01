@@ -6,7 +6,7 @@ description = "A Second Child?!"
 date = "2025-06-01"
 
 taxonomies.tags = [
-    "what's good",
+    "whats good",
     "godzilla",
 ]
 
