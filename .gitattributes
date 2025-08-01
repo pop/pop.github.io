@@ -3,3 +3,10 @@
 *.jpeg filter=lfs diff=lfs merge=lfs -text
 *.xcf filter=lfs diff=lfs merge=lfs -text
 *.gif filter=lfs diff=lfs merge=lfs -text
+content/whats-good-2025-01/montavilla-open-mic.jpeg filter=lfs diff=lfs merge=lfs -text
+content/whats-good-2025-06/civil[[:space:]]war.jpeg filter=lfs diff=lfs merge=lfs -text
+content/whats-good-2025-07/biollante-explosions.jpeg filter=lfs diff=lfs merge=lfs -text
+content/whats-good-2025-07/biollante-fire.jpeg filter=lfs diff=lfs merge=lfs -text
+content/whats-good-2025-07/biollante-not-the-monsters.jpeg filter=lfs diff=lfs merge=lfs -text
+content/whats-good-2025-07/biollante-we-are.jpeg filter=lfs diff=lfs merge=lfs -text
+content/whats-good-2025-07/biollante-woman.jpeg filter=lfs diff=lfs merge=lfs -text
