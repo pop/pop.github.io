@@ -6,7 +6,7 @@ description = "Stand up comedy, science playground, sci-fi, and some short games
 date = "2025-01-31"
 
 taxonomies.tags = [
-    "what's good"
+    "whats good"
 ]
 
 draft = false

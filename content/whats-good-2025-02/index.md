@@ -6,7 +6,7 @@ description = "A tough month with some notable highlights"
 date = "2025-03-01"
 
 taxonomies.tags = [
-    "what's good"
+    "whats good"
 ]
 
 draft = false

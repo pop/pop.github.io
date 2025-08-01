@@ -6,7 +6,7 @@ description = "batman and toontown"
 date = "2024-11-30"
 
 taxonomies.tags = [
-    "what's good"
+    "whats good"
 ]
 +++
 

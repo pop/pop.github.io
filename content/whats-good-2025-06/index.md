@@ -8,7 +8,7 @@ extra.image = "/whats-good-2025-06/preview.png"
 date = "2025-06-27"
 
 taxonomies.tags = [
-    "what's good",
+    "whats good",
     "godzilla",
 ]
 

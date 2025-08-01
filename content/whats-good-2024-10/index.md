@@ -6,7 +6,7 @@ description = "Binging comics, embracing spotify, detoxing YouTube"
 date = "2024-10-31"
 
 taxonomies.tags = [
-    "what's good"
+    "whats good"
 ]
 +++
 
