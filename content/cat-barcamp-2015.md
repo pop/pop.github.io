@@ -6,7 +6,8 @@ date = "2015-10-12"
 description = "Another great unconference sponsored by the PSU Computer Action Team."
 
 taxonomies.tags = [
-    "barcamp"
+    "barcamp",
+    "archive",
 ]
 +++
 

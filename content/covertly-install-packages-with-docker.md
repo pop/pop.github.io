@@ -6,7 +6,8 @@ date = "2015-10-07"
 description = "A simple guide on install $PACKAGE with $CONTAINER_RUNTIME."
 
 taxonomies.tags = [
-    "docker"
+    "docker",
+    "archive",
 ]
 +++
 

@@ -6,17 +6,54 @@
 
     {{ section.content | safe }}
 
-    <h1>Recent Posts</h1>
+    <div class="content">
+      <div class="whats-good">
+        <h1>What's Good</h1>
 
-    <ul class="posts">
-      {%- for page in section.pages %}
-        {%- if page.date and not page.draft and page.taxonomies.tags and page.taxonomies.tags is not containing("archive") %}
-          {{ macros::post_item(page=page) }}
-        {%- endif -%}
-      {%- endfor -%}
-    </ul>
+        <ul class="posts">
+          {% set_global items = 0 %}
+          {%- for page in section.pages %}
+            {%- if
+                page.date
+                and not page.draft
+                and page.taxonomies.tags
+                and page.taxonomies.tags is containing("whats good")
+                and page.taxonomies.tags is not containing("archive")
+                and items < 5
+            %}
+              {{ macros::post_item(page=page) }}
+              {% set_global items = items + 1 %}
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+        <a href={{ get_url(path="/tags/whats-good") }}>🗃️ the rest</a>
+      </div>
 
-    <a href={{ get_url(path="atom.xml") }}>📰 feed</a>
-    <a href={{ get_url(path="/tags/archive") }}>📼 archive</a>
+      <div class="games">
+        <h1>Games</h1>
+
+        <a href="https://games.elijah.run">👾 full list</a>
+      </div>
+
+      <div class="misc">
+        <h1>More Stuff</h1>
+
+        <ul class="posts">
+          {%- for page in section.pages %}
+            {%- if
+                page.date
+                and not page.draft
+                and page.taxonomies.tags
+                and page.taxonomies.tags is not containing("archive")
+                and page.taxonomies.tags is not containing("whats good")
+            %}
+              {{ macros::post_item(page=page) }}
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+        <a href={{ get_url(path="atom.xml") }}>📰 full feed</a>
+        <a href={{ get_url(path="/tags/archive") }}>📼 archive</a>
+      </div>
+    </div>
   </main>
 {% endblock %}
