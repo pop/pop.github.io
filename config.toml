@@ -8,8 +8,6 @@ compile_sass = false
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = false
 
-theme = "zola-bearblog"
-
 generate_feeds = true
 feed_filenames = ["atom.xml"]
 
@@ -45,20 +43,20 @@ max_level = 2
 visible_on_load = true
 
 [[extra.main_menu]]
-name = "(🏠 elijah.run)"
-url = "@/_index.md"
-
-[[extra.main_menu]]
 name = "(🕹️ games)"
-url = "https://games.elijah.run"
+url = "/games"
 
 [[extra.main_menu]]
-name = "(🐙 github 🐱)"
-url = "https://github.com/pop"
+name = "(✉️ email)"
+url = "mailto:pop@elijah.run"
 
 [[extra.main_menu]]
 name = "(🦋 bluesky)"
 url = "https://bsky.app/profile/elijah.run"
+
+[[extra.main_menu]]
+name = "(🐙 github 🐱)"
+url = "https://github.com/pop"
 
 [[extra.main_menu]]
 name = "(👔 resume)"

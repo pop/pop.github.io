@@ -1,0 +1,101 @@
+<style>
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+nav {
+    position: fixed;
+    top: 0;
+}
+
+footer{
+    position: fixed;
+    bottom: 0;
+}
+
+.console {
+    font-family:
+        /* Modern macOS & iOS system monospace */
+        "SFMono-Regular",
+        /* Windows system monospace (newer) */
+        "Consolas",
+        /* Windows legacy monospace fallback */
+        "Courier New",
+        /* Generic monospace fallback */
+        monospace;
+}
+
+.link {
+    font-weight: bold;
+    color: #333;
+}
+
+.about {
+    color: #666;
+}
+
+.stuff {
+    min-width: 400px;
+    font-size: 1.5em;
+}
+
+img.bg {
+    float: right;
+    width: 100%;
+}
+
+body {
+    background: url(/images/bg.jpg) no-repeat fixed bottom center;
+    background-size: contain;
+}
+</style>
+<body>
+    <nav>
+        <ul class=stuff>
+            <li class=console>
+                <a class=link href=/>/</a>
+                <span class=about>home</span>
+            </li>
+            <li class=console>
+                <a class=link href=/whats-good>/whats-good</a>
+                <span class=about>a monthly blog about good stuff</span>
+            </li>
+            <li class=console>
+                <a class=link href=/games>/games</a>
+                <span class=about>videogames i've worked on</span>
+            </li>
+            <li class=console>
+                <a class=link href=/blog>/blog</a>
+                <span class=about>the rest of my writing</span>
+            </li>
+            <li class=console>
+                <a class=link href=/fiction>/fiction</a>
+                <span class=about>more writing</span>
+            </li>
+            <li class=console>
+                <a class=link href=mailto:pop@elijah.run>pop@elijah.run</a>
+                <span class=about>email</span>
+            </li>
+            <li class=console>
+                <a class=link href=https://bsky.app/profile/elijah.run>@elijah.run</a>
+                <span class=about>bluesky</span>
+            </li>
+            <li class=console>
+                <a class=link href=https://github.com/pop>pop</a>
+                <span class=about>github</span>
+            </li>
+        </ul>
+    </nav>
+    <footer class=console>
+        Elijah Voigt
+    </footer>
+</body>
