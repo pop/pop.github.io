@@ -19,7 +19,7 @@ Hey I turned 30! That's good!
 
 To celebrate I _finally_ threw myself a birthday party!
 
-{{ image(path="whats-good/2025/04/boyhood.png", width=250, alt="Boyhood") }}
+![Boyhood](boyhood.png)
 
 Usually I forgo the birthday _party_ in favor of like... a nice dinner or something.
 A little treat instead of a big thing.
@@ -36,19 +36,19 @@ If you haven't seen it you should!
 
 Since ~November 2024 I have been working through my comics backlog of ~200 (probably closer to 300 by now) single issue comic books.
 
-{{ image(path="whats-good/2025/04/saga.jpg", width=500, alt="a stack of saga comic books") }}
+![a stack of saga comic books](saga.jpg)
 
 I have been collecting new release comics since ~2018 and while I read _some_ of them I never had the habit of reading _all_ of them, so over the years the "unread" pile stacked up.
 In November I decided to slay the dragon and finally vanquish the beast that was my comics backlog...
 
-{{ image(path="whats-good/2025/04/nights.jpg", width=500, alt="a stack of nights comic books") }}
+![a stack o fnights comic books](nights.jpg)
 
 ... and 6 months later I finall did!
 
 I read a lot of great comics -- I will write a tier list at some point -- and I am _very_ glad to be caught up.
 A weight is lifted off my shoulders now that I have reached *Comic Book Inbox Zero*
 
-{{ image(path="whats-good/2025/04/dawn-runner.jpg", width=500, alt="a stack of dawn runner comic books") }}
+![a stack of dawn runner comic books](dawn-runner.jpg)
 
 > Just ignore my trade paper backs backlog which is like... even more daunting than singles were.
 
@@ -56,11 +56,11 @@ I want to call out my two favorite characters across all 200-300-ish issues...
 
 Jeff (Deadpool, Marvel):
 
-{{ image(path="whats-good/2025/04/jeff.jpg", width=500, alt="jeff the shark dog") }}
+![jeff the shark dog](jeff.jpg)
 
 and Sploot (Saga, Image):
 
-{{ image(path="whats-good/2025/04/sploot.jpg", width=500, alt="sploot the dolphin dog") }}
+![sploot the dolphin dog](sploot.jpg)
 
 I would die for Sploot.
 
@@ -78,7 +78,7 @@ Anyway here's what I think of this month's Godzillas...
 
 ## Godzilla (1954)
 
-{{ image(path="whats-good/2025/04/godzilla.png", width=300, alt="godzilla (1954)") }}
+![Godzilla (1954)](godzilla.png)
 
 Godzilla is a classic.
 Black and white, dramatic, the guy in the rubber suit is only on camera a bit more than the shark in Jaws was, it's fun.
@@ -89,7 +89,7 @@ They were clearly **not** in the franchise building mindset at this point.
 
 ## Godzilla Raids Again (1956)
 
-{{ image(path="whats-good/2025/04/godzilla-raids-again.png", width=500, alt="godzilla raids again (1956)") }}
+![Godzilla Raids Again (1956)](godzilla-raids-again.png)
 
 I have no idea why it's called "Raids Again" -- Godzilla does not raid anything.
 It fights a big ol' dino, fucks some shit up, then gets buried in an avalanche.
@@ -101,7 +101,7 @@ This one at least leaves Godzilla's death bit more ambiguous leaving room for...
 
 ## King Kong vs Godzilla (1962)
 
-{{ image(path="whats-good/2025/04/king-kong-vs-godzilla.png", width=300, alt="king kong vs godzilla (1962)") }}
+![King Kong vs Godzilla (1962)](king-kong-vs-godzilla.png)
 
 This is the first Godzilla in COLOR and it pops!
 Some "Natives" in one scene have vibrant costumes that really put that color film to work.

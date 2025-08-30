@@ -1,0 +1,32 @@
+{% block header %}
+<header>
+  {% if section %}
+    <!-- this is a section of pages -->
+    {% set components = section.components %}
+  {% elif page %}
+    <!-- this is a single page -->
+    {% set components = page.components %}
+  {% elif term %}
+    <!-- this is a taxonomy term -->
+    {% set components = ["tags", term.slug] %}
+  {% elif taxonomy %}
+    <!-- this is a taxonomy term -->
+    {% set components = [taxonomy.name] %}
+  {% else %}
+    {% set components = [] %}
+  {% endif %}
+
+  <span class="console">
+  {% set_global path = "" %}
+  <a href="/">elijah.run</a>/
+  {%- for comp in components -%}
+    {% set_global path = path ~ "/" ~ comp -%}
+    {%- if not loop.last -%}
+      <a href="{{ path }}/">{{ comp | escape }}</a>/
+    {%- else -%}
+      {{ comp | escape }}
+    {%- endif -%}
+  {%- endfor -%}
+  </span>
+</header>
+{% endblock %}

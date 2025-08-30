@@ -34,13 +34,7 @@ The kids didn't mind it was so hot, and a bunch of people showed up!
 
 ## When the Moon Hits Your Eye (2025)
 
-{{ image(
-        path="whats-good/2025/07/when-the-moon-hits-your-eye.png",
-        alt="When the Moon Hits Your Eye by John Scalzi",
-        width=250,
-        float="right"
-    )
-}}
+![When the Moon Hits Your Eye by John Scalzi](when-the-moon-hits-your-eye.png)
 
 Another very fun Scalzi romp in which the moon turns to cheese and the world goes through an existential crisis.
 
@@ -54,13 +48,7 @@ Fun characters, solid premise, quick read.
 
 ## How to Talk so Little Kids Will Listen (2017, Audiobook)
 
-{{ image(
-        path="whats-good/2025/07/how-to-talk-so-little-kids-will-listen.png",
-        alt="How to Talk so Little Kids by Joanna Faber & Julie King",
-        width=200,
-        float="left"
-    )
-}}
+![How to Talk so Little Kids by Joanna Faber & Julie King](how-to-talk-so-little-kids-will-listen.png)
 
 As mentioned above, I am responsible for a two year old boy which is... challenging.
 Thankfully I have read this book and now I have TONS to tools to help!
@@ -85,13 +73,7 @@ Try it out!
 
 ## Kentucky Route Zero (2020)
 
-{{ image(
-        path="whats-good/2025/07/kentucky-route-zero.png",
-        alt="KRZ",
-        width=250,
-        float="right"
-    )
-}}
+![Kentucky Route Zero](kentucky-route-zero.png)
 
 After _years_ I have finally finished KRZ and like... wow.
 I love it.
@@ -105,13 +87,7 @@ You won't regret it.
 
 ## Split Fiction (2025)
 
-{{ image(
-        path="whats-good/2025/07/split-fiction.png",
-        alt="Split Fiction",
-        width=250,
-        float="left"
-    )
-}}
+![Split Fiction](split-fiction.png)
 
 On the totally different end of the spectrum we have Split Fiction!
 
@@ -127,18 +103,11 @@ That's right you're going to play an entire amazing game and then they're going 
 
 ## Superman (2025)
 
-{{ image(
-        path="whats-good/2025/07/superman.jpg",
-        alt="Superman (2025)",
-        width=250,
-        float="right"
-    )
-}}
+![Superman (2025)](superman.jpg)
 
 It's solid!
 Superman fights bad guys, struggles, is superman.
 Also he's pro-Palestine -- hell yeah!
-
 
 ## Godzillas
 
@@ -147,13 +116,7 @@ But he's back and although the movies feel _slightly_ more modern it's the same 
 
 ### Godzilla vs Megalon (1973)
 
-{{ image(
-        path="whats-good/2025/07/megalon.png",
-        alt="Godzilla vs Megalon (1973)",
-        width=250,
-        float="left"
-    )
-}}
+![Godzilla vs Megalon (1973)](megalon.png)
 
 The hi-light of Megalon was the introduction of Jet Jaguar!
 A character I knew and who felt _very familiar_ thanks to my upbringing on [Power Rangers](https://en.wikipedia.org/wiki/Power_Rangers) and [Beatleborgs](https://en.wikipedia.org/wiki/Big_Bad_Beetleborgs).
@@ -166,13 +129,7 @@ Science was just different in the 50's, 60's, and 70's I guess.
 
 ### Godzilla vs Mechagodzilla (1974)
 
-{{ image(
-        path="whats-good/2025/07/mechagodzilla.png",
-        alt="Godzilla vs Mechagodzilla (1974)",
-        width=250,
-        float="right"
-    )
-}}
+![Godzilla vs Mechagodzilla (1974)](mechagodzilla.png)
 
 Mechagodzilla is a _classic_.
 When I mention Godzilla folks usually say "Oh yeah like Gidorah and Mechagodzilla".
@@ -183,13 +140,7 @@ That said it in the final fight scene Godzilla becomes magnetic and I love that 
 
 ### Terror of Mechagodzilla (1975)
 
-{{ image(
-        path="whats-good/2025/07/terror-of-mechagodzilla.png",
-        alt="Terror of Mechagodzilla (1975)",
-        width=250,
-        float="left"
-    )
-}}
+![Terror of Mechagodzilla (1975)](terror-of-mechagodzilla.png)
 
 This is a totally forgettable entry BECAUSE THE ALIENS CONTROL THE KAIJU -- AGAIN!!
 
@@ -200,13 +151,7 @@ It's a nice way to catch you up on where the story is and makes the movies feel 
 
 ### Return of Godzilla (1984)
 
-{{ image(
-        path="whats-good/2025/07/return-of-godzilla.png",
-        alt="The Return of Godzilla (1984)",
-        width=250,
-        float="right"
-    )
-}}
+![The Return of Godzilla (1984)](return-of-godzilla.png)
 
 This movie was more confusing than anything for me:
 
@@ -221,13 +166,7 @@ The characters mention the _original_ Godzilla movies in the 50s (as events in t
 
 ### Godzilla vs Biollante (1989)
 
-{{ image(
-        path="whats-good/2025/07/biollante.png",
-        alt="Godzilla vs Biollante (1989)",
-        width=250,
-        float="left"
-    )
-}}
+![Godzilla vs Biollante (1989)](biollante.png)
 
 We're back baby.
 This is a classic Godzilla story if I've ever seen one.
@@ -236,47 +175,17 @@ Godzilla fights a genetic clone if himself -- but plant!
 
 Honestly it just rocks visually:
 
-{{ image(
-        path="whats-good/2025/07/biollante-explosions.jpeg",
-        alt="Godzilla in front of explosions",
-        width=500,
-        float="center"
-    )
-}}
+![Godzilla in front of explosions](whats-good/2025/07/biollante-explosions.jpeg)
 
-{{ image(
-        path="whats-good/2025/07/biollante-fire.jpeg",
-        alt="Godzilla facing Biollante on fire",
-        width=500,
-        float="center"
-    )
-}}
+![Godzilla facing Biollante on fire](biollante-fire.jpeg)
 
-{{ image(
-        path="whats-good/2025/07/biollante-woman.jpeg",
-        alt="Godzilla in background, woman in foreground",
-        width=500,
-        float="center"
-    )
-}}
+![Godzilla in background, woman in foreground](whats-good/2025/07/biollante-woman.jpeg)
 
 And then ends with this _very on the nose_ message to the viewer...
 
-{{ image(
-        path="whats-good/2025/07/biollante-not-the-monsters.jpeg",
-        alt="Godzilla and Biollante are not the monsters",
-        width=500,
-        float="center"
-    )
-}}
+![Godzilla and Biollante are not the monsters](biollante-not-the-monsters.jpeg)
 
-{{ image(
-        path="whats-good/2025/07/biollante-we-are.jpeg",
-        alt="We're the monsters for creating them",
-        width=500,
-        float="center"
-    )
-}}
+![We're the monsters for creating them](biollante-we-are.jpeg)
 
 ---
 

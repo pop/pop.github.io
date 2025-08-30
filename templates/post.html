@@ -1,0 +1,18 @@
+{%- if not page.draft -%}
+{% if page.taxonomies.tags %}
+    <li class="post">
+      <time datetime="{{ page.date | date(format='%+') }}" pubdate></time>
+      <a href="{{ page.path }}">{{ page.title }}</a> <span class=description>{{ page.date | date(format=config.extra.date_format) }}</span>
+        {% for tag in page.taxonomies.tags %}
+        <a href="/tags/{{ tag | slugify }}">#{{ tag | slugify }}</a>
+        {% endfor %}
+      <p class=description>{{ page.description }}</p>
+      </li>
+{% else %}
+    <li class="post">
+      <time datetime="{{ page.date | date(format='%+') }}" pubdate></time>
+      <a href="{{ page.path }}">{{ page.title }}</a> <span class=description>{{ page.date | date(format=config.extra.date_format) }}</span>
+    <p class=description>{{ page.description }}</p>
+    </li>
+  {% endif %}
+{% endif %}

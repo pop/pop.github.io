@@ -22,7 +22,7 @@ He was ~1 week ahead of his due date, just like his older brother.
 
 He had a bit of jaundice at first, so he had to wear this dope "blue-light blanket" that made him look like a pre-cog from Minority Report.
 
-{{ image(path="whats-good/2025/05/blue-light-blanket.png", width=300, alt="dramatic reenactment") }}
+![Dramatic Reenactment](blue-light-blanket.png)
 
 Post-jaundice the new baby has been great!
 Happy, healthy, and [in newborn adjusted terms] very easy!
@@ -31,7 +31,7 @@ I get to enjoy a few weeks off work which is a nice bonus~
 
 # Rowing with Tom Cruise
 
-{{ image(path="whats-good/2025/05/mission-impossible.jpg", width=300, alt="Mission: Impossible 1") }}
+![Mission: Impossible](mission-impossible.jpg)
 
 The rowing machine I have to exercise at home has a little attachment to stick your phone for movies, shows, videos, maybe workout routines I guess.
 
@@ -50,7 +50,7 @@ This month we kept the Godzilla train going with **5** Godzilla flicks!
 
 ## Mothra vs. Godzilla (1964)
 
-{{ image(path="whats-good/2025/05/mothra.jpg", width=300, alt="Mothra vs. Godzilla (1964)") }}
+![Mothra vs Godzilla (1964)](mothra.jpg)
 
 The visual effects for the two ummm... fairies?
 -- you know what I'm talking about --
@@ -61,7 +61,7 @@ The Mothra theme song is... haunting.
 
 ## Ghidorah, the Three-Headed Monster (1964)
 
-{{ image(path="whats-good/2025/05/ghidorah.webp", width=300, alt="Ghidorah, the Three-Headed Monster (1964)") }}
+![Ghidorah, the Three-Headed Monster (1964)](ghidorah.webp)
 
 This is really a kaiju team-up film which is fun.
 Everybody hates Ghidorah which makes sense, he's flashey and think's he's better than everybody because he has three heads.
@@ -69,7 +69,7 @@ What a tool.
 
 ## Invasion of Astro-Monster (1965)
 
-{{ image(path="whats-good/2025/05/astro-monster.jpg", width=300, alt="Invasion of Astro-Monster (1965)") }}
+![Invasion of Astro-Monster (1965)](astro-monster.jpg)
 
 Ok this is just another Ghidorah film, with a dash of "How to Serve Man".
 
@@ -78,7 +78,7 @@ I think his name was Glenn?
 
 ## Ebirah, Horror of the Deep (1966)
 
-{{ image(path="whats-good/2025/05/ebirah.jpg", width=300, alt="Ebirah, Horror of the Deep (1966)") }}
+![Ebirah, Horror of the Deep (1966)](ebirah.jpg)
 
 Ebirah has been the weakest movie so far.
 The main baddy felt disconnected from the rest of the film and didn't really do anything special-effects-wise that blew me away.
@@ -88,7 +88,7 @@ That's a skill isuse on my part.
 
 ## Son of Godzilla (1967)
 
-{{ image(path="whats-good/2025/05/son-of-godzilla.jpg", width=300, alt="Son of Godzilla (1967)") }}
+![Son of Godzilla (1967)](son-of-godzilla.jpg)
 
 Son of Godzilla is both the best an worst Godzilla flick so far.
 

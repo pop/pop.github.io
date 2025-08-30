@@ -25,7 +25,7 @@ Honestly it was a blast and I thought it was the perfect amount of whimsy for a 
 
 # Seven Games (Audiobook)
 
-{{ image(path="whats-good/2025/02/seven-games.jpg", width=250, alt="Seven Games: A Human Story by Oliver Roeder") }}
+![Seven Games: A human Story by Oliver Roeder](seven-games.jpg)
 
 "Seven Games: A Human Story" focuses on -- you guessed it -- seven games that progress in complexity:
 
@@ -51,7 +51,7 @@ Some hi-lights in no particular order:
 
 # Why Congress (Audiobook)
 
-{{ image(path="whats-good/2025/02/why-congress.jpg", width=250, alt="Why Congress by Phillip Wallach") }}
+![Why Congress by Phillip Wallach](why-congress.jpg)
 
 Taking a break from political _news_ to learn some political _history_.
 

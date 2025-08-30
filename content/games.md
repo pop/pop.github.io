@@ -1,14 +1,13 @@
 +++
-title = "games i have worked on"
+title = "games"
 
+weight = 8
 date = "2025-08-31"
 updated = "2025-08-31"
 
 description = "games i've worked on"
 
 draft = false
-
-template = "games.html"
 +++
 
 <style>
@@ -78,9 +77,7 @@ I was especially interested because rewind seemed easy to implement given the li
 [popgame.itch.io/flappy]: https://popgame.itch.io/flappy
 </details>
 
----
-
-[Sam Hall]: TODO
+[Sam Hall]: https://greatmist.bandcamp.com/
 [bevy]: https://bevy.org
 [avian]: https://github.com/Jondolf/avian
 [blender]: https://www.blender.org/

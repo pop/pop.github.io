@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{%- block main -%}
+<main>
+<style>
+main {
+    width: 100%;
+}
+</style>
+  {% include "header.html" %}
+  <h1>.../{{ section.title }}</h1>
+
+  <ul class=stuff>
+    <!-- if has subsections... -->
+    {%- for s in section.subsections -%}
+      {% set it = get_section(path=s) %}
+      <li class=post>/<a href={{it.path}}>{{ it.title }}</a> {{ it.description  }}</li>
+    {%- endfor -%}
+
+    {%- for page in section.pages -%}
+      {% if "archive" not in page.taxonomies.tags %}
+        {% include "post.html" %}
+      {% endif %}
+    {%- endfor -%}
+    {%- block more -%}
+    {%- endblock -%}
+  </ul>
+  <p class="console">
+    <a href="{{ get_url(path=section.path ~ "atom.xml", trailing_slash=false) }}">atom feed</a>
+    |
+    <a href="{{ get_url(path="/tags/archive", trailing_slash=false) }}">archive</a>
+  </p>
+{% include "footer.html" %}
+</main>
+{%- endblock -%}

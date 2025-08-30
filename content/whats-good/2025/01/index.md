@@ -23,7 +23,7 @@ There's always next month!
 
 # Stand-Up Comedy
 
-{{ image(path="whats-good/2025/01/montavilla-open-mic.jpeg", width=250, alt="OMSI Science Playground") }}
+![Montavilla Open Mic](montavilla-open-mic.jpeg)
 
 My [theme](https://www.youtube.com/watch?v=NVGuFdX5guE) for January was to do stand-up comedy _at least once_.
 And I did!
@@ -58,7 +58,7 @@ But knowing that my kid will be safe _and_ entertained, with only one way in and
 
 # Starter Villain
 
-{{ image(path="whats-good/2025/01/starter-villain.jpg", width=250, alt="Starter Villain") }}
+![Starter Villian](starter-villain.jpg)
 
 I'm a big fan of John Scalzi, the author of Old Mans War, Kaiju Preservation Society, and Fuzzy Nation (among others).
 
@@ -71,7 +71,7 @@ It's a solid short novel.
 
 # Game Makers Toolkit/Mind over Magnet
 
-{{ image(path="whats-good/2025/01/mind-over-magnet.jpg", width=500, alt="Mind over Magnet") }}
+![Mind Over Magnet](mind-over-magnet.jpg)
 
 [Game Makers Toolkit](https://gamemakerstoolkit.com/) is one of the _many_ gaming/game design Youtubers I follow.
 While not my favorite in content or voice, the channel did something _wild_ over the last three years: they made a game!
@@ -82,7 +82,7 @@ He has episodes about prototyping, scoping, play-testing, burnout/motivation, hi
 
 # Pools
 
-{{ image(path="whats-good/2025/01/pools.jpg", width=500, alt="Pools") }}
+![Pools](pools.jpg)
 
 [Pools](https://store.steampowered.com/app/2663530/POOLS/) is the best horror game I have played in a while.
 
