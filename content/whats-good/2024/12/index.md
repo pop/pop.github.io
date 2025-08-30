@@ -12,7 +12,7 @@ taxonomies.tags = [
 
 # "Friend's Art" House Show
 
-{{ image(path="whats-good/2024/12/lucy-art.jpg", width=500, alt="Photography by Lucy") }}
+![Photography by Lucy](lucy-art.jpg)
 
 My wonderful wife Lucy had the _genius_ idea of inviting our friends to show their artwork at our home!
 None of our friends are _professional_ artists, at least not in the medium they were showing, which made the event really fun!
@@ -40,7 +40,7 @@ If this sounds fun you should try it!
 
 # Ubik
 
-{{ image(path="whats-good/2024/12/ubik.png", width=200, alt="Ubik") }}
+![Ubik](ubik.png)
 
 [Ubik](https://en.wikipedia.org/wiki/Ubik) is a novel by Philip K. Dick which somehow I had _never_ heard of but I _absolutely loved_.
 
@@ -53,7 +53,7 @@ The premise is fun and includes a bunch of themes I really like including time-t
 
 # In the Miso Soup
 
-{{ image(path="whats-good/2024/12/in-the-miso-soup.png", width=200, alt="In the Miso Soup") }}
+![In the Miso Soup](in-the-miso-soup.png)
 
 [In the Miso Soup](https://en.wikipedia.org/wiki/In_the_Miso_Soup) is a psychological horror novel by Ryu Murakami which I really enjoyed!
 The way the novel builds tension, then releases it, and then uhh... has an entire third part was very exciting!
@@ -64,7 +64,7 @@ I don't read a lot of horror but this made me want to get into the genre.
 
 # Absolute Batman (ongoing)
 
-{{ image(path="whats-good/2024/12/absolute-batman.png", width=200, alt="Absolute Batman") }}
+![Absolute Batman](absolute-batman.png)
 
 [Absolute Batman](https://leagueofcomicgeeks.com/comic/2463692/absolute-batman-1) is an ongoing (as of December 2024) Batman series part of the [Absolute Universe](https://en.wikipedia.org/wiki/Absolute_Universe).
 The other Absolute's do not quite click for me, but Absolute Batman is my jam.
@@ -74,7 +74,7 @@ The art is by [Nick Dragotta](https://leagueofcomicgeeks.com/people/876/nick-dra
 
 # Sonic The Hedgehog 3
 
-{{ image(path="whats-good/2024/12/sonic-3.png", width=200, alt="Sonic 3 The Hedgehog") }}
+![Somic The Hedgehog 3](sonic-3.png)
 
 Sonic is the only movie series I actually go to the theater to watch.
 Not Marvel, not Nolan's films like Oppenheimer, just Sonics 1, 2, and now 3.

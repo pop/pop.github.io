@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{%- block main -%}
+<style>
+  body {
+    background: url(/images/bg.jpg) no-repeat fixed bottom center;
+    background-size: contain;
+  }
+
+  footer {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+    padding-bottom: 10px;
+  }
+</style>
+<main>
+  {% include "header.html" %}
+  <h1>{{ section.title }}</h1>
+
+  <!-- if has subsections... -->
+  <ul class=stuff>
+    {%- for s in section.subsections -%}
+      {% set it = get_section(path=s) %}
+      <li class=post>/<a href={{it.path}}>{{ it.title }}</a> <span class=description>{{ it.description  }}</span></li>
+    {%- endfor -%}
+    {%- for page in section.pages -%}
+      <li class=post>
+        <a href="{{ page.path }}">{{ page.title }}</a> <span class=description>{{ page.description }}</span>
+      </li>
+      </li>
+    {%- endfor -%}
+    {%- block more -%}
+    {%- endblock -%}
+
+    {% include "nav.html" %}
+  </ul>
+</main>
+{% include "footer.html" %}
+{%- endblock -%}

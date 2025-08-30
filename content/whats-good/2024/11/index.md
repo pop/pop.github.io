@@ -22,14 +22,14 @@ Let's get into it.
 
 ## Batman: Year One
 
-{{ image(path="whats-good/2024/11/batman-year-one.png", width=200, alt="Batman: Year One") }}
+![Batman: Year One](batman-year-one.png)
 
 As the title suggests, this is the _classic_ origin Batman origin story.
 Great place to start if you want to get into Batman.
 
 ## Batman: The Long Halloween
 
-{{ image(path="whats-good/2024/11/batman-the-long-halloween.png", width=200, alt="Batman: The Long Halloween") }}
+![Batman: The Long Halloween](batman-the-long-halloween.png)
 
 This was a _perfect_ follow-up to Year One.
 It reads more like a noir story and less like a super-hero comic, which I liked.
@@ -39,14 +39,14 @@ Not in the literal sense, but visually it is striking.
 
 ## Batman: The White Knight
 
-{{ image(path="whats-good/2024/11/batman-the-white-knight.png", width=200, alt="Batman: The White Knight") }}
+![Batman: The White Knight](batman-the-white-knight.png)
 
 This is more current era compared to the Year One and Long Halloween.
 It served as an interesting introduction for me to The Joker and Harley Quinn(s).
 
 # Toontown Rewritten
 
-{{ image(path="whats-good/2024/11/toontown-rewritten.png", width=200, alt="Toontown Rewritten") }}
+![Toontown Rewritten](toontown-rewritten.png)
 
 Besides Batman I got into a little MMO called [Toontown Rewritten](https://www.toontownrewritten.com/).
 

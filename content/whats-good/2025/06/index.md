@@ -21,13 +21,7 @@ This month I took full advantage of paternity leave, reading and playing some bo
 
 ## Polostan (2024)
 
-{{ image(
-        path="whats-good/2025/06/polostan.jpg",
-        alt="Polostan by Neal Stephenson",
-        width=250,
-        float="right"
-    )
-}}
+![Polostan by Neal Stephenson](whats-good/2025/06/polostan.jpg)
 
 I listened to Neal Stephenson's [Polostan](https://www.powells.com/book/polostan-9780062334497) at the start of the month.
 At *merely* 12 hours feels suspiciously like the first 1/3rd of a "normal" Neal Stephenson novel, which I honestly didn't hate.
@@ -40,13 +34,7 @@ If you don't _know_ if you like Neal Stephenson I would recommend a book he co-a
 
 ## The Lost Cause (2023)
 
-{{ image(
-        path="whats-good/2025/06/the lost cause.jpg",
-        alt="The Lost Cause by Cory Doctrow",
-        width=200,
-        float="left"
-    )
-}}
+![The Lost Cause by Cory Doctrow](the lost cause.jpg)
 
 [The Lost Cause](https://www.powells.com/book/lost-cause-9781250865939) is a recent Cory Doctrow novel about how my kid's generation might deal with the climate catastrophe, MAGA extremists, and refugee crisis all at the same time.
 In some ways it is an optimistic read of the 2050s, in others it is pessimistic, and it weirdly made me want to visit Burbank.
@@ -62,13 +50,7 @@ The characters aren't the _most_ complex, but it did get me to empathize with re
 
 ## The Sluts (2004)
 
-{{ image(
-        path="whats-good/2025/06/the sluts.jpg",
-        alt="The Sluts by Dennis Cooper",
-        width=250,
-        float="right"
-    )
-}}
+![The Sluts by Dennis Cooper](whats-good/2025/06/the sluts.jpg)
 
 This might be the most interesting book I have ever read.
 I picked up Dennis Cooper's [The Sluts](https://www.powells.com/book/sluts-9780786716746) on a whim after it was mentioned on the Something Rotten podcast.
@@ -86,13 +68,7 @@ Ultimately I'm happy I read it and the ending was thought provoking in a "raises
 
 ## Neverender Vol 1 (2023)
 
-{{ image(
-        path="whats-good/2025/06/neverender.jpg",
-        alt="Neverender Trade Paperback Cover",
-        width=250,
-        float="left"
-    )
-}}
+![Neverender Trade Paperback Cover](neverender.jpg)
 
 [Neverender](https://leagueofcomicgeeks.com/comics/series/158632/neverender) is a very fun comic.
 I would describe it as Gladiator in Space -- which looking at my shelf is [not a sparse sub-genre](https://leagueofcomicgeeks.com/comic/4865868/cosmoknights-vol-1-tp).
@@ -103,13 +79,7 @@ If you enjoy anime fights, political intrigue, and big space stations you should
 
 ## SCHiM (2024)
 
-{{ image(
-        path="whats-good/2025/06/schim.jpg",
-        alt="SCHiM poster",
-        width=250,
-        float="right"
-    )
-}}
+![SCHiM poster](schim.jpg)
 
 [SCHiM](https://store.steampowered.com/app/1519710/SCHiM/) is an a e s t h e t i c platformer where you play as a little shadow frog thing (I guess it's called a SCHiM) jumping from shadow to shadow.
 I'm including it here because it was a fun take on platforming, making it both mechanically interesting while still feeling like a familiar platformer.
@@ -122,13 +92,7 @@ Honestly if I had more time on my hands I would have loved to turn my brain off 
 
 ## NORCO (2022)
 
-{{ image(
-        path="whats-good/2025/06/norco.jpg",
-        alt="NORCO poster",
-        width=250,
-        float="left"
-    )
-}}
+![Norco Poster](norco.jpg)
 
 [NORCO](https://store.steampowered.com/app/1221250/NORCO/) was a gift from my best friend and [occasional collaborator](https://liquidmirror.itch.io/martian-chess), [Sam Hall](https://greatmist.bandcamp.com/music).
 I don't usually play point-and-click-adventures but this was really fun!
@@ -141,12 +105,7 @@ Yippee!
 
 ## Civil War (2024)
 
-{{ image(
-        path="whats-good/2025/06/civil war.jpeg",
-        alt="Civil War by Alex Garland",
-        width=250,
-        float="right")
-}}
+![Civil War by Alex Garland](civil war.jpeg)
 
 After finishing [Devs](https://en.wikipedia.org/wiki/Devs_(TV_series)) and watching [Men](https://en.wikipedia.org/wiki/Men_(2022_film)), I figured I should continue on my Alex Garland's directorial journey with [Civil War](https://en.wikipedia.org/wiki/Civil_War_(film)).
 I don't think I have anything interesting to say that hasn't already been said a few thousand times on the web, but I enjoyed the movie.
@@ -160,24 +119,14 @@ This month's Godzillas had some duds but also had my (current) favorite Godzilla
 
 ### Destroy All Monsters (1968)
 
-{{ image(
-        path="whats-good/2025/06/destroy all monsters.jpg",
-        alt="Destroy All Monsters (1968)",
-        width=250,
-        float="left")
-}}
+![Destroy All Monsters (1968)](destroy all monsters.jpg)
 
 I don't remember much about this one, but I remember that Ghidorah is a tool that sucks.
 Also this continues a trend of 60s Godzillas that are _obsessed_ with space travel, aliens, and aliens mind controlling kaiju.
 
 ### All Monsters Attack (1969)
 
-{{ image(
-        path="whats-good/2025/06/all monsters attack.jpg",
-        alt="All Monsters Attack (1969)",
-        width=250,
-        float="right")
-}}
+![All Monsters Attack (1969)](all monsters attack.jpg)
 
 Despite the *very similar title*, All Monsters Attack _rocks_.
 This is easily my favorite Godzilla flick thus far because is breaks the formula in _so many ways_:
@@ -188,12 +137,7 @@ This is easily my favorite Godzilla flick thus far because is breaks the formula
 
 ### Godzilla vs. Hedorah (1971)
 
-{{ image(
-        path="whats-good/2025/06/godzilla vs hedorah.jpg",
-        alt="Godzilla vs Hedorah (1971)",
-        width=250,
-        float="left")
-}}
+![Godzilla vs Hedorah (1971)](godzilla vs hedorah.jpg)
 
 This has the most on the nose "pollution is bad" story and that's _fine_ except they fumble it at the end!
 Instead of the solution to defeating the monster being like... going green and stopping polluting they just get Godzilla to electrocute the dang thing.
@@ -202,12 +146,7 @@ That said, there are some quirky animated sequences that felt vaguely Monty Pyth
 
 ### Godzilla vs. Gigan (1972)
 
-{{ image(
-        path="whats-good/2025/06/godzilla vs gigan.jpg",
-        alt="Godzilla vs Gigan (1972)",
-        width=250,
-        float="right")
-}}
+![Godzilla vs Gigan (1972)](godzilla vs gigan.jpg)
 
 Again with the aliens mind-controlling Kaiju? Guys I have to dock you points just for unoriginality.
 It was fine the first three times but now this feels like a cry for help.

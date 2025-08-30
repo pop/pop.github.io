@@ -23,25 +23,25 @@ Doh! I didn't even think to check if it was loaded!
 
 I recovered from this devastating self-prank, loaded the camera, and shot a roll.
 
-{{ image(path="whats-good/2025/03/coke.JPG", width=500, alt="Literally the best picture I got out of my first attempt at color film -- ugh") }}
+![Literally the best picture I got out of my first attempt at color film -- ugh](coke.JPG)
 
 The inherited camera was... kinda jank.
 
-{{ image(path="whats-good/2025/03/lucy-and-ollie-lunch.JPG", width=500, alt="jank photo of lucy and ollie eating lunch") }}
+![jank photo of lucy and ollie eating lunch](lucy-and-ollie-lunch.JPG)
 
 Don't get me wrong, it's an aesthetic... but I also only got like 3-4 useful pictures out of a roll of 37 which is a _bad ratio_.
 
-{{ image(path="whats-good/2025/03/ollie-swings.JPG", width=500, alt="Jank picture of my family on a swing") }}
+![Jank picture of my family on a swing](ollie-swings.JPG)
 
 Most of the picutres were not this cool dream vibe -- they were just blown our or totally blank.
 
-{{ image(path="whats-good/2025/03/ollie-slide-edited.JPG", width=500, alt="Another jank photo of my kid on a slide") }}
+![Another jank photo of my kid on a slide](ollie-slide-edited.JPG)
 
 As I got more into it, I acquired two cameras that worked more reliably:
 1. A cheap [Ilford Reusable Disposable camera](https://ilford.com/product/sprite-35-ii-camera/).
 2. Lucy got me a refurbished [Olympus OM-1](https://en.wikipedia.org/wiki/Olympus_OM-1)!
 
-{{ image(path="whats-good/2025/03/cherry-blossoms.JPG", width=500, alt="cherry blossoms") }}
+![cherry blossoms](cherry-blossoms.JPG)
 
 The "Reusable Disposable" sounds like an oxymoron but it's exactly what you'd expect:
 * Basic plastic shell
@@ -52,23 +52,23 @@ The "Reusable Disposable" sounds like an oxymoron but it's exactly what you'd ex
 
 I shot my first _successful_ roll of Color film on the Illford and it was great!
 
-{{ image(path="whats-good/2025/03/negatives.jpg", width=500, alt="Negative film on a lightbox") }}
-{{ image(path="whats-good/2025/03/positives.png", width=500, alt="Inverted film on lightbox") }}
+![Negative film on a lightbox](negatives.jpg)
+![Inverted film on a lightbox](positives.png)
 
 The OM-1 is a _really_ nice manual film camera and lens -- a "camera system".
 Lucy got it refurbished for ~$60 which feels like a steal given the build quality!
 
-{{ image(path="whats-good/2025/03/flower.JPG", width=500, alt="a flower") }}
+![A flower](flower.JPG)
 
 I love this camera.
 
-{{ image(path="whats-good/2025/03/chairs.JPG", width=500, alt="stacked chairs") }}
+![stacked chairs](chairs.JPG)
 
 I've also been _developing_ the film at home which for me has been half the fun!
 * For [black and white film](https://youtu.be/WpgsITqoDXQ) I do "Stand Development" where you dilute your developer 1:100 so the process takes ~1 hour but you can't over-develop.
 * For [color film development](https://youtu.be/rW1cg3hDdc4) I'm just doing C41 development, which required me to buy a Sous Vide!
 
-{{ image(path="whats-good/2025/03/c41.jpg", width=500, alt="C41 development requires chemicals to be at exactly 102F") }}
+![C41 development requires chemicals to be at exactly 102F](c41.jpg)
 
 Yay kitchen sink science!
 
@@ -77,11 +77,11 @@ The results are great!
 
 Here's some more pictures!
 
-{{ image(path="whats-good/2025/03/cherry-blossoms.JPG", width=500, alt="some cherry blossoms") }}
-{{ image(path="whats-good/2025/03/drink-coffee-hail-satan.JPG", width=500, alt="a silicon valley show reference") }}
-{{ image(path="whats-good/2025/03/wheel-chairs.JPG", width=500, alt="wheel chairs") }}
-{{ image(path="whats-good/2025/03/golf-clubs.JPG", width=500, alt="golf clubs") }}
-{{ image(path="whats-good/2025/03/eli-ollie-out-of-focus.JPG", width=500, alt="eli with ollie out of focus") }}
+![some cherry blossoms](cherry-blossoms.JPG)
+![a silicon valley show reference](drink-coffee-hail-satan.JPG)
+![wheel chairs](wheel-chairs.JPG)
+![golf clubs](golf-clubs.JPG)
+![eli with ollie out of focus](eli-ollie-out-of-focus.JPG)
 
 Note: I have a _lot_ of photos of my toddler but I am avoiding publishing those too widely for his privacy.
 I also want them to be fresh when he inevitably uses them as dating profile fodder.

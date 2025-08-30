@@ -14,7 +14,7 @@ October was a pretty good month for my media diet -- so good in fact I was inspi
 
 # Comics: Rare Flavors
 
-{{ image(path="whats-good/2024/10/rare-flavors.jpg", width=200, alt="Rare Flavors") }}
+![Rare Flavors](rare-flavors.jpg)
 
 [Rare Flavors] is so goddamn good.
 The pastel colors, history spanning story, and love of it's culinary subject make for a short and sweet story I think everybody should read.
@@ -27,7 +27,7 @@ If you're in Portland check out my go-to comics shop: [Books With Pictures]!
 
 # Tech: ScreenZen
 
-{{ image(path="whats-good/2024/10/screenzen-example.jpg", width=200, alt="ScreenZen in action") }}
+![ScreenZen in action](screenzen-example.jpg)
 
 Thanks to [ScreenZen] I have finally broken my addiction to YouTube, an app I use so much I have been a Premium subscriber since it was called "YouTube Red".
 I would recommend it to anybody that wants to spend less time on their phone, or in my case just less time on _certain_ apps.
@@ -44,7 +44,7 @@ So yeah ScreenZen has been awesome.
 
 # Video: Dropout.tv
 
-{{ image(path="whats-good/2024/10/make-some-noise.png", width=400, alt="Make! Some! Noise! Dropout.TV") }}
+![Make! Some! Noise! Dropout.TV](make-some-noise.png)
 
 Dropout shows like [Make! Some! Noise!] and [Game Changer] have become my new "Internet TV" of choice and I love it.
 The production value is on-par with legacy TV, the talent is talenting, and there's shows for many tastes.

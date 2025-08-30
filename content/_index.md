@@ -1,5 +1,5 @@
 +++
-sort_by = "date"
-
-template = "home.html"
+sort_by = "weight"
+title = "elijah.run"
+description = "home"
 +++
