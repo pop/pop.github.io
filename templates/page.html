@@ -9,6 +9,15 @@ main {
 <main>
   {% include "header.html" -%}
   <h1>{{ page.title }}</h1>
+  <p class="console" class="side">
+    published {{ page.date }}
+    {%- if page.updated %}
+      | updated {{ page.updated }}
+    {%- endif -%}
+    {%- if page.taxonomies.tags %}
+      | tags: {% include "tags.html" %}
+    {%- endif -%}
+  </p>
   {{ page.content | safe }}
   {% include "footer.html" -%}
 </main>

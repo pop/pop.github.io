@@ -21,7 +21,7 @@ This month I took full advantage of paternity leave, reading and playing some bo
 
 ## Polostan (2024)
 
-![Polostan by Neal Stephenson](whats-good/2025/06/polostan.jpg)
+![Polostan by Neal Stephenson](polostan.jpg)
 
 I listened to Neal Stephenson's [Polostan](https://www.powells.com/book/polostan-9780062334497) at the start of the month.
 At *merely* 12 hours feels suspiciously like the first 1/3rd of a "normal" Neal Stephenson novel, which I honestly didn't hate.
@@ -34,7 +34,7 @@ If you don't _know_ if you like Neal Stephenson I would recommend a book he co-a
 
 ## The Lost Cause (2023)
 
-![The Lost Cause by Cory Doctrow](the lost cause.jpg)
+![The Lost Cause by Cory Doctrow](the-lost-cause.jpg)
 
 [The Lost Cause](https://www.powells.com/book/lost-cause-9781250865939) is a recent Cory Doctrow novel about how my kid's generation might deal with the climate catastrophe, MAGA extremists, and refugee crisis all at the same time.
 In some ways it is an optimistic read of the 2050s, in others it is pessimistic, and it weirdly made me want to visit Burbank.
@@ -50,7 +50,7 @@ The characters aren't the _most_ complex, but it did get me to empathize with re
 
 ## The Sluts (2004)
 
-![The Sluts by Dennis Cooper](whats-good/2025/06/the sluts.jpg)
+![The Sluts by Dennis Cooper](the-sluts.jpg)
 
 This might be the most interesting book I have ever read.
 I picked up Dennis Cooper's [The Sluts](https://www.powells.com/book/sluts-9780786716746) on a whim after it was mentioned on the Something Rotten podcast.
@@ -105,7 +105,7 @@ Yippee!
 
 ## Civil War (2024)
 
-![Civil War by Alex Garland](civil war.jpeg)
+![Civil War by Alex Garland](civil-war.jpeg)
 
 After finishing [Devs](https://en.wikipedia.org/wiki/Devs_(TV_series)) and watching [Men](https://en.wikipedia.org/wiki/Men_(2022_film)), I figured I should continue on my Alex Garland's directorial journey with [Civil War](https://en.wikipedia.org/wiki/Civil_War_(film)).
 I don't think I have anything interesting to say that hasn't already been said a few thousand times on the web, but I enjoyed the movie.
@@ -119,14 +119,14 @@ This month's Godzillas had some duds but also had my (current) favorite Godzilla
 
 ### Destroy All Monsters (1968)
 
-![Destroy All Monsters (1968)](destroy all monsters.jpg)
+![Destroy All Monsters (1968)](destroy-all-monsters.jpg)
 
 I don't remember much about this one, but I remember that Ghidorah is a tool that sucks.
 Also this continues a trend of 60s Godzillas that are _obsessed_ with space travel, aliens, and aliens mind controlling kaiju.
 
 ### All Monsters Attack (1969)
 
-![All Monsters Attack (1969)](all monsters attack.jpg)
+![All Monsters Attack (1969)](all-monsters-attack.jpg)
 
 Despite the *very similar title*, All Monsters Attack _rocks_.
 This is easily my favorite Godzilla flick thus far because is breaks the formula in _so many ways_:
@@ -137,7 +137,7 @@ This is easily my favorite Godzilla flick thus far because is breaks the formula
 
 ### Godzilla vs. Hedorah (1971)
 
-![Godzilla vs Hedorah (1971)](godzilla vs hedorah.jpg)
+![Godzilla vs Hedorah (1971)](godzilla-vs-hedorah.jpg)
 
 This has the most on the nose "pollution is bad" story and that's _fine_ except they fumble it at the end!
 Instead of the solution to defeating the monster being like... going green and stopping polluting they just get Godzilla to electrocute the dang thing.
@@ -146,7 +146,7 @@ That said, there are some quirky animated sequences that felt vaguely Monty Pyth
 
 ### Godzilla vs. Gigan (1972)
 
-![Godzilla vs Gigan (1972)](godzilla vs gigan.jpg)
+![Godzilla vs Gigan (1972)](godzilla-vs-gigan.jpg)
 
 Again with the aliens mind-controlling Kaiju? Guys I have to dock you points just for unoriginality.
 It was fine the first three times but now this feels like a cry for help.

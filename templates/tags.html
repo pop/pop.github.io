@@ -1,0 +1,4 @@
+{% for tag in page.taxonomies.tags %}
+  <a href="/tags/{{ tag | slugify }}">#{{ tag | slugify }}</a>
+{% endfor %}
+
