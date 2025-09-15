@@ -8,6 +8,8 @@ description = "Sit back and ponder how much we've learned these past few weeks."
 taxonomies.tags = [
     "independent crypto"
 ]
+
+aliases = ["/independent-crypto-conclusions"]
 +++
 
 {% note() %}

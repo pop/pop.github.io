@@ -6,8 +6,10 @@ date = "2018-06-23"
 description = "So you want to set a node attribute in a resource block? Good luck --oh wait you don't need luck because you have this blogpost!"
 
 taxonomies.tags = [
-    "europe 2015", "travel", "archive"
+    "chef", "archive"
 ]
+
+aliases = ["/chef-dynamic-attributes"]
 +++
 
 ## Problem

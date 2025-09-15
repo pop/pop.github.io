@@ -10,6 +10,8 @@ taxonomies.tags = [
     "rust",
 ]
 
+aliases = ["/shuffle-good"]
+
 draft = true
 +++
 

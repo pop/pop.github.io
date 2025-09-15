@@ -9,6 +9,8 @@ taxonomies.tags = [
     "barcamp",
     "archive",
 ]
+
+aliases = ["/cat-barcamp-2015"]
 +++
 
 This weekend I went to [Cat Barcamp 2015](http://catbarcamp.org/), an unconference run by the PSU [Computer Action Team](http://cat.pdx.edu/).

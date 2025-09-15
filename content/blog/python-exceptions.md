@@ -8,6 +8,8 @@ description = "One of the most useful features of Python are exceptions-- but ho
 taxonomies.tags = [
     "python"
 ]
+
+aliases = ["/python-exceptions"]
 +++
 
 ```python

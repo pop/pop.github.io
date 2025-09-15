@@ -9,6 +9,8 @@ taxonomies.tags = [
     "graphics"
 ]
 
+aliases = ["/graphics-coding"]
+
 draft = true
 +++
 

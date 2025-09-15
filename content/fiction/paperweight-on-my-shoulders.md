@@ -8,6 +8,8 @@ description = "A paperweight whispers to a mathematician: 'I feel so depressed.'
 taxonomies.tags = [
     "creative writing", "magicrealismbot", "archive"
 ]
+
+aliases = ["/paperweight-on-my-shoulders"]
 +++
 
 ## Prompt

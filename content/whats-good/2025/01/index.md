@@ -8,6 +8,7 @@ date = "2025-01-31"
 taxonomies.tags = [
     "whats good"
 ]
+aliases = ["/whats-good-2025-01"]
 
 draft = false
 +++

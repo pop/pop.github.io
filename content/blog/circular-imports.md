@@ -8,6 +8,8 @@ description = "Nothing is that simple..."
 taxonomies.tags = [
     "python"
 ]
+
+aliases = ["/circular-imports"]
 +++
 
 Don't you hate when you're writing a python program and you get hit with one of these?

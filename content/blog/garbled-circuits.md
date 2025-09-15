@@ -8,6 +8,7 @@ description = "I know those words seperately but..."
 taxonomies.tags = [
     "independent crypto"
 ]
+aliases = ["/garbled-circuits"]
 +++
 
 {% note() %}

@@ -9,6 +9,8 @@ taxonomies.tags = [
     "comic",
     "archive",
 ]
+
+aliases = ["/induction"]
 +++
 
 ![Classic mathematics memes](/images/comics/induction.png)

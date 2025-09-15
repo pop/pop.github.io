@@ -8,6 +8,8 @@ description = "Independent Crypto landing page."
 taxonomies.tags = [
     "independent crypto"
 ]
+
+aliases = ["/independent-crypto"]
 +++
 
 {% note() %}

@@ -8,6 +8,8 @@ description = "A talk I gave at Seattle GNU Linux Conference 2020"
 taxonomies.tags = [
     "rust", "amethyst", "games"
 ]
+
+aliases = ["/seagl-2020-lets-build-a-game-with-rust"]
 +++
 
 {% note() %}

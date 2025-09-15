@@ -8,6 +8,8 @@ description = "By looking at a fireplace, a medieval sorcerer can turn stone int
 taxonomies.tags = [
     "creative writing", "magicrealismbot", "archive"
 ]
+
+aliases = ["/moonstone-discovery"]
 +++
 
 ## Prompt
