@@ -8,6 +8,8 @@ description = "Harder than regular functions."
 taxonomies.tags = [
     "independent crypto"
 ]
+
+aliases = ["/memory-hard-functions"]
 +++
 
 {% note() %}

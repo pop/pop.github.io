@@ -8,6 +8,8 @@ description = "Testing your website with a web-server is important! Here's how t
 taxonomies.tags = [
     "development"
 ]
+
+aliases = ["/how-to-develop-a-site-for-the-web"]
 +++
 
 {% note() %}

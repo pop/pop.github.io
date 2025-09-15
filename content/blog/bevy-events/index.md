@@ -12,6 +12,8 @@ taxonomies.tags = [
     "rust",
     "bevy",
 ]
+
+aliases = ["/bevy-events"]
 +++
 
 Event-driven triggers i have used in Bevy:

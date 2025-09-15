@@ -8,6 +8,8 @@ description = "The title is really an understatement..."
 taxonomies.tags = [
     "git"
 ]
+
+aliases = ["/git-does-a-lot-of-things"]
 +++
 
 I should make a tool that extends `git` to delete all of the files matched by the `.gitginore`.

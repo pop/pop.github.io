@@ -8,6 +8,8 @@ description = "Or yet another reason you should never roll your own crypto."
 taxonomies.tags = [
     "independent crypto"
 ]
+
+aliases = ["/remote-timing-attacks"]
 +++
 
 {% note() %}

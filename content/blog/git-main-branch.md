@@ -8,6 +8,8 @@ description = "Really the story of not upgrading for far too long..."
 taxonomies.tags = [
     "git"
 ]
+
+aliases = ["/git-main-branch"]
 +++
 
 So I was on my laptop running an ancient release of Linux called Fedora 30 -- so old COVID wasn't even a twinkle in a bat's eye when it was released.

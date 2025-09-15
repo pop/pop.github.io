@@ -9,6 +9,8 @@ taxonomies.tags = [
     "programming"
 ]
 
+aliases = ["/on-the-metal"]
+
 draft = true
 +++
 

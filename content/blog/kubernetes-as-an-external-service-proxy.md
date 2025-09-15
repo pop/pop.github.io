@@ -6,8 +6,10 @@ date = "2018-10-13"
 description = "An adventure where we learn `Kubernetes` by doing *a very straight forward project*; documenting every success, failure, and quip along the way"
 
 taxonomies.tags = [
-    "europe 2015", "travel", "archive"
+    "kubernetes", "archive"
 ]
+
+aliases = ["/kubernetes-as-an-external-service-proxy"]
 +++
 
 Say you have a firewall restriction that creates the following situation:

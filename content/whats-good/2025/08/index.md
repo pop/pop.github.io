@@ -11,6 +11,7 @@ taxonomies.tags = [
     "whats good",
     "godzilla",
 ]
+aliases = ["/whats-good-2025-08"]
 
 draft = false
 +++

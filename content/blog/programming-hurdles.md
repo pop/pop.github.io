@@ -8,6 +8,8 @@ description = "Sage advice for myself in Freshman year."
 taxonomies.tags = [
     "programming"
 ]
+
+aliases = ["/programming-hurdles"]
 +++
 
 I've been actively learning programming for almost five years now.

@@ -8,6 +8,7 @@ description = "I fucking graduated. Fuck yes."
 taxonomies.tags = [
     "graduation", "archive"
 ]
+aliases = ["/graduation"]
 +++
 
 Today I checked my grades for the last time.

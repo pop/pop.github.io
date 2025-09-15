@@ -8,6 +8,8 @@ description = "HeY wAnT tO SeE a NEat PYtHOn TriCK!?"
 taxonomies.tags = [
     "python"
 ]
+
+aliases = ["/python-dynamic-dispatch"]
 +++
 
 🦝 Hey want tO see a nEat PYtHoN triCK?

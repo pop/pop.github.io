@@ -8,6 +8,8 @@ description = "An adventure where we learn [Kubernetes] by doing [a very straigh
 taxonomies.tags = [
     "kubernetes"
 ]
+
+aliases = ["/buildbot-on-kubernetes"]
 +++
 
 ![kubernetes logo](/images/buildbot-on-k8s/kubernetes-logo.png)

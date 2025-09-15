@@ -8,6 +8,8 @@ description = "Exploring ways to make Rust more ergonomic through the use of the
 taxonomies.tags = [
     "rust"
 ]
+
+aliases = ["/rust-default-from"]
 +++
 
 I've been writing Rust off and on since 2014 and consistently since 2019

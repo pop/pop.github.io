@@ -13,6 +13,8 @@ taxonomies.tags = [
     "bevy",
     "rapier",
 ]
+
+aliases = ["/bevy-rapier-vehicle"]
 +++
 
 No example for this?

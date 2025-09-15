@@ -9,6 +9,8 @@ taxonomies.tags = [
     "docker",
     "archive",
 ]
+
+aliases = ["/covertly-install-packages-with-docker"]
 +++
 
 [Jump to the codey bits](#the-deets-dockerfile-and-commands)

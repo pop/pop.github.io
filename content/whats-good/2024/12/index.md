@@ -8,6 +8,7 @@ date = "2024-12-27"
 taxonomies.tags = [
     "whats good"
 ]
+aliases = ["/whats-good-2024-12"]
 +++
 
 # "Friend's Art" House Show

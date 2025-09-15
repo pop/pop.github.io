@@ -8,6 +8,8 @@ description = "A ghoul and an archbishop are fighting over custody of their chil
 taxonomies.tags = [
     "creative writing", "magicrealismbot", "archive"
 ]
+
+aliases = ["/debra-the-ghoul"]
 +++
 
 ## Prompt

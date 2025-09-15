@@ -8,6 +8,8 @@ description = "Gwendolyn and Stefan love to try new things..."
 taxonomies.tags = [
     "creative writing", "archive"
 ]
+
+aliases = ["/the-try-new-things-couple"]
 +++
 
 Gwendolyn and Stefan love to try new things.

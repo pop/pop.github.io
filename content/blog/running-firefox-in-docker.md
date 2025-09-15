@@ -8,6 +8,8 @@ description = "You got Firefox in my Docker! You got Docker in my Firefox!"
 taxonomies.tags = [
     "docker"
 ]
+
+aliases = ["/running-firefox-in-docker"]
 +++
 
 Turns out you can run Firefox in Docker.

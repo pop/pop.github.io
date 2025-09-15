@@ -8,6 +8,8 @@ description = "A baroness looks at the Mona Lisa and sees her newborn baby in th
 taxonomies.tags = [
     "creative writing", "magicrealismbot", "archive"
 ]
+
+aliases = ["/lady-wangle"]
 +++
 
 ## Prompt

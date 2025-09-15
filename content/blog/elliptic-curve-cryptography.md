@@ -8,6 +8,8 @@ description = "The low-down on Elliptic Curve Cryptography."
 taxonomies.tags = [
     "independent crypto"
 ]
+
+aliases = ["/elliptic-curve-cryptography"]
 +++
 
 {% note() %}

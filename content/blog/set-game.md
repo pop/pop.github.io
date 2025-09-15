@@ -11,6 +11,8 @@ taxonomies.tags = [
     "bevy",
 ]
 
+aliases = ["/set-game"]
+
 draft = true
 +++
 

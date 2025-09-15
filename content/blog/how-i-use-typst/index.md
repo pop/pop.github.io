@@ -10,6 +10,8 @@ taxonomies.tags = [
     "typst",
 ]
 
+aliases = ["/how-i-use-typst"]
+
 draft = false
 +++
 

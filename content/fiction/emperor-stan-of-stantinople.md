@@ -8,6 +8,8 @@ description = "An emperor owns a steam-powered device which allows him to destro
 taxonomies.tags = [
     "creative writing", "magicarealismbot", "archive"
 ]
+
+aliases = ["/emperor-stan-of-stantinople"]
 +++
 
 ## Prompt
