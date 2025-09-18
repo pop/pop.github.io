@@ -9,7 +9,7 @@ main {
 </style>
   {% include "header.html" %}
   <h1>.../{{ section.title }}</h1>
-
+    {{ section.content | safe }}
   <ul class=stuff>
     <!-- if has subsections... -->
     {%- for s in section.subsections -%}

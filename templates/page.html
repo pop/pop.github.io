@@ -18,9 +18,9 @@ main {
       | tags: {% include "tags.html" %}
     {%- endif -%}
   </p>
-  <details>
-  <summary>Table of Contents</summary>
   {% if page.toc %}
+    <details>
+    <summary>Table of Contents</summary>
     <ul>
     {% for h1 in page.toc %}
         <li>
@@ -37,8 +37,8 @@ main {
         </li>
     {% endfor %}
     </ul>
-  {% endif %}
   </details>
+  {% endif %}
   {{ page.content | safe }}
   {% include "footer.html" -%}
 </main>
