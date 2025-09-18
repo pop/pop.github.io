@@ -26,17 +26,15 @@
   {% include "header.html" %}
   <h1>{{ section.title }}</h1>
 
-  <!-- if has subsections... -->
   <ul class=stuff>
+    <!-- if has subsections... -->
     {%- for s in section.subsections -%}
       {% set it = get_section(path=s) %}
-      <li class=post>/<a href={{it.path}}>{{ it.title }}</a> <span class=description>{{ it.description  }}</span></li>
+      <li class=post>🗄️ /<a href={{it.path}}>{{ it.title }}</a>/ <span class=description>{{ it.description  }}</span></li>
     {%- endfor -%}
+    <!-- does not have subsections... -->
     {%- for page in section.pages -%}
-      <li class=post>
-        <a href="{{ page.path }}">{{ page.title }}</a> <span class=description>{{ page.description }}</span>
-      </li>
-      </li>
+      <li class=post>📃 /<a href="{{ page.path }}">{{ page.title }}</a> <span class=description>{{ page.description }}</span></li>
     {%- endfor -%}
     {%- block more -%}
     {%- endblock -%}

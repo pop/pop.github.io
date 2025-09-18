@@ -6,7 +6,7 @@ date = "2020-11-13"
 description = "A talk I gave at Seattle GNU Linux Conference 2020"
 
 taxonomies.tags = [
-    "rust", "amethyst", "games"
+    "rust", "amethyst", "gamedev"
 ]
 
 aliases = ["/seagl-2020-lets-build-a-game-with-rust"]
