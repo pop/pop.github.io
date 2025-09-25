@@ -17,11 +17,11 @@ draft = false
 
 This week I re-wrote [my resume](/Elijah%20Voigt.pdf)  in [typst](https://typst.app/).
 
-[Old](/how-i-use-typst/old.pdf):
-![old resume](/how-i-use-typst/old.png)
+[Old](old.pdf):
+![old resume](old.png)
 
-[New](/how-i-use-typst/new.pdf):
-![new resume](/how-i-use-typst/new.png)
+[New](new.pdf):
+![new resume](new.png)
 
 *Can you tell the difference? No? Excellent!*
 
@@ -58,7 +58,7 @@ this is a paragraph.
 But my resume is more... function heavy than advertised.
 For example, this:
 
-![example styled section](/how-i-use-typst/example.png)
+![example styled section](example.png)
 
 Came from this function:
 
