@@ -41,7 +41,7 @@ keep track of the order things happened in, like queuing an event.
 Try to keep them *relatively small* since they are fast for retrieval but not inherently space efficient.
 {% end %}
 
-%{ define(word="[Hash-table/Key-Value/Dictionary](https://en.wikipedia.org/wiki/Hash_table)" %}
+{% define(word="[Hash-table/Key-Value/Dictionary](https://en.wikipedia.org/wiki/Hash_table)" %}
 **Hashes are useful for storing unordered data** with keys, like an address book or a small database.
 We use them to access data quickly and easily since data is retrieved using a key and always takes approximately the same amount of time.
 When you get data out of a dictionary you provide a key and get back the associated data, just like (you guessed it) *a real dictionary* where provided the word you get back a definition.
