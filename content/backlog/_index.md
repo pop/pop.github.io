@@ -9,7 +9,7 @@ generate_feeds = true
 _The Backlog_!
 A more or less comprehensive list of everything I _plan on_ reading/watching/playing in my... lifetime.
 
-> Note this list is not comprehensive list of everything I _have ever_ read/watched/played, just from September 2025 and beyond!
+> Note this list is not a comprehensive list of everything I _have ever_ read/watched/played, just from September 2025 and beyond!
 
 # In Progress
 
