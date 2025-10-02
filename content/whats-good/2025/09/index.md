@@ -13,7 +13,7 @@ taxonomies.tags = [
 ]
 aliases = ["/whats-good-2025-09"]
 
-draft = true
+draft = false
 +++
 
 # Getting 3rd in a Dragon Boats Race
@@ -33,13 +33,13 @@ It's free to play and runs in your browser so check it out!
 ![Blue Prince](blue-prince.jpg)
 
 Blue Prince is a really interesting rogue-like(-ish) mansion builder.
-This is maybe the first game Lucy and I have played together because she was really interested and for some reason it's not on Switch!?!?
+This is maybe the first game Lucy and I have played together because she was really interested and for some reason it's not on Switch (!?!?) so she _had_ to play with me on the Steam Deck!
 
-Lucy and I played for ~15 hours together, which is the first time we have ever played a videogame together.
+We played for ~15 hours together, which is impressive given that this is the first time we've played a videogame together.
 The puzzles are really interesting and I genuinely felt like I got something new out of every run, unlocking new info every iteration.
 
-Now for the less good parts... I had to quit after 15 hours.
-My stamina for long games has never been good and when every 30-60 minute run only produces _maybe_ one piece of information in a game that has no clear path to completion... I start to question if this is the best use of my time.
+Now for the less good parts... I had to quit well before we were done.
+My stamina for long games has never been strong and when every run is 30-60 minutes and only produces _maybe_ one piece of information in a game that has no clear path to completion... I start to existentially question if this is the best use of my time.
 On top of that a lot of the game presents what are, in my opinion, red herrings; dates that aren't the solution to a puzzle, props that are just for decoration, a third thing.
 A good puzzle game has very little on top of the mechanics of the puzzle, and those things that are "just set dressing" should be clearly messaged as such, but in this game _everything_ feels like it's saying "Look at me! I'm a clue!" and it's exhausting.
 
@@ -57,7 +57,7 @@ He does a good job of covering a lot of the breadth and history of "end of the w
 
 # Gotham City: Year One
 
-![Gotham City: Year One](gotham-city-year-one)
+![Gotham City: Year One](gotham-city-year-one.jpg)
 
 [Gotham City: Year One](https://dc.fandom.com/wiki/Gotham_City:_Year_One_Vol_1) is a straight up good noir story that _happens_ to be a prequel to Batman.
 If you like the Noir genre you'll enjoy this read.
@@ -68,7 +68,7 @@ If you like the Noir genre you'll enjoy this read.
 
 [Batman: Hush](https://dc.fandom.com/wiki/Batman:_Hush) reminds me a lot of [Batman: The Long Halloween](https://en.wikipedia.org/wiki/Batman:_The_Long_Halloween).
 It spans over 12 issues, hits on most of the star villains, and has some twist at the end that it's building up to.
-I prefer Long Halloween, but Hush was a solid story with some interesting bits and taught me a bit more about the character(s) of Robin than I expected to learn.
+I prefer Long Halloween, but Hush was a solid story with an interesting romance plot and taught me a bit more about the character(s) of Robin than I expected to learn.
 
 # Godzillas
 
@@ -102,6 +102,6 @@ The story was uninspired re-using a surprising number of elements from previous 
 # The Backlog
 
 I also started a project called [The Backlog](/backlog).
-It's actually the public version of a private backlog I've had in Obsidian for a few months now, but I figure to build the habit of writing I would start publishing those little notes I jot down after I finish something.
+It's the public version of a private backlog I've kept in Obsidian for a few months now, but I figure to build the habit of writing I would start publishing the little notes I jot down after I finish something.
 
-I am already overwhelmed at the number of games and tv shows I would like to watch...
+I am already overwhelmed at the number of games and tv shows I want to watch...
