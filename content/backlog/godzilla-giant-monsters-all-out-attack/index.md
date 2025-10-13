@@ -3,7 +3,7 @@ title = "GMK: Giant Monsters All-Out Attack (2001)"
 
 date = "2025-10-06"
 
-description = "TODO"
+description = "Godzilla fights Mothra and King Ghidora"
 
 taxonomies.tags = [
     "backlog",
