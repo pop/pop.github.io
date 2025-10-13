@@ -1,0 +1,15 @@
++++
+title = "Title (YYYY)"
+
+date = "YYYY-MM-DD"
+
+description = "TODO"
+
+taxonomies.tags = [
+    "backlog",
+    # "movies", "comics", "games", "comics"
+]
+
+draft = true
++++
+
