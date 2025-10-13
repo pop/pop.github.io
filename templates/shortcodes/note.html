@@ -1,9 +1,9 @@
-<span class="note">
+<div class="note">
     <span class="note-title">
         Note
     </span>
 
     <span class="note-body">
-        {{ body | markdown(inline=false) }}
+        {{ body | markdown(inline=false) | safe }}
     </span>
 </span>

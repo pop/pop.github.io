@@ -1,0 +1,2 @@
+{% set data = load_data(path=path, format="plain") %}
+{{ data | split(pat="\n") | length - 1 }}
