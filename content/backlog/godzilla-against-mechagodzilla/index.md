@@ -3,7 +3,7 @@ title = "Godzilla Against Mechagodzilla (2002)"
 
 date = "2025-10-10"
 
-description = "TODO"
+description = "Godzilla fights... Mechagodzilla"
 
 taxonomies.tags = [
     "backlog",

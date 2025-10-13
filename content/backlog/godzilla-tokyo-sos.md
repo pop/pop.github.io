@@ -3,7 +3,7 @@ title = "Godzilla: Tokyo S.O.S"
 
 date = "2025-10-12"
 
-description = "TODO"
+description = "Godzilla fights... Mechagodzilla... again"
 
 taxonomies.tags = [
     "backlog",
@@ -11,7 +11,7 @@ taxonomies.tags = [
     "godzilla",
 ]
 
-draft = true
+draft = false
 +++
 
 This one felt like the sequel to Godzilla Against Mechagodzilla.
