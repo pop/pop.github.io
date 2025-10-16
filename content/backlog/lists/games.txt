@@ -1,3 +1,4 @@
+- Jusant
 - ANIMAL WELL
 - Children of the sun
 - Coffin mall
@@ -7,7 +8,6 @@
 - Inscryption
 - Voyager-19
 - Blippo+
-- Jusant
 - Islanders
 - Ooo
 - Prey
@@ -18,6 +18,8 @@
 - Sekiro Shadow Die Twice
 - Spec Ops The Line
 - Stephen's Sausage Roll
+- Sky the Scraper
+- Pigface
 - Tacoma
 - This Is the Police
 - Undertale
