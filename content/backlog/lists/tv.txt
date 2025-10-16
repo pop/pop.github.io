@@ -1,117 +1,116 @@
-- Star Trek Strange New Worlds
-- Residen Alien
-- Alien: Earth
-- Poker Face
-- Murderbot
-- I'm a Virgo
-- Marvel's Runaways
-- Gen V
-- What If...?
-- Severance
-- Carol & the End of the World
-- Secret Level
-- Twin Peaks
-- Mob Psycho
-- Euphoria
-- Silo
-- Star Wars: Skeleton Crew
-- Lioness
-- Clone High
-- Agahtha All Along
-- Review
-- utopia
-- Unicorn: Warriors Eternal
-- Scavengers Reign
-- Pinky and the Brain
-- Echo
-- Shogun
-- X-Men '97
-- Trigun
-- Chainsaw Man
 - 3 Body Problem
-- His Dark Materials
-- Star Trek: Strange New Worlds
-- True Detective
-- Station Eleven
-- Slow Horses
-- Monarch: Legacy of Monsters
-- Penn & Tell: Bull!
-- Resident Alien
-- Vagrant Queen
-- Halo
-- Swarm
-- Marvel's Moon Girl and Devil Dinosaur
-- Twilight Zone
-- Batman: The Animated Series
-- The Curse
-- X-Men
-- Halt and Catch Fire
-- Pushing Daises
-- The Morning Show
-- Serial Experiments Lain
-- Scott Pilgrim Takes Off
-- The Fall of the House of Usher
-- Blue Eye Samurai
-- Star Trek: Lower Decks
-- Harley Quinn
-- Ashoka
-- Dead Set
-- Watchmen
-- Patriot
-- The Orville
 - Arcane
-- The Lord of the Rings: The Rings of Power
-- Lovecraft Country
-- Love, Death, & Robots
-- I am Groot
-- Columbo
-- I Think You Should Leave
-- She-Ra and the Princesses of Power
-- Invincible
-- Ony Murders in the Building
-- Archer
-- The Expanse
-- The Righteous Gemstones
-- Doom Patrol
-- Legion
-- Mr. Robot
-- King of the Hill
+- Cowboy Bebop
+- Fleabag
 - Foundation
+- Gen V
+- Halt and Catch Fire
+- Invincible
+- Severance
+- It's Always Sunny in Philadelphia
+- Murderbot
+- Poker Face
+- Primal
+- Reservation Dogs
+- Secret Level
+- Star Wars: Andor
+- Steven Universe
+- The Mandalorian
+- The Bear
+- The Curse
+- The Expanse
+- The Last of us
+- The Rehearsal
+- Watchmen
+---
+- Agahtha All Along
+- Alien: Earth
+- Archer
+- Ashoka
+- Atlanta
+- Batman: The Animated Series
+- Better Call Saul
+- Blue Eye Samurai
+- Bob's Burgers
+- Carol & the End of the World
+- Chainsaw Man
+- Clone High
+- Columbo
+- Courage the Cowardly Dog
+- Dead Set
+- Doom Patrol
+- Echo
+- Euphoria
+- Halo
+- Harley Quinn
+- His Dark Materials
+- I Think You Should Leave
+- I am Groot
+- I'm a Virgo
+- Infinity Train
+- Invader ZIM
+- King of the Hill
+- Legion
+- Letterkenny
+- Lioness
+- Love, Death, & Robots
+- Lovecraft Country
+- Marvel's Moon Girl and Devil Dinosaur
+- Marvel's Runaways
+- Mob Psycho
+- Monarch: Legacy of Monsters
+- Mr. Robot
 - Mrs. Davis
-- Star Trek: Picard
+- My Name is Earl
+- Ony Murders in the Building
+- Patriot
+- Penn & Tell: Bull!
+- Pinky and the Brain
+- Pushing Daises
+- Resident Alien
+- Review
 - Rick and Morty
 - Robot Chicken
-- The Venture Bros.
-- Star Trek: Voyager
-- Star Trek: The Next Generation
-- Star Trek: Prodigy
-- Infinity Train
-- My Name is Earl
-- The White Lotus
-- The Sopranos
-- Cowboy Bebop
-- Steven Universe
-- Better Call Saul
-- Atlanta
-- Invader ZIM
-- Shitt's Creek
-- Fleabag
-- Letterkenny
-- The Witcher
-- Reservation Dogs
-- Star Wars: The Clone Wars
 - Samurai Jack
-- Courage the Cowardly Dog
-- The Bear
-- The Last of us
+- Scavengers Reign
+- Scott Pilgrim Takes Off
+- Serial Experiments Lain
+- She-Ra and the Princesses of Power
+- Shitt's Creek
+- Shogun
+- Silo
+- Slow Horses
 - SpongeBob SquarePants
-- Star Wars: Andor
-- The Mandalorian
-- The knick
-- It's Always Sunny in Philadelphia
-- Bob's Burgers
-- The Newsroom
-- The Rehearsal
 - Star Blazers
+- Star Trek Strange New Worlds
+- Star Trek: Lower Decks
+- Star Trek: Picard
+- Star Trek: Prodigy
+- Star Trek: Strange New Worlds
+- Star Trek: The Next Generation
+- Star Trek: Voyager
+- Star Wars: Skeleton Crew
+- Star Wars: The Clone Wars
+- Station Eleven
+- Swarm
+- The Fall of the House of Usher
+- The Lord of the Rings: The Rings of Power
+- The Morning Show
+- The Newsroom
+- The Orville
 - The Powerpuff Girls
-- Primal
+- The Righteous Gemstones
+- The Sopranos
+- The Venture Bros.
+- The White Lotus
+- The Witcher
+- The knick
+- Trigun
+- True Detective
+- Twilight Zone
+- Twin Peaks
+- Unicorn: Warriors Eternal
+- Vagrant Queen
+- What If...?
+- X-Men '97
+- Utopia
