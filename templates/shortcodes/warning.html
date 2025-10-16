@@ -4,6 +4,6 @@
     </span>
 
     <span class="warning-body">
-        {{ body | markdown(inline=false) }}
+        {{ body | markdown(inline=false) | safe }}
     </span>
-</span>
+</div>
