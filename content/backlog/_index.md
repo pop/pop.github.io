@@ -15,8 +15,9 @@ A more or less comprehensive list of everything I _plan on_ reading/watching/pla
 
 * [comic] [Avengers Vol 1-5 (Johnatan Hickman)](https://www.goodreads.com/series/298617-avengers-by-jonathan-hickman-the-complete-collection)
 * [book] [House of Leaves](https://en.wikipedia.org/wiki/House_of_Leaves)
-* [TV] [The Boys](https://en.wikipedia.org/wiki/The_Boys_(TV_series))
+* [tv] [The Boys](https://en.wikipedia.org/wiki/The_Boys_(TV_series))
 * [game] [Peak](https://en.wikipedia.org/wiki/Peak_(video_game))
+* [game] [Jusant](https://en.wikipedia.org/wiki/Jusant)
 
 # Backlog
 
