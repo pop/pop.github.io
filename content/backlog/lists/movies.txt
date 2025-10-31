@@ -1,14 +1,10 @@
-- Godzilla (2014)
-- Godzilla Against Mechagodzilla
-- Godzilla City on the Edge of Battle
-- Godzilla Final Wars
-- Godzilla King of the Monsters
-- Godzilla Minus One
-- Godzilla Planet
-- Godzilla The Planet Eater
-- Godzilla vs. Kong
-- Godzilla vs. Megaguirus
 - Shin Godzilla
+- Godzilla Planet of the Monsters
+- Godzilla City on the Edge of Battle
+- Godzilla The Planet Eater
+- Godzilla King of the Monsters
+- Godzilla vs. Kong
+- Godzilla Minus One
 - Godzilla x Kong The New Empire
 - Mission Impossible Dead Reckoning
 - Mission Impossible Final Reckoning
@@ -18,7 +14,6 @@
 - Dawn of the Dead (2004)
 - Eraserhead
 - Eyes Wide Shut
-- Fantastic Four: First Steps
 - Good Time
 - How to Blow Up a Pipeline
 - John Wick
@@ -29,7 +24,7 @@
 - The Raid 2
 - Top Gun: Maverick
 - Warfare
-- [Eddington](https://www.themoviedb.org/movie/648878-eddington)
+- Eddington
 ---
 - 10 Things I Hate About You
 - A Few Good Men
