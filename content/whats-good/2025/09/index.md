@@ -6,6 +6,7 @@ description = "Dragon Boats, Flappy Bird (with rewind), Blue Prince, Batman Hush
 extra.image = "/whats-good/2025/09/todo.jpg"
 
 date = "2025-09-30"
+updated = "2025-10-30"
 
 taxonomies.tags = [
     "whats good",
@@ -98,6 +99,26 @@ The jokes land, it's not distractingly 90's in it's you know misogyny, and the p
 Godzilla 2000 Millennium felt... off.
 Like Toho was going through the motions on this one.
 The story was uninspired re-using a surprising number of elements from previous films like space ships that turn into Kaiju and the Defense Force trying yet again to kill Godzilla even though that has literally never come close to working since the first movie.
+
+
+## Godzilla vs. Megaguirus
+
+![Godzilla vs Megaguirus](godzilla-vs-megaguirus.jpg)
+
+My only takeaway from this is that using a BLACK HOLE to kill Godzilla is the most metal weapon used in these movies to date.
+
+Also the camera work is generally closer to the action which is a nice change from previous titles.
+The fights feel more intimate as a result.
+
+## GMK: Giant Monsters All-Out Attack
+
+![Godzilla: Giant Monsters All-Out Attack](gmk.jpg)
+
+I liked that there were a lot of little vignettes in this movie.
+
+Also a weird theme of people dying.
+Not like... maybe off-screen dying, there's a lot of people standing around, then a giant tail swiping or foot stomping them.
+Not dark, and rarely addressed explicitly, but definitely notable.
 
 # The Backlog
 
