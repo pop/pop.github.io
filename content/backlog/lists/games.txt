@@ -1,4 +1,6 @@
 - Jusant
+- Peak
+- Sky the Scraper
 - ANIMAL WELL
 - Children of the sun
 - Coffin mall
@@ -6,7 +8,6 @@
 - Hades II
 - Hollow Knight
 - Inscryption
-- Voyager-19
 - Blippo+
 - Islanders
 - Ooo
@@ -18,7 +19,6 @@
 - Sekiro Shadow Die Twice
 - Spec Ops The Line
 - Stephen's Sausage Roll
-- Sky the Scraper
 - Pigface
 - Tacoma
 - This Is the Police
