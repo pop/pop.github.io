@@ -3,14 +3,12 @@ title = "Voyager-19 (2024)"
 
 date = "2025-10-31"
 
-description = "It's like Iron Lung but in space."
+description = "It's like Iron Lung in space"
 
 taxonomies.tags = [
     "backlog",
     "games",
 ]
-
-draft = false
 +++
 
 I was house-bound on Halloween because I was sick and I have two little kids.

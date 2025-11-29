@@ -3,7 +3,7 @@ title = "Godzilla: Final Wars (2004)"
 
 date = "2025-10-24"
 
-description = "TODO"
+description = "You should watch this off-the-wall Godzilla flick"
 
 taxonomies.tags = [
     "backlog",
@@ -11,7 +11,7 @@ taxonomies.tags = [
     "godzilla",
 ]
 
-draft = false
+aliases = ["/backlog/godzilla-final-war"]
 +++
 
 This movie fucks.

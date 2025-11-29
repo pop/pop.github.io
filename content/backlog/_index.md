@@ -13,11 +13,10 @@ A more or less comprehensive list of everything I _plan on_ reading/watching/pla
 
 # In Progress
 
+* [game] [Sekiro: Shadows Die Twice](https://en.wikipedia.org/wiki/Sekiro:_Shadows_Die_Twice)
 * [comic] [Avengers Vol 1-5 (Johnatan Hickman)](https://www.goodreads.com/series/298617-avengers-by-jonathan-hickman-the-complete-collection)
-* [book] [House of Leaves](https://en.wikipedia.org/wiki/House_of_Leaves)
+* [book] [Priestdaddy](https://en.wikipedia.org/wiki/Priestdaddy)
 * [tv] [The Boys](https://en.wikipedia.org/wiki/The_Boys_(TV_series))
-* [game] [Peak](https://en.wikipedia.org/wiki/Peak_(video_game))
-* [game] [Jusant](https://en.wikipedia.org/wiki/Jusant)
 
 # Backlog
 
