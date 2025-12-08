@@ -14,6 +14,9 @@ main {
     {%- if page.updated %}
       | updated {{ page.updated }}
     {%- endif -%}
+    {%- if page.extra.hours %}
+      | {{ page.extra.hours }} hour(s) played
+    {% endif -%}
     {%- if page.taxonomies.tags %}
       | tags: {% include "tags.html" %}
     {%- endif -%}
