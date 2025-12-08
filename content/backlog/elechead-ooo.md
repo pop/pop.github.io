@@ -2,8 +2,11 @@
 title = "Elechead (2021) & Öoo (2025)"
 
 date = "2025-11-25"
+updated = "2025-12-07"
 
 description = "Two lil' puzzle platformers"
+
+extra.hours = 7.5
 
 taxonomies.tags = [
     "backlog",
@@ -14,7 +17,7 @@ taxonomies.tags = [
 Elechead and Öoo are delightful, short, and sweet puzzle platformers by Nama Takahashi.
 Both have a strong core mechanic that is explored well.
 
-They are short at ~2hrs each, but offer some rewarding hidden/extra puzzles if you want to stay in the world a bit longer.
+They are short at ~3hrs each, but offer some rewarding hidden/extra puzzles if you want to stay in the world a bit longer.
 
 They also follow the golden rule of puzzle games:
 
