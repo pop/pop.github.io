@@ -5,14 +5,15 @@
   body {
     background: url(/images/bg.jpg) no-repeat fixed bottom center;
     background-size: contain;
+    margin: 40px;
   }
 
   main {
     height: 100vh;
   }
 
-  li.post>*,footer {
-      background-color: #ffffff
+  .container {
+    background-color: #ffffffcc;
   }
 
   footer {
@@ -22,25 +23,27 @@
     padding-bottom: 10px;
   }
 </style>
-<main>
-  {% include "header.html" %}
-  <h1>{{ section.title }}</h1>
+<div class=container>
+    <main>
+      {% include "header.html" %}
+      <h1>{{ section.title }}</h1>
 
-  <ul class=stuff>
-    <!-- if has subsections... -->
-    {%- for s in section.subsections -%}
-      {% set it = get_section(path=s) %}
-      <li class=post>🗄️ /<a href={{it.path}}>{{ it.title }}</a>/ <span class=description>{{ it.description  }}</span></li>
-    {%- endfor -%}
-    <!-- does not have subsections... -->
-    {%- for page in section.pages -%}
-      <li class=post>📃 /<a href="{{ page.path }}">{{ page.title }}</a> <span class=description>{{ page.description }}</span></li>
-    {%- endfor -%}
-    {%- block more -%}
-    {%- endblock -%}
+      <ul class=stuff>
+        <!-- if has subsections... -->
+        {%- for s in section.subsections -%}
+          {% set it = get_section(path=s) %}
+          <li class=post>🗄️ /<a href={{it.path}}>{{ it.title }}</a>/ <span class=description>{{ it.description  }}</span></li>
+        {%- endfor -%}
+        <!-- does not have subsections... -->
+        {%- for page in section.pages -%}
+          <li class=post>📃 /<a href="{{ page.path }}">{{ page.title }}</a> <span class=description>{{ page.description }}</span></li>
+        {%- endfor -%}
+        {%- block more -%}
+        {%- endblock -%}
 
-    {% include "nav.html" %}
-  </ul>
-</main>
-{% include "footer.html" %}
+        {% include "nav.html" %}
+      </ul>
+    </main>
+    {% include "footer.html" %}
+</div>
 {%- endblock -%}
