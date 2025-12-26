@@ -6,7 +6,7 @@ date = "2017-11-27"
 description = "Sit back and ponder how much we've learned these past few weeks."
 
 taxonomies.tags = [
-    "independent crypto"
+    "cryptography"
 ]
 
 aliases = ["/independent-crypto-conclusions"]

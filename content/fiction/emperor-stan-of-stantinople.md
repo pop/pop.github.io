@@ -6,7 +6,7 @@ date = "2016-07-01"
 description = "An emperor owns a steam-powered device which allows him to destroy the past."
 
 taxonomies.tags = [
-    "creative writing", "magicarealismbot", "archive"
+    "creative writing", "magicrealismbot", "archive"
 ]
 
 aliases = ["/emperor-stan-of-stantinople"]

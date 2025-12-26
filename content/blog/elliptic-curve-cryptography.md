@@ -6,7 +6,7 @@ date = "2017-10-04"
 description = "The low-down on Elliptic Curve Cryptography."
 
 taxonomies.tags = [
-    "independent crypto"
+    "cryptography"
 ]
 
 aliases = ["/elliptic-curve-cryptography"]

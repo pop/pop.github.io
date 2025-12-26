@@ -5,9 +5,7 @@ date = "2017-12-12"
 
 description = "I fucking graduated. Fuck yes."
 
-taxonomies.tags = [
-    "graduation", "archive"
-]
+taxonomies.tags = ["archive"]
 aliases = ["/graduation"]
 +++
 
