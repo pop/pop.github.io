@@ -6,7 +6,7 @@ date = "2017-07-10"
 description = "Independent Crypto landing page."
 
 taxonomies.tags = [
-    "independent crypto"
+    "cryptography"
 ]
 
 aliases = ["/independent-crypto"]

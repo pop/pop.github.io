@@ -13,10 +13,10 @@ A more or less comprehensive list of everything I _plan on_ reading/watching/pla
 
 # In Progress
 
-* [game] [Sekiro: Shadows Die Twice](https://en.wikipedia.org/wiki/Sekiro:_Shadows_Die_Twice)
-* [comic] [Avengers Vol 1-5 (Johnatan Hickman)](https://www.goodreads.com/series/298617-avengers-by-jonathan-hickman-the-complete-collection)
-* [book] [Priestdaddy](https://en.wikipedia.org/wiki/Priestdaddy)
+* [game] [The Entropy Centre](https://en.wikipedia.org/wiki/The_Entropy_Centre)
+* [book] [Cascade Failure](https://www.powells.com/book/9781250871251)
 * [tv] [The Boys](https://en.wikipedia.org/wiki/The_Boys_(TV_series))
+* [comic] [Avengers Vol 1-5 (Johnatan Hickman)](https://www.goodreads.com/series/298617-avengers-by-jonathan-hickman-the-complete-collection)
 
 # Backlog
 

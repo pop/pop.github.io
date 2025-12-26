@@ -6,7 +6,7 @@ date = "2017-10-10"
 description = "I know those words seperately but..."
 
 taxonomies.tags = [
-    "independent crypto"
+    "cryptography"
 ]
 aliases = ["/garbled-circuits"]
 +++

@@ -6,7 +6,7 @@ date = "2017-11-20"
 description = "Or yet another reason you should never roll your own crypto."
 
 taxonomies.tags = [
-    "independent crypto"
+    "cryptography"
 ]
 
 aliases = ["/remote-timing-attacks"]

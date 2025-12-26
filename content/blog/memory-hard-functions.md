@@ -6,7 +6,7 @@ date = "2017-10-17"
 description = "Harder than regular functions."
 
 taxonomies.tags = [
-    "independent crypto"
+    "cryptography"
 ]
 
 aliases = ["/memory-hard-functions"]
