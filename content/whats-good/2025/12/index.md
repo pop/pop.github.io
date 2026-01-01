@@ -1,7 +1,7 @@
 +++
 title = "What's Good #15 (December 2025)"
 
-description = "Priestdaddy."
+description = "Priestdaddy and the end of the Godzilla project."
 
 extra.image = "/whats-good/2025/12/todo.jpg"
 
