@@ -8,8 +8,6 @@ description = "Focuing on the good stuff, cutting out the cruft."
 taxonomies.tags = [
     "media"
 ]
-
-draft = true
 +++
 
 I, like many people in 2025, have a looooong list of games, movies, tv, and books that I want to enjoy sometime between now and death.
