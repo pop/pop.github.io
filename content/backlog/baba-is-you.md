@@ -1,9 +1,9 @@
 +++
-title = "Baba is You(YYYY)"
+title = "Baba is You (2019)"
 
-date = "2026-01-31"
+date = "2026-02-28"
 
-description = "TODO"
+description = "[ BRAIN ][ IS ][ HURT ]"
 
 taxonomies.tags = [
     "backlog",
