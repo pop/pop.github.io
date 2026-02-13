@@ -184,18 +184,21 @@ editor/
 
 ## Implementation Phases
 
-### Phase 1: Project Scaffold & Auth
+### Phase 1: Project Scaffold & Auth ✓
 
 **Goal:** Yew app boots, user can log in with GitHub.
 
-- [ ] Initialize Cargo workspace in `editor/`
-- [ ] Set up Trunk build config (`Trunk.toml`, `index.html`)
-- [ ] Create Yew app shell with router (login, dashboard, editor, preview routes)
-- [ ] Implement GitHub OAuth redirect (frontend side)
-- [ ] Create Cloudflare Worker for token exchange
-- [ ] Implement token storage and auth state management
-- [ ] Add dev-mode bypass (manual token entry)
-- [ ] Verify: user can log in and token is stored
+- [x] Initialize Cargo project in `editor/` with Yew 0.21, yew-router, gloo-*, serde, web-sys
+- [x] Set up Trunk build config (`Trunk.toml`, `index.html`)
+- [x] Create Yew app shell with router (Login, Dashboard, Editor, Preview, NotFound routes)
+- [x] Implement GitHub OAuth redirect (frontend side) — login.rs redirects to GitHub, handles `?code=` callback
+- [x] Create Cloudflare Worker for token exchange — `worker/src/lib.rs` with CORS, POST `/exchange`
+- [x] Implement token storage and auth state management — `AuthContext` via `ContextProvider`, sessionStorage
+- [x] Add dev-mode bypass (manual token entry) — collapsible PAT input on login page
+- [ ] **TODO:** Set `GITHUB_CLIENT_ID` in `src/components/login.rs`
+- [ ] **TODO:** Set `WORKER_URL` in `src/services/auth.rs` after deploying the worker
+- [ ] **TODO:** Deploy Cloudflare Worker and configure secrets (`wrangler secret put GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET`)
+- [ ] Verify: user can log in and token is stored (works now via dev-mode PAT entry; OAuth pending worker deploy)
 
 ### Phase 2: Content Browsing
 
@@ -286,3 +289,11 @@ editor/
 - Explored blog repository structure
 - Defined requirements and architecture
 - Created this planning document
+
+### Session 2 (2026-02-12)
+- Built Phase 1: full project scaffold with all source files
+- App compiles to WASM (`cargo check --target wasm32-unknown-unknown` passes)
+- Auth flow: AuthContext with ContextProvider, sessionStorage persistence, OAuth callback handler, dev-mode PAT bypass
+- Router: 5 routes with auth guards on protected pages (redirect to login if no token)
+- Cloudflare Worker: Rust worker with CORS, exchanges OAuth code for GitHub access token
+- Remaining for Phase 1 completion: configure GitHub OAuth App credentials and deploy worker
