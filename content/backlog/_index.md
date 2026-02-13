@@ -13,8 +13,8 @@ A more or less comprehensive list of everything I _plan on_ reading/watching/pla
 
 # In Progress
 
-* [game] [Dispatch](https://en.wikipedia.org/wiki/Dispatch_(video_game))
-* [book] [Strange Pictures](https://en.wikipedia.org/wiki/Strange_Pictures)
+* [game] [Crash Bandicoot](https://en.wikipedia.org/wiki/Crash_Bandicoot_N._Sane_Trilogy)
+* [book] [Model Home](https://www.powells.com/book/model-home-9781250397591)
 * [tv] [The Boys](https://en.wikipedia.org/wiki/The_Boys_(TV_series))
 * [comic] [Avengers Vol 1-5 (Johnatan Hickman)](https://www.goodreads.com/series/298617-avengers-by-jonathan-hickman-the-complete-collection)
 

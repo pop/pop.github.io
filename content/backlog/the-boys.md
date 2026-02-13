@@ -4,7 +4,7 @@ title = "The Boys (2019-2016)"
 date = "2026-01-01"
 updated = "2026-01-01"
 
-description = "Prime loves gory superhero shoes huh..."
+description = "Prime sure loves gory superhero shows..."
 
 taxonomies.tags = [
     "backlog",
