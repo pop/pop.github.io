@@ -10,5 +10,6 @@ __pycache__/
 *.pid
 public/
 .direnv/
+
 # nix home-manager
 result
