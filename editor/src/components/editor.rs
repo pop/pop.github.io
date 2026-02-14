@@ -1,8 +1,10 @@
+use std::rc::Rc;
+
 use gloo_storage::{SessionStorage, Storage};
 use wasm_bindgen::closure::Closure;
 use wasm_bindgen::JsCast;
 use wasm_bindgen::JsValue;
-use web_sys::{HtmlInputElement, HtmlTextAreaElement};
+use web_sys::{HtmlElement, HtmlInputElement, HtmlTextAreaElement};
 use yew::prelude::*;
 use yew_router::prelude::*;
 
@@ -42,8 +44,23 @@ pub fn editor_page(props: &Props) -> Html {
     let save_msg = use_state(|| Option::<String>::None);
     let is_new = use_state(|| false);
     let view_mode = use_state(|| ViewMode::Edit);
+    let dragging = use_state(|| false);
     let file_input_ref = use_node_ref();
     let textarea_ref = use_node_ref();
+    let save_btn_ref = use_node_ref();
+    let has_unsaved = use_mut_ref(|| false);
+
+    // Auth-aware error setter: clears token on 401
+    let set_error: Rc<dyn Fn(String)> = {
+        let error = error.clone();
+        let set_token = auth.set_token.clone();
+        Rc::new(move |msg: String| {
+            if msg.contains("Unauthorized") {
+                set_token.emit(None);
+            }
+            error.set(Some(msg));
+        })
+    };
 
     // Redirect if not authenticated
     {
@@ -57,13 +74,83 @@ pub fn editor_page(props: &Props) -> Html {
         });
     }
 
+    // Track unsaved changes for beforeunload
+    {
+        let has_unsaved = has_unsaved.clone();
+        let content = content.clone();
+        let original_content = original_content.clone();
+        let is_new = is_new.clone();
+        use_effect(move || {
+            *has_unsaved.borrow_mut() = *content != *original_content || *is_new;
+            || ()
+        });
+    }
+
+    // Warn before closing tab with unsaved changes
+    {
+        let has_unsaved = has_unsaved.clone();
+        use_effect_with((), move |_| {
+            let listener = Closure::<dyn FnMut(web_sys::BeforeUnloadEvent)>::wrap(Box::new(
+                move |e: web_sys::BeforeUnloadEvent| {
+                    if *has_unsaved.borrow() {
+                        e.prevent_default();
+                        e.set_return_value("You have unsaved changes.");
+                    }
+                },
+            ));
+
+            let window = gloo_utils::window();
+            let _ = window.add_event_listener_with_callback(
+                "beforeunload",
+                listener.as_ref().unchecked_ref(),
+            );
+
+            move || {
+                let _ = window.remove_event_listener_with_callback(
+                    "beforeunload",
+                    listener.as_ref().unchecked_ref(),
+                );
+            }
+        });
+    }
+
+    // Keyboard shortcuts (Ctrl+S / Cmd+S to save)
+    {
+        let save_btn_ref = save_btn_ref.clone();
+        use_effect_with((), move |_| {
+            let listener = Closure::<dyn FnMut(web_sys::KeyboardEvent)>::wrap(Box::new(
+                move |e: web_sys::KeyboardEvent| {
+                    if (e.ctrl_key() || e.meta_key()) && e.key() == "s" {
+                        e.prevent_default();
+                        if let Some(btn) = save_btn_ref.cast::<HtmlElement>() {
+                            btn.click();
+                        }
+                    }
+                },
+            ));
+
+            let document = gloo_utils::document();
+            let _ = document.add_event_listener_with_callback(
+                "keydown",
+                listener.as_ref().unchecked_ref(),
+            );
+
+            move || {
+                let _ = document.remove_event_listener_with_callback(
+                    "keydown",
+                    listener.as_ref().unchecked_ref(),
+                );
+            }
+        });
+    }
+
     // Load file content on mount
     {
         let content = content.clone();
         let original_content = original_content.clone();
         let file_sha = file_sha.clone();
         let loading = loading.clone();
-        let error = error.clone();
+        let set_error = set_error.clone();
         let is_new = is_new.clone();
         let branch = branch.clone();
         let path = props.path.clone();
@@ -73,7 +160,24 @@ pub fn editor_page(props: &Props) -> Html {
             if let Some(token) = token {
                 wasm_bindgen_futures::spawn_local(async move {
                     let client = GitHubClient::new(token);
-                    let active_branch = (*branch).clone();
+                    let mut active_branch = (*branch).clone();
+
+                    // Verify stored branch still exists
+                    if let Some(ref branch_name) = active_branch {
+                        match client.get_branch_sha(branch_name).await {
+                            Ok(_) => {} // Branch exists
+                            Err(e) if e.contains("not found") => {
+                                clear_active_branch();
+                                branch.set(None);
+                                active_branch = None;
+                            }
+                            Err(e) => {
+                                set_error(e);
+                                loading.set(false);
+                                return;
+                            }
+                        }
+                    }
 
                     let result = load_file(&client, &path, active_branch.as_deref()).await;
 
@@ -93,7 +197,7 @@ pub fn editor_page(props: &Props) -> Html {
                             loading.set(false);
                         }
                         Err(e) => {
-                            error.set(Some(e));
+                            set_error(e);
                             loading.set(false);
                         }
                     }
@@ -120,6 +224,7 @@ pub fn editor_page(props: &Props) -> Html {
         let branch = branch.clone();
         let saving = saving.clone();
         let error = error.clone();
+        let set_error = set_error.clone();
         let save_msg = save_msg.clone();
         let path = props.path.clone();
         let token = auth.token.clone();
@@ -132,6 +237,7 @@ pub fn editor_page(props: &Props) -> Html {
             let branch = branch.clone();
             let saving = saving.clone();
             let error = error.clone();
+            let set_error = set_error.clone();
             let save_msg = save_msg.clone();
             let path = path.clone();
             let is_new = is_new.clone();
@@ -154,7 +260,7 @@ pub fn editor_page(props: &Props) -> Html {
                                 name
                             }
                             Err(e) => {
-                                error.set(Some(e));
+                                set_error(e);
                                 saving.set(false);
                                 return;
                             }
@@ -190,7 +296,7 @@ pub fn editor_page(props: &Props) -> Html {
                             saving.set(false);
                         }
                         Err(e) => {
-                            error.set(Some(e));
+                            set_error(e);
                             saving.set(false);
                         }
                     }
@@ -203,6 +309,7 @@ pub fn editor_page(props: &Props) -> Html {
         let file_sha = file_sha.clone();
         let branch = branch.clone();
         let error = error.clone();
+        let set_error = set_error.clone();
         let saving = saving.clone();
         let path = props.path.clone();
         let token = auth.token.clone();
@@ -220,6 +327,7 @@ pub fn editor_page(props: &Props) -> Html {
             let file_sha = file_sha.clone();
             let branch = branch.clone();
             let error = error.clone();
+            let set_error = set_error.clone();
             let saving = saving.clone();
             let path = path.clone();
             let navigator = navigator.clone();
@@ -246,7 +354,7 @@ pub fn editor_page(props: &Props) -> Html {
                                 name
                             }
                             Err(e) => {
-                                error.set(Some(e));
+                                set_error(e);
                                 saving.set(false);
                                 return;
                             }
@@ -263,7 +371,7 @@ pub fn editor_page(props: &Props) -> Html {
                             navigator.push(&Route::Dashboard);
                         }
                         Err(e) => {
-                            error.set(Some(e));
+                            set_error(e);
                             saving.set(false);
                         }
                     }
@@ -272,32 +380,19 @@ pub fn editor_page(props: &Props) -> Html {
         })
     };
 
-    // Image upload callbacks
-    let on_upload_click = {
-        let file_input_ref = file_input_ref.clone();
-        Callback::from(move |_: MouseEvent| {
-            if let Some(input) = file_input_ref.cast::<HtmlInputElement>() {
-                input.click();
-            }
-        })
-    };
-
-    let on_file_selected = {
+    // Shared image upload callback (used by file input and drag-and-drop)
+    let upload_image = {
         let content = content.clone();
         let branch = branch.clone();
         let uploading = uploading.clone();
         let error = error.clone();
+        let set_error = set_error.clone();
         let save_msg = save_msg.clone();
         let path = props.path.clone();
         let token = auth.token.clone();
         let textarea_ref = textarea_ref.clone();
-        let file_input_ref = file_input_ref.clone();
 
-        Callback::from(move |e: Event| {
-            let input: HtmlInputElement = e.target_unchecked_into();
-            let Some(files) = input.files() else { return };
-            let Some(file) = files.get(0) else { return };
-
+        Callback::from(move |file: web_sys::File| {
             let file_name = sanitize_filename(&file.name());
             let upload_dir = parent_dir(&path);
             let upload_path = if upload_dir.is_empty() {
@@ -310,10 +405,10 @@ pub fn editor_page(props: &Props) -> Html {
             let branch = branch.clone();
             let uploading = uploading.clone();
             let error = error.clone();
+            let set_error = set_error.clone();
             let save_msg = save_msg.clone();
             let path = path.clone();
             let textarea_ref = textarea_ref.clone();
-            let file_input_ref = file_input_ref.clone();
 
             if let Some(token) = token.clone() {
                 uploading.set(true);
@@ -324,7 +419,7 @@ pub fn editor_page(props: &Props) -> Html {
                     let bytes = match read_file_as_bytes(file).await {
                         Ok(b) => b,
                         Err(e) => {
-                            error.set(Some(e));
+                            set_error(e);
                             uploading.set(false);
                             return;
                         }
@@ -342,16 +437,28 @@ pub fn editor_page(props: &Props) -> Html {
                                 name
                             }
                             Err(e) => {
-                                error.set(Some(e));
+                                set_error(e);
                                 uploading.set(false);
                                 return;
                             }
                         },
                     };
 
+                    // Check if image already exists (for overwrite)
+                    let existing_sha = match client.get_file(&upload_path, &branch_name).await {
+                        Ok(existing) => Some(existing.sha),
+                        Err(_) => None,
+                    };
+
                     let message = format!("Upload image {file_name}");
                     match client
-                        .upload_binary_file(&upload_path, &bytes, &message, &branch_name)
+                        .upload_binary_file(
+                            &upload_path,
+                            &bytes,
+                            &message,
+                            existing_sha.as_deref(),
+                            &branch_name,
+                        )
                         .await
                     {
                         Ok(_sha) => {
@@ -378,16 +485,78 @@ pub fn editor_page(props: &Props) -> Html {
                             uploading.set(false);
                         }
                         Err(e) => {
-                            error.set(Some(e));
+                            set_error(e);
                             uploading.set(false);
                         }
                     }
-
-                    // Reset file input so the same file can be re-selected
-                    if let Some(input) = file_input_ref.cast::<HtmlInputElement>() {
-                        input.set_value("");
-                    }
                 });
+            }
+        })
+    };
+
+    let on_upload_click = {
+        let file_input_ref = file_input_ref.clone();
+        Callback::from(move |_: MouseEvent| {
+            if let Some(input) = file_input_ref.cast::<HtmlInputElement>() {
+                input.click();
+            }
+        })
+    };
+
+    let on_file_selected = {
+        let upload_image = upload_image.clone();
+        let file_input_ref = file_input_ref.clone();
+
+        Callback::from(move |e: Event| {
+            let input: HtmlInputElement = e.target_unchecked_into();
+            if let Some(files) = input.files() {
+                if let Some(file) = files.get(0) {
+                    upload_image.emit(file);
+                }
+            }
+            // Reset file input so the same file can be re-selected
+            if let Some(input) = file_input_ref.cast::<HtmlInputElement>() {
+                input.set_value("");
+            }
+        })
+    };
+
+    // Drag-and-drop image upload
+    let on_dragover = {
+        let dragging = dragging.clone();
+        Callback::from(move |e: DragEvent| {
+            e.prevent_default();
+            dragging.set(true);
+        })
+    };
+
+    let on_dragleave = {
+        let dragging = dragging.clone();
+        Callback::from(move |e: DragEvent| {
+            e.prevent_default();
+            dragging.set(false);
+        })
+    };
+
+    let on_drop = {
+        let dragging = dragging.clone();
+        let upload_image = upload_image.clone();
+
+        Callback::from(move |e: DragEvent| {
+            e.prevent_default();
+            dragging.set(false);
+
+            if let Some(dt) = e.data_transfer() {
+                if let Some(files) = dt.files() {
+                    for i in 0..files.length() {
+                        if let Some(file) = files.get(i) {
+                            if file.type_().starts_with("image/") {
+                                upload_image.emit(file);
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         })
     };
@@ -397,6 +566,7 @@ pub fn editor_page(props: &Props) -> Html {
         let branch = branch.clone();
         let saving = saving.clone();
         let error = error.clone();
+        let set_error = set_error.clone();
         let save_msg = save_msg.clone();
         let token = auth.token.clone();
         let navigator = navigator.clone();
@@ -406,6 +576,7 @@ pub fn editor_page(props: &Props) -> Html {
             let branch = branch.clone();
             let saving = saving.clone();
             let error = error.clone();
+            let set_error = set_error.clone();
             let save_msg = save_msg.clone();
             let navigator = navigator.clone();
             let path = path.clone();
@@ -439,7 +610,7 @@ pub fn editor_page(props: &Props) -> Html {
                             navigator.push(&Route::Dashboard);
                         }
                         Err(e) => {
-                            error.set(Some(e));
+                            set_error(e);
                             saving.set(false);
                         }
                     }
@@ -452,6 +623,7 @@ pub fn editor_page(props: &Props) -> Html {
         let branch = branch.clone();
         let saving = saving.clone();
         let error = error.clone();
+        let set_error = set_error.clone();
         let token = auth.token.clone();
         let navigator = navigator.clone();
 
@@ -469,6 +641,7 @@ pub fn editor_page(props: &Props) -> Html {
             let branch = branch.clone();
             let saving = saving.clone();
             let error = error.clone();
+            let set_error = set_error.clone();
             let navigator = navigator.clone();
 
             let Some(branch_name) = (*branch).clone() else {
@@ -491,7 +664,7 @@ pub fn editor_page(props: &Props) -> Html {
                             navigator.push(&Route::Dashboard);
                         }
                         Err(e) => {
-                            error.set(Some(e));
+                            set_error(e);
                             saving.set(false);
                         }
                     }
@@ -551,6 +724,7 @@ pub fn editor_page(props: &Props) -> Html {
             } else {
                 <div class="editor-toolbar">
                     <button
+                        ref={save_btn_ref.clone()}
                         class="save-btn"
                         onclick={on_save}
                         disabled={*saving || !has_changes}
@@ -616,7 +790,16 @@ pub fn editor_page(props: &Props) -> Html {
                         }
                     </div>
                 }
-                <div class={classes!("editor-container", is_split.then_some("split"))}>
+                <div
+                    class={classes!(
+                        "editor-container",
+                        is_split.then_some("split"),
+                        (*dragging).then_some("drag-over"),
+                    )}
+                    ondragover={on_dragover}
+                    ondragleave={on_dragleave}
+                    ondrop={on_drop}
+                >
                     if show_editor {
                         <textarea
                             ref={textarea_ref.clone()}

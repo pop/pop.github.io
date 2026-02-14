@@ -57,6 +57,7 @@ impl GitHubClient {
                 let git_ref: GitRef = resp.json().await.map_err(|e| e.to_string())?;
                 Ok(git_ref.object.sha)
             }
+            401 => Err("Unauthorized \u{2014} check your token".into()),
             404 => Err(format!("Branch not found: {branch}")),
             status => Err(format!("GitHub API error: {status}")),
         }
@@ -86,6 +87,7 @@ impl GitHubClient {
 
         match resp.status() {
             201 => Ok(()),
+            401 => Err("Unauthorized \u{2014} check your token".into()),
             422 => Err("Branch already exists".into()),
             status => Err(format!("Failed to create branch: {status}")),
         }
@@ -104,6 +106,7 @@ impl GitHubClient {
 
         match resp.status() {
             204 => Ok(()),
+            401 => Err("Unauthorized \u{2014} check your token".into()),
             status => Err(format!("Failed to delete branch: {status}")),
         }
     }
@@ -136,6 +139,7 @@ impl GitHubClient {
 
         match resp.status() {
             201 | 204 => Ok(()),
+            401 => Err("Unauthorized \u{2014} check your token".into()),
             404 => Err("Branch not found".into()),
             409 => Err("Merge conflict \u{2014} resolve manually on GitHub".into()),
             status => Err(format!("Failed to merge: {status}")),
@@ -188,6 +192,7 @@ impl GitHubClient {
                     .to_string();
                 Ok(sha)
             }
+            401 => Err("Unauthorized \u{2014} check your token".into()),
             409 => Err("Conflict \u{2014} file was modified elsewhere".into()),
             status => Err(format!("Failed to save file: {status}")),
         }
@@ -220,6 +225,7 @@ impl GitHubClient {
 
         match resp.status() {
             200 => Ok(()),
+            401 => Err("Unauthorized \u{2014} check your token".into()),
             status => Err(format!("Failed to delete file: {status}")),
         }
     }
@@ -227,21 +233,28 @@ impl GitHubClient {
     // ── Binary uploads ───────────────────────────────────────────
 
     /// Upload a binary file (e.g., image) to a branch. Returns the new file SHA.
+    ///
+    /// Pass `sha = None` for new files, `sha = Some(...)` to overwrite existing.
     pub async fn upload_binary_file(
         &self,
         path: &str,
         data: &[u8],
         message: &str,
+        sha: Option<&str>,
         branch: &str,
     ) -> Result<String, String> {
         let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/contents/{path}");
         let encoded = BASE64_STANDARD.encode(data);
 
-        let body = json!({
+        let mut body = json!({
             "message": message,
             "content": encoded,
             "branch": branch,
         });
+
+        if let Some(sha) = sha {
+            body.as_object_mut().unwrap().insert("sha".into(), json!(sha));
+        }
 
         let resp = Request::put(&url)
             .header("Authorization", &format!("Bearer {}", self.token))
@@ -263,6 +276,7 @@ impl GitHubClient {
                     .to_string();
                 Ok(sha)
             }
+            401 => Err("Unauthorized \u{2014} check your token".into()),
             409 => Err("Conflict \u{2014} image already exists at this path".into()),
             status => Err(format!("Failed to upload image: {status}")),
         }

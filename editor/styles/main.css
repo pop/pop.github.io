@@ -557,6 +557,13 @@ nav a:hover {
 .editor-container {
     display: flex;
     gap: 1rem;
+    transition: outline 0.15s, background-color 0.15s;
+}
+
+.editor-container.drag-over {
+    outline: 2px dashed #6f42c1;
+    outline-offset: -2px;
+    background: rgba(111, 66, 193, 0.05);
 }
 
 .editor-container .editor-textarea {

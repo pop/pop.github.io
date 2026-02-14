@@ -22,7 +22,11 @@ wasm-logger = "0.2"
 [dependencies.web-sys]
 version = "0.3"
 features = [
+    "BeforeUnloadEvent",
     "Blob",
+    "DataTransfer",
+    "DragEvent",
+    "EventTarget",
     "File",
     "FileList",
     "FileReader",
@@ -30,5 +34,6 @@ features = [
     "HtmlInputElement",
     "HtmlTextAreaElement",
     "HtmlSelectElement",
+    "KeyboardEvent",
     "UrlSearchParams",
 ]
