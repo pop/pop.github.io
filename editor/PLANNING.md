@@ -237,16 +237,19 @@ editor/
 - [ ] **TODO:** Add syntax highlighting for code blocks (would need a JS highlight library or WASM-compatible solution)
 - [ ] Verify: markdown renders correctly for existing posts (requires valid GitHub token via dev-mode PAT entry)
 
-### Phase 5: Image Upload
+### Phase 5: Image Upload ✓
 
 **Goal:** User can upload images alongside posts.
 
-- [ ] Add file input for image selection
-- [ ] Read image as base64 in browser
-- [ ] Upload via GitHub Contents API (PUT with base64 content)
-- [ ] Insert markdown image reference into editor
-- [ ] Show uploaded images in preview
-- [ ] Verify: images upload and display correctly
+- [x] Add file input for image selection — hidden `<input type="file" accept="image/*">` triggered by "Upload Image" button in editor toolbar
+- [x] Read image as base64 in browser — async `read_file_as_bytes` helper using FileReader API wrapped in a JS Promise/JsFuture
+- [x] Upload via GitHub Contents API (PUT with base64 content) — `upload_binary_file` method on `GitHubClient` encodes raw bytes as base64
+- [x] Insert markdown image reference into editor — inserts `![filename](filename)` at cursor position (via `selectionStart`) or appends at end
+- [x] Show uploaded images in preview — images already render in markdown preview via existing `.markdown-body img` CSS
+- [ ] **TODO:** Handle uploading images when file already exists at path (currently returns a conflict error; could check and pass SHA to overwrite)
+- [ ] **TODO:** Support drag-and-drop image upload into the editor textarea
+- [ ] **TODO:** Add image size/type validation before upload
+- [ ] Verify: images upload and display correctly (requires valid GitHub token via dev-mode PAT entry)
 
 ### Phase 6: Publish & Discard
 
@@ -325,4 +328,13 @@ editor/
 - Editor now has three-mode view toggle (Edit / Preview / Split) in the toolbar; Preview renders markdown via `Html::from_html_unchecked`; Split mode uses flexbox with both panes at 50% width and wider page max-width
 - Standalone Preview component at `/preview/*path` loads file from `source` branch, renders markdown, links to editor
 - CSS: view toggle button group, split layout with `.editor-container` flex, `.preview-pane` styling, `.markdown-body` typography (headings, code blocks, tables, blockquotes, lists, images, links, hr, strikethrough)
+- Compiles clean (`cargo check --target wasm32-unknown-unknown` — only expected dead-code warnings for `ref_name` field and `delete_branch` method used in Phase 6)
+
+### Session 6 (2026-02-14)
+- Built Phase 5: image upload
+- Added `upload_binary_file` method to `GitHubClient` in `services/github.rs`: takes raw `&[u8]`, base64-encodes, uploads via PUT to Contents API
+- Added web-sys features: `Blob`, `File`, `FileList`, `FileReader`, `HtmlElement` for browser file handling
+- Editor image upload flow: hidden `<input type="file" accept="image/*">` triggered by "Upload Image" toolbar button; `read_file_as_bytes` async helper wraps FileReader in a `js_sys::Promise` + `JsFuture`; bytes uploaded to same directory as current file; `![name](name)` markdown reference inserted at cursor position
+- Helper functions: `sanitize_filename` (lowercase, no spaces), `parent_dir` (extract directory from path), `char_pos_to_byte_offset` (JS selectionStart to Rust byte offset)
+- CSS: `.upload-btn` styling (purple accent), `.hidden-file-input` (display:none)
 - Compiles clean (`cargo check --target wasm32-unknown-unknown` — only expected dead-code warnings for `ref_name` field and `delete_branch` method used in Phase 6)
