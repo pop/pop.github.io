@@ -64,6 +64,11 @@ pub fn preview(props: &Props) -> Html {
 
     html! {
         <div class="preview-page">
+            <div class="preview-nav">
+                <Link<Route> to={Route::Dashboard} classes="back-link">
+                    {"\u{2190} Dashboard"}
+                </Link<Route>>
+            </div>
             <div class="preview-header">
                 <h2>{&props.path}</h2>
                 <Link<Route> to={Route::Editor { path: props.path.clone() }} classes="edit-link">
