@@ -1,11 +1,26 @@
-/// GitHub API response types — implemented in Phase 2.
 use serde::Deserialize;
 
-#[derive(Clone, Debug, Deserialize)]
+/// A single entry returned by the GitHub Contents API when listing a directory.
+#[derive(Clone, Debug, PartialEq, Deserialize)]
 pub struct ContentEntry {
     pub name: String,
     pub path: String,
     #[serde(rename = "type")]
     pub entry_type: String,
     pub sha: String,
+    #[serde(default)]
+    pub size: u64,
+    pub download_url: Option<String>,
+}
+
+/// Full file content returned by the GitHub Contents API when reading a single file.
+#[derive(Clone, Debug, PartialEq, Deserialize)]
+pub struct FileContent {
+    pub name: String,
+    pub path: String,
+    pub sha: String,
+    #[serde(default)]
+    pub size: u64,
+    pub content: Option<String>,
+    pub encoding: Option<String>,
 }

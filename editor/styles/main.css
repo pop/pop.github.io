@@ -116,6 +116,111 @@ nav a:hover {
     cursor: pointer;
 }
 
+/* Dashboard */
+
+.dashboard {
+    max-width: 800px;
+}
+
+.dashboard-header {
+    margin-bottom: 1.5rem;
+}
+
+.dashboard-header h2 {
+    margin-bottom: 0.5rem;
+}
+
+.breadcrumbs {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.breadcrumb-link {
+    color: #0366d6;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.breadcrumb-link:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb-sep {
+    margin: 0 0.25rem;
+    color: #999;
+}
+
+.breadcrumb-current {
+    color: #333;
+    font-weight: 600;
+}
+
+.navigate-up {
+    margin-bottom: 1rem;
+}
+
+.up-link {
+    color: #0366d6;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.up-link:hover {
+    text-decoration: underline;
+}
+
+.content-list {
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.content-entry {
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid #e1e4e8;
+    cursor: pointer;
+    transition: background-color 0.1s;
+}
+
+.content-entry:last-child {
+    border-bottom: none;
+}
+
+.content-entry:hover {
+    background-color: #f6f8fa;
+}
+
+.content-entry.is-dir .entry-name {
+    font-weight: 600;
+}
+
+.entry-icon {
+    width: 1.5rem;
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.entry-name {
+    flex: 1;
+    color: #333;
+}
+
+.entry-size {
+    color: #999;
+    font-size: 0.85rem;
+    margin-left: 1rem;
+}
+
+.empty {
+    color: #666;
+    text-align: center;
+    padding: 2rem;
+}
+
 /* Placeholder pages */
 
 .placeholder {
