@@ -1,5 +1,8 @@
 use gloo_storage::{SessionStorage, Storage};
-use web_sys::HtmlTextAreaElement;
+use wasm_bindgen::closure::Closure;
+use wasm_bindgen::JsCast;
+use wasm_bindgen::JsValue;
+use web_sys::{HtmlInputElement, HtmlTextAreaElement};
 use yew::prelude::*;
 use yew_router::prelude::*;
 
@@ -34,10 +37,13 @@ pub fn editor_page(props: &Props) -> Html {
     let branch = use_state(get_active_branch);
     let loading = use_state(|| true);
     let saving = use_state(|| false);
+    let uploading = use_state(|| false);
     let error = use_state(|| Option::<String>::None);
     let save_msg = use_state(|| Option::<String>::None);
     let is_new = use_state(|| false);
     let view_mode = use_state(|| ViewMode::Edit);
+    let file_input_ref = use_node_ref();
+    let textarea_ref = use_node_ref();
 
     // Redirect if not authenticated
     {
@@ -258,6 +264,126 @@ pub fn editor_page(props: &Props) -> Html {
         })
     };
 
+    // Image upload callbacks
+    let on_upload_click = {
+        let file_input_ref = file_input_ref.clone();
+        Callback::from(move |_: MouseEvent| {
+            if let Some(input) = file_input_ref.cast::<HtmlInputElement>() {
+                input.click();
+            }
+        })
+    };
+
+    let on_file_selected = {
+        let content = content.clone();
+        let branch = branch.clone();
+        let uploading = uploading.clone();
+        let error = error.clone();
+        let save_msg = save_msg.clone();
+        let path = props.path.clone();
+        let token = auth.token.clone();
+        let textarea_ref = textarea_ref.clone();
+        let file_input_ref = file_input_ref.clone();
+
+        Callback::from(move |e: Event| {
+            let input: HtmlInputElement = e.target_unchecked_into();
+            let Some(files) = input.files() else { return };
+            let Some(file) = files.get(0) else { return };
+
+            let file_name = sanitize_filename(&file.name());
+            let upload_dir = parent_dir(&path);
+            let upload_path = if upload_dir.is_empty() {
+                file_name.clone()
+            } else {
+                format!("{upload_dir}/{file_name}")
+            };
+
+            let content = content.clone();
+            let branch = branch.clone();
+            let uploading = uploading.clone();
+            let error = error.clone();
+            let save_msg = save_msg.clone();
+            let path = path.clone();
+            let textarea_ref = textarea_ref.clone();
+            let file_input_ref = file_input_ref.clone();
+
+            if let Some(token) = token.clone() {
+                uploading.set(true);
+                error.set(None);
+                save_msg.set(None);
+
+                wasm_bindgen_futures::spawn_local(async move {
+                    let bytes = match read_file_as_bytes(file).await {
+                        Ok(b) => b,
+                        Err(e) => {
+                            error.set(Some(e));
+                            uploading.set(false);
+                            return;
+                        }
+                    };
+
+                    let client = GitHubClient::new(token);
+
+                    // Ensure editor branch exists
+                    let branch_name = match (*branch).clone() {
+                        Some(b) => b,
+                        None => match create_editor_branch(&client, &path).await {
+                            Ok(name) => {
+                                store_active_branch(&name);
+                                branch.set(Some(name.clone()));
+                                name
+                            }
+                            Err(e) => {
+                                error.set(Some(e));
+                                uploading.set(false);
+                                return;
+                            }
+                        },
+                    };
+
+                    let message = format!("Upload image {file_name}");
+                    match client
+                        .upload_binary_file(&upload_path, &bytes, &message, &branch_name)
+                        .await
+                    {
+                        Ok(_sha) => {
+                            // Insert markdown image reference at cursor position
+                            let md_ref = format!("![{file_name}]({file_name})");
+                            let current = (*content).clone();
+
+                            let new_content =
+                                if let Some(textarea) = textarea_ref.cast::<HtmlTextAreaElement>() {
+                                    if let Ok(Some(pos)) = textarea.selection_start() {
+                                        let insert_at =
+                                            char_pos_to_byte_offset(&current, pos as usize);
+                                        let (before, after) = current.split_at(insert_at);
+                                        format!("{before}{md_ref}{after}")
+                                    } else {
+                                        format!("{current}\n{md_ref}")
+                                    }
+                                } else {
+                                    format!("{current}\n{md_ref}")
+                                };
+
+                            content.set(new_content);
+                            save_msg.set(Some(format!("Uploaded {file_name}")));
+                            uploading.set(false);
+                        }
+                        Err(e) => {
+                            error.set(Some(e));
+                            uploading.set(false);
+                        }
+                    }
+
+                    // Reset file input so the same file can be re-selected
+                    if let Some(input) = file_input_ref.cast::<HtmlInputElement>() {
+                        input.set_value("");
+                    }
+                });
+            }
+        })
+    };
+
     // View mode toggle callbacks
     let set_edit = {
         let view_mode = view_mode.clone();
@@ -314,11 +440,25 @@ pub fn editor_page(props: &Props) -> Html {
                         <button
                             class="delete-btn"
                             onclick={on_delete}
-                            disabled={*saving}
+                            disabled={*saving || *uploading}
                         >
                             {"Delete"}
                         </button>
                     }
+                    <button
+                        class="upload-btn"
+                        onclick={on_upload_click}
+                        disabled={*saving || *uploading}
+                    >
+                        { if *uploading { "Uploading\u{2026}" } else { "Upload Image" } }
+                    </button>
+                    <input
+                        ref={file_input_ref.clone()}
+                        type="file"
+                        accept="image/*"
+                        class="hidden-file-input"
+                        onchange={on_file_selected}
+                    />
                     <div class="view-toggle">
                         <button
                             class={classes!("toggle-btn", (*view_mode == ViewMode::Edit).then_some("active"))}
@@ -337,6 +477,7 @@ pub fn editor_page(props: &Props) -> Html {
                 <div class={classes!("editor-container", is_split.then_some("split"))}>
                     if show_editor {
                         <textarea
+                            ref={textarea_ref.clone()}
                             class="editor-textarea"
                             value={(*content).clone()}
                             oninput={on_input}
@@ -473,4 +614,60 @@ fn title_from_slug(slug: &str) -> String {
         None => String::new(),
         Some(c) => c.to_uppercase().to_string() + chars.as_str(),
     }
+}
+
+// ── Image upload helpers ─────────────────────────────────────────
+
+/// Read a browser File as bytes using the FileReader API.
+async fn read_file_as_bytes(file: web_sys::File) -> Result<Vec<u8>, String> {
+    let promise = js_sys::Promise::new(&mut |resolve, reject| {
+        let reader = web_sys::FileReader::new().unwrap();
+        let reader2 = reader.clone();
+        let resolve = resolve.clone();
+        let reject = reject.clone();
+
+        let onload = Closure::once(move || {
+            let result = reader2.result().unwrap();
+            let _ = resolve.call1(&JsValue::NULL, &result);
+        });
+
+        let onerror = Closure::once(move || {
+            let _ = reject.call1(&JsValue::NULL, &JsValue::from_str("Failed to read file"));
+        });
+
+        reader.set_onload(Some(onload.as_ref().unchecked_ref()));
+        reader.set_onerror(Some(onerror.as_ref().unchecked_ref()));
+        onload.forget();
+        onerror.forget();
+
+        let _ = reader.read_as_array_buffer(&file);
+    });
+
+    let result = wasm_bindgen_futures::JsFuture::from(promise)
+        .await
+        .map_err(|_| "Failed to read file".to_string())?;
+
+    let array = js_sys::Uint8Array::new(&result);
+    Ok(array.to_vec())
+}
+
+/// Get the parent directory of a file path.
+fn parent_dir(path: &str) -> &str {
+    path.rsplit_once('/').map_or("", |(dir, _)| dir)
+}
+
+/// Sanitize a filename for use in a URL path (lowercase, no spaces).
+fn sanitize_filename(name: &str) -> String {
+    name.chars()
+        .map(|c| if c == ' ' { '-' } else { c })
+        .filter(|c| c.is_alphanumeric() || *c == '-' || *c == '_' || *c == '.')
+        .collect::<String>()
+        .to_lowercase()
+}
+
+/// Convert a character position (from JS selectionStart) to a byte offset in a UTF-8 string.
+fn char_pos_to_byte_offset(s: &str, char_pos: usize) -> usize {
+    s.char_indices()
+        .nth(char_pos)
+        .map_or(s.len(), |(byte_idx, _)| byte_idx)
 }

@@ -190,6 +190,50 @@ impl GitHubClient {
         }
     }
 
+    // ── Binary uploads ───────────────────────────────────────────
+
+    /// Upload a binary file (e.g., image) to a branch. Returns the new file SHA.
+    pub async fn upload_binary_file(
+        &self,
+        path: &str,
+        data: &[u8],
+        message: &str,
+        branch: &str,
+    ) -> Result<String, String> {
+        let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/contents/{path}");
+        let encoded = BASE64_STANDARD.encode(data);
+
+        let body = json!({
+            "message": message,
+            "content": encoded,
+            "branch": branch,
+        });
+
+        let resp = Request::put(&url)
+            .header("Authorization", &format!("Bearer {}", self.token))
+            .header("Accept", "application/vnd.github.v3+json")
+            .header("User-Agent", "elijah-run-editor")
+            .json(&body)
+            .map_err(|e| e.to_string())?
+            .send()
+            .await
+            .map_err(|e| e.to_string())?;
+
+        match resp.status() {
+            200 | 201 => {
+                let result: serde_json::Value =
+                    resp.json().await.map_err(|e| e.to_string())?;
+                let sha = result["content"]["sha"]
+                    .as_str()
+                    .ok_or("Missing SHA in response")?
+                    .to_string();
+                Ok(sha)
+            }
+            409 => Err("Conflict \u{2014} image already exists at this path".into()),
+            status => Err(format!("Failed to upload image: {status}")),
+        }
+    }
+
     // ── Helpers ──────────────────────────────────────────────────
 
     async fn get(&self, url: &str) -> Result<gloo_net::http::Response, String> {

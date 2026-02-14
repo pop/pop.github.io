@@ -380,6 +380,30 @@ nav a:hover {
     cursor: default;
 }
 
+.upload-btn {
+    padding: 0.5rem 1.2rem;
+    border: 1px solid #6f42c1;
+    border-radius: 4px;
+    background: white;
+    color: #6f42c1;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.upload-btn:hover {
+    background: #6f42c1;
+    color: white;
+}
+
+.upload-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.hidden-file-input {
+    display: none;
+}
+
 .editor-textarea {
     width: 100%;
     min-height: 60vh;
