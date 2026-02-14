@@ -200,16 +200,16 @@ editor/
 - [ ] **TODO:** Deploy Cloudflare Worker and configure secrets (`wrangler secret put GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET`)
 - [ ] Verify: user can log in and token is stored (works now via dev-mode PAT entry; OAuth pending worker deploy)
 
-### Phase 2: Content Browsing
+### Phase 2: Content Browsing ✓
 
 **Goal:** Authenticated user can browse the `content/` directory.
 
-- [ ] Implement GitHub API client (list contents, read file)
-- [ ] Build dashboard page: directory listing of `content/`
-- [ ] Support navigating into subdirectories
-- [ ] Display file metadata (name, type, path)
-- [ ] Handle GitHub API pagination
-- [ ] Verify: user can browse all content directories
+- [x] Implement GitHub API client (list contents, read file) — `GitHubClient` with `list_contents` and `get_file` methods, reads from `source` branch
+- [x] Build dashboard page: directory listing of `content/` — fetches and displays entries on load
+- [x] Support navigating into subdirectories — clicking a directory updates state and re-fetches
+- [x] Display file metadata (name, type, path) — shows name, dir/file indicator, file size; breadcrumb path navigation
+- [ ] **TODO:** Handle GitHub API pagination — Contents API returns max 1000 entries per directory; unlikely to hit for this blog but not handled yet (would need Trees API fallback)
+- [ ] Verify: user can browse all content directories (requires valid GitHub token via dev-mode PAT entry)
 
 ### Phase 3: Editing & Branching
 
@@ -297,3 +297,13 @@ editor/
 - Router: 5 routes with auth guards on protected pages (redirect to login if no token)
 - Cloudflare Worker: Rust worker with CORS, exchanges OAuth code for GitHub access token
 - Remaining for Phase 1 completion: configure GitHub OAuth App credentials and deploy worker
+
+### Session 3 (2026-02-13)
+- Built Phase 2: content browsing
+- `GitHubClient` in `services/github.rs`: `list_contents` and `get_file` methods calling GitHub Contents API with Bearer auth, reads from `source` branch explicitly
+- `ContentEntry` and `FileContent` models in `models/github.rs` with serde deserialization
+- Dashboard rewrite in `components/dashboard.rs`: fetches `content/` on load, sorts dirs-first then alphabetically, click dirs to navigate deeper, click files to open editor route
+- Breadcrumb navigation with clickable path segments, "Back" link for parent directory
+- Loading and error states for API calls
+- CSS styles for content list (bordered rows, hover state, dir/file distinction, file sizes)
+- Compiles clean (`cargo check --target wasm32-unknown-unknown` — only expected dead-code warnings for Phase 3+ stubs)
