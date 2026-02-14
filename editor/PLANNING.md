@@ -221,7 +221,7 @@ editor/
 - [x] Implement "create new post" from template — "+ New Post" button on dashboard with section + slug inputs; navigates to editor which generates TOML frontmatter template for 404 paths
 - [x] Implement file deletion — Delete button commits file removal to editor branch via `delete_file`
 - [x] Track active editor branch in app state — branch name persisted in `sessionStorage` (`editor_branch` key); survives navigation between pages
-- [ ] **TODO:** Add confirmation dialog before delete (currently deletes immediately; Phase 7 polish)
+- [x] Add confirmation dialog before delete — native browser confirm dialog added in Phase 7
 - [ ] **TODO:** Handle case where stored branch was deleted externally (e.g. detect 404 on branch and clear sessionStorage)
 - [ ] Verify: edits appear as commits on the editor branch (requires valid GitHub token via dev-mode PAT entry)
 
@@ -259,20 +259,22 @@ editor/
 - [x] Delete editor branch after successful merge — automatic cleanup after successful merge
 - [x] Implement "Discard": delete editor branch without merging — uses existing `delete_branch`, clears sessionStorage
 - [x] Handle merge conflicts (show error, suggest manual resolution) — 409 response returns "Merge conflict — resolve manually on GitHub"
-- [ ] **TODO:** Add confirmation dialog before discard (currently discards immediately; Phase 7 polish)
+- [x] Add confirmation dialog before discard — native browser confirm dialog added in Phase 7
 - [ ] **TODO:** Show diff of changes before publishing (would need GitHub Compare API)
 - [ ] Verify: published posts appear on default branch (requires valid GitHub token via dev-mode PAT entry)
 
-### Phase 7: Polish
+### Phase 7: Polish ✓
 
 **Goal:** Usable, reasonably styled application.
 
-- [ ] Basic CSS styling (readable, functional layout)
-- [ ] Error handling and user-facing error messages
-- [ ] Loading states for API calls
-- [ ] Navigation breadcrumbs
-- [ ] Confirm dialogs for destructive actions (delete, discard)
-- [ ] Session expiry handling (re-auth flow)
+- [x] Basic CSS styling (readable, functional layout) — system font stack, max-width containers, consistent spacing; all components styled since Phase 1-6
+- [x] Error handling and user-facing error messages — styled error banners with pink background and border; all API errors surfaced to user
+- [x] Loading states for API calls — loading indicators in dashboard, editor, and preview components
+- [x] Navigation breadcrumbs — clickable breadcrumb path in dashboard; back-to-dashboard links in editor and preview
+- [x] Confirm dialogs for destructive actions (delete, discard) — native browser confirm dialogs before file deletion and branch discard
+- [ ] **TODO:** Session expiry handling (detect 401 from GitHub API and redirect to re-auth)
+- [ ] **TODO:** Add keyboard shortcuts (Ctrl+S to save)
+- [ ] **TODO:** Add unsaved changes warning when navigating away (beforeunload)
 
 ---
 
@@ -349,4 +351,12 @@ editor/
 - Added `clear_active_branch` helper for sessionStorage cleanup
 - Publish bar UI: `.publish-bar` with green Publish button, red-outline Discard button, contextual hint when changes are unsaved
 - CSS: `.publish-bar`, `.publish-btn`, `.discard-btn`, `.publish-hint` styles
+- Compiles clean (`cargo check --target wasm32-unknown-unknown` — only `ref_name` dead-code warning remaining)
+
+### Session 6 continued (2026-02-14) — Phase 7
+- Built Phase 7: polish
+- Added native browser confirm dialogs (`window.confirm`) before file Delete and branch Discard
+- CSS improvements: global button transitions, `focus-visible` outline styles for accessibility, toolbar `flex-wrap` for small screens
+- Error messages: pink background with border for visibility; success/save messages: green background with border
+- Added "Back to Dashboard" links in editor and preview pages for easier navigation
 - Compiles clean (`cargo check --target wasm32-unknown-unknown` — only `ref_name` dead-code warning remaining)

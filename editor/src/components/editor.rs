@@ -209,6 +209,14 @@ pub fn editor_page(props: &Props) -> Html {
         let navigator = navigator.clone();
 
         Callback::from(move |_: MouseEvent| {
+            let window = gloo_utils::window();
+            if !window
+                .confirm_with_message("Delete this file? This cannot be undone.")
+                .unwrap_or(false)
+            {
+                return;
+            }
+
             let file_sha = file_sha.clone();
             let branch = branch.clone();
             let error = error.clone();
@@ -448,6 +456,16 @@ pub fn editor_page(props: &Props) -> Html {
         let navigator = navigator.clone();
 
         Callback::from(move |_: MouseEvent| {
+            let window = gloo_utils::window();
+            if !window
+                .confirm_with_message(
+                    "Discard all changes? This will delete the editor branch.",
+                )
+                .unwrap_or(false)
+            {
+                return;
+            }
+
             let branch = branch.clone();
             let saving = saving.clone();
             let error = error.clone();
@@ -504,6 +522,11 @@ pub fn editor_page(props: &Props) -> Html {
     html! {
         <div class={classes!("editor-page", is_split.then_some("editor-page-wide"))}>
             <div class="editor-header">
+                <div class="editor-nav">
+                    <Link<Route> to={Route::Dashboard} classes="back-link">
+                        {"\u{2190} Dashboard"}
+                    </Link<Route>>
+                </div>
                 <h2 class="editor-path">{&props.path}</h2>
                 <div class="editor-meta">
                     if let Some(ref b) = *branch {
