@@ -211,19 +211,19 @@ editor/
 - [ ] **TODO:** Handle GitHub API pagination — Contents API returns max 1000 entries per directory; unlikely to hit for this blog but not handled yet (would need Trees API fallback)
 - [ ] Verify: user can browse all content directories (requires valid GitHub token via dev-mode PAT entry)
 
-### Phase 3: Editing & Branching
+### Phase 3: Editing & Branching ✓
 
 **Goal:** User can edit files on an auto-created branch.
 
-- [ ] Implement branch creation via GitHub API
-- [ ] On "edit" click: create branch, load file content into textarea
-- [ ] Implement save: commit file to editor branch
-- [ ] Implement "create new post" from template
-  - User picks a section and slug
-  - App creates directory + `index.md` from template
-- [ ] Implement file deletion
-- [ ] Track active editor branch in app state
-- [ ] Verify: edits appear as commits on the editor branch
+- [x] Implement branch creation via GitHub API — `get_branch_sha`, `create_branch`, `delete_branch` in `GitHubClient`; `GitRef`/`GitObject` models
+- [x] On "edit" click: create branch, load file content into textarea — editor fetches file, decodes base64, populates textarea; branch created on first save
+- [x] Implement save: commit file to editor branch — `create_or_update_file` with base64 encoding; creates branch from `source` HEAD on first save
+- [x] Implement "create new post" from template — "+ New Post" button on dashboard with section + slug inputs; navigates to editor which generates TOML frontmatter template for 404 paths
+- [x] Implement file deletion — Delete button commits file removal to editor branch via `delete_file`
+- [x] Track active editor branch in app state — branch name persisted in `sessionStorage` (`editor_branch` key); survives navigation between pages
+- [ ] **TODO:** Add confirmation dialog before delete (currently deletes immediately; Phase 7 polish)
+- [ ] **TODO:** Handle case where stored branch was deleted externally (e.g. detect 404 on branch and clear sessionStorage)
+- [ ] Verify: edits appear as commits on the editor branch (requires valid GitHub token via dev-mode PAT entry)
 
 ### Phase 4: Markdown Preview
 
@@ -307,3 +307,12 @@ editor/
 - Loading and error states for API calls
 - CSS styles for content list (bordered rows, hover state, dir/file distinction, file sizes)
 - Compiles clean (`cargo check --target wasm32-unknown-unknown` — only expected dead-code warnings for Phase 3+ stubs)
+
+### Session 4 (2026-02-13)
+- Built Phase 3: editing and branching
+- Expanded `GitHubClient` in `services/github.rs`: `get_branch_sha`, `create_branch`, `delete_branch`, `create_or_update_file`, `delete_file`, `get_file` now takes branch parameter; refactored common headers into private `get` helper; added `decode_github_content` utility for base64 decoding
+- Added `GitRef`/`GitObject` models for Git Refs API responses; added `base64` and `js-sys` crates, `HtmlTextAreaElement`/`HtmlSelectElement` web-sys features
+- Editor rewrite in `components/editor.rs`: loads file from editor branch (if active) or source, falls back to template for new files; textarea editing; Save creates branch on first save (named `editor/{date}-{slug}`) and commits to it; Delete removes file on branch; branch name persisted in sessionStorage
+- New post creation: dashboard now has "+ New Post" button with section/slug form; navigates to editor path which auto-generates TOML frontmatter template when file doesn't exist
+- CSS styles for editor (textarea, toolbar, save/delete buttons, branch badge, new-file badge) and new-post form
+- Compiles clean (`cargo check --target wasm32-unknown-unknown` — only expected dead-code warnings for `Post` struct, `ref_name` field, and `delete_branch` method used in Phase 6)
