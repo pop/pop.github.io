@@ -108,6 +108,40 @@ impl GitHubClient {
         }
     }
 
+    // ── Merge operations ─────────────────────────────────────────
+
+    /// Merge a head branch into a base branch.
+    pub async fn merge_branch(
+        &self,
+        head_branch: &str,
+        base_branch: &str,
+        commit_message: &str,
+    ) -> Result<(), String> {
+        let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/merges");
+        let body = json!({
+            "base": base_branch,
+            "head": head_branch,
+            "commit_message": commit_message,
+        });
+
+        let resp = Request::post(&url)
+            .header("Authorization", &format!("Bearer {}", self.token))
+            .header("Accept", "application/vnd.github.v3+json")
+            .header("User-Agent", "elijah-run-editor")
+            .json(&body)
+            .map_err(|e| e.to_string())?
+            .send()
+            .await
+            .map_err(|e| e.to_string())?;
+
+        match resp.status() {
+            201 | 204 => Ok(()),
+            404 => Err("Branch not found".into()),
+            409 => Err("Merge conflict \u{2014} resolve manually on GitHub".into()),
+            status => Err(format!("Failed to merge: {status}")),
+        }
+    }
+
     // ── File mutations ───────────────────────────────────────────
 
     /// Create or update a file on a branch. Returns the new file SHA.
