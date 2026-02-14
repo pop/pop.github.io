@@ -4,11 +4,19 @@ use yew::prelude::*;
 use yew_router::prelude::*;
 
 use crate::app::AuthContext;
+use crate::models::post::render_markdown;
 use crate::routes::Route;
 use crate::services::github::{decode_github_content, GitHubClient};
 
 const DEFAULT_BRANCH: &str = "source";
 const BRANCH_KEY: &str = "editor_branch";
+
+#[derive(Clone, Copy, PartialEq)]
+enum ViewMode {
+    Edit,
+    Preview,
+    Split,
+}
 
 #[derive(Properties, PartialEq)]
 pub struct Props {
@@ -29,6 +37,7 @@ pub fn editor_page(props: &Props) -> Html {
     let error = use_state(|| Option::<String>::None);
     let save_msg = use_state(|| Option::<String>::None);
     let is_new = use_state(|| false);
+    let view_mode = use_state(|| ViewMode::Edit);
 
     // Redirect if not authenticated
     {
@@ -249,10 +258,27 @@ pub fn editor_page(props: &Props) -> Html {
         })
     };
 
+    // View mode toggle callbacks
+    let set_edit = {
+        let view_mode = view_mode.clone();
+        Callback::from(move |_: MouseEvent| view_mode.set(ViewMode::Edit))
+    };
+    let set_preview = {
+        let view_mode = view_mode.clone();
+        Callback::from(move |_: MouseEvent| view_mode.set(ViewMode::Preview))
+    };
+    let set_split = {
+        let view_mode = view_mode.clone();
+        Callback::from(move |_: MouseEvent| view_mode.set(ViewMode::Split))
+    };
+
     let has_changes = *content != *original_content || *is_new;
+    let show_editor = *view_mode != ViewMode::Preview;
+    let show_preview = *view_mode != ViewMode::Edit;
+    let is_split = *view_mode == ViewMode::Split;
 
     html! {
-        <div class="editor-page">
+        <div class={classes!("editor-page", is_split.then_some("editor-page-wide"))}>
             <div class="editor-header">
                 <h2 class="editor-path">{&props.path}</h2>
                 <div class="editor-meta">
@@ -293,13 +319,36 @@ pub fn editor_page(props: &Props) -> Html {
                             {"Delete"}
                         </button>
                     }
+                    <div class="view-toggle">
+                        <button
+                            class={classes!("toggle-btn", (*view_mode == ViewMode::Edit).then_some("active"))}
+                            onclick={set_edit}
+                        >{"Edit"}</button>
+                        <button
+                            class={classes!("toggle-btn", (*view_mode == ViewMode::Preview).then_some("active"))}
+                            onclick={set_preview}
+                        >{"Preview"}</button>
+                        <button
+                            class={classes!("toggle-btn", (*view_mode == ViewMode::Split).then_some("active"))}
+                            onclick={set_split}
+                        >{"Split"}</button>
+                    </div>
                 </div>
-                <textarea
-                    class="editor-textarea"
-                    value={(*content).clone()}
-                    oninput={on_input}
-                    spellcheck="false"
-                />
+                <div class={classes!("editor-container", is_split.then_some("split"))}>
+                    if show_editor {
+                        <textarea
+                            class="editor-textarea"
+                            value={(*content).clone()}
+                            oninput={on_input}
+                            spellcheck="false"
+                        />
+                    }
+                    if show_preview {
+                        <div class="preview-pane markdown-body">
+                            {Html::from_html_unchecked(AttrValue::from(render_markdown(&content)))}
+                        </div>
+                    }
+                </div>
             }
         </div>
     }
