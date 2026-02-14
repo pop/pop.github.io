@@ -24,3 +24,17 @@ pub struct FileContent {
     pub content: Option<String>,
     pub encoding: Option<String>,
 }
+
+/// A git reference (branch pointer) from the Git Refs API.
+#[derive(Clone, Debug, Deserialize)]
+pub struct GitRef {
+    #[serde(rename = "ref")]
+    pub ref_name: String,
+    pub object: GitObject,
+}
+
+/// The object a git ref points to.
+#[derive(Clone, Debug, Deserialize)]
+pub struct GitObject {
+    pub sha: String,
+}

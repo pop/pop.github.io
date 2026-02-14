@@ -1,5 +1,6 @@
 use std::cmp::Ordering;
 
+use web_sys::HtmlInputElement;
 use yew::prelude::*;
 use yew_router::prelude::*;
 
@@ -17,6 +18,9 @@ pub fn dashboard() -> Html {
     let entries = use_state(|| Vec::<ContentEntry>::new());
     let loading = use_state(|| false);
     let error = use_state(|| Option::<String>::None);
+    let show_new_post = use_state(|| false);
+    let new_section = use_state(|| "blog".to_string());
+    let new_slug = use_state(String::new);
 
     // Redirect to login if not authenticated
     {
@@ -96,6 +100,46 @@ pub fn dashboard() -> Html {
         })
     };
 
+    let toggle_new_post = {
+        let show_new_post = show_new_post.clone();
+        Callback::from(move |_: MouseEvent| {
+            show_new_post.set(!*show_new_post);
+        })
+    };
+
+    let on_section_input = {
+        let new_section = new_section.clone();
+        Callback::from(move |e: InputEvent| {
+            let target: HtmlInputElement = e.target_unchecked_into();
+            new_section.set(target.value());
+        })
+    };
+
+    let on_slug_input = {
+        let new_slug = new_slug.clone();
+        Callback::from(move |e: InputEvent| {
+            let target: HtmlInputElement = e.target_unchecked_into();
+            new_slug.set(target.value());
+        })
+    };
+
+    let on_create_post = {
+        let navigator = navigator.clone();
+        let new_section = new_section.clone();
+        let new_slug = new_slug.clone();
+        let show_new_post = show_new_post.clone();
+        Callback::from(move |e: SubmitEvent| {
+            e.prevent_default();
+            let section = (*new_section).clone();
+            let slug = (*new_slug).clone();
+            if !slug.is_empty() {
+                let path = format!("content/{section}/{slug}/index.md");
+                show_new_post.set(false);
+                navigator.push(&Route::Editor { path });
+            }
+        })
+    };
+
     let breadcrumbs = render_breadcrumbs(&current_path, {
         let current_path = current_path.clone();
         Callback::from(move |path: String| {
@@ -106,9 +150,45 @@ pub fn dashboard() -> Html {
     html! {
         <div class="dashboard">
             <div class="dashboard-header">
-                <h2>{"Content"}</h2>
+                <div class="dashboard-title-row">
+                    <h2>{"Content"}</h2>
+                    <button class="new-post-btn" onclick={toggle_new_post}>
+                        { if *show_new_post { "Cancel" } else { "+ New Post" } }
+                    </button>
+                </div>
                 <div class="breadcrumbs">{breadcrumbs}</div>
             </div>
+
+            if *show_new_post {
+                <form class="new-post-form" onsubmit={on_create_post}>
+                    <div class="form-row">
+                        <label for="section">{"Section"}</label>
+                        <input
+                            id="section"
+                            type="text"
+                            value={(*new_section).clone()}
+                            oninput={on_section_input}
+                            placeholder="blog"
+                        />
+                    </div>
+                    <div class="form-row">
+                        <label for="slug">{"Slug"}</label>
+                        <input
+                            id="slug"
+                            type="text"
+                            value={(*new_slug).clone()}
+                            oninput={on_slug_input}
+                            placeholder="my-new-post"
+                        />
+                    </div>
+                    <button type="submit" class="create-btn" disabled={new_slug.is_empty()}>
+                        {"Create"}
+                    </button>
+                    <span class="new-post-preview">
+                        {format!("content/{}/{}/index.md", *new_section, *new_slug)}
+                    </span>
+                </form>
+            }
 
             if *current_path != "content" {
                 <div class="navigate-up">
