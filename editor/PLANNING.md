@@ -225,15 +225,17 @@ editor/
 - [ ] **TODO:** Handle case where stored branch was deleted externally (e.g. detect 404 on branch and clear sessionStorage)
 - [ ] Verify: edits appear as commits on the editor branch (requires valid GitHub token via dev-mode PAT entry)
 
-### Phase 4: Markdown Preview
+### Phase 4: Markdown Preview ✓
 
 **Goal:** User can preview posts as rendered markdown.
 
-- [ ] Integrate markdown-rs for rendering
-- [ ] Build preview component: rendered HTML output
-- [ ] Strip TOML frontmatter before rendering
-- [ ] Side-by-side or toggle layout (editor | preview)
-- [ ] Verify: markdown renders correctly for existing posts
+- [x] Integrate markdown-rs for rendering — `markdown` crate v1.0 with GFM options (tables, strikethrough, task lists, autolinks)
+- [x] Build preview component: rendered HTML output — standalone Preview page at `/preview/*path` loads file from `source` branch, renders markdown with `Html::from_html_unchecked`; also integrated into editor
+- [x] Strip TOML frontmatter before rendering — `strip_frontmatter` in `models/post.rs` finds `+++` delimiters and returns body only
+- [x] Side-by-side or toggle layout (editor | preview) — three-mode toggle (Edit / Preview / Split) in editor toolbar; Split mode shows textarea and rendered output side-by-side with flexbox; page widens to full width in split mode
+- [ ] **TODO:** Debounce markdown rendering in split mode for large documents (currently re-renders on every keystroke; not a problem at current content sizes)
+- [ ] **TODO:** Add syntax highlighting for code blocks (would need a JS highlight library or WASM-compatible solution)
+- [ ] Verify: markdown renders correctly for existing posts (requires valid GitHub token via dev-mode PAT entry)
 
 ### Phase 5: Image Upload
 
@@ -316,3 +318,11 @@ editor/
 - New post creation: dashboard now has "+ New Post" button with section/slug form; navigates to editor path which auto-generates TOML frontmatter template when file doesn't exist
 - CSS styles for editor (textarea, toolbar, save/delete buttons, branch badge, new-file badge) and new-post form
 - Compiles clean (`cargo check --target wasm32-unknown-unknown` — only expected dead-code warnings for `Post` struct, `ref_name` field, and `delete_branch` method used in Phase 6)
+
+### Session 5 (2026-02-13)
+- Built Phase 4: markdown preview
+- Added `markdown` crate v1.0 with GFM support; `strip_frontmatter` and `render_markdown` utilities in `models/post.rs`
+- Editor now has three-mode view toggle (Edit / Preview / Split) in the toolbar; Preview renders markdown via `Html::from_html_unchecked`; Split mode uses flexbox with both panes at 50% width and wider page max-width
+- Standalone Preview component at `/preview/*path` loads file from `source` branch, renders markdown, links to editor
+- CSS: view toggle button group, split layout with `.editor-container` flex, `.preview-pane` styling, `.markdown-body` typography (headings, code blocks, tables, blockquotes, lists, images, links, hr, strikethrough)
+- Compiles clean (`cargo check --target wasm32-unknown-unknown` — only expected dead-code warnings for `ref_name` field and `delete_branch` method used in Phase 6)
