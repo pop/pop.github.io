@@ -251,15 +251,17 @@ editor/
 - [ ] **TODO:** Add image size/type validation before upload
 - [ ] Verify: images upload and display correctly (requires valid GitHub token via dev-mode PAT entry)
 
-### Phase 6: Publish & Discard
+### Phase 6: Publish & Discard ✓
 
 **Goal:** User can merge their branch or discard changes.
 
-- [ ] Implement "Publish": merge editor branch into `source`
-- [ ] Delete editor branch after successful merge
-- [ ] Implement "Discard": delete editor branch without merging
-- [ ] Handle merge conflicts (show error, suggest manual resolution)
-- [ ] Verify: published posts appear on default branch
+- [x] Implement "Publish": merge editor branch into `source` — `merge_branch` method on `GitHubClient` using GitHub Merges API (`POST /repos/{owner}/{repo}/merges`)
+- [x] Delete editor branch after successful merge — automatic cleanup after successful merge
+- [x] Implement "Discard": delete editor branch without merging — uses existing `delete_branch`, clears sessionStorage
+- [x] Handle merge conflicts (show error, suggest manual resolution) — 409 response returns "Merge conflict — resolve manually on GitHub"
+- [ ] **TODO:** Add confirmation dialog before discard (currently discards immediately; Phase 7 polish)
+- [ ] **TODO:** Show diff of changes before publishing (would need GitHub Compare API)
+- [ ] Verify: published posts appear on default branch (requires valid GitHub token via dev-mode PAT entry)
 
 ### Phase 7: Polish
 
@@ -338,3 +340,13 @@ editor/
 - Helper functions: `sanitize_filename` (lowercase, no spaces), `parent_dir` (extract directory from path), `char_pos_to_byte_offset` (JS selectionStart to Rust byte offset)
 - CSS: `.upload-btn` styling (purple accent), `.hidden-file-input` (display:none)
 - Compiles clean (`cargo check --target wasm32-unknown-unknown` — only expected dead-code warnings for `ref_name` field and `delete_branch` method used in Phase 6)
+
+### Session 6 continued (2026-02-14)
+- Built Phase 6: publish & discard
+- Added `merge_branch` method to `GitHubClient` in `services/github.rs`: POSTs to GitHub Merges API to merge head branch into base branch; handles 201/204 (success), 404 (not found), 409 (conflict)
+- Editor publish flow: "Publish" button merges editor branch into `source`, deletes editor branch, clears sessionStorage branch key, navigates to dashboard; disabled when unsaved changes exist (with hint text)
+- Editor discard flow: "Discard" button deletes editor branch, clears sessionStorage, navigates to dashboard
+- Added `clear_active_branch` helper for sessionStorage cleanup
+- Publish bar UI: `.publish-bar` with green Publish button, red-outline Discard button, contextual hint when changes are unsaved
+- CSS: `.publish-bar`, `.publish-btn`, `.discard-btn`, `.publish-hint` styles
+- Compiles clean (`cargo check --target wasm32-unknown-unknown` — only `ref_name` dead-code warning remaining)

@@ -384,6 +384,104 @@ pub fn editor_page(props: &Props) -> Html {
         })
     };
 
+    // Publish & discard callbacks
+    let on_publish = {
+        let branch = branch.clone();
+        let saving = saving.clone();
+        let error = error.clone();
+        let save_msg = save_msg.clone();
+        let token = auth.token.clone();
+        let navigator = navigator.clone();
+        let path = props.path.clone();
+
+        Callback::from(move |_: MouseEvent| {
+            let branch = branch.clone();
+            let saving = saving.clone();
+            let error = error.clone();
+            let save_msg = save_msg.clone();
+            let navigator = navigator.clone();
+            let path = path.clone();
+
+            let Some(branch_name) = (*branch).clone() else {
+                error.set(Some("No active branch to publish".into()));
+                return;
+            };
+
+            if let Some(token) = token.clone() {
+                saving.set(true);
+                error.set(None);
+                save_msg.set(None);
+
+                wasm_bindgen_futures::spawn_local(async move {
+                    let client = GitHubClient::new(token);
+                    let slug = slug_from_path(&path);
+                    let message = format!("Publish: {slug}");
+
+                    match client
+                        .merge_branch(&branch_name, DEFAULT_BRANCH, &message)
+                        .await
+                    {
+                        Ok(()) => {
+                            // Clean up: delete editor branch and clear state
+                            let _ = client.delete_branch(&branch_name).await;
+                            clear_active_branch();
+                            branch.set(None);
+                            save_msg.set(Some("Published!".into()));
+                            saving.set(false);
+                            navigator.push(&Route::Dashboard);
+                        }
+                        Err(e) => {
+                            error.set(Some(e));
+                            saving.set(false);
+                        }
+                    }
+                });
+            }
+        })
+    };
+
+    let on_discard = {
+        let branch = branch.clone();
+        let saving = saving.clone();
+        let error = error.clone();
+        let token = auth.token.clone();
+        let navigator = navigator.clone();
+
+        Callback::from(move |_: MouseEvent| {
+            let branch = branch.clone();
+            let saving = saving.clone();
+            let error = error.clone();
+            let navigator = navigator.clone();
+
+            let Some(branch_name) = (*branch).clone() else {
+                error.set(Some("No active branch to discard".into()));
+                return;
+            };
+
+            if let Some(token) = token.clone() {
+                saving.set(true);
+                error.set(None);
+
+                wasm_bindgen_futures::spawn_local(async move {
+                    let client = GitHubClient::new(token);
+
+                    match client.delete_branch(&branch_name).await {
+                        Ok(()) => {
+                            clear_active_branch();
+                            branch.set(None);
+                            saving.set(false);
+                            navigator.push(&Route::Dashboard);
+                        }
+                        Err(e) => {
+                            error.set(Some(e));
+                            saving.set(false);
+                        }
+                    }
+                });
+            }
+        })
+    };
+
     // View mode toggle callbacks
     let set_edit = {
         let view_mode = view_mode.clone();
@@ -474,6 +572,27 @@ pub fn editor_page(props: &Props) -> Html {
                         >{"Split"}</button>
                     </div>
                 </div>
+                if branch.is_some() {
+                    <div class="publish-bar">
+                        <button
+                            class="publish-btn"
+                            onclick={on_publish}
+                            disabled={*saving || *uploading || has_changes}
+                        >
+                            {"Publish"}
+                        </button>
+                        <button
+                            class="discard-btn"
+                            onclick={on_discard}
+                            disabled={*saving || *uploading}
+                        >
+                            {"Discard"}
+                        </button>
+                        if has_changes {
+                            <span class="publish-hint">{"Save changes before publishing"}</span>
+                        }
+                    </div>
+                }
                 <div class={classes!("editor-container", is_split.then_some("split"))}>
                     if show_editor {
                         <textarea
@@ -567,6 +686,10 @@ fn get_active_branch() -> Option<String> {
 
 fn store_active_branch(branch: &str) {
     let _ = SessionStorage::set(BRANCH_KEY, branch);
+}
+
+fn clear_active_branch() {
+    SessionStorage::delete(BRANCH_KEY);
 }
 
 // ── Template generation ─────────────────────────────────────────
