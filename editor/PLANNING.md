@@ -222,7 +222,7 @@ editor/
 - [x] Implement file deletion — Delete button commits file removal to editor branch via `delete_file`
 - [x] Track active editor branch in app state — branch name persisted in `sessionStorage` (`editor_branch` key); survives navigation between pages
 - [x] Add confirmation dialog before delete — native browser confirm dialog added in Phase 7
-- [ ] **TODO:** Handle case where stored branch was deleted externally (e.g. detect 404 on branch and clear sessionStorage)
+- [x] Handle case where stored branch was deleted externally — load effect verifies branch SHA before loading file; clears sessionStorage on 404
 - [ ] Verify: edits appear as commits on the editor branch (requires valid GitHub token via dev-mode PAT entry)
 
 ### Phase 4: Markdown Preview ✓
@@ -246,8 +246,8 @@ editor/
 - [x] Upload via GitHub Contents API (PUT with base64 content) — `upload_binary_file` method on `GitHubClient` encodes raw bytes as base64
 - [x] Insert markdown image reference into editor — inserts `![filename](filename)` at cursor position (via `selectionStart`) or appends at end
 - [x] Show uploaded images in preview — images already render in markdown preview via existing `.markdown-body img` CSS
-- [ ] **TODO:** Handle uploading images when file already exists at path (currently returns a conflict error; could check and pass SHA to overwrite)
-- [ ] **TODO:** Support drag-and-drop image upload into the editor textarea
+- [x] Handle uploading images when file already exists at path — checks existing file SHA before upload, passes SHA to overwrite
+- [x] Support drag-and-drop image upload into the editor textarea — ondragover/ondragleave/ondrop on editor container with visual indicator
 - [ ] **TODO:** Add image size/type validation before upload
 - [ ] Verify: images upload and display correctly (requires valid GitHub token via dev-mode PAT entry)
 
@@ -272,9 +272,9 @@ editor/
 - [x] Loading states for API calls — loading indicators in dashboard, editor, and preview components
 - [x] Navigation breadcrumbs — clickable breadcrumb path in dashboard; back-to-dashboard links in editor and preview
 - [x] Confirm dialogs for destructive actions (delete, discard) — native browser confirm dialogs before file deletion and branch discard
-- [ ] **TODO:** Session expiry handling (detect 401 from GitHub API and redirect to re-auth)
-- [ ] **TODO:** Add keyboard shortcuts (Ctrl+S to save)
-- [ ] **TODO:** Add unsaved changes warning when navigating away (beforeunload)
+- [x] Session expiry handling — all API methods detect 401, clear auth token, redirect to login
+- [x] Add keyboard shortcuts — Ctrl+S / Cmd+S triggers save via document keydown listener
+- [x] Add unsaved changes warning — beforeunload event with use_mut_ref tracking dirty state
 
 ---
 
@@ -359,4 +359,16 @@ editor/
 - CSS improvements: global button transitions, `focus-visible` outline styles for accessibility, toolbar `flex-wrap` for small screens
 - Error messages: pink background with border for visibility; success/save messages: green background with border
 - Added "Back to Dashboard" links in editor and preview pages for easier navigation
+- Compiles clean (`cargo check --target wasm32-unknown-unknown` — only `ref_name` dead-code warning remaining)
+
+### Session 7 (2026-02-14) — Robustness & UX improvements
+- Implemented 6 robustness/UX items (TODO items 4-9 from review)
+- **Session expiry handling (all components):** Added `Rc<dyn Fn(String)>` error wrapper in editor that checks for "Unauthorized" and clears auth token; added same 401 detection in dashboard and preview load effects; all `GitHubClient` methods already return "Unauthorized" on 401
+- **Externally deleted branch handling:** Editor load effect now calls `get_branch_sha` to verify stored branch exists before loading file; clears sessionStorage and falls back to source branch on 404
+- **Image conflict handling:** `upload_binary_file` now accepts `sha: Option<&str>` parameter; editor checks for existing file at upload path via `get_file` and passes SHA to overwrite
+- **Keyboard shortcuts:** Document-level `keydown` listener via `wasm_bindgen::closure::Closure`; Ctrl+S / Cmd+S clicks save button programmatically via `NodeRef`; cleanup removes listener on unmount
+- **Unsaved changes warning:** `use_mut_ref` tracks dirty state (content != original or is_new); `beforeunload` listener via Closure checks flag and calls `prevent_default` + `set_return_value`
+- **Drag-and-drop image upload:** Shared `Callback<web_sys::File>` used by both file input and drag-drop; `ondragover`/`ondragleave`/`ondrop` on editor container; `dragging` state adds `.drag-over` CSS class with dashed purple outline
+- Added web-sys features: `BeforeUnloadEvent`, `DataTransfer`, `DragEvent`, `EventTarget`, `KeyboardEvent`
+- CSS: `.drag-over` class with dashed outline and subtle background tint; transition on editor container
 - Compiles clean (`cargo check --target wasm32-unknown-unknown` — only `ref_name` dead-code warning remaining)

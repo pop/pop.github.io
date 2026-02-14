@@ -39,6 +39,7 @@ pub fn preview(props: &Props) -> Html {
         let error = error.clone();
         let path = props.path.clone();
         let token = auth.token.clone();
+        let set_token = auth.set_token.clone();
 
         use_effect_with((path.clone(), token.clone()), move |_| {
             if let Some(token) = token {
@@ -52,6 +53,9 @@ pub fn preview(props: &Props) -> Html {
                             loading.set(false);
                         }
                         Err(e) => {
+                            if e.contains("Unauthorized") {
+                                set_token.emit(None);
+                            }
                             error.set(Some(e));
                             loading.set(false);
                         }

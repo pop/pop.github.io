@@ -41,6 +41,7 @@ pub fn dashboard() -> Html {
         let error = error.clone();
         let path = (*current_path).clone();
         let token = auth.token.clone();
+        let set_token = auth.set_token.clone();
 
         use_effect_with((path.clone(), token.clone()), move |_| {
             if let Some(token) = token {
@@ -64,6 +65,9 @@ pub fn dashboard() -> Html {
                             loading.set(false);
                         }
                         Err(e) => {
+                            if e.contains("Unauthorized") {
+                                set_token.emit(None);
+                            }
                             error.set(Some(e));
                             entries.set(vec![]);
                             loading.set(false);
