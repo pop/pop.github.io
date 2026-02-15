@@ -66,6 +66,20 @@ pub fn preview(props: &Props) -> Html {
         });
     }
 
+    // Syntax highlighting after content loads
+    {
+        let content_val = (*content).clone();
+        let loading_val = *loading;
+        use_effect_with((content_val, loading_val), move |(_, loading)| {
+            if !loading {
+                let _ = js_sys::eval(
+                    "if(typeof hljs!=='undefined'){document.querySelectorAll('pre code:not(.hljs)').forEach(el=>hljs.highlightElement(el));}",
+                );
+            }
+            || ()
+        });
+    }
+
     html! {
         <div class="preview-page">
             <div class="preview-nav">

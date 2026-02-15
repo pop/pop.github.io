@@ -208,7 +208,7 @@ editor/
 - [x] Build dashboard page: directory listing of `content/` — fetches and displays entries on load
 - [x] Support navigating into subdirectories — clicking a directory updates state and re-fetches
 - [x] Display file metadata (name, type, path) — shows name, dir/file indicator, file size; breadcrumb path navigation
-- [ ] **TODO:** Handle GitHub API pagination — Contents API returns max 1000 entries per directory; unlikely to hit for this blog but not handled yet (would need Trees API fallback)
+- [x] Handle GitHub API pagination — `list_contents` detects 1000-entry truncation and falls back to recursive Git Trees API; converts TreeEntry to ContentEntry for seamless dashboard display
 - [ ] Verify: user can browse all content directories (requires valid GitHub token via dev-mode PAT entry)
 
 ### Phase 3: Editing & Branching ✓
@@ -233,8 +233,8 @@ editor/
 - [x] Build preview component: rendered HTML output — standalone Preview page at `/preview/*path` loads file from `source` branch, renders markdown with `Html::from_html_unchecked`; also integrated into editor
 - [x] Strip TOML frontmatter before rendering — `strip_frontmatter` in `models/post.rs` finds `+++` delimiters and returns body only
 - [x] Side-by-side or toggle layout (editor | preview) — three-mode toggle (Edit / Preview / Split) in editor toolbar; Split mode shows textarea and rendered output side-by-side with flexbox; page widens to full width in split mode
-- [ ] **TODO:** Debounce markdown rendering in split mode for large documents (currently re-renders on every keystroke; not a problem at current content sizes)
-- [ ] **TODO:** Add syntax highlighting for code blocks (would need a JS highlight library or WASM-compatible solution)
+- [x] Debounce markdown rendering in split mode — 200ms debounce via async sleep + generation counter; `rendered_html` state avoids re-rendering on every keystroke
+- [x] Add syntax highlighting for code blocks — highlight.js loaded via CDN; `use_effect` calls `hljs.highlightElement` on unhighlighted `<code>` blocks after each preview render
 - [ ] Verify: markdown renders correctly for existing posts (requires valid GitHub token via dev-mode PAT entry)
 
 ### Phase 5: Image Upload ✓
@@ -248,7 +248,7 @@ editor/
 - [x] Show uploaded images in preview — images already render in markdown preview via existing `.markdown-body img` CSS
 - [x] Handle uploading images when file already exists at path — checks existing file SHA before upload, passes SHA to overwrite
 - [x] Support drag-and-drop image upload into the editor textarea — ondragover/ondragleave/ondrop on editor container with visual indicator
-- [ ] **TODO:** Add image size/type validation before upload
+- [x] Add image size/type validation before upload — validates MIME type (png, jpeg, gif, webp, svg+xml) and file size (10 MB max) before reading bytes
 - [ ] Verify: images upload and display correctly (requires valid GitHub token via dev-mode PAT entry)
 
 ### Phase 6: Publish & Discard ✓
@@ -260,7 +260,7 @@ editor/
 - [x] Implement "Discard": delete editor branch without merging — uses existing `delete_branch`, clears sessionStorage
 - [x] Handle merge conflicts (show error, suggest manual resolution) — 409 response returns "Merge conflict — resolve manually on GitHub"
 - [x] Add confirmation dialog before discard — native browser confirm dialog added in Phase 7
-- [ ] **TODO:** Show diff of changes before publishing (would need GitHub Compare API)
+- [x] Show diff of changes before publishing — `compare_branches` method using GitHub Compare API; "Publish" shows diff panel with file patches, additions/deletions stats; "Confirm Publish" to merge
 - [ ] Verify: published posts appear on default branch (requires valid GitHub token via dev-mode PAT entry)
 
 ### Phase 7: Polish ✓
@@ -372,3 +372,12 @@ editor/
 - Added web-sys features: `BeforeUnloadEvent`, `DataTransfer`, `DragEvent`, `EventTarget`, `KeyboardEvent`
 - CSS: `.drag-over` class with dashed outline and subtle background tint; transition on editor container
 - Compiles clean (`cargo check --target wasm32-unknown-unknown` — only `ref_name` dead-code warning remaining)
+
+### Session 8 (2026-02-14) — Final TODO items
+- Implemented 5 remaining TODO items (pagination, debounce, syntax highlighting, image validation, diff preview)
+- **Pagination (Trees API fallback):** `list_contents` detects when Contents API returns 1000 entries (its hard cap) and falls back to `list_contents_via_tree` using the Git Trees API with `recursive=1`; filters tree entries to direct children of requested path; converts `TreeEntry` to `ContentEntry` for seamless dashboard display. Added `TreeResponse`/`TreeEntry` models in `models/github.rs`.
+- **Debounced markdown rendering:** Added `rendered_html` state and `render_gen` generation counter. `use_effect_with` on `(content, show_preview)` spawns an async task that sleeps 200ms then checks if its generation is still current before rendering. Preview pane displays `rendered_html` instead of calling `render_markdown` directly. Shows "Rendering..." placeholder while waiting.
+- **Syntax highlighting:** Added highlight.js v11.9 CSS + JS via CDN in `index.html`. Editor has `use_effect_with` on `rendered_html` that calls `hljs.highlightElement` on all unhighlighted `<code>` blocks via `js_sys::eval`. Preview component has the same highlighting effect after content loads.
+- **Image size/type validation:** Added validation at the start of `upload_image` callback before any async work. Checks MIME type against allowed list (png, jpeg, gif, webp, svg+xml) and file size (10 MB max). Shows error message with actual file size on rejection.
+- **Diff preview before publishing:** Added `compare_branches` method to `GitHubClient` using GitHub Compare API (`GET /repos/{owner}/{repo}/compare/{base}...{head}`). Added `CompareResponse`/`DiffFile` models. "Publish" button now fetches branch comparison and shows a diff panel with: summary (files changed, additions, deletions), per-file patches with +/- coloring, status badges (A/M/D/R). "Confirm Publish" and "Cancel" buttons in diff panel. Full diff CSS: `.diff-panel`, `.diff-file-header`, `.diff-patch`, `.diff-line-add/del/hunk/ctx`.
+- Compiles clean (`cargo check --target wasm32-unknown-unknown` — only `ref_name` and `truncated` dead-code warnings)

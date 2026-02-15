@@ -38,3 +38,42 @@ pub struct GitRef {
 pub struct GitObject {
     pub sha: String,
 }
+
+/// Response from the Git Trees API (`GET /repos/{owner}/{repo}/git/trees/{sha}`).
+#[derive(Clone, Debug, Deserialize)]
+pub struct TreeResponse {
+    pub tree: Vec<TreeEntry>,
+    pub truncated: bool,
+}
+
+/// A single entry in a git tree.
+#[derive(Clone, Debug, Deserialize)]
+pub struct TreeEntry {
+    pub path: String,
+    #[serde(rename = "type")]
+    pub entry_type: String,
+    pub sha: String,
+    #[serde(default)]
+    pub size: Option<u64>,
+}
+
+/// Response from the GitHub Compare API (`GET /repos/{owner}/{repo}/compare/{base}...{head}`).
+#[derive(Clone, Debug, PartialEq, Deserialize)]
+pub struct CompareResponse {
+    pub status: String,
+    pub ahead_by: u32,
+    pub total_commits: u32,
+    #[serde(default)]
+    pub files: Vec<DiffFile>,
+}
+
+/// A single file entry in a compare response.
+#[derive(Clone, Debug, PartialEq, Deserialize)]
+pub struct DiffFile {
+    pub filename: String,
+    pub status: String,
+    pub additions: u32,
+    pub deletions: u32,
+    pub changes: u32,
+    pub patch: Option<String>,
+}
