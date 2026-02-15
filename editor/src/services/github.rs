@@ -2,7 +2,9 @@ use base64::prelude::*;
 use gloo_net::http::Request;
 use serde_json::json;
 
-use crate::models::github::{ContentEntry, FileContent, GitRef};
+use crate::models::github::{
+    CompareResponse, ContentEntry, FileContent, GitRef, TreeResponse,
+};
 
 const OWNER: &str = "pop";
 const REPO: &str = "pop.github.io";
@@ -20,14 +22,65 @@ impl GitHubClient {
     // ── Directory & file reading ─────────────────────────────────
 
     /// List the contents of a directory in the repo (reads from the `source` branch).
+    ///
+    /// Falls back to the Git Trees API if the Contents API returns 1000 entries
+    /// (its hard cap), which indicates possible truncation.
     pub async fn list_contents(&self, path: &str) -> Result<Vec<ContentEntry>, String> {
         let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/contents/{path}?ref=source");
         let resp = self.get(&url).await?;
 
         match resp.status() {
-            200 => resp.json().await.map_err(|e| e.to_string()),
+            200 => {
+                let entries: Vec<ContentEntry> =
+                    resp.json().await.map_err(|e| e.to_string())?;
+                if entries.len() >= 1000 {
+                    self.list_contents_via_tree(path).await
+                } else {
+                    Ok(entries)
+                }
+            }
             401 => Err("Unauthorized \u{2014} check your token".into()),
             404 => Err(format!("Path not found: {path}")),
+            status => Err(format!("GitHub API error: {status}")),
+        }
+    }
+
+    /// Fallback directory listing using the Git Trees API (no 1000-entry cap).
+    async fn list_contents_via_tree(&self, path: &str) -> Result<Vec<ContentEntry>, String> {
+        let sha = self.get_branch_sha("source").await?;
+        let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/git/trees/{sha}?recursive=1");
+        let resp = self.get(&url).await?;
+
+        match resp.status() {
+            200 => {
+                let tree: TreeResponse = resp.json().await.map_err(|e| e.to_string())?;
+                let prefix = format!("{path}/");
+                let entries = tree
+                    .tree
+                    .iter()
+                    .filter_map(|te| {
+                        let relative = te.path.strip_prefix(&prefix)?;
+                        if relative.contains('/') {
+                            return None; // not a direct child
+                        }
+                        Some(ContentEntry {
+                            name: relative.to_string(),
+                            path: te.path.clone(),
+                            entry_type: if te.entry_type == "tree" {
+                                "dir"
+                            } else {
+                                "file"
+                            }
+                            .to_string(),
+                            sha: te.sha.clone(),
+                            size: te.size.unwrap_or(0),
+                            download_url: None,
+                        })
+                    })
+                    .collect();
+                Ok(entries)
+            }
+            401 => Err("Unauthorized \u{2014} check your token".into()),
             status => Err(format!("GitHub API error: {status}")),
         }
     }
@@ -143,6 +196,25 @@ impl GitHubClient {
             404 => Err("Branch not found".into()),
             409 => Err("Merge conflict \u{2014} resolve manually on GitHub".into()),
             status => Err(format!("Failed to merge: {status}")),
+        }
+    }
+
+    // ── Compare operations ─────────────────────────────────────
+
+    /// Compare two branches, returning the list of changed files and patches.
+    pub async fn compare_branches(
+        &self,
+        base: &str,
+        head: &str,
+    ) -> Result<CompareResponse, String> {
+        let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/compare/{base}...{head}");
+        let resp = self.get(&url).await?;
+
+        match resp.status() {
+            200 => resp.json().await.map_err(|e| e.to_string()),
+            401 => Err("Unauthorized \u{2014} check your token".into()),
+            404 => Err("Branch not found".into()),
+            status => Err(format!("GitHub API error: {status}")),
         }
     }
 

@@ -730,6 +730,141 @@ nav a:hover {
     color: #999;
 }
 
+/* Diff panel */
+
+.diff-panel {
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+}
+
+.diff-header {
+    padding: 0.75rem 1rem;
+    background: #f6f8fa;
+    border-bottom: 1px solid #e1e4e8;
+}
+
+.diff-header h3 {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.diff-summary {
+    font-size: 0.85rem;
+    color: #586069;
+}
+
+.diff-additions {
+    color: #22863a;
+    font-weight: 600;
+}
+
+.diff-deletions {
+    color: #cb2431;
+    font-weight: 600;
+}
+
+.diff-empty {
+    padding: 1rem;
+    color: #586069;
+    text-align: center;
+}
+
+.diff-files {
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.diff-file {
+    border-bottom: 1px solid #e1e4e8;
+}
+
+.diff-file:last-child {
+    border-bottom: none;
+}
+
+.diff-file-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #fafbfc;
+    border-bottom: 1px solid #e1e4e8;
+    font-size: 0.85rem;
+}
+
+.diff-file-status {
+    display: inline-block;
+    width: 1.4rem;
+    height: 1.4rem;
+    line-height: 1.4rem;
+    text-align: center;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: white;
+}
+
+.diff-file-status.added { background: #28a745; }
+.diff-file-status.removed { background: #cb2431; }
+.diff-file-status.modified { background: #dbab09; }
+.diff-file-status.renamed { background: #0366d6; }
+
+.diff-file-name {
+    flex: 1;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    word-break: break-all;
+}
+
+.diff-file-stats {
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.diff-patch {
+    margin: 0;
+    padding: 0;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    overflow-x: auto;
+    background: white;
+}
+
+.diff-line {
+    padding: 0 1rem;
+    white-space: pre;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+.diff-line-add {
+    background: #e6ffed;
+    color: #22863a;
+}
+
+.diff-line-del {
+    background: #ffeef0;
+    color: #cb2431;
+}
+
+.diff-line-hunk {
+    background: #f1f8ff;
+    color: #0366d6;
+    font-weight: 600;
+}
+
+.diff-line-ctx {
+    color: #24292e;
+}
+
+.diff-actions {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: #f6f8fa;
+    border-top: 1px solid #e1e4e8;
+}
+
 /* Placeholder pages */
 
 .placeholder {

@@ -9,6 +9,7 @@ use yew::prelude::*;
 use yew_router::prelude::*;
 
 use crate::app::AuthContext;
+use crate::models::github::{CompareResponse, DiffFile};
 use crate::models::post::render_markdown;
 use crate::routes::Route;
 use crate::services::github::{decode_github_content, GitHubClient};
@@ -49,6 +50,11 @@ pub fn editor_page(props: &Props) -> Html {
     let textarea_ref = use_node_ref();
     let save_btn_ref = use_node_ref();
     let has_unsaved = use_mut_ref(|| false);
+    let rendered_html = use_state(String::new);
+    let render_gen = use_mut_ref(|| 0u32);
+    let show_diff = use_state(|| false);
+    let diff_data = use_state(|| Option::<CompareResponse>::None);
+    let diff_loading = use_state(|| false);
 
     // Auth-aware error setter: clears token on 401
     let set_error: Rc<dyn Fn(String)> = {
@@ -141,6 +147,48 @@ pub fn editor_page(props: &Props) -> Html {
                     listener.as_ref().unchecked_ref(),
                 );
             }
+        });
+    }
+
+    // Debounced markdown rendering for preview
+    {
+        let rendered_html = rendered_html.clone();
+        let content_val = (*content).clone();
+        let render_gen = render_gen.clone();
+        let show_preview = *view_mode != ViewMode::Edit;
+
+        use_effect_with((content_val, show_preview), move |(content_val, show_preview)| {
+            if *show_preview {
+                let gen = {
+                    let mut g = render_gen.borrow_mut();
+                    *g = g.wrapping_add(1);
+                    *g
+                };
+
+                let content_val = content_val.clone();
+                let rendered_html = rendered_html.clone();
+                let render_gen = render_gen.clone();
+
+                wasm_bindgen_futures::spawn_local(async move {
+                    sleep_ms(200).await;
+                    if *render_gen.borrow() == gen {
+                        rendered_html.set(render_markdown(&content_val));
+                    }
+                });
+            }
+
+            || ()
+        });
+    }
+
+    // Syntax highlighting after preview render
+    {
+        let rendered_html_val = (*rendered_html).clone();
+        use_effect_with(rendered_html_val, move |html| {
+            if !html.is_empty() {
+                highlight_code_blocks();
+            }
+            || ()
         });
     }
 
@@ -393,6 +441,27 @@ pub fn editor_page(props: &Props) -> Html {
         let textarea_ref = textarea_ref.clone();
 
         Callback::from(move |file: web_sys::File| {
+            // Validate image type
+            let mime = file.type_();
+            if !matches!(
+                mime.as_str(),
+                "image/png" | "image/jpeg" | "image/gif" | "image/webp" | "image/svg+xml"
+            ) {
+                error.set(Some(format!("Unsupported image type: {mime}")));
+                return;
+            }
+
+            // Validate file size (10 MB max)
+            const MAX_SIZE: f64 = 10.0 * 1024.0 * 1024.0;
+            let size = file.size();
+            if size > MAX_SIZE {
+                error.set(Some(format!(
+                    "Image too large ({:.1} MB). Maximum size is 10 MB.",
+                    size / (1024.0 * 1024.0)
+                )));
+                return;
+            }
+
             let file_name = sanitize_filename(&file.name());
             let upload_dir = parent_dir(&path);
             let upload_path = if upload_dir.is_empty() {
@@ -561,8 +630,53 @@ pub fn editor_page(props: &Props) -> Html {
         })
     };
 
-    // Publish & discard callbacks
+    // Publish: show diff first, then confirm
     let on_publish = {
+        let branch = branch.clone();
+        let error = error.clone();
+        let set_error = set_error.clone();
+        let token = auth.token.clone();
+        let show_diff = show_diff.clone();
+        let diff_data = diff_data.clone();
+        let diff_loading = diff_loading.clone();
+
+        Callback::from(move |_: MouseEvent| {
+            let branch = branch.clone();
+            let error = error.clone();
+            let set_error = set_error.clone();
+            let show_diff = show_diff.clone();
+            let diff_data = diff_data.clone();
+            let diff_loading = diff_loading.clone();
+
+            let Some(branch_name) = (*branch).clone() else {
+                error.set(Some("No active branch to publish".into()));
+                return;
+            };
+
+            if let Some(token) = token.clone() {
+                diff_loading.set(true);
+                show_diff.set(false);
+                error.set(None);
+
+                wasm_bindgen_futures::spawn_local(async move {
+                    let client = GitHubClient::new(token);
+                    match client.compare_branches(DEFAULT_BRANCH, &branch_name).await {
+                        Ok(data) => {
+                            diff_data.set(Some(data));
+                            show_diff.set(true);
+                            diff_loading.set(false);
+                        }
+                        Err(e) => {
+                            set_error(e);
+                            diff_loading.set(false);
+                        }
+                    }
+                });
+            }
+        })
+    };
+
+    let on_confirm_publish = {
         let branch = branch.clone();
         let saving = saving.clone();
         let error = error.clone();
@@ -571,6 +685,7 @@ pub fn editor_page(props: &Props) -> Html {
         let token = auth.token.clone();
         let navigator = navigator.clone();
         let path = props.path.clone();
+        let show_diff = show_diff.clone();
 
         Callback::from(move |_: MouseEvent| {
             let branch = branch.clone();
@@ -580,6 +695,7 @@ pub fn editor_page(props: &Props) -> Html {
             let save_msg = save_msg.clone();
             let navigator = navigator.clone();
             let path = path.clone();
+            let show_diff = show_diff.clone();
 
             let Some(branch_name) = (*branch).clone() else {
                 error.set(Some("No active branch to publish".into()));
@@ -587,6 +703,7 @@ pub fn editor_page(props: &Props) -> Html {
             };
 
             if let Some(token) = token.clone() {
+                show_diff.set(false);
                 saving.set(true);
                 error.set(None);
                 save_msg.set(None);
@@ -601,7 +718,6 @@ pub fn editor_page(props: &Props) -> Html {
                         .await
                     {
                         Ok(()) => {
-                            // Clean up: delete editor branch and clear state
                             let _ = client.delete_branch(&branch_name).await;
                             clear_active_branch();
                             branch.set(None);
@@ -616,6 +732,13 @@ pub fn editor_page(props: &Props) -> Html {
                     }
                 });
             }
+        })
+    };
+
+    let on_cancel_diff = {
+        let show_diff = show_diff.clone();
+        Callback::from(move |_: MouseEvent| {
+            show_diff.set(false);
         })
     };
 
@@ -774,9 +897,9 @@ pub fn editor_page(props: &Props) -> Html {
                         <button
                             class="publish-btn"
                             onclick={on_publish}
-                            disabled={*saving || *uploading || has_changes}
+                            disabled={*saving || *uploading || *diff_loading || has_changes}
                         >
-                            {"Publish"}
+                            { if *diff_loading { "Loading diff\u{2026}" } else { "Publish" } }
                         </button>
                         <button
                             class="discard-btn"
@@ -789,6 +912,11 @@ pub fn editor_page(props: &Props) -> Html {
                             <span class="publish-hint">{"Save changes before publishing"}</span>
                         }
                     </div>
+                    if *show_diff {
+                        if let Some(ref data) = *diff_data {
+                            {render_diff_panel(data, on_confirm_publish, on_cancel_diff)}
+                        }
+                    }
                 }
                 <div
                     class={classes!(
@@ -811,7 +939,11 @@ pub fn editor_page(props: &Props) -> Html {
                     }
                     if show_preview {
                         <div class="preview-pane markdown-body">
-                            {Html::from_html_unchecked(AttrValue::from(render_markdown(&content)))}
+                            if rendered_html.is_empty() {
+                                <p class="loading">{"Rendering\u{2026}"}</p>
+                            } else {
+                                {Html::from_html_unchecked(AttrValue::from((*rendered_html).clone()))}
+                            }
                         </div>
                     }
                 </div>
@@ -999,4 +1131,119 @@ fn char_pos_to_byte_offset(s: &str, char_pos: usize) -> usize {
     s.char_indices()
         .nth(char_pos)
         .map_or(s.len(), |(byte_idx, _)| byte_idx)
+}
+
+// ── Debounce / highlighting helpers ─────────────────────────────
+
+/// Async sleep using setTimeout.
+async fn sleep_ms(ms: i32) {
+    let promise = js_sys::Promise::new(&mut |resolve, _| {
+        let _ = gloo_utils::window()
+            .set_timeout_with_callback_and_timeout_and_arguments_0(&resolve, ms);
+    });
+    let _ = wasm_bindgen_futures::JsFuture::from(promise).await;
+}
+
+/// Call highlight.js on all unhighlighted code blocks in the DOM.
+fn highlight_code_blocks() {
+    let _ = js_sys::eval(
+        "if(typeof hljs!=='undefined'){document.querySelectorAll('pre code:not(.hljs)').forEach(el=>hljs.highlightElement(el));}",
+    );
+}
+
+// ── Diff rendering ──────────────────────────────────────────────
+
+fn render_diff_panel(
+    data: &CompareResponse,
+    on_confirm: Callback<MouseEvent>,
+    on_cancel: Callback<MouseEvent>,
+) -> Html {
+    let total_additions: u32 = data.files.iter().map(|f| f.additions).sum();
+    let total_deletions: u32 = data.files.iter().map(|f| f.deletions).sum();
+
+    if data.files.is_empty() {
+        return html! {
+            <div class="diff-panel">
+                <p class="diff-empty">{"No changes to publish."}</p>
+                <div class="diff-actions">
+                    <button class="discard-btn" onclick={on_cancel}>{"Close"}</button>
+                </div>
+            </div>
+        };
+    }
+
+    html! {
+        <div class="diff-panel">
+            <div class="diff-header">
+                <h3>{"Changes to publish"}</h3>
+                <p class="diff-summary">
+                    {format!("{} file{} changed, ",
+                        data.files.len(),
+                        if data.files.len() == 1 { "" } else { "s" }
+                    )}
+                    <span class="diff-additions">{format!("+{total_additions}")}</span>
+                    {", "}
+                    <span class="diff-deletions">{format!("-{total_deletions}")}</span>
+                </p>
+            </div>
+            <div class="diff-files">
+                { for data.files.iter().map(render_diff_file) }
+            </div>
+            <div class="diff-actions">
+                <button class="publish-btn" onclick={on_confirm}>
+                    {"Confirm Publish"}
+                </button>
+                <button class="discard-btn" onclick={on_cancel}>
+                    {"Cancel"}
+                </button>
+            </div>
+        </div>
+    }
+}
+
+fn render_diff_file(file: &DiffFile) -> Html {
+    let status_class = match file.status.as_str() {
+        "added" => "added",
+        "removed" => "removed",
+        "renamed" => "renamed",
+        _ => "modified",
+    };
+    let status_letter = match file.status.as_str() {
+        "added" => "A",
+        "removed" => "D",
+        "renamed" => "R",
+        _ => "M",
+    };
+
+    html! {
+        <div class="diff-file">
+            <div class="diff-file-header">
+                <span class={classes!("diff-file-status", status_class)}>
+                    {status_letter}
+                </span>
+                <span class="diff-file-name">{&file.filename}</span>
+                <span class="diff-file-stats">
+                    <span class="diff-additions">{format!("+{}", file.additions)}</span>
+                    {" "}
+                    <span class="diff-deletions">{format!("-{}", file.deletions)}</span>
+                </span>
+            </div>
+            if let Some(ref patch) = file.patch {
+                <pre class="diff-patch">
+                    { for patch.lines().map(|line| {
+                        let class = if line.starts_with('+') {
+                            "diff-line-add"
+                        } else if line.starts_with('-') {
+                            "diff-line-del"
+                        } else if line.starts_with("@@") {
+                            "diff-line-hunk"
+                        } else {
+                            "diff-line-ctx"
+                        };
+                        html! { <div class={classes!("diff-line", class)}>{line}</div> }
+                    }) }
+                </pre>
+            }
+        </div>
+    }
 }
