@@ -276,14 +276,175 @@ editor/
 - [x] Add keyboard shortcuts — Ctrl+S / Cmd+S triggers save via document keydown listener
 - [x] Add unsaved changes warning — beforeunload event with use_mut_ref tracking dirty state
 
+### Phase 8: Dashboard Enhancements
+
+**Goal:** Richer content browsing with search, sort, caching, and multi-branch support.
+
+#### 8a. Search / filter
+
+- [ ] Add a text input above the content list that filters entries by name as the user types
+- [ ] Filter should be case-insensitive substring match
+- [ ] Clear button to reset the filter
+- [ ] Filter state resets when navigating into a subdirectory
+
+#### 8b. Sort options
+
+- [ ] Add a sort toggle/dropdown: **Alphabetical** (default) or **Last modified**
+- [ ] Alphabetical: current behavior (dirs first, then A-Z)
+- [ ] Last modified: fetch last commit date per file using the Commits API (`GET /repos/{owner}/{repo}/commits?path={file}&per_page=1`), sort most recent first
+- [ ] Cache commit dates alongside file entries so re-sorting doesn't re-fetch
+- [ ] Show the last-modified date in the entry row when sorting by time
+- [ ] Dirs-first ordering should still apply within each sort mode
+
+#### 8c. Cache list results
+
+- [ ] Cache directory listings in `sessionStorage` keyed by path, with a TTL (e.g. 5 minutes)
+- [ ] On navigation, serve from cache if within TTL; otherwise fetch from API
+- [ ] Auto-invalidate cache for a path after save, publish, delete, or discard touches that directory
+- [ ] Add a visible "Refresh" button in the dashboard header to force re-fetch
+- [ ] Cache should store entries + commit dates together so sorted views are instant on revisit
+
+#### 8d. Branch selector
+
+- [ ] Add a branch picker in the dashboard header (dropdown or sidebar panel)
+- [ ] Fetch all branches matching `editor/*` from the Git Refs API (`GET /repos/{owner}/{repo}/git/matching-refs/heads/editor/`)
+- [ ] Display each branch with its name and date (extracted from branch name convention `editor/{date}-{slug}`)
+- [ ] Clicking a branch sets it as the active branch in sessionStorage and reloads the dashboard
+- [ ] Show the currently active branch prominently (highlighted or with a badge)
+- [ ] Allow "deselecting" a branch to return to browsing the `source` branch directly
+- [ ] **TODO:** Consider showing commit count or last activity per branch (extra API calls)
+
+### Phase 9: Preview Enhancements
+
+**Goal:** Display structured frontmatter alongside rendered content.
+
+- [ ] Parse TOML frontmatter into key-value pairs (extend `models/post.rs` with a `parse_frontmatter` function using the `toml` crate)
+- [ ] Display frontmatter as a table above the rendered markdown in both the editor preview pane and the standalone Preview page
+- [ ] Table should show all fields: title, date, description, taxonomies, draft status, aliases, etc.
+- [ ] Style the frontmatter table distinctly from the markdown body (e.g. muted background, smaller font)
+- [ ] In the editor, the frontmatter table should update live as the user edits the `+++` block
+- [ ] **TODO:** Add `toml` crate to Cargo.toml dependencies (needed for parsing)
+
+### Phase 10: CI Integration
+
+**Goal:** Automated zola build checks on editor branches, with publish gating in the UI.
+
+#### 10a. GitHub Actions workflow
+
+- [ ] Create `.github/workflows/editor-check.yml` in `pop/pop.github.io`
+- [ ] Trigger: `push` to branches matching `editor/**`
+- [ ] Job: checkout repo, install Zola, run `zola build` — exits non-zero on build errors
+- [ ] Keep the workflow minimal (no deploy, just validate the build)
+
+#### 10b. CI status in the editor UI
+
+- [ ] Add a `get_check_runs` method to `GitHubClient` using the Checks API (`GET /repos/{owner}/{repo}/commits/{ref}/check-runs`)
+- [ ] Add `CheckRunResponse` / `CheckRun` models (status, conclusion, html_url, name)
+- [ ] In the editor publish bar, fetch the CI status for the current branch head
+- [ ] Display CI state: pending (yellow spinner), success (green check), failure (red X), or no checks yet
+- [ ] **Block the Publish button** when CI is pending or has failed — only enable on success
+- [ ] On failure, show a link to the failed CI run (`html_url` from the check run) so the user can inspect the build log
+- [ ] Poll or re-check CI status periodically (e.g. every 15 seconds while the publish bar is visible) so it updates when the build finishes
+- [ ] **TODO:** Decide behavior when no check runs exist yet (e.g. first push hasn't triggered CI — allow publish or block?)
+
+### Phase 11: Automated Testing
+
+**Goal:** Add unit and integration tests to catch regressions, especially before the GraphQL migration refactor.
+
+#### 11a. Unit tests (pure functions)
+
+These are standard `#[cfg(test)]` modules — no browser or WASM runtime needed.
+
+- [ ] `models/post.rs` — test `strip_frontmatter` (with/without frontmatter, empty input, unclosed delimiters) and `render_markdown` (basic markdown, GFM features, frontmatter stripping)
+- [ ] `services/github.rs` — test `decode_github_content` (valid base64, base64 with whitespace/newlines, invalid input, empty string)
+- [ ] `components/editor.rs` — test `slug_from_path` (index.md, _index.md, standalone .md, nested paths, edge cases), `title_from_slug` (hyphenated, single word, empty), `sanitize_filename` (spaces, special chars, uppercase, unicode), `char_pos_to_byte_offset` (ASCII, multi-byte UTF-8, out-of-bounds), `parent_dir` (nested path, root-level file, no slash), `generate_template` (verify frontmatter structure)
+- [ ] `components/dashboard.rs` — test `format_size` (bytes, KB, MB boundaries)
+- [ ] Extract testable pure functions from component files into a shared `utils.rs` module to simplify testing and avoid pulling in Yew dependencies
+
+#### 11b. API client tests (`wasm-bindgen-test`)
+
+These run in a headless browser via `wasm-pack test --headless --chrome`.
+
+- [ ] Add `wasm-bindgen-test` as a dev-dependency
+- [ ] Create `tests/` directory with WASM integration tests
+- [ ] Mock HTTP responses to test `GitHubClient` methods:
+  - Response parsing (200 with valid JSON, error status codes, malformed JSON)
+  - 401 handling (verify "Unauthorized" error string for auth-expiry detection)
+  - `list_contents` fallback (verify Trees API is called when Contents API returns 1000 entries)
+  - `create_or_update_file` request body construction (base64 encoding, SHA inclusion)
+- [ ] **TODO:** Evaluate `gloo-net` mocking options — may need a trait-based HTTP abstraction or `mockito`-style approach for WASM
+
+#### 11c. Component tests (stretch goal)
+
+- [ ] Evaluate Yew's testing utilities for rendering components in isolation
+- [ ] Test key flows: auth redirect when no token, editor loading states, view mode toggling
+- [ ] **TODO:** Yew component testing is limited — decide if the effort is justified vs. relying on unit tests + manual verification
+
+#### 11d. CI integration
+
+- [ ] Add a `test` job to the GitHub Actions workflow (or create a new workflow)
+- [ ] Run `cargo test` (native unit tests) and `wasm-pack test --headless --chrome` (WASM integration tests)
+- [ ] Run on push to `editor/**` branches alongside the existing zola build check
+- [ ] Add a `Makefile` target: `make test` that runs both test suites locally
+
+### Phase 12: Migrate to GitHub GraphQL API
+
+**Goal:** Replace all REST API calls with GraphQL for efficiency, batching, and future-proofing.
+
+**Motivation:** The REST API requires one HTTP round-trip per operation. GraphQL enables batching (e.g. fetch file content + branch SHA + commit dates in one request), returns exactly the fields needed, and returns text file content directly (no base64 decode step). This particularly benefits Phase 8 (sort-by-date needs per-file commit info) and Phase 10 (CI status alongside branch data).
+
+**Scope:** Only `services/github.rs` and `models/github.rs` are rewritten. All component code (`editor.rs`, `dashboard.rs`, `preview.rs`) is unchanged — `GitHubClient` method signatures stay the same.
+
+#### 12a. Core infrastructure
+
+- [ ] Change `API_BASE` to `https://api.github.com/graphql`
+- [ ] Replace the `get` helper with a `query` helper that POSTs GraphQL queries and returns the `data` payload
+- [ ] Add GraphQL error handling — responses return HTTP 200 with `errors[]` in the body instead of status codes; parse and surface these as `Err(String)` like the current REST error paths
+- [ ] Fetch and cache the repository node ID on first call (`repository(owner, name) { id }`) — needed by several mutations
+- [ ] Remove `base64` decode step for text file reads (GraphQL `Blob.text` returns plain text)
+
+#### 12b. Query migrations
+
+| REST method | GraphQL replacement | Notes |
+|---|---|---|
+| `list_contents` | `repository.object(expression: "source:{path}") { ... on Tree { entries { name, type, oid, object { ... on Blob { byteSize } } } } }` | Replaces both Contents API and Trees API fallback; no 1000-entry cap |
+| `get_file` | `repository.object(expression: "{branch}:{path}") { ... on Blob { text, oid } }` | Returns plain text, no base64; `oid` is the SHA |
+| `get_branch_sha` | `repository.ref(qualifiedName: "refs/heads/{branch}") { target { oid } }` | Direct equivalent |
+| `compare_branches` | **Keep as REST** — no clean GraphQL equivalent exists | The `compareCommits` field is preview-tier and doesn't return patches |
+
+#### 12c. Mutation migrations
+
+| REST method | GraphQL replacement | Notes |
+|---|---|---|
+| `create_branch` | `createRef(input: { repositoryId, name: "refs/heads/...", oid })` | Needs cached repo node ID |
+| `delete_branch` | `deleteRef(input: { refId })` | Needs the ref node ID — fetch via `repository.ref(...) { id }` first |
+| `merge_branch` | `mergeBranch(input: { repositoryId, base, head, commitMessage })` | Direct equivalent |
+| `create_or_update_file` | `createCommitOnBranch(input: { branch: { repositoryNameWithOwner, branchName }, expectedHeadOid, message: { headline }, fileChanges: { additions: [{ path, contents }] } })` | More complex but more powerful; needs expected HEAD OID for conflict detection; contents is base64 |
+| `delete_file` | `createCommitOnBranch` with `fileChanges: { deletions: [{ path }] }` | Same mutation as create/update |
+| `upload_binary_file` | `createCommitOnBranch` with base64-encoded `contents` | Same mutation; binary files still need base64 |
+
+#### 12d. Model changes
+
+- [ ] Add GraphQL response envelope types (`GraphQLResponse<T>` with `data` and `errors` fields)
+- [ ] Replace `ContentEntry` deserialization to match Tree entry shape (`name`, `type`, `oid`, nested `object` for size)
+- [ ] Replace `FileContent` with a simpler `Blob` type (`text: String`, `oid: String`) — no more `content`/`encoding` fields
+- [ ] Replace `GitRef` with GraphQL ref shape (`id`, `target { oid }`)
+- [ ] `CompareResponse` / `DiffFile` stay as-is (REST endpoint retained)
+- [ ] **TODO:** `createCommitOnBranch` requires `expectedHeadOid` — need to thread the branch HEAD SHA through save/delete/upload flows (already partially tracked via `get_branch_sha`)
+
+#### 12e. Batching opportunities (future optimization)
+
+- [ ] **Editor load:** batch `get_branch_sha` + `get_file` into a single query
+- [ ] **Dashboard sort-by-date:** batch directory listing + per-file last-commit-date into one query using `history(first: 1)` on each tree entry's associated path
+- [ ] **Branch selector + CI status:** batch branch list + check suite status per branch
+- [ ] **TODO:** Evaluate whether batching justifies the added query complexity for each case
+
 ---
 
 ## Open Questions
 
 - **Hosting:** Where to deploy the built WASM app. Options include GitHub
   Pages, Cloudflare Pages, or serving from the same repo's static output.
-- **Concurrent editing:** What happens if the user has multiple editor
-  branches? For now, assume one active branch at a time.
 - **Conflict resolution:** If `source` changes while editing, a merge may
   conflict. Initial approach: show an error and suggest the user resolve
   manually on GitHub.
