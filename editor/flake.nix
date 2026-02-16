@@ -20,6 +20,8 @@
           trunk
           wasm-bindgen-cli
           gnumake
+          wrangler
+          opentofu
         ];
       };
     }
