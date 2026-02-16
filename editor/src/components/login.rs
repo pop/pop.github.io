@@ -7,8 +7,7 @@ use crate::app::AuthContext;
 use crate::routes::Route;
 use crate::services::auth;
 
-// TODO: Set this to your GitHub OAuth App's client ID
-const GITHUB_CLIENT_ID: &str = "";
+const GITHUB_CLIENT_ID: &str = "Ov23lidCWWsvthYknofh";
 
 #[function_component(Login)]
 pub fn login() -> Html {
