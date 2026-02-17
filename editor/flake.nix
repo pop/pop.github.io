@@ -21,6 +21,7 @@
           wasm-bindgen-cli
           gnumake
           wrangler
+          worker-build
           opentofu
         ];
       };
