@@ -395,57 +395,62 @@ These run in a headless browser via `wasm-pack test --headless --chrome`.
 - [ ] Run on push to `editor/**` branches alongside the existing zola build check
 - [ ] Add a `Makefile` target: `make test` that runs both test suites locally
 
-### Phase 12: Migrate to GitHub GraphQL API
+### Phase 12: Migrate Reads to GitHub GraphQL API ✓
 
-**Goal:** Replace all REST API calls with GraphQL for efficiency, batching, and future-proofing.
+**Goal:** Migrate read operations to GraphQL for efficiency; keep mutations and anonymous reads as REST.
 
-**Motivation:** The REST API requires one HTTP round-trip per operation. GraphQL enables batching (e.g. fetch file content + branch SHA + commit dates in one request), returns exactly the fields needed, and returns text file content directly (no base64 decode step). This particularly benefits Phase 8 (sort-by-date needs per-file commit info) and Phase 10 (CI status alongside branch data).
+**Motivation:** GraphQL returns text file content directly (no base64 decode), has no 1000-entry directory cap, and returns exactly the fields needed. GitHub's GraphQL API requires authentication even for public repos, so anonymous reads (Phase 13) fall back to REST.
 
-**Scope:** Only `services/github.rs` and `models/github.rs` are rewritten. All component code (`editor.rs`, `dashboard.rs`, `preview.rs`) is unchanged — `GitHubClient` method signatures stay the same.
+**Scope:** Read methods in `services/github.rs` dispatch to GraphQL when authenticated, REST when anonymous. Mutations stay as REST (no benefit from `createCommitOnBranch` complexity). `compare_branches` stays as REST (no GraphQL equivalent for patches).
 
-#### 12a. Core infrastructure
+#### 12a. Core infrastructure ✓
 
-- [ ] Change `API_BASE` to `https://api.github.com/graphql`
-- [ ] Replace the `get` helper with a `query` helper that POSTs GraphQL queries and returns the `data` payload
-- [ ] Add GraphQL error handling — responses return HTTP 200 with `errors[]` in the body instead of status codes; parse and surface these as `Err(String)` like the current REST error paths
-- [ ] Fetch and cache the repository node ID on first call (`repository(owner, name) { id }`) — needed by several mutations
-- [ ] Remove `base64` decode step for text file reads (GraphQL `Blob.text` returns plain text)
+- [x] Add `GRAPHQL_URL` constant (`https://api.github.com/graphql`)
+- [x] Add `graphql<T>()` helper method — POSTs query + variables, parses `GraphQLResponse<T>`, surfaces `errors[]` as `Err(String)`, returns `data`
+- [x] Add `GraphQLResponse<T>`, `GraphQLError` types in `models/github.rs`
+- [x] Both `get_file` paths (GraphQL + REST) now return decoded text — `decode_github_content` made private, component calls removed
 
-#### 12b. Query migrations
+#### 12b. Query migrations ✓
 
-| REST method | GraphQL replacement | Notes |
+| REST method | GraphQL replacement | Status |
 |---|---|---|
-| `list_contents` | `repository.object(expression: "source:{path}") { ... on Tree { entries { name, type, oid, object { ... on Blob { byteSize } } } } }` | Replaces both Contents API and Trees API fallback; no 1000-entry cap |
-| `get_file` | `repository.object(expression: "{branch}:{path}") { ... on Blob { text, oid } }` | Returns plain text, no base64; `oid` is the SHA |
-| `get_branch_sha` | `repository.ref(qualifiedName: "refs/heads/{branch}") { target { oid } }` | Direct equivalent |
-| `compare_branches` | **Keep as REST** — no clean GraphQL equivalent exists | The `compareCommits` field is preview-tier and doesn't return patches |
+| `list_contents` | `repository.object(expression) { ... on Tree { entries { name, type, oid, object { ... on Blob { byteSize } } } } }` | ✓ GraphQL when auth'd, REST fallback for anon |
+| `get_file` | `repository.object(expression) { ... on Blob { text, oid, byteSize } }` | ✓ Returns plain text, no base64 |
+| `get_branch_sha` | `repository.ref(qualifiedName) { target { oid } }` | ✓ GraphQL when auth'd |
+| `list_editor_branches` | `repository.refs(refPrefix: "refs/heads/editor/") { nodes { name, prefix, target { oid } } }` | ✓ GraphQL when auth'd |
+| `compare_branches` | **Keep as REST** | No GraphQL equivalent for patches |
+| `get_last_commit_date` | **Keep as REST** | GraphQL batching is a future optimization |
+| `get_check_runs` | **Keep as REST** | Deeply nested GraphQL path, REST is cleaner |
 
-#### 12c. Mutation migrations
+#### 12c. Mutation migrations — deferred
 
-| REST method | GraphQL replacement | Notes |
-|---|---|---|
-| `create_branch` | `createRef(input: { repositoryId, name: "refs/heads/...", oid })` | Needs cached repo node ID |
-| `delete_branch` | `deleteRef(input: { refId })` | Needs the ref node ID — fetch via `repository.ref(...) { id }` first |
-| `merge_branch` | `mergeBranch(input: { repositoryId, base, head, commitMessage })` | Direct equivalent |
-| `create_or_update_file` | `createCommitOnBranch(input: { branch: { repositoryNameWithOwner, branchName }, expectedHeadOid, message: { headline }, fileChanges: { additions: [{ path, contents }] } })` | More complex but more powerful; needs expected HEAD OID for conflict detection; contents is base64 |
-| `delete_file` | `createCommitOnBranch` with `fileChanges: { deletions: [{ path }] }` | Same mutation as create/update |
-| `upload_binary_file` | `createCommitOnBranch` with base64-encoded `contents` | Same mutation; binary files still need base64 |
+Mutations stay as REST. `createCommitOnBranch` requires `expectedHeadOid` (extra round trip per write) and returns commit OIDs instead of blob SHAs (would require editor component changes). The REST mutation API works well and always requires auth.
 
-#### 12d. Model changes
+#### 12d. Model changes ✓
 
-- [ ] Add GraphQL response envelope types (`GraphQLResponse<T>` with `data` and `errors` fields)
-- [ ] Replace `ContentEntry` deserialization to match Tree entry shape (`name`, `type`, `oid`, nested `object` for size)
-- [ ] Replace `FileContent` with a simpler `Blob` type (`text: String`, `oid: String`) — no more `content`/`encoding` fields
-- [ ] Replace `GitRef` with GraphQL ref shape (`id`, `target { oid }`)
-- [ ] `CompareResponse` / `DiffFile` stay as-is (REST endpoint retained)
-- [ ] **TODO:** `createCommitOnBranch` requires `expectedHeadOid` — need to thread the branch HEAD SHA through save/delete/upload flows (already partially tracked via `get_branch_sha`)
+- [x] Added GraphQL response types: `GraphQLResponse<T>`, `GraphQLError`, `GqlTreeData`, `GqlTree`, `GqlTreeEntry`, `GqlEntryObject`, `GqlBlobData`, `GqlBlob`, `GqlRefData`, `GqlRef`, `GqlRefTarget`, `GqlRefsData`, `GqlRefConnection`, `GqlRefNode`
+- [x] REST-specific types (`ContentEntry`, `FileContent`, `GitRef`, `CompareResponse`, etc.) unchanged — GraphQL responses mapped to same types internally
+- [x] `decode_github_content` made private — `get_file` now returns decoded text from both paths
 
 #### 12e. Batching opportunities (future optimization)
 
 - [ ] **Editor load:** batch `get_branch_sha` + `get_file` into a single query
 - [ ] **Dashboard sort-by-date:** batch directory listing + per-file last-commit-date into one query using `history(first: 1)` on each tree entry's associated path
 - [ ] **Branch selector + CI status:** batch branch list + check suite status per branch
-- [ ] **TODO:** Evaluate whether batching justifies the added query complexity for each case
+
+### Phase 13: Public View Mode ✓
+
+**Goal:** Make all pages publicly browsable without login; gate write operations behind authentication.
+
+The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supports unauthenticated read operations. This phase removes the login requirement for browsing, previewing, and viewing content, while keeping save, publish, delete, upload, and branch operations behind authentication.
+
+- [x] Make `GitHubClient` work without auth — `token` field changed to `Option<String>`; added `anonymous()` constructor and `require_token()` guard; `get` helper conditionally adds `Authorization` header; write methods (`create_or_update_file`, `delete_file`, `upload_binary_file`, `create_branch`, `delete_branch`, `merge_branch`) return error if called without token
+- [x] Change default route from Login to Dashboard — `/` now routes to Dashboard; Login moved to `/login`; OAuth redirect_uri updated to `{origin}/login`
+- [x] Update nav to always render — shows Dashboard link always; shows Logout button when authenticated, Login link when not
+- [x] Remove auth redirect from Dashboard — uses `GitHubClient::anonymous()` when no token; hides "+ New Post" button and branch selector when not authenticated; all read functionality (browsing, searching, sorting) works without login
+- [x] Remove auth redirect from Preview — uses anonymous client when no token; fully functional without login
+- [x] Remove auth redirect from Editor — uses anonymous client for file loading; when not authenticated: hides Save/Delete/Upload/Publish UI, shows "Login to save" link; textarea editing still works locally
+- [ ] Verify: unauthenticated browsing, preview, and editor viewing work end-to-end
 
 ---
 
@@ -598,3 +603,25 @@ These run in a headless browser via `wasm-pack test --headless --chrome`.
 - Preview (`components/preview.rs`): added `frontmatter_fields` state; parsed after file load; same table rendering before markdown body
 - CSS: `.frontmatter-table` (muted `#f6f8fa` background, `0.85rem` font, full width, collapsed borders), `.fm-key` (bold, 120px width), `.fm-value` (word-break)
 - Compiles clean (same dead-code warnings as before)
+
+### Session 12 (2026-02-17) — Phase 13
+- Built Phase 13: public view mode (unauthenticated browsing)
+- `GitHubClient` token changed to `Option<String>`; added `anonymous()` constructor and `require_token()` guard for write methods; `get` helper conditionally adds `Authorization` header
+- Routes: default route (`/`) changed from Login to Dashboard; Login moved to `/login`; OAuth redirect_uri updated to `{origin}/login`
+- Nav: always renders with Dashboard link; shows Logout when authenticated, Login link when not
+- Dashboard: removed auth redirect; uses `GitHubClient::anonymous()` when no token; hides "+ New Post" button and branch selector when unauthenticated; all read ops (browsing, search, sort) work without login
+- Preview: removed auth redirect; uses anonymous client; fully functional without login
+- Editor: removed auth redirect; uses anonymous client for file loading; hides Save/Delete/Upload Image/Publish UI when unauthenticated; shows "Login to save" link; textarea editing works locally
+- Compiles clean (`cargo check --target wasm32-unknown-unknown`)
+
+### Session 13 (2026-02-17) — Phase 12
+- Built Phase 12: migrate reads to GraphQL API (hybrid approach)
+- Added `GRAPHQL_URL` constant and `graphql<T>()` helper method to `GitHubClient` — POSTs query + variables to `/graphql`, parses `GraphQLResponse<T>` envelope, surfaces `errors[]` as `Err(String)`
+- Added GraphQL response types in `models/github.rs`: `GraphQLResponse<T>`, `GraphQLError`, `GqlTreeData`/`GqlTree`/`GqlTreeEntry`/`GqlEntryObject` (Tree queries), `GqlBlobData`/`GqlBlob` (Blob queries), `GqlRefData`/`GqlRef`/`GqlRefTarget` (ref queries), `GqlRefsData`/`GqlRefConnection`/`GqlRefNode` (refs listing)
+- Migrated `list_contents` — GraphQL Tree query when authenticated (no 1000-entry cap, replaces both Contents API and Trees API fallback), REST fallback for anonymous
+- Migrated `get_file` — GraphQL `Blob.text` returns plaintext directly; REST path now decodes base64 internally; both paths return decoded text in `FileContent.content`
+- Migrated `get_branch_sha` — GraphQL `ref.target.oid` when authenticated, REST fallback
+- Migrated `list_editor_branches` — GraphQL `refs(refPrefix)` when authenticated, REST fallback
+- Removed `decode_github_content` calls from `editor.rs` and `preview.rs` — `get_file` now returns decoded text; `decode_github_content` made private (used only by REST `get_file_rest`)
+- Kept as REST: all mutations, `compare_branches`, `get_check_runs`, `get_last_commit_date`/`get_commit_dates_bulk`
+- Compiles clean (`cargo check --target wasm32-unknown-unknown`)

@@ -3,9 +3,9 @@ use yew_router::prelude::*;
 #[derive(Clone, Routable, PartialEq)]
 pub enum Route {
     #[at("/")]
-    Login,
-    #[at("/dashboard")]
     Dashboard,
+    #[at("/login")]
+    Login,
     #[at("/edit/*path")]
     Editor { path: String },
     #[at("/preview/*path")]

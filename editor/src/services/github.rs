@@ -3,33 +3,113 @@ use std::collections::HashMap;
 use base64::prelude::*;
 use futures::future::join_all;
 use gloo_net::http::Request;
+use serde::de::DeserializeOwned;
 use serde_json::json;
 
 use crate::models::github::{
-    CheckRunsResponse, CommitInfo, CompareResponse, ContentEntry, FileContent, GitRef,
-    TreeResponse,
+    CheckRunsResponse, CommitInfo, CompareResponse, ContentEntry, FileContent,
+    GqlBlobData, GqlRefData, GqlRefsData, GqlTreeData, GitRef, GraphQLResponse, TreeResponse,
 };
 
 const OWNER: &str = "pop";
 const REPO: &str = "pop.github.io";
 const API_BASE: &str = "https://api.github.com";
+const GRAPHQL_URL: &str = "https://api.github.com/graphql";
 
 pub struct GitHubClient {
-    pub token: String,
+    pub token: Option<String>,
 }
 
 impl GitHubClient {
     pub fn new(token: String) -> Self {
-        Self { token }
+        Self { token: Some(token) }
+    }
+
+    pub fn anonymous() -> Self {
+        Self { token: None }
+    }
+
+    fn require_token(&self) -> Result<&str, String> {
+        self.token
+            .as_deref()
+            .ok_or_else(|| "Authentication required for this operation".into())
     }
 
     // ── Directory & file reading ─────────────────────────────────
 
     /// List the contents of a directory in the repo.
     ///
-    /// Falls back to the Git Trees API if the Contents API returns 1000 entries
-    /// (its hard cap), which indicates possible truncation.
+    /// Uses GraphQL when authenticated (no entry count limit).
+    /// Falls back to REST when anonymous, with a Git Trees API fallback
+    /// if the Contents API returns 1000 entries (its hard cap).
     pub async fn list_contents(
+        &self,
+        path: &str,
+        branch: Option<&str>,
+    ) -> Result<Vec<ContentEntry>, String> {
+        if self.token.is_some() {
+            self.list_contents_graphql(path, branch).await
+        } else {
+            self.list_contents_rest(path, branch).await
+        }
+    }
+
+    async fn list_contents_graphql(
+        &self,
+        path: &str,
+        branch: Option<&str>,
+    ) -> Result<Vec<ContentEntry>, String> {
+        let git_ref = branch.unwrap_or("source");
+        let expression = format!("{git_ref}:{path}");
+
+        let query = r#"
+            query($owner: String!, $name: String!, $expression: String!) {
+                repository(owner: $owner, name: $name) {
+                    object(expression: $expression) {
+                        ... on Tree {
+                            entries {
+                                name
+                                type
+                                oid
+                                object {
+                                    ... on Blob { byteSize }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        "#;
+
+        let data: GqlTreeData = self
+            .graphql(query, json!({ "owner": OWNER, "name": REPO, "expression": expression }))
+            .await?;
+
+        let tree = data
+            .repository
+            .object
+            .ok_or_else(|| format!("Path not found: {path}"))?;
+
+        let entries = tree.entries.unwrap_or_default();
+
+        Ok(entries
+            .into_iter()
+            .map(|e| ContentEntry {
+                path: if path.is_empty() {
+                    e.name.clone()
+                } else {
+                    format!("{path}/{}", e.name)
+                },
+                name: e.name,
+                entry_type: if e.entry_type == "tree" { "dir" } else { "file" }.to_string(),
+                sha: e.oid,
+                size: e.object.and_then(|o| o.byte_size).unwrap_or(0),
+                download_url: None,
+            })
+            .collect())
+    }
+
+    async fn list_contents_rest(
         &self,
         path: &str,
         branch: Option<&str>,
@@ -95,12 +175,73 @@ impl GitHubClient {
     }
 
     /// Read a single file from the repo on a specific branch.
+    ///
+    /// Returns decoded text content (not base64) regardless of API path.
     pub async fn get_file(&self, path: &str, branch: &str) -> Result<FileContent, String> {
+        if self.token.is_some() {
+            self.get_file_graphql(path, branch).await
+        } else {
+            self.get_file_rest(path, branch).await
+        }
+    }
+
+    async fn get_file_graphql(
+        &self,
+        path: &str,
+        branch: &str,
+    ) -> Result<FileContent, String> {
+        let expression = format!("{branch}:{path}");
+
+        let query = r#"
+            query($owner: String!, $name: String!, $expression: String!) {
+                repository(owner: $owner, name: $name) {
+                    object(expression: $expression) {
+                        ... on Blob {
+                            text
+                            oid
+                            byteSize
+                        }
+                    }
+                }
+            }
+        "#;
+
+        let data: GqlBlobData = self
+            .graphql(query, json!({ "owner": OWNER, "name": REPO, "expression": expression }))
+            .await?;
+
+        let blob = data
+            .repository
+            .object
+            .ok_or_else(|| format!("File not found: {path}"))?;
+
+        let name = path.rsplit('/').next().unwrap_or(path).to_string();
+
+        Ok(FileContent {
+            name,
+            path: path.to_string(),
+            sha: blob.oid,
+            size: blob.byte_size,
+            content: blob.text,
+            encoding: None,
+        })
+    }
+
+    async fn get_file_rest(
+        &self,
+        path: &str,
+        branch: &str,
+    ) -> Result<FileContent, String> {
         let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/contents/{path}?ref={branch}");
         let resp = self.get(&url).await?;
 
         match resp.status() {
-            200 => resp.json().await.map_err(|e| e.to_string()),
+            200 => {
+                let mut fc: FileContent = resp.json().await.map_err(|e| e.to_string())?;
+                // Decode base64 content so callers always get plaintext
+                fc.content = fc.content.map(|c| decode_github_content(&c));
+                Ok(fc)
+            }
             401 => Err("Unauthorized \u{2014} check your token".into()),
             404 => Err(format!("File not found: {path}")),
             status => Err(format!("GitHub API error: {status}")),
@@ -111,6 +252,37 @@ impl GitHubClient {
 
     /// Get the HEAD SHA of a branch.
     pub async fn get_branch_sha(&self, branch: &str) -> Result<String, String> {
+        if self.token.is_some() {
+            self.get_branch_sha_graphql(branch).await
+        } else {
+            self.get_branch_sha_rest(branch).await
+        }
+    }
+
+    async fn get_branch_sha_graphql(&self, branch: &str) -> Result<String, String> {
+        let qualified = format!("refs/heads/{branch}");
+
+        let query = r#"
+            query($owner: String!, $name: String!, $ref: String!) {
+                repository(owner: $owner, name: $name) {
+                    ref(qualifiedName: $ref) {
+                        target { oid }
+                    }
+                }
+            }
+        "#;
+
+        let data: GqlRefData = self
+            .graphql(query, json!({ "owner": OWNER, "name": REPO, "ref": qualified }))
+            .await?;
+
+        data.repository
+            .git_ref
+            .map(|r| r.target.oid)
+            .ok_or_else(|| format!("Branch not found: {branch}"))
+    }
+
+    async fn get_branch_sha_rest(&self, branch: &str) -> Result<String, String> {
         let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/git/ref/heads/{branch}");
         let resp = self.get(&url).await?;
 
@@ -131,6 +303,7 @@ impl GitHubClient {
         branch_name: &str,
         from_sha: &str,
     ) -> Result<(), String> {
+        let token = self.require_token()?;
         let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/git/refs");
         let body = json!({
             "ref": format!("refs/heads/{branch_name}"),
@@ -138,7 +311,7 @@ impl GitHubClient {
         });
 
         let resp = Request::post(&url)
-            .header("Authorization", &format!("Bearer {}", self.token))
+            .header("Authorization", &format!("Bearer {token}"))
             .header("Accept", "application/vnd.github.v3+json")
             .header("User-Agent", "elijah-run-editor")
             .json(&body)
@@ -157,9 +330,10 @@ impl GitHubClient {
 
     /// Delete a branch.
     pub async fn delete_branch(&self, branch_name: &str) -> Result<(), String> {
+        let token = self.require_token()?;
         let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/git/refs/heads/{branch_name}");
         let resp = Request::delete(&url)
-            .header("Authorization", &format!("Bearer {}", self.token))
+            .header("Authorization", &format!("Bearer {token}"))
             .header("Accept", "application/vnd.github.v3+json")
             .header("User-Agent", "elijah-run-editor")
             .send()
@@ -189,8 +363,9 @@ impl GitHubClient {
             "commit_message": commit_message,
         });
 
+        let token = self.require_token()?;
         let resp = Request::post(&url)
-            .header("Authorization", &format!("Bearer {}", self.token))
+            .header("Authorization", &format!("Bearer {token}"))
             .header("Accept", "application/vnd.github.v3+json")
             .header("User-Agent", "elijah-run-editor")
             .json(&body)
@@ -240,6 +415,7 @@ impl GitHubClient {
         sha: Option<&str>,
         branch: &str,
     ) -> Result<String, String> {
+        let token = self.require_token()?;
         let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/contents/{path}");
         let encoded = BASE64_STANDARD.encode(content.as_bytes());
 
@@ -254,7 +430,7 @@ impl GitHubClient {
         }
 
         let resp = Request::put(&url)
-            .header("Authorization", &format!("Bearer {}", self.token))
+            .header("Authorization", &format!("Bearer {token}"))
             .header("Accept", "application/vnd.github.v3+json")
             .header("User-Agent", "elijah-run-editor")
             .json(&body)
@@ -287,6 +463,7 @@ impl GitHubClient {
         message: &str,
         branch: &str,
     ) -> Result<(), String> {
+        let token = self.require_token()?;
         let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/contents/{path}");
         let body = json!({
             "message": message,
@@ -295,7 +472,7 @@ impl GitHubClient {
         });
 
         let resp = Request::delete(&url)
-            .header("Authorization", &format!("Bearer {}", self.token))
+            .header("Authorization", &format!("Bearer {token}"))
             .header("Accept", "application/vnd.github.v3+json")
             .header("User-Agent", "elijah-run-editor")
             .json(&body)
@@ -324,6 +501,7 @@ impl GitHubClient {
         sha: Option<&str>,
         branch: &str,
     ) -> Result<String, String> {
+        let token = self.require_token()?;
         let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/contents/{path}");
         let encoded = BASE64_STANDARD.encode(data);
 
@@ -338,7 +516,7 @@ impl GitHubClient {
         }
 
         let resp = Request::put(&url)
-            .header("Authorization", &format!("Bearer {}", self.token))
+            .header("Authorization", &format!("Bearer {token}"))
             .header("Accept", "application/vnd.github.v3+json")
             .header("User-Agent", "elijah-run-editor")
             .json(&body)
@@ -367,6 +545,48 @@ impl GitHubClient {
 
     /// List all branches matching the `editor/` prefix.
     pub async fn list_editor_branches(&self) -> Result<Vec<GitRef>, String> {
+        if self.token.is_some() {
+            self.list_editor_branches_graphql().await
+        } else {
+            self.list_editor_branches_rest().await
+        }
+    }
+
+    async fn list_editor_branches_graphql(&self) -> Result<Vec<GitRef>, String> {
+        let query = r#"
+            query($owner: String!, $name: String!) {
+                repository(owner: $owner, name: $name) {
+                    refs(refPrefix: "refs/heads/editor/", first: 100) {
+                        nodes {
+                            name
+                            prefix
+                            target { oid }
+                        }
+                    }
+                }
+            }
+        "#;
+
+        let data: GqlRefsData = self
+            .graphql(query, json!({ "owner": OWNER, "name": REPO }))
+            .await?;
+
+        let nodes = data
+            .repository
+            .refs
+            .map(|r| r.nodes)
+            .unwrap_or_default();
+
+        Ok(nodes
+            .into_iter()
+            .map(|n| GitRef {
+                ref_name: format!("{}{}", n.prefix, n.name),
+                object: crate::models::github::GitObject { sha: n.target.oid },
+            })
+            .collect())
+    }
+
+    async fn list_editor_branches_rest(&self) -> Result<Vec<GitRef>, String> {
         let url =
             format!("{API_BASE}/repos/{OWNER}/{REPO}/git/matching-refs/heads/editor/");
         let resp = self.get(&url).await?;
@@ -421,7 +641,10 @@ impl GitHubClient {
                 let token = self.token.clone();
                 let branch = branch.map(|b| b.to_string());
                 async move {
-                    let client = GitHubClient::new(token);
+                    let client = match token {
+                        Some(t) => GitHubClient::new(t),
+                        None => GitHubClient::anonymous(),
+                    };
                     match client
                         .get_last_commit_date(&path, branch.as_deref())
                         .await
@@ -463,18 +686,54 @@ impl GitHubClient {
     // ── Helpers ──────────────────────────────────────────────────
 
     async fn get(&self, url: &str) -> Result<gloo_net::http::Response, String> {
-        Request::get(url)
-            .header("Authorization", &format!("Bearer {}", self.token))
+        let mut req = Request::get(url)
             .header("Accept", "application/vnd.github.v3+json")
+            .header("User-Agent", "elijah-run-editor");
+        if let Some(ref token) = self.token {
+            req = req.header("Authorization", &format!("Bearer {token}"));
+        }
+        req.send().await.map_err(|e| e.to_string())
+    }
+
+    async fn graphql<T: DeserializeOwned>(
+        &self,
+        query: &str,
+        variables: serde_json::Value,
+    ) -> Result<T, String> {
+        let token = self.require_token()?;
+        let body = json!({ "query": query, "variables": variables });
+
+        let resp = Request::post(GRAPHQL_URL)
+            .header("Authorization", &format!("Bearer {token}"))
+            .header("Content-Type", "application/json")
             .header("User-Agent", "elijah-run-editor")
+            .json(&body)
+            .map_err(|e| e.to_string())?
             .send()
             .await
-            .map_err(|e| e.to_string())
+            .map_err(|e| e.to_string())?;
+
+        if resp.status() == 401 {
+            return Err("Unauthorized \u{2014} check your token".into());
+        }
+
+        let gql: GraphQLResponse<T> = resp.json().await.map_err(|e| e.to_string())?;
+
+        if let Some(errors) = gql.errors {
+            let msg = errors
+                .iter()
+                .map(|e| e.message.as_str())
+                .collect::<Vec<_>>()
+                .join("; ");
+            return Err(msg);
+        }
+
+        gql.data.ok_or_else(|| "No data in GraphQL response".into())
     }
 }
 
-/// Decode base64 file content from the GitHub API (which includes newlines).
-pub fn decode_github_content(encoded: &str) -> String {
+/// Decode base64 file content from the GitHub REST API (which includes newlines).
+fn decode_github_content(encoded: &str) -> String {
     let cleaned: String = encoded.chars().filter(|c| !c.is_whitespace()).collect();
     match BASE64_STANDARD.decode(cleaned.as_bytes()) {
         Ok(bytes) => String::from_utf8_lossy(&bytes).to_string(),

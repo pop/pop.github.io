@@ -49,7 +49,7 @@ pub fn login() -> Html {
                                     let _ = history.replace_state_with_url(
                                         &wasm_bindgen::JsValue::NULL,
                                         "",
-                                        Some("/"),
+                                        Some("/login"),
                                     );
                                 }
                             }
@@ -71,7 +71,7 @@ pub fn login() -> Html {
             .origin()
             .unwrap_or_default();
         let url = format!(
-            "https://github.com/login/oauth/authorize?client_id={GITHUB_CLIENT_ID}&redirect_uri={origin}&scope=repo"
+            "https://github.com/login/oauth/authorize?client_id={GITHUB_CLIENT_ID}&redirect_uri={origin}/login&scope=repo"
         );
         let _ = gloo_utils::window().location().set_href(&url);
     });

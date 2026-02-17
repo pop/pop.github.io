@@ -106,3 +106,113 @@ pub struct CheckRun {
     pub conclusion: Option<String>,
     pub html_url: String,
 }
+
+// ── GraphQL types ────────────────────────────────────────────────
+
+/// Generic GraphQL response envelope.
+#[derive(Deserialize)]
+#[serde(bound(deserialize = "T: serde::de::DeserializeOwned"))]
+pub struct GraphQLResponse<T> {
+    pub data: Option<T>,
+    pub errors: Option<Vec<GraphQLError>>,
+}
+
+#[derive(Deserialize)]
+pub struct GraphQLError {
+    pub message: String,
+}
+
+/// Response for a Tree query (list_contents).
+#[derive(Deserialize)]
+pub struct GqlTreeData {
+    pub repository: GqlRepoTree,
+}
+
+#[derive(Deserialize)]
+pub struct GqlRepoTree {
+    pub object: Option<GqlTree>,
+}
+
+#[derive(Deserialize)]
+pub struct GqlTree {
+    pub entries: Option<Vec<GqlTreeEntry>>,
+}
+
+#[derive(Deserialize)]
+pub struct GqlTreeEntry {
+    pub name: String,
+    #[serde(rename = "type")]
+    pub entry_type: String,
+    pub oid: String,
+    pub object: Option<GqlEntryObject>,
+}
+
+#[derive(Deserialize)]
+pub struct GqlEntryObject {
+    #[serde(rename = "byteSize")]
+    pub byte_size: Option<u64>,
+}
+
+/// Response for a Blob query (get_file).
+#[derive(Deserialize)]
+pub struct GqlBlobData {
+    pub repository: GqlRepoBlob,
+}
+
+#[derive(Deserialize)]
+pub struct GqlRepoBlob {
+    pub object: Option<GqlBlob>,
+}
+
+#[derive(Deserialize)]
+pub struct GqlBlob {
+    pub text: Option<String>,
+    pub oid: String,
+    #[serde(rename = "byteSize")]
+    pub byte_size: u64,
+}
+
+/// Response for a ref query (get_branch_sha).
+#[derive(Deserialize)]
+pub struct GqlRefData {
+    pub repository: GqlRepoRef,
+}
+
+#[derive(Deserialize)]
+pub struct GqlRepoRef {
+    #[serde(rename = "ref")]
+    pub git_ref: Option<GqlRef>,
+}
+
+#[derive(Deserialize)]
+pub struct GqlRef {
+    pub target: GqlRefTarget,
+}
+
+#[derive(Deserialize)]
+pub struct GqlRefTarget {
+    pub oid: String,
+}
+
+/// Response for a refs query (list_editor_branches).
+#[derive(Deserialize)]
+pub struct GqlRefsData {
+    pub repository: GqlRepoRefs,
+}
+
+#[derive(Deserialize)]
+pub struct GqlRepoRefs {
+    pub refs: Option<GqlRefConnection>,
+}
+
+#[derive(Deserialize)]
+pub struct GqlRefConnection {
+    pub nodes: Vec<GqlRefNode>,
+}
+
+#[derive(Deserialize)]
+pub struct GqlRefNode {
+    pub name: String,
+    pub prefix: String,
+    pub target: GqlRefTarget,
+}

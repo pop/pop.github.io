@@ -13,7 +13,7 @@ use crate::components::dashboard::invalidate_cache;
 use crate::models::github::{CompareResponse, DiffFile};
 use crate::models::post::{parse_frontmatter, render_markdown};
 use crate::routes::Route;
-use crate::services::github::{decode_github_content, GitHubClient};
+use crate::services::github::GitHubClient;
 
 const DEFAULT_BRANCH: &str = "source";
 const BRANCH_KEY: &str = "editor_branch";
@@ -79,17 +79,7 @@ pub fn editor_page(props: &Props) -> Html {
         })
     };
 
-    // Redirect if not authenticated
-    {
-        let navigator = navigator.clone();
-        let token = auth.token.clone();
-        use_effect_with(token.clone(), move |token| {
-            if token.is_none() {
-                navigator.push(&Route::Login);
-            }
-            || ()
-        });
-    }
+    let is_authenticated = auth.token.is_some();
 
     // Track unsaved changes for beforeunload
     {
@@ -219,12 +209,17 @@ pub fn editor_page(props: &Props) -> Html {
         let token = auth.token.clone();
 
         use_effect_with((path.clone(), token.clone()), move |_| {
-            if let Some(token) = token {
-                wasm_bindgen_futures::spawn_local(async move {
-                    let client = GitHubClient::new(token);
-                    let mut active_branch = (*branch).clone();
+            let client = match token {
+                Some(t) => GitHubClient::new(t),
+                None => GitHubClient::anonymous(),
+            };
+            let has_token = client.token.is_some();
 
-                    // Verify stored branch still exists
+            wasm_bindgen_futures::spawn_local(async move {
+                let mut active_branch = (*branch).clone();
+
+                // Verify stored branch still exists (only when authenticated)
+                if has_token {
                     if let Some(ref branch_name) = active_branch {
                         match client.get_branch_sha(branch_name).await {
                             Ok(_) => {} // Branch exists
@@ -240,31 +235,34 @@ pub fn editor_page(props: &Props) -> Html {
                             }
                         }
                     }
+                } else {
+                    // Anonymous users don't use editor branches
+                    active_branch = None;
+                }
 
-                    let result = load_file(&client, &path, active_branch.as_deref()).await;
+                let result = load_file(&client, &path, active_branch.as_deref()).await;
 
-                    match result {
-                        Ok(LoadedFile::Existing { text, sha }) => {
-                            content.set(text.clone());
-                            original_content.set(text);
-                            file_sha.set(Some(sha));
-                            is_new.set(false);
-                            loading.set(false);
-                        }
-                        Ok(LoadedFile::New { template }) => {
-                            content.set(template.clone());
-                            original_content.set(String::new());
-                            file_sha.set(None);
-                            is_new.set(true);
-                            loading.set(false);
-                        }
-                        Err(e) => {
-                            set_error(e);
-                            loading.set(false);
-                        }
+                match result {
+                    Ok(LoadedFile::Existing { text, sha }) => {
+                        content.set(text.clone());
+                        original_content.set(text);
+                        file_sha.set(Some(sha));
+                        is_new.set(false);
+                        loading.set(false);
                     }
-                });
-            }
+                    Ok(LoadedFile::New { template }) => {
+                        content.set(template.clone());
+                        original_content.set(String::new());
+                        file_sha.set(None);
+                        is_new.set(true);
+                        loading.set(false);
+                    }
+                    Err(e) => {
+                        set_error(e);
+                        loading.set(false);
+                    }
+                }
+            });
             || ()
         });
     }
@@ -920,37 +918,43 @@ pub fn editor_page(props: &Props) -> Html {
                 <p class="loading">{"Loading\u{2026}"}</p>
             } else {
                 <div class="editor-toolbar">
-                    <button
-                        ref={save_btn_ref.clone()}
-                        class="save-btn"
-                        onclick={on_save}
-                        disabled={*saving || !has_changes}
-                    >
-                        { if *saving { "Saving\u{2026}" } else { "Save" } }
-                    </button>
-                    if file_sha.is_some() {
+                    if is_authenticated {
                         <button
-                            class="delete-btn"
-                            onclick={on_delete}
+                            ref={save_btn_ref.clone()}
+                            class="save-btn"
+                            onclick={on_save}
+                            disabled={*saving || !has_changes}
+                        >
+                            { if *saving { "Saving\u{2026}" } else { "Save" } }
+                        </button>
+                        if file_sha.is_some() {
+                            <button
+                                class="delete-btn"
+                                onclick={on_delete}
+                                disabled={*saving || *uploading}
+                            >
+                                {"Delete"}
+                            </button>
+                        }
+                        <button
+                            class="upload-btn"
+                            onclick={on_upload_click}
                             disabled={*saving || *uploading}
                         >
-                            {"Delete"}
+                            { if *uploading { "Uploading\u{2026}" } else { "Upload Image" } }
                         </button>
+                        <input
+                            ref={file_input_ref.clone()}
+                            type="file"
+                            accept="image/*"
+                            class="hidden-file-input"
+                            onchange={on_file_selected}
+                        />
+                    } else {
+                        <span class="login-hint">
+                            <Link<Route> to={Route::Login}>{"Login to save"}</Link<Route>>
+                        </span>
                     }
-                    <button
-                        class="upload-btn"
-                        onclick={on_upload_click}
-                        disabled={*saving || *uploading}
-                    >
-                        { if *uploading { "Uploading\u{2026}" } else { "Upload Image" } }
-                    </button>
-                    <input
-                        ref={file_input_ref.clone()}
-                        type="file"
-                        accept="image/*"
-                        class="hidden-file-input"
-                        onchange={on_file_selected}
-                    />
                     <div class="view-toggle">
                         <button
                             class={classes!("toggle-btn", (*view_mode == ViewMode::Edit).then_some("active"))}
@@ -966,7 +970,7 @@ pub fn editor_page(props: &Props) -> Html {
                         >{"Split"}</button>
                     </div>
                 </div>
-                if branch.is_some() {
+                if is_authenticated && branch.is_some() {
                     <div class="publish-bar">
                         <button
                             class="publish-btn"
@@ -1055,7 +1059,7 @@ async fn load_file(
     if let Some(branch) = active_branch {
         match client.get_file(path, branch).await {
             Ok(file) => {
-                let text = decode_github_content(&file.content.unwrap_or_default());
+                let text = file.content.unwrap_or_default();
                 return Ok(LoadedFile::Existing {
                     text,
                     sha: file.sha,
@@ -1071,7 +1075,7 @@ async fn load_file(
     // Try the default branch
     match client.get_file(path, DEFAULT_BRANCH).await {
         Ok(file) => {
-            let text = decode_github_content(&file.content.unwrap_or_default());
+            let text = file.content.unwrap_or_default();
             Ok(LoadedFile::Existing {
                 text,
                 sha: file.sha,
