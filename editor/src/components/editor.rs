@@ -9,6 +9,7 @@ use yew::prelude::*;
 use yew_router::prelude::*;
 
 use crate::app::AuthContext;
+use crate::components::dashboard::invalidate_cache;
 use crate::models::github::{CompareResponse, DiffFile};
 use crate::models::post::render_markdown;
 use crate::routes::Route;
@@ -22,6 +23,14 @@ enum ViewMode {
     Edit,
     Preview,
     Split,
+}
+
+#[derive(Clone, PartialEq)]
+enum CiState {
+    Pending,
+    Success,
+    Failure(String), // html_url to the failing run
+    None,            // no check runs exist
 }
 
 #[derive(Properties, PartialEq)]
@@ -55,6 +64,7 @@ pub fn editor_page(props: &Props) -> Html {
     let show_diff = use_state(|| false);
     let diff_data = use_state(|| Option::<CompareResponse>::None);
     let diff_loading = use_state(|| false);
+    let ci_status = use_state(|| CiState::None);
 
     // Auth-aware error setter: clears token on 401
     let set_error: Rc<dyn Fn(String)> = {
@@ -255,6 +265,61 @@ pub fn editor_page(props: &Props) -> Html {
         });
     }
 
+    // CI status: fetch on mount and poll every 15s while pending
+    {
+        let ci_status = ci_status.clone();
+        let branch_val = (*branch).clone();
+        let token = auth.token.clone();
+
+        use_effect_with((branch_val.clone(), token.clone()), move |_| {
+            let ci_status = ci_status.clone();
+            let mut interval_handle: Option<i32> = None;
+
+            if let (Some(branch_name), Some(token)) = (branch_val, token) {
+                // Initial fetch
+                {
+                    let ci_status = ci_status.clone();
+                    let branch_name = branch_name.clone();
+                    let token = token.clone();
+                    wasm_bindgen_futures::spawn_local(async move {
+                        fetch_ci_status(&token, &branch_name, &ci_status).await;
+                    });
+                }
+
+                // Poll every 15 seconds
+                let cb_ci = ci_status.clone();
+                let cb_branch = branch_name.clone();
+                let cb_token = token.clone();
+
+                let cb = Closure::<dyn FnMut()>::new(move || {
+                    let ci_status = cb_ci.clone();
+                    let branch_name = cb_branch.clone();
+                    let token = cb_token.clone();
+                    wasm_bindgen_futures::spawn_local(async move {
+                        fetch_ci_status(&token, &branch_name, &ci_status).await;
+                    });
+                });
+
+                let id = gloo_utils::window()
+                    .set_interval_with_callback_and_timeout_and_arguments_0(
+                        cb.as_ref().unchecked_ref(),
+                        15_000,
+                    )
+                    .unwrap_or(0);
+                cb.forget();
+                interval_handle = Some(id);
+            } else {
+                ci_status.set(CiState::None);
+            }
+
+            move || {
+                if let Some(id) = interval_handle {
+                    let _ = gloo_utils::window().clear_interval_with_handle(id);
+                }
+            }
+        });
+    }
+
     let on_input = {
         let content = content.clone();
         let save_msg = save_msg.clone();
@@ -340,6 +405,7 @@ pub fn editor_page(props: &Props) -> Html {
                             file_sha.set(Some(new_sha));
                             original_content.set((*content).clone());
                             is_new.set(false);
+                            invalidate_cache(parent_dir(&path));
                             save_msg.set(Some("Saved".into()));
                             saving.set(false);
                         }
@@ -415,6 +481,7 @@ pub fn editor_page(props: &Props) -> Html {
                         .await
                     {
                         Ok(()) => {
+                            invalidate_cache(parent_dir(&path));
                             saving.set(false);
                             navigator.push(&Route::Dashboard);
                         }
@@ -721,6 +788,7 @@ pub fn editor_page(props: &Props) -> Html {
                             let _ = client.delete_branch(&branch_name).await;
                             clear_active_branch();
                             branch.set(None);
+                            invalidate_cache(parent_dir(&path));
                             save_msg.set(Some("Published!".into()));
                             saving.set(false);
                             navigator.push(&Route::Dashboard);
@@ -783,6 +851,7 @@ pub fn editor_page(props: &Props) -> Html {
                         Ok(()) => {
                             clear_active_branch();
                             branch.set(None);
+                            crate::components::dashboard::invalidate_all_caches();
                             saving.set(false);
                             navigator.push(&Route::Dashboard);
                         }
@@ -811,6 +880,7 @@ pub fn editor_page(props: &Props) -> Html {
     };
 
     let has_changes = *content != *original_content || *is_new;
+    let ci_blocks_publish = matches!(*ci_status, CiState::Pending | CiState::Failure(_));
     let show_editor = *view_mode != ViewMode::Preview;
     let show_preview = *view_mode != ViewMode::Edit;
     let is_split = *view_mode == ViewMode::Split;
@@ -897,7 +967,7 @@ pub fn editor_page(props: &Props) -> Html {
                         <button
                             class="publish-btn"
                             onclick={on_publish}
-                            disabled={*saving || *uploading || *diff_loading || has_changes}
+                            disabled={*saving || *uploading || *diff_loading || has_changes || ci_blocks_publish}
                         >
                             { if *diff_loading { "Loading diff\u{2026}" } else { "Publish" } }
                         </button>
@@ -908,6 +978,7 @@ pub fn editor_page(props: &Props) -> Html {
                         >
                             {"Discard"}
                         </button>
+                        {render_ci_indicator(&ci_status)}
                         if has_changes {
                             <span class="publish-hint">{"Save changes before publishing"}</span>
                         }
@@ -1149,6 +1220,70 @@ fn highlight_code_blocks() {
     let _ = js_sys::eval(
         "if(typeof hljs!=='undefined'){document.querySelectorAll('pre code:not(.hljs)').forEach(el=>hljs.highlightElement(el));}",
     );
+}
+
+// ── CI status ───────────────────────────────────────────────────
+
+async fn fetch_ci_status(
+    token: &str,
+    branch: &str,
+    ci_status: &UseStateHandle<CiState>,
+) {
+    // Don't re-fetch if already in a terminal state
+    let current = (*ci_status).clone();
+    if matches!(&*current, CiState::Success | CiState::Failure(_)) {
+        return;
+    }
+
+    let client = GitHubClient::new(token.to_string());
+    match client.get_check_runs(branch).await {
+        Ok(resp) => {
+            if resp.check_runs.is_empty() {
+                ci_status.set(CiState::None);
+                return;
+            }
+            let any_pending = resp.check_runs.iter().any(|r| r.status != "completed");
+            if any_pending {
+                ci_status.set(CiState::Pending);
+                return;
+            }
+            let failure = resp.check_runs.iter().find(|r| {
+                r.conclusion.as_deref() == Some("failure")
+            });
+            if let Some(failed) = failure {
+                ci_status.set(CiState::Failure(failed.html_url.clone()));
+            } else {
+                ci_status.set(CiState::Success);
+            }
+        }
+        Err(_) => {
+            // Silently ignore CI fetch errors (don't block the user)
+        }
+    }
+}
+
+fn render_ci_indicator(ci_status: &UseStateHandle<CiState>) -> Html {
+    match &**ci_status {
+        CiState::None => html! {},
+        CiState::Pending => html! {
+            <span class="ci-status ci-pending" title="CI check running">
+                {"\u{23F3} CI pending\u{2026}"}
+            </span>
+        },
+        CiState::Success => html! {
+            <span class="ci-status ci-success" title="CI check passed">
+                {"\u{2713} CI passed"}
+            </span>
+        },
+        CiState::Failure(url) => html! {
+            <span class="ci-status ci-failure">
+                {"\u{2717} CI failed "}
+                <a href={url.clone()} target="_blank" rel="noopener" class="ci-link">
+                    {"(view)"}
+                </a>
+            </span>
+        },
+    }
 }
 
 // ── Diff rendering ──────────────────────────────────────────────

@@ -3,7 +3,7 @@ use gloo_net::http::Request;
 use serde_json::json;
 
 use crate::models::github::{
-    CompareResponse, ContentEntry, FileContent, GitRef, TreeResponse,
+    CheckRunsResponse, CompareResponse, ContentEntry, FileContent, GitRef, TreeResponse,
 };
 
 const OWNER: &str = "pop";
@@ -21,12 +21,17 @@ impl GitHubClient {
 
     // ── Directory & file reading ─────────────────────────────────
 
-    /// List the contents of a directory in the repo (reads from the `source` branch).
+    /// List the contents of a directory in the repo.
     ///
     /// Falls back to the Git Trees API if the Contents API returns 1000 entries
     /// (its hard cap), which indicates possible truncation.
-    pub async fn list_contents(&self, path: &str) -> Result<Vec<ContentEntry>, String> {
-        let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/contents/{path}?ref=source");
+    pub async fn list_contents(
+        &self,
+        path: &str,
+        branch: Option<&str>,
+    ) -> Result<Vec<ContentEntry>, String> {
+        let git_ref = branch.unwrap_or("source");
+        let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/contents/{path}?ref={git_ref}");
         let resp = self.get(&url).await?;
 
         match resp.status() {
@@ -351,6 +356,37 @@ impl GitHubClient {
             401 => Err("Unauthorized \u{2014} check your token".into()),
             409 => Err("Conflict \u{2014} image already exists at this path".into()),
             status => Err(format!("Failed to upload image: {status}")),
+        }
+    }
+
+    // ── Branch listing ────────────────────────────────────────────
+
+    /// List all branches matching the `editor/` prefix.
+    pub async fn list_editor_branches(&self) -> Result<Vec<GitRef>, String> {
+        let url =
+            format!("{API_BASE}/repos/{OWNER}/{REPO}/git/matching-refs/heads/editor/");
+        let resp = self.get(&url).await?;
+
+        match resp.status() {
+            200 => resp.json().await.map_err(|e| e.to_string()),
+            401 => Err("Unauthorized \u{2014} check your token".into()),
+            status => Err(format!("GitHub API error: {status}")),
+        }
+    }
+
+    // ── CI status ───────────────────────────────────────────────
+
+    /// Get check runs for a given git ref (branch name or SHA).
+    pub async fn get_check_runs(&self, git_ref: &str) -> Result<CheckRunsResponse, String> {
+        let url =
+            format!("{API_BASE}/repos/{OWNER}/{REPO}/commits/{git_ref}/check-runs");
+        let resp = self.get(&url).await?;
+
+        match resp.status() {
+            200 => resp.json().await.map_err(|e| e.to_string()),
+            401 => Err("Unauthorized \u{2014} check your token".into()),
+            404 => Err(format!("Ref not found: {git_ref}")),
+            status => Err(format!("GitHub API error: {status}")),
         }
     }
 

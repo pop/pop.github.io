@@ -20,7 +20,7 @@ GitHub OAuth token exchange (the only server-side component).
 | Image support | Yes | Upload images via GitHub API |
 | Publish flow | Direct merge | Merge editor branch to default branch, no PR |
 | Repo location | Same repo | Editor lives in `editor/` subdirectory |
-| Hosting | TBD | Decide after app is functional |
+| Hosting | Cloudflare Pages | Custom domain `editor.elijah.run`; infrastructure managed via OpenTofu |
 | Build tool | Trunk | Standard Yew/WASM bundler |
 
 ## Blog Structure Reference
@@ -202,10 +202,10 @@ editor/
 - [x] Create Cloudflare Worker for token exchange — `worker/src/lib.rs` with CORS, POST `/exchange`
 - [x] Implement token storage and auth state management — `AuthContext` via `ContextProvider`, sessionStorage
 - [x] Add dev-mode bypass (manual token entry) — collapsible PAT input on login page
-- [ ] **TODO:** Set `GITHUB_CLIENT_ID` in `src/components/login.rs`
-- [ ] **TODO:** Set `WORKER_URL` in `src/services/auth.rs` after deploying the worker
-- [ ] **TODO:** Deploy Cloudflare Worker and configure secrets (`wrangler secret put GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET`)
-- [ ] Verify: user can log in and token is stored (works now via dev-mode PAT entry; OAuth pending worker deploy)
+- [x] **TODO:** Set `GITHUB_CLIENT_ID` in `src/components/login.rs` — configured via OpenTofu, value in `terraform.tfvars`
+- [x] **TODO:** Set `WORKER_URL` in `src/services/auth.rs` after deploying the worker — set to `https://blog-editor-oauth.homeworkbad.workers.dev`
+- [x] **TODO:** Deploy Cloudflare Worker and configure secrets — deployed via OpenTofu (`cloudflare_worker` + `cloudflare_worker_version` + `cloudflare_workers_deployment`); secrets set as `secret_text` bindings
+- [ ] Verify: user can log in and token is stored (OAuth flow functional; needs end-to-end verification)
 
 ### Phase 2: Content Browsing ✓
 
@@ -303,22 +303,23 @@ editor/
 - [ ] Show the last-modified date in the entry row when sorting by time
 - [ ] Dirs-first ordering should still apply within each sort mode
 
-#### 8c. Cache list results
+#### 8c. Cache list results ✓
 
-- [ ] Cache directory listings in `sessionStorage` keyed by path, with a TTL (e.g. 5 minutes)
-- [ ] On navigation, serve from cache if within TTL; otherwise fetch from API
-- [ ] Auto-invalidate cache for a path after save, publish, delete, or discard touches that directory
-- [ ] Add a visible "Refresh" button in the dashboard header to force re-fetch
+- [x] Cache directory listings in `sessionStorage` keyed by path, with a TTL (e.g. 5 minutes) — `CachedListing` struct with entries + timestamp, 5-minute TTL checked against `js_sys::Date::now()`
+- [x] On navigation, serve from cache if within TTL; otherwise fetch from API — dashboard effect checks `get_cached_listing` before API call
+- [x] Auto-invalidate cache for a path after save, publish, delete, or discard touches that directory — editor calls `invalidate_cache(parent_dir)` on save/delete, `invalidate_all_caches` on discard
+- [x] Add a visible "Refresh" button in the dashboard header to force re-fetch — refresh button increments `force_refresh` counter which bypasses cache
 - [ ] Cache should store entries + commit dates together so sorted views are instant on revisit
 
-#### 8d. Branch selector
+#### 8d. Branch selector ✓
 
-- [ ] Add a branch picker in the dashboard header (dropdown or sidebar panel)
-- [ ] Fetch all branches matching `editor/*` from the Git Refs API (`GET /repos/{owner}/{repo}/git/matching-refs/heads/editor/`)
-- [ ] Display each branch with its name and date (extracted from branch name convention `editor/{date}-{slug}`)
-- [ ] Clicking a branch sets it as the active branch in sessionStorage and reloads the dashboard
-- [ ] Show the currently active branch prominently (highlighted or with a badge)
-- [ ] Allow "deselecting" a branch to return to browsing the `source` branch directly
+- [x] Add a branch picker in the dashboard header (dropdown or sidebar panel) — toggle button shows/hides branch list panel
+- [x] Fetch all branches matching `editor/*` from the Git Refs API (`GET /repos/{owner}/{repo}/git/matching-refs/heads/editor/`) — `list_editor_branches` method on `GitHubClient`
+- [x] Display each branch with its name and date (extracted from branch name convention `editor/{date}-{slug}`) — branch list shows `editor/` prefix stripped names
+- [x] Clicking a branch sets it as the active branch in sessionStorage and reloads the dashboard — updates `editor_branch` key, invalidates all caches, increments refresh counter
+- [x] Show the currently active branch prominently (highlighted or with a badge) — purple badge in dashboard header with branch name
+- [x] Allow "deselecting" a branch to return to browsing the `source` branch directly — "View source" and "x" buttons clear active branch
+- [x] `list_contents` now accepts optional branch parameter (was hardcoded to `source`) — dashboard passes active branch to API
 - [ ] **TODO:** Consider showing commit count or last activity per branch (extra API calls)
 
 ### Phase 9: Preview Enhancements
@@ -332,27 +333,27 @@ editor/
 - [ ] In the editor, the frontmatter table should update live as the user edits the `+++` block
 - [ ] **TODO:** Add `toml` crate to Cargo.toml dependencies (needed for parsing)
 
-### Phase 10: CI Integration
+### Phase 10: CI Integration ✓
 
 **Goal:** Automated zola build checks on editor branches, with publish gating in the UI.
 
-#### 10a. GitHub Actions workflow
+#### 10a. GitHub Actions workflow ✓
 
-- [ ] Create `.github/workflows/editor-check.yml` in `pop/pop.github.io`
-- [ ] Trigger: `push` to branches matching `editor/**`
-- [ ] Job: checkout repo, install Zola, run `zola build` — exits non-zero on build errors
-- [ ] Keep the workflow minimal (no deploy, just validate the build)
+- [x] Create `.github/workflows/editor-check.yml` in `pop/pop.github.io` — workflow file at repo root
+- [x] Trigger: `push` to branches matching `editor/**`
+- [x] Job: checkout repo (with LFS + submodules), install Zola 0.19.2 via `taiki-e/install-action`, run `zola build`
+- [x] Keep the workflow minimal (no deploy, just validate the build)
 
-#### 10b. CI status in the editor UI
+#### 10b. CI status in the editor UI ✓
 
-- [ ] Add a `get_check_runs` method to `GitHubClient` using the Checks API (`GET /repos/{owner}/{repo}/commits/{ref}/check-runs`)
-- [ ] Add `CheckRunResponse` / `CheckRun` models (status, conclusion, html_url, name)
-- [ ] In the editor publish bar, fetch the CI status for the current branch head
-- [ ] Display CI state: pending (yellow spinner), success (green check), failure (red X), or no checks yet
-- [ ] **Block the Publish button** when CI is pending or has failed — only enable on success
-- [ ] On failure, show a link to the failed CI run (`html_url` from the check run) so the user can inspect the build log
-- [ ] Poll or re-check CI status periodically (e.g. every 15 seconds while the publish bar is visible) so it updates when the build finishes
-- [ ] **TODO:** Decide behavior when no check runs exist yet (e.g. first push hasn't triggered CI — allow publish or block?)
+- [x] Add a `get_check_runs` method to `GitHubClient` using the Checks API (`GET /repos/{owner}/{repo}/commits/{ref}/check-runs`)
+- [x] Add `CheckRunsResponse` / `CheckRun` models (id, name, status, conclusion, html_url)
+- [x] In the editor publish bar, fetch the CI status for the current branch head — `fetch_ci_status` async helper called on mount
+- [x] Display CI state: pending (hourglass, yellow), success (checkmark, green), failure (X, red with link), or no checks yet (hidden)
+- [x] **Block the Publish button** when CI is pending or has failed — `ci_blocks_publish` flag added to disabled conditions
+- [x] On failure, show a link to the failed CI run (`html_url` from the check run) so the user can inspect the build log
+- [x] Poll CI status every 15 seconds via `setInterval`; stops polling when CI reaches terminal state (success/failure) or component unmounts
+- [x] When no check runs exist: allow publish (treated as `CiState::None`, does not block)
 
 ### Phase 11: Automated Testing
 
@@ -450,13 +451,12 @@ These run in a headless browser via `wasm-pack test --headless --chrome`.
 
 ## Open Questions
 
-- **Hosting:** Where to deploy the built WASM app. Options include GitHub
-  Pages, Cloudflare Pages, or serving from the same repo's static output.
+- ~~**Hosting:** Where to deploy the built WASM app.~~ **Resolved:** Cloudflare Pages at `editor.elijah.run`, managed via OpenTofu.
 - **Conflict resolution:** If `source` changes while editing, a merge may
   conflict. Initial approach: show an error and suggest the user resolve
   manually on GitHub.
-- **Worker deployment:** Need to set up wrangler config and GitHub OAuth
-  App credentials (client ID + secret as Worker secrets).
+- ~~**Worker deployment:** Need to set up wrangler config and GitHub OAuth
+  App credentials.~~ **Resolved:** Deployed via OpenTofu (`cloudflare_worker` + `cloudflare_worker_version` + `cloudflare_workers_deployment`). Secrets configured as `secret_text` bindings in the worker version. Infrastructure config in `editor/infra/`.
 
 ---
 
@@ -549,3 +549,27 @@ These run in a headless browser via `wasm-pack test --headless --chrome`.
 - **Image size/type validation:** Added validation at the start of `upload_image` callback before any async work. Checks MIME type against allowed list (png, jpeg, gif, webp, svg+xml) and file size (10 MB max). Shows error message with actual file size on rejection.
 - **Diff preview before publishing:** Added `compare_branches` method to `GitHubClient` using GitHub Compare API (`GET /repos/{owner}/{repo}/compare/{base}...{head}`). Added `CompareResponse`/`DiffFile` models. "Publish" button now fetches branch comparison and shows a diff panel with: summary (files changed, additions, deletions), per-file patches with +/- coloring, status badges (A/M/D/R). "Confirm Publish" and "Cancel" buttons in diff panel. Full diff CSS: `.diff-panel`, `.diff-file-header`, `.diff-patch`, `.diff-line-add/del/hunk/ctx`.
 - Compiles clean (`cargo check --target wasm32-unknown-unknown` — only `ref_name` and `truncated` dead-code warnings)
+
+### Session 9 (2026-02-17) — Phases 8c, 8d, 10a, 10b
+- Built Phase 8c: directory listing cache
+- `CachedListing` struct with entries + timestamp in `dashboard.rs`; `get_cached_listing`/`set_cached_listing` use sessionStorage with `dir_cache_{path}` keys and 5-minute TTL; `invalidate_cache` (pub) and `invalidate_all_caches` (pub) exported for use by editor
+- Dashboard fetch effect checks cache before API call; `force_refresh` counter in effect deps bypasses cache when incremented
+- Refresh button (↻) added to dashboard header alongside branch toggle and new post buttons
+- Editor calls `invalidate_cache(parent_dir)` on save/delete/publish; `invalidate_all_caches` on discard
+- Added `Serialize` derive to `ContentEntry` for sessionStorage serialization
+- Built Phase 8d: branch selector
+- `list_editor_branches` method on `GitHubClient` using `GET /repos/{owner}/{repo}/git/matching-refs/heads/editor/`
+- `list_contents` now accepts `Option<&str>` branch parameter (was hardcoded to `source`); dashboard passes active branch
+- Branch selector UI: toggle button, branch list panel with clickable items, active branch badge with clear button, "View source" to deselect
+- Switching branches invalidates all caches and forces refresh
+- Built Phase 10a: GitHub Actions workflow
+- `.github/workflows/editor-check.yml`: triggers on `push` to `editor/**` branches; checks out with LFS + submodules; installs Zola 0.19.2 via `taiki-e/install-action@v2`; runs `zola build`
+- Built Phase 10b: CI status in editor UI
+- `CheckRunsResponse`/`CheckRun` models in `models/github.rs`; `get_check_runs` method on `GitHubClient`
+- `CiState` enum (Pending, Success, Failure with URL, None); `fetch_ci_status` async helper aggregates check runs into single state
+- CI indicator in publish bar: hourglass for pending, checkmark for success, X with link for failure; hidden when no check runs
+- Publish button disabled when CI is pending or failed (`ci_blocks_publish` flag)
+- Polls every 15 seconds via `setInterval`; stops when terminal state reached; interval cleared on component unmount
+- CSS: `.dashboard-actions`, `.refresh-btn`, `.branch-toggle-btn`, `.active-branch-badge`, `.branch-list`, `.branch-item`, `.ci-status`, `.ci-pending/success/failure`
+- Compiles clean (`cargo check --target wasm32-unknown-unknown` — dead-code warnings for `truncated`, `total_count`, `id`, `name` fields in deserialized structs)
+- Deployed to Cloudflare Pages (production)

@@ -1,7 +1,7 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 /// A single entry returned by the GitHub Contents API when listing a directory.
-#[derive(Clone, Debug, PartialEq, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
 pub struct ContentEntry {
     pub name: String,
     pub path: String,
@@ -76,4 +76,21 @@ pub struct DiffFile {
     pub deletions: u32,
     pub changes: u32,
     pub patch: Option<String>,
+}
+
+/// Response from the GitHub Check Runs API.
+#[derive(Clone, Debug, Deserialize)]
+pub struct CheckRunsResponse {
+    pub total_count: u32,
+    pub check_runs: Vec<CheckRun>,
+}
+
+/// A single check run from the Check Runs API.
+#[derive(Clone, Debug, Deserialize)]
+pub struct CheckRun {
+    pub id: u64,
+    pub name: String,
+    pub status: String,
+    pub conclusion: Option<String>,
+    pub html_url: String,
 }
