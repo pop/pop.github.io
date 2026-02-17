@@ -894,3 +894,168 @@ nav a:hover {
     color: #666;
     font-style: italic;
 }
+
+/* Dashboard actions row */
+
+.dashboard-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.refresh-btn {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    color: #555;
+}
+
+.refresh-btn:hover {
+    border-color: #999;
+    color: #333;
+}
+
+/* Branch selector */
+
+.branch-toggle-btn {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #6f42c1;
+    border-radius: 4px;
+    background: white;
+    color: #6f42c1;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.branch-toggle-btn:hover {
+    background: #6f42c1;
+    color: white;
+}
+
+.active-branch-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding: 0.3rem 0.6rem;
+    background: #f5f0ff;
+    border: 1px solid #d1bcf9;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+.branch-label {
+    color: #6f42c1;
+    font-family: monospace;
+}
+
+.clear-branch-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6f42c1;
+    font-size: 1rem;
+    padding: 0 0.25rem;
+    line-height: 1;
+}
+
+.clear-branch-btn:hover {
+    color: #d73a49;
+}
+
+.branch-list {
+    margin-top: 0.5rem;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.branch-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+    background: #f6f8fa;
+    border-bottom: 1px solid #e1e4e8;
+    font-size: 0.85rem;
+}
+
+.branch-list-title {
+    font-weight: 600;
+    color: #333;
+}
+
+.branch-empty {
+    padding: 0.75rem;
+    color: #666;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.branch-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    border-bottom: 1px solid #e1e4e8;
+    font-size: 0.85rem;
+    transition: background-color 0.1s;
+}
+
+.branch-item:last-child {
+    border-bottom: none;
+}
+
+.branch-item:hover {
+    background: #f6f8fa;
+}
+
+.branch-item.active {
+    background: #f5f0ff;
+}
+
+.branch-name {
+    font-family: monospace;
+    color: #6f42c1;
+}
+
+.branch-active-indicator {
+    font-size: 0.75rem;
+    color: #6f42c1;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* CI status indicator */
+
+.ci-status {
+    font-size: 0.85rem;
+    margin-left: 0.5rem;
+}
+
+.ci-pending {
+    color: #dbab09;
+}
+
+.ci-success {
+    color: #28a745;
+}
+
+.ci-failure {
+    color: #cb2431;
+}
+
+.ci-link {
+    color: #cb2431;
+    text-decoration: underline;
+    font-size: 0.85rem;
+}
+
+.ci-link:hover {
+    color: #86181d;
+}

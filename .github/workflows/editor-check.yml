@@ -1,0 +1,23 @@
+name: Editor Branch Check
+
+on:
+  push:
+    branches:
+      - 'editor/**'
+
+jobs:
+  zola-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+          submodules: recursive
+
+      - name: Install Zola
+        uses: taiki-e/install-action@v2
+        with:
+          tool: zola@0.19.2
+
+      - name: Build site
+        run: zola build
