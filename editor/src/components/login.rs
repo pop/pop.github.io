@@ -113,20 +113,22 @@ pub fn login() -> Html {
                         {"Login with GitHub"}
                     </button>
 
-                    <div class="dev-login">
-                        <details>
-                            <summary>{"Dev mode: enter token manually"}</summary>
-                            <form onsubmit={on_dev_login}>
-                                <input
-                                    type="password"
-                                    placeholder="GitHub personal access token"
-                                    value={(*dev_token).clone()}
-                                    oninput={on_dev_token_input}
-                                />
-                                <button type="submit">{"Use Token"}</button>
-                            </form>
-                        </details>
-                    </div>
+                    if cfg!(debug_assertions) {
+                        <div class="dev-login">
+                            <details>
+                                <summary>{"Dev mode: enter token manually"}</summary>
+                                <form onsubmit={on_dev_login}>
+                                    <input
+                                        type="password"
+                                        placeholder="GitHub personal access token"
+                                        value={(*dev_token).clone()}
+                                        oninput={on_dev_token_input}
+                                    />
+                                    <button type="submit">{"Use Token"}</button>
+                                </form>
+                            </details>
+                        </div>
+                    }
                 </div>
             }
         </div>
