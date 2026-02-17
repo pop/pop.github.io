@@ -36,7 +36,7 @@ These require `Cargo.toml`, `Trunk.toml`, and `index.html` to exist (Phase 1 sca
 
 ### Key flows
 
-- **Auth:** GitHub OAuth redirect → Cloudflare Worker exchanges code for token → token stored in sessionStorage. Dev mode: manual personal access token entry.
+- **Auth:** GitHub OAuth redirect → Cloudflare Worker exchanges code for token → token stored in sessionStorage. Dev builds only: manual personal access token entry (hidden in release via `cfg!(debug_assertions)`).
 - **Editing:** Create branch `editor/{date}-{slug}` → commit edits to branch → merge to `source` branch on publish (or delete branch on discard).
 
 ### Source layout (planned)
@@ -51,6 +51,30 @@ src/
 └── models/              # post.rs (frontmatter + body), github.rs (API types)
 worker/                  # Cloudflare Worker for OAuth token exchange
 ```
+
+## Deployment
+
+### Frontend (Cloudflare Pages)
+
+```bash
+trunk build --release
+wrangler pages deploy dist/ --project-name=b7e52fb82687f258
+```
+
+The Pages project is a Direct Upload project (no git integration). Build locally with Trunk, then deploy the `dist/` directory. Production URL: https://editor.elijah.run
+
+### OAuth Worker (Cloudflare Workers)
+
+```bash
+cd worker
+wrangler deploy
+```
+
+The worker name is `blog-editor-oauth`. Secrets (`GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`) are set via `wrangler secret put`.
+
+### Infrastructure
+
+OpenTofu configs live in `infra/`. The Pages project, custom domain DNS, and worker are all managed there. Run `tofu apply` from `infra/` to update infrastructure.
 
 ## Blog Content Conventions
 
