@@ -1,9 +1,13 @@
+use std::collections::HashMap;
+
 use base64::prelude::*;
+use futures::future::join_all;
 use gloo_net::http::Request;
 use serde_json::json;
 
 use crate::models::github::{
-    CheckRunsResponse, CompareResponse, ContentEntry, FileContent, GitRef, TreeResponse,
+    CheckRunsResponse, CommitInfo, CompareResponse, ContentEntry, FileContent, GitRef,
+    TreeResponse,
 };
 
 const OWNER: &str = "pop";
@@ -372,6 +376,72 @@ impl GitHubClient {
             401 => Err("Unauthorized \u{2014} check your token".into()),
             status => Err(format!("GitHub API error: {status}")),
         }
+    }
+
+    // ── Commit dates ─────────────────────────────────────────────
+
+    /// Get the last commit date for a file path on a branch.
+    pub async fn get_last_commit_date(
+        &self,
+        file_path: &str,
+        branch: Option<&str>,
+    ) -> Result<String, String> {
+        let git_ref = branch.unwrap_or("source");
+        let url = format!(
+            "{API_BASE}/repos/{OWNER}/{REPO}/commits?path={file_path}&sha={git_ref}&per_page=1"
+        );
+        let resp = self.get(&url).await?;
+
+        match resp.status() {
+            200 => {
+                let commits: Vec<CommitInfo> =
+                    resp.json().await.map_err(|e| e.to_string())?;
+                commits
+                    .first()
+                    .map(|c| c.commit.committer.date.clone())
+                    .ok_or_else(|| "No commits found".to_string())
+            }
+            401 => Err("Unauthorized \u{2014} check your token".into()),
+            status => Err(format!("GitHub API error: {status}")),
+        }
+    }
+
+    /// Fetch last commit dates for multiple file paths in parallel.
+    /// Returns a map of path -> epoch milliseconds.
+    /// Entries that fail to fetch are silently omitted.
+    pub async fn get_commit_dates_bulk(
+        &self,
+        paths: &[String],
+        branch: Option<&str>,
+    ) -> HashMap<String, f64> {
+        let futures: Vec<_> = paths
+            .iter()
+            .map(|path| {
+                let path = path.clone();
+                let token = self.token.clone();
+                let branch = branch.map(|b| b.to_string());
+                async move {
+                    let client = GitHubClient::new(token);
+                    match client
+                        .get_last_commit_date(&path, branch.as_deref())
+                        .await
+                    {
+                        Ok(date_str) => {
+                            let ms = js_sys::Date::parse(&date_str);
+                            if ms.is_nan() {
+                                None
+                            } else {
+                                Some((path, ms))
+                            }
+                        }
+                        Err(_) => None,
+                    }
+                }
+            })
+            .collect();
+
+        let results = join_all(futures).await;
+        results.into_iter().flatten().collect()
     }
 
     // ── CI status ───────────────────────────────────────────────

@@ -287,21 +287,21 @@ editor/
 
 **Goal:** Richer content browsing with search, sort, caching, and multi-branch support.
 
-#### 8a. Search / filter
+#### 8a. Search / filter ✓
 
-- [ ] Add a text input above the content list that filters entries by name as the user types
-- [ ] Filter should be case-insensitive substring match
-- [ ] Clear button to reset the filter
-- [ ] Filter state resets when navigating into a subdirectory
+- [x] Add a text input above the content list that filters entries by name as the user types — `.filter-input` in `.filter-sort-bar` with `oninput` callback
+- [x] Filter should be case-insensitive substring match — `filter.to_lowercase()` compared against `e.name.to_lowercase()`
+- [x] Clear button to reset the filter — `.clear-filter-btn` with × character, absolutely positioned inside filter input
+- [x] Filter state resets when navigating into a subdirectory — `filter_text.set(String::new())` in `on_navigate`, `on_navigate_up`, and breadcrumb callbacks
 
-#### 8b. Sort options
+#### 8b. Sort options ✓
 
-- [ ] Add a sort toggle/dropdown: **Alphabetical** (default) or **Last modified**
-- [ ] Alphabetical: current behavior (dirs first, then A-Z)
-- [ ] Last modified: fetch last commit date per file using the Commits API (`GET /repos/{owner}/{repo}/commits?path={file}&per_page=1`), sort most recent first
-- [ ] Cache commit dates alongside file entries so re-sorting doesn't re-fetch
-- [ ] Show the last-modified date in the entry row when sorting by time
-- [ ] Dirs-first ordering should still apply within each sort mode
+- [x] Add a sort toggle/dropdown: **Alphabetical** (default) or **Last modified** — `SortMode` enum with `Alphabetical`/`LastModified`; two toggle buttons ("A–Z" / "Recent") in `.sort-bar`
+- [x] Alphabetical: current behavior (dirs first, then A-Z) — default sort from API fetch preserved
+- [x] Last modified: fetch last commit date per file using the Commits API (`GET /repos/{owner}/{repo}/commits?path={file}&per_page=1`), sort most recent first — `get_commit_dates_bulk` uses `futures::join_all` for parallel fetching; lazy-loaded only when "Recent" clicked
+- [x] Cache commit dates alongside file entries so re-sorting doesn't re-fetch — `CachedListing.commit_dates: Option<HashMap<String, f64>>` stored in sessionStorage alongside entries
+- [x] Show the last-modified date in the entry row when sorting by time — `.entry-date` span in `render_entry` with `format_date(epoch_ms)` helper
+- [x] Dirs-first ordering should still apply within each sort mode — both sort modes use `type_ord` (dir < file) as primary sort key
 
 #### 8c. Cache list results ✓
 
@@ -309,7 +309,7 @@ editor/
 - [x] On navigation, serve from cache if within TTL; otherwise fetch from API — dashboard effect checks `get_cached_listing` before API call
 - [x] Auto-invalidate cache for a path after save, publish, delete, or discard touches that directory — editor calls `invalidate_cache(parent_dir)` on save/delete, `invalidate_all_caches` on discard
 - [x] Add a visible "Refresh" button in the dashboard header to force re-fetch — refresh button increments `force_refresh` counter which bypasses cache
-- [ ] Cache should store entries + commit dates together so sorted views are instant on revisit
+- [x] Cache should store entries + commit dates together so sorted views are instant on revisit — `CachedListing` includes `commit_dates: Option<HashMap<String, f64>>`; `get_cached_commit_dates`/`set_cached_commit_dates` helpers read/write alongside entries
 
 #### 8d. Branch selector ✓
 
@@ -573,3 +573,16 @@ These run in a headless browser via `wasm-pack test --headless --chrome`.
 - CSS: `.dashboard-actions`, `.refresh-btn`, `.branch-toggle-btn`, `.active-branch-badge`, `.branch-list`, `.branch-item`, `.ci-status`, `.ci-pending/success/failure`
 - Compiles clean (`cargo check --target wasm32-unknown-unknown` — dead-code warnings for `truncated`, `total_count`, `id`, `name` fields in deserialized structs)
 - Deployed to Cloudflare Pages (production)
+
+### Session 10 (2026-02-17) — Phases 8a, 8b
+- Built Phase 8a: search/filter for dashboard content list
+- Filter input (`.filter-input`) with case-insensitive substring matching; clear button (×) to reset; filter resets automatically on directory navigation
+- "No entries match the filter." empty state when filter excludes everything
+- Built Phase 8b: sort options (Alphabetical / Last Modified)
+- `SortMode` enum with two toggle buttons ("A–Z" / "Recent") in `.sort-bar`
+- Lazy date fetching: commit dates only fetched via `get_commit_dates_bulk` (parallel `futures::join_all`) when user clicks "Recent"
+- `CachedListing` extended with `commit_dates: Option<HashMap<String, f64>>` for caching dates alongside entries in sessionStorage
+- `get_last_commit_date` and `get_commit_dates_bulk` methods added to `GitHubClient`; `CommitInfo`/`CommitDetail`/`CommitAuthor` models added
+- `format_date(epoch_ms)` helper renders dates as `YYYY-MM-DD` using `js_sys::Date`
+- CSS: `.filter-sort-bar`, `.filter-bar`, `.filter-input`, `.clear-filter-btn`, `.sort-bar`, `.sort-btn`, `.loading-dates`, `.entry-date`
+- Compiles clean (same dead-code warnings as before)

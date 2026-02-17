@@ -78,6 +78,22 @@ pub struct DiffFile {
     pub patch: Option<String>,
 }
 
+/// A commit from the GitHub Commits API (minimal fields for last-modified sorting).
+#[derive(Clone, Debug, Deserialize)]
+pub struct CommitInfo {
+    pub commit: CommitDetail,
+}
+
+#[derive(Clone, Debug, Deserialize)]
+pub struct CommitDetail {
+    pub committer: CommitAuthor,
+}
+
+#[derive(Clone, Debug, Deserialize)]
+pub struct CommitAuthor {
+    pub date: String,
+}
+
 /// Response from the GitHub Check Runs API.
 #[derive(Clone, Debug, Deserialize)]
 pub struct CheckRunsResponse {
