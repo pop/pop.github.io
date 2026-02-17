@@ -8,10 +8,6 @@ use crate::routes::Route;
 pub fn nav() -> Html {
     let auth = use_context::<AuthContext>().expect("AuthContext not found");
 
-    if auth.token.is_none() {
-        return html! {};
-    }
-
     let on_logout = {
         let set_token = auth.set_token.clone();
         Callback::from(move |_: MouseEvent| {
@@ -24,7 +20,11 @@ pub fn nav() -> Html {
             <div class="nav-links">
                 <Link<Route> to={Route::Dashboard}>{"Dashboard"}</Link<Route>>
             </div>
-            <button onclick={on_logout} class="logout-btn">{"Logout"}</button>
+            if auth.token.is_some() {
+                <button onclick={on_logout} class="logout-btn">{"Logout"}</button>
+            } else {
+                <Link<Route> to={Route::Login} classes="login-link">{"Login"}</Link<Route>>
+            }
         </nav>
     }
 }

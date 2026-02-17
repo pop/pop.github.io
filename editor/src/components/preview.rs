@@ -4,7 +4,7 @@ use yew_router::prelude::*;
 use crate::app::AuthContext;
 use crate::models::post::{parse_frontmatter, render_markdown};
 use crate::routes::Route;
-use crate::services::github::{decode_github_content, GitHubClient};
+use crate::services::github::GitHubClient;
 
 #[derive(Properties, PartialEq)]
 pub struct Props {
@@ -14,24 +14,11 @@ pub struct Props {
 #[function_component(Preview)]
 pub fn preview(props: &Props) -> Html {
     let auth = use_context::<AuthContext>().expect("AuthContext not found");
-    let navigator = use_navigator().expect("Navigator not found");
 
     let content = use_state(String::new);
     let frontmatter_fields = use_state(Vec::<(String, String)>::new);
     let loading = use_state(|| true);
     let error = use_state(|| Option::<String>::None);
-
-    // Redirect if not authenticated
-    {
-        let navigator = navigator.clone();
-        let token = auth.token.clone();
-        use_effect_with(token.clone(), move |token| {
-            if token.is_none() {
-                navigator.push(&Route::Login);
-            }
-            || ()
-        });
-    }
 
     // Load file content from source branch
     {
@@ -44,27 +31,28 @@ pub fn preview(props: &Props) -> Html {
         let set_token = auth.set_token.clone();
 
         use_effect_with((path.clone(), token.clone()), move |_| {
-            if let Some(token) = token {
-                wasm_bindgen_futures::spawn_local(async move {
-                    let client = GitHubClient::new(token);
-                    match client.get_file(&path, "source").await {
-                        Ok(file) => {
-                            let text =
-                                decode_github_content(&file.content.unwrap_or_default());
-                            frontmatter_fields.set(parse_frontmatter(&text));
-                            content.set(text);
-                            loading.set(false);
-                        }
-                        Err(e) => {
-                            if e.contains("Unauthorized") {
-                                set_token.emit(None);
-                            }
-                            error.set(Some(e));
-                            loading.set(false);
-                        }
+            let client = match token {
+                Some(t) => GitHubClient::new(t),
+                None => GitHubClient::anonymous(),
+            };
+
+            wasm_bindgen_futures::spawn_local(async move {
+                match client.get_file(&path, "source").await {
+                    Ok(file) => {
+                        let text = file.content.unwrap_or_default();
+                        frontmatter_fields.set(parse_frontmatter(&text));
+                        content.set(text);
+                        loading.set(false);
                     }
-                });
-            }
+                    Err(e) => {
+                        if e.contains("Unauthorized") {
+                            set_token.emit(None);
+                        }
+                        error.set(Some(e));
+                        loading.set(false);
+                    }
+                }
+            });
             || ()
         });
     }

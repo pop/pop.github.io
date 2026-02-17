@@ -125,19 +125,9 @@ pub fn dashboard() -> Html {
     let commit_dates = use_state(HashMap::<String, f64>::new);
     let dates_loading = use_state(|| false);
 
-    // Redirect to login if not authenticated
-    {
-        let navigator = navigator.clone();
-        let token = auth.token.clone();
-        use_effect_with(token.clone(), move |token| {
-            if token.is_none() {
-                navigator.push(&Route::Login);
-            }
-            || ()
-        });
-    }
+    let is_authenticated = auth.token.is_some();
 
-    // Fetch editor branches on mount
+    // Fetch editor branches on mount (only when authenticated)
     {
         let branches = branches.clone();
         let token = auth.token.clone();
@@ -170,59 +160,61 @@ pub fn dashboard() -> Html {
         use_effect_with(
             (path.clone(), token.clone(), refresh, branch.clone()),
             move |_| {
-                if let Some(token) = token {
-                    // Check cache (skip on force refresh)
-                    let use_cache = refresh == 0;
-                    let cached = if use_cache {
-                        get_cached_listing(&path)
+                // Check cache (skip on force refresh)
+                let use_cache = refresh == 0;
+                let cached = if use_cache {
+                    get_cached_listing(&path)
+                } else {
+                    None
+                };
+
+                if let Some(cached) = cached {
+                    entries.set(cached);
+                    loading.set(false);
+                    // Restore cached commit dates if available
+                    if let Some(dates) = get_cached_commit_dates(&path) {
+                        commit_dates.set(dates);
                     } else {
-                        None
+                        commit_dates.set(HashMap::new());
+                    }
+                } else {
+                    loading.set(true);
+                    error.set(None);
+                    commit_dates.set(HashMap::new());
+
+                    let client = match token {
+                        Some(t) => GitHubClient::new(t),
+                        None => GitHubClient::anonymous(),
                     };
 
-                    if let Some(cached) = cached {
-                        entries.set(cached);
-                        loading.set(false);
-                        // Restore cached commit dates if available
-                        if let Some(dates) = get_cached_commit_dates(&path) {
-                            commit_dates.set(dates);
-                        } else {
-                            commit_dates.set(HashMap::new());
-                        }
-                    } else {
-                        loading.set(true);
-                        error.set(None);
-                        commit_dates.set(HashMap::new());
-
-                        wasm_bindgen_futures::spawn_local(async move {
-                            let client = GitHubClient::new(token);
-                            match client.list_contents(&path, branch.as_deref()).await {
-                                Ok(mut items) => {
-                                    items.sort_by(|a, b| {
-                                        let type_ord = match (
-                                            a.entry_type.as_str(),
-                                            b.entry_type.as_str(),
-                                        ) {
-                                            ("dir", "file") => Ordering::Less,
-                                            ("file", "dir") => Ordering::Greater,
-                                            _ => Ordering::Equal,
-                                        };
-                                        type_ord.then_with(|| a.name.cmp(&b.name))
-                                    });
-                                    set_cached_listing(&path, &items);
-                                    entries.set(items);
-                                    loading.set(false);
-                                }
-                                Err(e) => {
-                                    if e.contains("Unauthorized") {
-                                        set_token.emit(None);
-                                    }
-                                    error.set(Some(e));
-                                    entries.set(vec![]);
-                                    loading.set(false);
-                                }
+                    wasm_bindgen_futures::spawn_local(async move {
+                        match client.list_contents(&path, branch.as_deref()).await {
+                            Ok(mut items) => {
+                                items.sort_by(|a, b| {
+                                    let type_ord = match (
+                                        a.entry_type.as_str(),
+                                        b.entry_type.as_str(),
+                                    ) {
+                                        ("dir", "file") => Ordering::Less,
+                                        ("file", "dir") => Ordering::Greater,
+                                        _ => Ordering::Equal,
+                                    };
+                                    type_ord.then_with(|| a.name.cmp(&b.name))
+                                });
+                                set_cached_listing(&path, &items);
+                                entries.set(items);
+                                loading.set(false);
                             }
-                        });
-                    }
+                            Err(e) => {
+                                if e.contains("Unauthorized") {
+                                    set_token.emit(None);
+                                }
+                                error.set(Some(e));
+                                entries.set(vec![]);
+                                loading.set(false);
+                            }
+                        }
+                    });
                 }
 
                 || ()
@@ -381,16 +373,20 @@ pub fn dashboard() -> Html {
                 return;
             }
 
-            if let Some(token) = token.clone() {
+            {
                 let commit_dates = commit_dates.clone();
                 let dates_loading = dates_loading.clone();
                 let paths: Vec<String> = entries.iter().map(|e| e.path.clone()).collect();
                 let branch = (*active_branch).clone();
                 let dir_path = (*current_path).clone();
 
+                let client = match token.clone() {
+                    Some(t) => GitHubClient::new(t),
+                    None => GitHubClient::anonymous(),
+                };
+
                 dates_loading.set(true);
                 wasm_bindgen_futures::spawn_local(async move {
-                    let client = GitHubClient::new(token);
                     let dates = client
                         .get_commit_dates_bulk(&paths, branch.as_deref())
                         .await;
@@ -455,12 +451,14 @@ pub fn dashboard() -> Html {
                         <button class="refresh-btn" onclick={on_refresh} title="Refresh">
                             {"\u{21BB}"}
                         </button>
-                        <button class="branch-toggle-btn" onclick={toggle_branches}>
-                            { if *show_branches { "Hide branches" } else { "Branches" } }
-                        </button>
-                        <button class="new-post-btn" onclick={toggle_new_post}>
-                            { if *show_new_post { "Cancel" } else { "+ New Post" } }
-                        </button>
+                        if is_authenticated {
+                            <button class="branch-toggle-btn" onclick={toggle_branches}>
+                                { if *show_branches { "Hide branches" } else { "Branches" } }
+                            </button>
+                            <button class="new-post-btn" onclick={toggle_new_post}>
+                                { if *show_new_post { "Cancel" } else { "+ New Post" } }
+                            </button>
+                        }
                     </div>
                 </div>
                 if let Some(ref name) = *active_branch {
