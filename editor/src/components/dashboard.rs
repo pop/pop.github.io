@@ -1,7 +1,9 @@
 use std::cmp::Ordering;
+use std::collections::HashMap;
 
 use gloo_storage::{SessionStorage, Storage};
 use serde::{Deserialize, Serialize};
+use wasm_bindgen::JsValue;
 use web_sys::HtmlInputElement;
 use yew::prelude::*;
 use yew_router::prelude::*;
@@ -14,12 +16,20 @@ use crate::services::github::GitHubClient;
 const BRANCH_KEY: &str = "editor_branch";
 const CACHE_TTL_MS: f64 = 5.0 * 60.0 * 1000.0; // 5 minutes
 
+#[derive(Clone, Copy, PartialEq)]
+enum SortMode {
+    Alphabetical,
+    LastModified,
+}
+
 // ── Directory listing cache ─────────────────────────────────────
 
 #[derive(Serialize, Deserialize)]
 struct CachedListing {
     entries: Vec<ContentEntry>,
     timestamp: f64,
+    #[serde(default)]
+    commit_dates: Option<HashMap<String, f64>>,
 }
 
 fn cache_key(path: &str) -> String {
@@ -41,8 +51,21 @@ fn set_cached_listing(path: &str, entries: &[ContentEntry]) {
     let cached = CachedListing {
         entries: entries.to_vec(),
         timestamp: js_sys::Date::now(),
+        commit_dates: None,
     };
     let _ = SessionStorage::set(&cache_key(path), &cached);
+}
+
+fn get_cached_commit_dates(path: &str) -> Option<HashMap<String, f64>> {
+    let cached: CachedListing = SessionStorage::get(&cache_key(path)).ok()?;
+    cached.commit_dates
+}
+
+fn set_cached_commit_dates(path: &str, dates: &HashMap<String, f64>) {
+    if let Ok(mut cached) = SessionStorage::get::<CachedListing>(&cache_key(path)) {
+        cached.commit_dates = Some(dates.clone());
+        let _ = SessionStorage::set(&cache_key(path), &cached);
+    }
 }
 
 /// Invalidate a single directory cache entry.
@@ -94,6 +117,14 @@ pub fn dashboard() -> Html {
         SessionStorage::get(BRANCH_KEY).ok()
     });
 
+    // Phase 8a: search/filter
+    let filter_text = use_state(String::new);
+
+    // Phase 8b: sort options
+    let sort_mode = use_state(|| SortMode::Alphabetical);
+    let commit_dates = use_state(HashMap::<String, f64>::new);
+    let dates_loading = use_state(|| false);
+
     // Redirect to login if not authenticated
     {
         let navigator = navigator.clone();
@@ -134,6 +165,7 @@ pub fn dashboard() -> Html {
         let set_token = auth.set_token.clone();
         let refresh = *force_refresh;
         let branch = (*active_branch).clone();
+        let commit_dates = commit_dates.clone();
 
         use_effect_with(
             (path.clone(), token.clone(), refresh, branch.clone()),
@@ -150,9 +182,16 @@ pub fn dashboard() -> Html {
                     if let Some(cached) = cached {
                         entries.set(cached);
                         loading.set(false);
+                        // Restore cached commit dates if available
+                        if let Some(dates) = get_cached_commit_dates(&path) {
+                            commit_dates.set(dates);
+                        } else {
+                            commit_dates.set(HashMap::new());
+                        }
                     } else {
                         loading.set(true);
                         error.set(None);
+                        commit_dates.set(HashMap::new());
 
                         wasm_bindgen_futures::spawn_local(async move {
                             let client = GitHubClient::new(token);
@@ -202,8 +241,10 @@ pub fn dashboard() -> Html {
     let on_navigate = {
         let current_path = current_path.clone();
         let navigator = navigator.clone();
+        let filter_text = filter_text.clone();
         Callback::from(move |entry: ContentEntry| {
             if entry.entry_type == "dir" {
+                filter_text.set(String::new());
                 current_path.set(entry.path);
             } else {
                 navigator.push(&Route::Editor {
@@ -215,9 +256,11 @@ pub fn dashboard() -> Html {
 
     let on_navigate_up = {
         let current_path = current_path.clone();
+        let filter_text = filter_text.clone();
         Callback::from(move |_: MouseEvent| {
             let path = (*current_path).clone();
             if let Some(pos) = path.rfind('/') {
+                filter_text.set(String::new());
                 current_path.set(path[..pos].to_string());
             }
         })
@@ -292,12 +335,116 @@ pub fn dashboard() -> Html {
         })
     };
 
+    // Phase 8a: filter callbacks
+    let on_filter_input = {
+        let filter_text = filter_text.clone();
+        Callback::from(move |e: InputEvent| {
+            let target: HtmlInputElement = e.target_unchecked_into();
+            filter_text.set(target.value());
+        })
+    };
+
+    let on_clear_filter = {
+        let filter_text = filter_text.clone();
+        Callback::from(move |_: MouseEvent| {
+            filter_text.set(String::new());
+        })
+    };
+
+    // Phase 8b: sort toggle with lazy date fetching
+    let on_set_sort_alpha = {
+        let sort_mode = sort_mode.clone();
+        Callback::from(move |_: MouseEvent| {
+            sort_mode.set(SortMode::Alphabetical);
+        })
+    };
+
+    let on_set_sort_recent = {
+        let sort_mode = sort_mode.clone();
+        let commit_dates = commit_dates.clone();
+        let dates_loading = dates_loading.clone();
+        let entries = entries.clone();
+        let token = auth.token.clone();
+        let current_path = current_path.clone();
+        let active_branch = active_branch.clone();
+        Callback::from(move |_: MouseEvent| {
+            sort_mode.set(SortMode::LastModified);
+
+            // If we already have dates, nothing to do
+            if !commit_dates.is_empty() {
+                return;
+            }
+
+            // Check cache
+            if let Some(cached) = get_cached_commit_dates(&current_path) {
+                commit_dates.set(cached);
+                return;
+            }
+
+            if let Some(token) = token.clone() {
+                let commit_dates = commit_dates.clone();
+                let dates_loading = dates_loading.clone();
+                let paths: Vec<String> = entries.iter().map(|e| e.path.clone()).collect();
+                let branch = (*active_branch).clone();
+                let dir_path = (*current_path).clone();
+
+                dates_loading.set(true);
+                wasm_bindgen_futures::spawn_local(async move {
+                    let client = GitHubClient::new(token);
+                    let dates = client
+                        .get_commit_dates_bulk(&paths, branch.as_deref())
+                        .await;
+                    set_cached_commit_dates(&dir_path, &dates);
+                    commit_dates.set(dates);
+                    dates_loading.set(false);
+                });
+            }
+        })
+    };
+
     let breadcrumbs = render_breadcrumbs(&current_path, {
         let current_path = current_path.clone();
+        let filter_text = filter_text.clone();
         Callback::from(move |path: String| {
+            filter_text.set(String::new());
             current_path.set(path);
         })
     });
+
+    // Compute filtered and sorted entries for display
+    let display_entries: Vec<ContentEntry> = {
+        let filter = (*filter_text).to_lowercase();
+        let mut filtered: Vec<ContentEntry> = if filter.is_empty() {
+            (*entries).clone()
+        } else {
+            (*entries)
+                .iter()
+                .filter(|e| e.name.to_lowercase().contains(&filter))
+                .cloned()
+                .collect()
+        };
+
+        if *sort_mode == SortMode::LastModified {
+            let dates = &*commit_dates;
+            filtered.sort_by(|a, b| {
+                let type_ord = match (a.entry_type.as_str(), b.entry_type.as_str()) {
+                    ("dir", "file") => Ordering::Less,
+                    ("file", "dir") => Ordering::Greater,
+                    _ => Ordering::Equal,
+                };
+                type_ord.then_with(|| {
+                    let a_date = dates.get(&a.path).copied().unwrap_or(0.0);
+                    let b_date = dates.get(&b.path).copied().unwrap_or(0.0);
+                    b_date.partial_cmp(&a_date).unwrap_or(Ordering::Equal)
+                })
+            });
+        }
+
+        filtered
+    };
+
+    let cur_sort = *sort_mode;
+    let cur_dates = (*commit_dates).clone();
 
     html! {
         <div class="dashboard">
@@ -367,16 +514,56 @@ pub fn dashboard() -> Html {
                 </div>
             }
 
+            // Filter and sort controls
+            if !entries.is_empty() || !filter_text.is_empty() {
+                <div class="filter-sort-bar">
+                    <div class="filter-bar">
+                        <input
+                            type="text"
+                            class="filter-input"
+                            placeholder="Filter by name\u{2026}"
+                            value={(*filter_text).clone()}
+                            oninput={on_filter_input}
+                        />
+                        if !filter_text.is_empty() {
+                            <button class="clear-filter-btn" onclick={on_clear_filter}>
+                                {"\u{00D7}"}
+                            </button>
+                        }
+                    </div>
+                    <div class="sort-bar">
+                        <span class="sort-label">{"Sort:"}</span>
+                        <button
+                            class={classes!("sort-btn", (*sort_mode == SortMode::Alphabetical).then_some("active"))}
+                            onclick={on_set_sort_alpha}
+                        >
+                            {"A\u{2013}Z"}
+                        </button>
+                        <button
+                            class={classes!("sort-btn", (*sort_mode == SortMode::LastModified).then_some("active"))}
+                            onclick={on_set_sort_recent}
+                        >
+                            {"Recent"}
+                        </button>
+                        if *dates_loading {
+                            <span class="loading-dates">{"Loading dates\u{2026}"}</span>
+                        }
+                    </div>
+                </div>
+            }
+
             if *loading {
                 <p class="loading">{"Loading\u{2026}"}</p>
             } else if let Some(err) = &*error {
                 <p class="error">{err}</p>
             } else if entries.is_empty() {
                 <p class="empty">{"This directory is empty."}</p>
+            } else if display_entries.is_empty() {
+                <p class="empty">{"No entries match the filter."}</p>
             } else {
                 <div class="content-list">
-                    { for (*entries).iter().map(|entry| {
-                        render_entry(entry, on_navigate.clone())
+                    { for display_entries.iter().map(|entry| {
+                        render_entry(entry, on_navigate.clone(), &cur_sort, &cur_dates)
                     }) }
                 </div>
             }
@@ -434,12 +621,23 @@ fn render_branch_list(
 
 // ── Entry rendering ─────────────────────────────────────────────
 
-fn render_entry(entry: &ContentEntry, on_click: Callback<ContentEntry>) -> Html {
+fn render_entry(
+    entry: &ContentEntry,
+    on_click: Callback<ContentEntry>,
+    sort_mode: &SortMode,
+    commit_dates: &HashMap<String, f64>,
+) -> Html {
     let is_dir = entry.entry_type == "dir";
     let entry_clone = entry.clone();
     let onclick = Callback::from(move |_: MouseEvent| {
         on_click.emit(entry_clone.clone());
     });
+
+    let date_display = if *sort_mode == SortMode::LastModified {
+        commit_dates.get(&entry.path).map(|ms| format_date(*ms))
+    } else {
+        None
+    };
 
     html! {
         <div class={classes!("content-entry", is_dir.then_some("is-dir"))} onclick={onclick}>
@@ -447,6 +645,9 @@ fn render_entry(entry: &ContentEntry, on_click: Callback<ContentEntry>) -> Html 
                 { if is_dir { "\u{25B8}" } else { "\u{00B7}" } }
             </span>
             <span class="entry-name">{&entry.name}</span>
+            if let Some(ref date) = date_display {
+                <span class="entry-date">{date}</span>
+            }
             if !is_dir {
                 <span class="entry-size">{format_size(entry.size)}</span>
             }
@@ -491,4 +692,12 @@ fn format_size(bytes: u64) -> String {
     } else {
         format!("{:.1} MB", bytes as f64 / (1024.0 * 1024.0))
     }
+}
+
+fn format_date(epoch_ms: f64) -> String {
+    let date = js_sys::Date::new(&JsValue::from_f64(epoch_ms));
+    let year = date.get_full_year();
+    let month = date.get_month() + 1;
+    let day = date.get_date();
+    format!("{year}-{month:02}-{day:02}")
 }
