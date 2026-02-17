@@ -9,6 +9,12 @@ variable "cloudflare_account_id" {
   type        = string
 }
 
+variable "cloudflare_zone_id" {
+  description = "Cloudflare zone ID for elijah.run"
+  type        = string
+  sensitive   = true
+}
+
 variable "github_client_id" {
   description = "GitHub OAuth App client ID"
   type        = string
