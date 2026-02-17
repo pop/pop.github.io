@@ -4,8 +4,7 @@ use serde::Deserialize;
 
 const TOKEN_KEY: &str = "github_token";
 
-// TODO: Set this to your deployed Cloudflare Worker URL
-const WORKER_URL: &str = "";
+const WORKER_URL: &str = "https://blog-editor-oauth.homeworkbad.workers.dev";
 
 pub fn get_token() -> Option<String> {
     SessionStorage::get(TOKEN_KEY).ok()

@@ -2,3 +2,7 @@
 /dist
 /worker/target
 /worker/build
+/infra/.terraform/
+/infra/*.tfstate
+/infra/*.tfstate.backup
+/infra/terraform.tfvars
