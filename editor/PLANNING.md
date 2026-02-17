@@ -322,16 +322,16 @@ editor/
 - [x] `list_contents` now accepts optional branch parameter (was hardcoded to `source`) — dashboard passes active branch to API
 - [ ] **TODO:** Consider showing commit count or last activity per branch (extra API calls)
 
-### Phase 9: Preview Enhancements
+### Phase 9: Preview Enhancements ✓
 
 **Goal:** Display structured frontmatter alongside rendered content.
 
-- [ ] Parse TOML frontmatter into key-value pairs (extend `models/post.rs` with a `parse_frontmatter` function using the `toml` crate)
-- [ ] Display frontmatter as a table above the rendered markdown in both the editor preview pane and the standalone Preview page
-- [ ] Table should show all fields: title, date, description, taxonomies, draft status, aliases, etc.
-- [ ] Style the frontmatter table distinctly from the markdown body (e.g. muted background, smaller font)
-- [ ] In the editor, the frontmatter table should update live as the user edits the `+++` block
-- [ ] **TODO:** Add `toml` crate to Cargo.toml dependencies (needed for parsing)
+- [x] Parse TOML frontmatter into key-value pairs (extend `models/post.rs` with a `parse_frontmatter` function using the `toml` crate) — `extract_frontmatter`, `parse_frontmatter`, `flatten_toml`, `format_toml_value` functions added; nested tables flattened with dot notation (e.g. `taxonomies.tags`)
+- [x] Display frontmatter as a table above the rendered markdown in both the editor preview pane and the standalone Preview page — `.frontmatter-table` rendered with `<tr><td class="fm-key">` / `<td class="fm-value">` rows
+- [x] Table should show all fields: title, date, description, taxonomies, draft status, aliases, etc. — all TOML value types handled (strings, booleans, integers, floats, arrays as comma-separated, datetimes, nested tables)
+- [x] Style the frontmatter table distinctly from the markdown body (e.g. muted background, smaller font) — `#f6f8fa` background, `0.85rem` font, bordered, bold keys
+- [x] In the editor, the frontmatter table should update live as the user edits the `+++` block — `frontmatter_fields` state updated in same debounced render effect alongside `rendered_html`
+- [x] Added `toml = "0.8"` to Cargo.toml dependencies
 
 ### Phase 10: CI Integration ✓
 
@@ -585,4 +585,16 @@ These run in a headless browser via `wasm-pack test --headless --chrome`.
 - `get_last_commit_date` and `get_commit_dates_bulk` methods added to `GitHubClient`; `CommitInfo`/`CommitDetail`/`CommitAuthor` models added
 - `format_date(epoch_ms)` helper renders dates as `YYYY-MM-DD` using `js_sys::Date`
 - CSS: `.filter-sort-bar`, `.filter-bar`, `.filter-input`, `.clear-filter-btn`, `.sort-bar`, `.sort-btn`, `.loading-dates`, `.entry-date`
+- Compiles clean (same dead-code warnings as before)
+
+### Session 11 (2026-02-17) — Phase 9
+- Built Phase 9: preview enhancements (frontmatter display)
+- Added `toml = "0.8"` crate to `Cargo.toml`
+- `extract_frontmatter` in `models/post.rs`: extracts raw TOML between `+++` delimiters; reuses same delimiter-finding logic as `strip_frontmatter`
+- `parse_frontmatter` in `models/post.rs`: parses TOML into `Vec<(String, String)>` key-value pairs via `toml::from_str::<toml::Table>`; nested tables flattened with dot notation (e.g. `taxonomies.tags`); graceful degradation on parse failure (returns empty vec)
+- `format_toml_value` helper: strings unquoted, arrays comma-separated, booleans/numbers/datetimes as-is
+- `flatten_toml` helper: recursively walks `toml::Table`, building dotted key paths for nested tables
+- Editor (`components/editor.rs`): added `frontmatter_fields` state; updated debounced preview render effect to call `parse_frontmatter` alongside `render_markdown`; renders `.frontmatter-table` above markdown in preview pane
+- Preview (`components/preview.rs`): added `frontmatter_fields` state; parsed after file load; same table rendering before markdown body
+- CSS: `.frontmatter-table` (muted `#f6f8fa` background, `0.85rem` font, full width, collapsed borders), `.fm-key` (bold, 120px width), `.fm-value` (word-break)
 - Compiles clean (same dead-code warnings as before)

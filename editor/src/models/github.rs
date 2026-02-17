@@ -43,7 +43,6 @@ pub struct GitObject {
 #[derive(Clone, Debug, Deserialize)]
 pub struct TreeResponse {
     pub tree: Vec<TreeEntry>,
-    pub truncated: bool,
 }
 
 /// A single entry in a git tree.
@@ -97,15 +96,12 @@ pub struct CommitAuthor {
 /// Response from the GitHub Check Runs API.
 #[derive(Clone, Debug, Deserialize)]
 pub struct CheckRunsResponse {
-    pub total_count: u32,
     pub check_runs: Vec<CheckRun>,
 }
 
 /// A single check run from the Check Runs API.
 #[derive(Clone, Debug, Deserialize)]
 pub struct CheckRun {
-    pub id: u64,
-    pub name: String,
     pub status: String,
     pub conclusion: Option<String>,
     pub html_url: String,

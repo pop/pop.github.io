@@ -11,7 +11,7 @@ use yew_router::prelude::*;
 use crate::app::AuthContext;
 use crate::components::dashboard::invalidate_cache;
 use crate::models::github::{CompareResponse, DiffFile};
-use crate::models::post::render_markdown;
+use crate::models::post::{parse_frontmatter, render_markdown};
 use crate::routes::Route;
 use crate::services::github::{decode_github_content, GitHubClient};
 
@@ -60,6 +60,7 @@ pub fn editor_page(props: &Props) -> Html {
     let save_btn_ref = use_node_ref();
     let has_unsaved = use_mut_ref(|| false);
     let rendered_html = use_state(String::new);
+    let frontmatter_fields = use_state(Vec::<(String, String)>::new);
     let render_gen = use_mut_ref(|| 0u32);
     let show_diff = use_state(|| false);
     let diff_data = use_state(|| Option::<CompareResponse>::None);
@@ -163,6 +164,7 @@ pub fn editor_page(props: &Props) -> Html {
     // Debounced markdown rendering for preview
     {
         let rendered_html = rendered_html.clone();
+        let frontmatter_fields = frontmatter_fields.clone();
         let content_val = (*content).clone();
         let render_gen = render_gen.clone();
         let show_preview = *view_mode != ViewMode::Edit;
@@ -177,11 +179,13 @@ pub fn editor_page(props: &Props) -> Html {
 
                 let content_val = content_val.clone();
                 let rendered_html = rendered_html.clone();
+                let frontmatter_fields = frontmatter_fields.clone();
                 let render_gen = render_gen.clone();
 
                 wasm_bindgen_futures::spawn_local(async move {
                     sleep_ms(200).await;
                     if *render_gen.borrow() == gen {
+                        frontmatter_fields.set(parse_frontmatter(&content_val));
                         rendered_html.set(render_markdown(&content_val));
                     }
                 });
@@ -1013,6 +1017,16 @@ pub fn editor_page(props: &Props) -> Html {
                             if rendered_html.is_empty() {
                                 <p class="loading">{"Rendering\u{2026}"}</p>
                             } else {
+                                if !frontmatter_fields.is_empty() {
+                                    <table class="frontmatter-table">
+                                        { for frontmatter_fields.iter().map(|(key, value)| html! {
+                                            <tr>
+                                                <td class="fm-key">{key}</td>
+                                                <td class="fm-value">{value}</td>
+                                            </tr>
+                                        }) }
+                                    </table>
+                                }
                                 {Html::from_html_unchecked(AttrValue::from((*rendered_html).clone()))}
                             }
                         </div>

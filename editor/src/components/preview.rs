@@ -2,7 +2,7 @@ use yew::prelude::*;
 use yew_router::prelude::*;
 
 use crate::app::AuthContext;
-use crate::models::post::render_markdown;
+use crate::models::post::{parse_frontmatter, render_markdown};
 use crate::routes::Route;
 use crate::services::github::{decode_github_content, GitHubClient};
 
@@ -17,6 +17,7 @@ pub fn preview(props: &Props) -> Html {
     let navigator = use_navigator().expect("Navigator not found");
 
     let content = use_state(String::new);
+    let frontmatter_fields = use_state(Vec::<(String, String)>::new);
     let loading = use_state(|| true);
     let error = use_state(|| Option::<String>::None);
 
@@ -35,6 +36,7 @@ pub fn preview(props: &Props) -> Html {
     // Load file content from source branch
     {
         let content = content.clone();
+        let frontmatter_fields = frontmatter_fields.clone();
         let loading = loading.clone();
         let error = error.clone();
         let path = props.path.clone();
@@ -49,6 +51,7 @@ pub fn preview(props: &Props) -> Html {
                         Ok(file) => {
                             let text =
                                 decode_github_content(&file.content.unwrap_or_default());
+                            frontmatter_fields.set(parse_frontmatter(&text));
                             content.set(text);
                             loading.set(false);
                         }
@@ -100,6 +103,16 @@ pub fn preview(props: &Props) -> Html {
                 <p class="error">{err}</p>
             } else {
                 <div class="preview-pane markdown-body">
+                    if !frontmatter_fields.is_empty() {
+                        <table class="frontmatter-table">
+                            { for frontmatter_fields.iter().map(|(key, value)| html! {
+                                <tr>
+                                    <td class="fm-key">{key}</td>
+                                    <td class="fm-value">{value}</td>
+                                </tr>
+                            }) }
+                        </table>
+                    }
                     {Html::from_html_unchecked(AttrValue::from(render_markdown(&content)))}
                 </div>
             }
