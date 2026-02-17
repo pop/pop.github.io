@@ -14,6 +14,7 @@ GitHub OAuth token exchange (the only server-side component).
 | Framework | Yew (Rust/WASM) | User requirement |
 | Markdown rendering | markdown-rs | User requirement |
 | Auth | GitHub OAuth | Only production auth method |
+| Public viewing | No login required | Browsing and previewing content is unauthenticated; login only needed for editing/publishing |
 | Serverless | Cloudflare Workers | OAuth token exchange; Rust/WASM support |
 | Content scope | All of `content/` | Blog, fiction, whats-good, backlog, games, root pages |
 | Image support | Yes | Upload images via GitHub API |
@@ -88,7 +89,13 @@ The GitHub repo is `pop/pop.github.io`. Default branch is `source`.
 8. All subsequent GitHub API calls use this token
 
 For local development: skip OAuth, use a personal access token stored
-in an env var or entered manually.
+in an env var or entered manually (debug builds only).
+
+**Public access:** The `pop/pop.github.io` repo is public, so the GitHub
+Contents API works without authentication for read-only operations.
+Browsing content and previewing posts should work without login. Each
+page should show a "Login with GitHub" button; once authenticated, the
+user gains access to editing, publishing, and other write operations.
 
 ### Editing Workflow
 
