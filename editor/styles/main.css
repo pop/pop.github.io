@@ -622,6 +622,40 @@ nav a:hover {
     text-decoration: underline;
 }
 
+/* Frontmatter table */
+
+.frontmatter-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+    background: #f6f8fa;
+}
+
+.frontmatter-table tr {
+    border-bottom: 1px solid #e1e4e8;
+}
+
+.frontmatter-table tr:last-child {
+    border-bottom: none;
+}
+
+.fm-key {
+    width: 120px;
+    padding: 0.35rem 0.75rem;
+    font-weight: 600;
+    color: #24292e;
+    vertical-align: top;
+}
+
+.fm-value {
+    padding: 0.35rem 0.75rem;
+    color: #444;
+    word-break: break-word;
+}
+
 /* Markdown body typography */
 
 .markdown-body {
