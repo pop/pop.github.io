@@ -8,13 +8,28 @@ use web_sys::HtmlInputElement;
 use yew::prelude::*;
 use yew_router::prelude::*;
 
+use wasm_bindgen::JsCast;
+use wasm_bindgen::closure::Closure;
+
 use crate::app::AuthContext;
-use crate::models::github::{ContentEntry, GitRef};
+use crate::models::github::{CompareResponse, ContentEntry, DiffFile, GitRef};
 use crate::routes::Route;
 use crate::services::github::GitHubClient;
 
-const BRANCH_KEY: &str = "editor_branch";
+const DEFAULT_BRANCH: &str = "source";
+const SORT_KEY: &str = "dashboard_sort_mode";
+const RETURN_PATH_KEY: &str = "dashboard_return_path";
+const ALL_FILES_KEY: &str = "all_files_index";
 const CACHE_TTL_MS: f64 = 5.0 * 60.0 * 1000.0; // 5 minutes
+const ALL_FILES_TTL_MS: f64 = 15.0 * 60.0 * 1000.0; // 15 minutes
+
+#[derive(Clone, PartialEq)]
+enum CiState {
+    Pending,
+    Success,
+    Failure(String),
+    None,
+}
 
 #[derive(Clone, Copy, PartialEq)]
 enum SortMode {
@@ -68,6 +83,41 @@ fn set_cached_commit_dates(path: &str, dates: &HashMap<String, f64>) {
     }
 }
 
+// ── Global file index cache ─────────────────────────────────────
+
+#[derive(Serialize, Deserialize)]
+struct CachedAllFiles {
+    entries: Vec<ContentEntry>,
+    timestamp: f64,
+}
+
+fn all_files_cache_key(branch: Option<&str>) -> String {
+    match branch {
+        Some(b) => format!("{ALL_FILES_KEY}_{b}"),
+        None => ALL_FILES_KEY.to_string(),
+    }
+}
+
+fn get_cached_all_files(branch: Option<&str>) -> Option<Vec<ContentEntry>> {
+    let key = all_files_cache_key(branch);
+    let cached: CachedAllFiles = SessionStorage::get(&key).ok()?;
+    let now = js_sys::Date::now();
+    if now - cached.timestamp < ALL_FILES_TTL_MS {
+        Some(cached.entries)
+    } else {
+        SessionStorage::delete(&key);
+        None
+    }
+}
+
+fn set_cached_all_files(entries: &[ContentEntry], branch: Option<&str>) {
+    let cached = CachedAllFiles {
+        entries: entries.to_vec(),
+        timestamp: js_sys::Date::now(),
+    };
+    let _ = SessionStorage::set(&all_files_cache_key(branch), &cached);
+}
+
 /// Invalidate a single directory cache entry.
 pub fn invalidate_cache(path: &str) {
     SessionStorage::delete(&cache_key(path));
@@ -94,6 +144,16 @@ pub fn invalidate_all_caches() {
     }
 }
 
+fn is_media_file(name: &str) -> bool {
+    matches!(
+        name.rsplit('.').next().unwrap_or("").to_lowercase().as_str(),
+        "jpg" | "jpeg" | "png" | "gif" | "webp" | "svg"
+            | "mp4" | "webm" | "mov" | "avi"
+            | "mp3" | "wav" | "ogg" | "flac"
+            | "pdf" | "zip" | "gz" | "tar"
+    )
+}
+
 // ── Dashboard component ─────────────────────────────────────────
 
 #[function_component(Dashboard)]
@@ -101,7 +161,15 @@ pub fn dashboard() -> Html {
     let auth = use_context::<AuthContext>().expect("AuthContext not found");
     let navigator = use_navigator().expect("Navigator not found");
 
-    let current_path = use_state(|| "content".to_string());
+    let current_path = use_state(|| {
+        SessionStorage::get::<String>(RETURN_PATH_KEY)
+            .ok()
+            .map(|path| {
+                SessionStorage::delete(RETURN_PATH_KEY);
+                path
+            })
+            .unwrap_or_else(|| "content".to_string())
+    });
     let entries = use_state(|| Vec::<ContentEntry>::new());
     let loading = use_state(|| false);
     let error = use_state(|| Option::<String>::None);
@@ -113,17 +181,41 @@ pub fn dashboard() -> Html {
     // Branch selector state
     let branches = use_state(|| Vec::<GitRef>::new());
     let show_branches = use_state(|| false);
-    let active_branch = use_state(|| -> Option<String> {
-        SessionStorage::get(BRANCH_KEY).ok()
-    });
 
     // Phase 8a: search/filter
     let filter_text = use_state(String::new);
 
     // Phase 8b: sort options
-    let sort_mode = use_state(|| SortMode::Alphabetical);
+    let sort_mode = use_state(|| {
+        SessionStorage::get::<String>(SORT_KEY)
+            .ok()
+            .filter(|s| s == "recent")
+            .map(|_| SortMode::LastModified)
+            .unwrap_or(SortMode::Alphabetical)
+    });
     let commit_dates = use_state(HashMap::<String, f64>::new);
     let dates_loading = use_state(|| false);
+
+    // Global file index for search (Bug 3)
+    let all_files = use_state(|| Vec::<ContentEntry>::new());
+    let all_files_loading = use_state(|| false);
+
+    // Delete confirmation state
+    let delete_confirm = use_state(|| Option::<ContentEntry>::None);
+    let delete_error   = use_state(|| Option::<String>::None);
+    let deleting       = use_state(|| false);
+
+    // Branch publish/discard/CI state
+    let show_diff     = use_state(|| false);
+    let diff_data     = use_state(|| Option::<CompareResponse>::None);
+    let diff_loading  = use_state(|| false);
+    let ci_status     = use_state(|| CiState::None);
+    let branch_saving = use_state(|| false);
+    let branch_error  = use_state(|| Option::<String>::None);
+
+    // Active branch from shared context (replaces local use_state)
+    let active_branch_opt = auth.active_branch.clone();
+    let set_active_branch = auth.set_active_branch.clone();
 
     let is_authenticated = auth.token.is_some();
 
@@ -154,7 +246,7 @@ pub fn dashboard() -> Html {
         let token = auth.token.clone();
         let set_token = auth.set_token.clone();
         let refresh = *force_refresh;
-        let branch = (*active_branch).clone();
+        let branch = active_branch_opt.clone();
         let commit_dates = commit_dates.clone();
 
         use_effect_with(
@@ -222,11 +314,283 @@ pub fn dashboard() -> Html {
         );
     }
 
+    // Load the global file index; re-fetch whenever the active branch changes
+    {
+        let all_files = all_files.clone();
+        let all_files_loading = all_files_loading.clone();
+        let token = auth.token.clone();
+        let active_branch_opt = active_branch_opt.clone();
+        use_effect_with(active_branch_opt.clone(), move |_| {
+            all_files.set(vec![]);
+            let branch = active_branch_opt.clone();
+            if let Some(cached) = get_cached_all_files(branch.as_deref()) {
+                all_files.set(cached);
+            } else {
+                all_files_loading.set(true);
+                let client = match token {
+                    Some(t) => GitHubClient::new(t),
+                    None => GitHubClient::anonymous(),
+                };
+                wasm_bindgen_futures::spawn_local(async move {
+                    if let Ok(files) = client.list_all_files(branch.as_deref()).await {
+                        set_cached_all_files(&files, branch.as_deref());
+                        all_files.set(files);
+                    }
+                    all_files_loading.set(false);
+                });
+            }
+            || ()
+        });
+    }
+
+    // Auto-fetch commit dates when sort is restored to LastModified on mount (Bug 1)
+    {
+        let sort_mode = sort_mode.clone();
+        let commit_dates = commit_dates.clone();
+        let dates_loading = dates_loading.clone();
+        let entries = entries.clone();
+        let token = auth.token.clone();
+        let current_path = current_path.clone();
+        let active_branch_opt = active_branch_opt.clone();
+        use_effect_with((*sort_mode, entries.len()), move |_| {
+            if *sort_mode == SortMode::LastModified
+                && commit_dates.is_empty()
+                && !entries.is_empty()
+            {
+                let dir_path = (*current_path).clone();
+                if let Some(cached) = get_cached_commit_dates(&dir_path) {
+                    commit_dates.set(cached);
+                } else {
+                    let commit_dates = commit_dates.clone();
+                    let dates_loading = dates_loading.clone();
+                    let paths: Vec<String> = entries.iter().map(|e| e.path.clone()).collect();
+                    let branch = active_branch_opt.clone();
+                    let client = match token {
+                        Some(t) => GitHubClient::new(t),
+                        None => GitHubClient::anonymous(),
+                    };
+                    dates_loading.set(true);
+                    wasm_bindgen_futures::spawn_local(async move {
+                        let dates = client
+                            .get_commit_dates_bulk(&paths, branch.as_deref())
+                            .await;
+                        set_cached_commit_dates(&dir_path, &dates);
+                        commit_dates.set(dates);
+                        dates_loading.set(false);
+                    });
+                }
+            }
+            || ()
+        });
+    }
+
+    // CI status: fetch on mount and poll every 15s while pending
+    {
+        let ci_status = ci_status.clone();
+        let branch_val = active_branch_opt.clone();
+        let token = auth.token.clone();
+
+        use_effect_with((branch_val.clone(), token.clone()), move |_| {
+            let ci_status = ci_status.clone();
+            let mut interval_handle: Option<i32> = None;
+
+            if let (Some(branch_name), Some(token)) = (branch_val, token) {
+                {
+                    let ci_status = ci_status.clone();
+                    let branch_name = branch_name.clone();
+                    let token = token.clone();
+                    wasm_bindgen_futures::spawn_local(async move {
+                        fetch_ci_status(&token, &branch_name, &ci_status).await;
+                    });
+                }
+
+                let cb_ci = ci_status.clone();
+                let cb_branch = branch_name.clone();
+                let cb_token = token.clone();
+
+                let cb = Closure::<dyn FnMut()>::new(move || {
+                    let ci_status = cb_ci.clone();
+                    let branch_name = cb_branch.clone();
+                    let token = cb_token.clone();
+                    wasm_bindgen_futures::spawn_local(async move {
+                        fetch_ci_status(&token, &branch_name, &ci_status).await;
+                    });
+                });
+
+                let id = gloo_utils::window()
+                    .set_interval_with_callback_and_timeout_and_arguments_0(
+                        cb.as_ref().unchecked_ref(),
+                        15_000,
+                    )
+                    .unwrap_or(0);
+                cb.forget();
+                interval_handle = Some(id);
+            } else {
+                ci_status.set(CiState::None);
+            }
+
+            move || {
+                if let Some(id) = interval_handle {
+                    let _ = gloo_utils::window().clear_interval_with_handle(id);
+                }
+            }
+        });
+    }
+
     let on_refresh = {
         let force_refresh = force_refresh.clone();
         Callback::from(move |_: MouseEvent| {
             invalidate_all_caches();
             force_refresh.set(*force_refresh + 1);
+        })
+    };
+
+    let on_publish = {
+        let branch_opt = active_branch_opt.clone();
+        let token = auth.token.clone();
+        let show_diff = show_diff.clone();
+        let diff_data = diff_data.clone();
+        let diff_loading = diff_loading.clone();
+        let branch_error = branch_error.clone();
+
+        Callback::from(move |_: MouseEvent| {
+            let Some(branch_name) = branch_opt.clone() else {
+                branch_error.set(Some("No active branch to publish".into()));
+                return;
+            };
+            let Some(token) = token.clone() else { return };
+
+            let show_diff = show_diff.clone();
+            let diff_data = diff_data.clone();
+            let diff_loading = diff_loading.clone();
+            let branch_error = branch_error.clone();
+
+            diff_loading.set(true);
+            show_diff.set(false);
+            branch_error.set(None);
+
+            wasm_bindgen_futures::spawn_local(async move {
+                let client = GitHubClient::new(token);
+                match client.compare_branches(DEFAULT_BRANCH, &branch_name).await {
+                    Ok(data) => {
+                        diff_data.set(Some(data));
+                        show_diff.set(true);
+                        diff_loading.set(false);
+                    }
+                    Err(e) => {
+                        branch_error.set(Some(e));
+                        diff_loading.set(false);
+                    }
+                }
+            });
+        })
+    };
+
+    let on_confirm_publish = {
+        let branch_opt = active_branch_opt.clone();
+        let set_active_branch = set_active_branch.clone();
+        let token = auth.token.clone();
+        let show_diff = show_diff.clone();
+        let branch_saving = branch_saving.clone();
+        let branch_error = branch_error.clone();
+        let force_refresh = force_refresh.clone();
+
+        Callback::from(move |_: MouseEvent| {
+            let Some(branch_name) = branch_opt.clone() else {
+                branch_error.set(Some("No active branch to publish".into()));
+                return;
+            };
+            let Some(token) = token.clone() else { return };
+
+            let set_active_branch = set_active_branch.clone();
+            let show_diff = show_diff.clone();
+            let branch_saving = branch_saving.clone();
+            let branch_error = branch_error.clone();
+            let force_refresh = force_refresh.clone();
+
+            show_diff.set(false);
+            branch_saving.set(true);
+            branch_error.set(None);
+
+            wasm_bindgen_futures::spawn_local(async move {
+                let client = GitHubClient::new(token);
+                let message = format!("Publish {branch_name}");
+
+                match client
+                    .merge_branch(&branch_name, DEFAULT_BRANCH, &message)
+                    .await
+                {
+                    Ok(()) => {
+                        let _ = client.delete_branch(&branch_name).await;
+                        set_active_branch.emit(None);
+                        invalidate_all_caches();
+                        branch_saving.set(false);
+                        force_refresh.set(*force_refresh + 1);
+                    }
+                    Err(e) => {
+                        branch_error.set(Some(e));
+                        branch_saving.set(false);
+                    }
+                }
+            });
+        })
+    };
+
+    let on_cancel_diff = {
+        let show_diff = show_diff.clone();
+        Callback::from(move |_: MouseEvent| {
+            show_diff.set(false);
+        })
+    };
+
+    let on_discard = {
+        let branch_opt = active_branch_opt.clone();
+        let set_active_branch = set_active_branch.clone();
+        let token = auth.token.clone();
+        let branch_saving = branch_saving.clone();
+        let branch_error = branch_error.clone();
+        let force_refresh = force_refresh.clone();
+
+        Callback::from(move |_: MouseEvent| {
+            let window = gloo_utils::window();
+            if !window
+                .confirm_with_message(
+                    "Discard all changes? This will delete the editor branch.",
+                )
+                .unwrap_or(false)
+            {
+                return;
+            }
+
+            let Some(branch_name) = branch_opt.clone() else {
+                branch_error.set(Some("No active branch to discard".into()));
+                return;
+            };
+            let Some(token) = token.clone() else { return };
+
+            let set_active_branch = set_active_branch.clone();
+            let branch_saving = branch_saving.clone();
+            let branch_error = branch_error.clone();
+            let force_refresh = force_refresh.clone();
+
+            branch_saving.set(true);
+            branch_error.set(None);
+
+            wasm_bindgen_futures::spawn_local(async move {
+                let client = GitHubClient::new(token);
+                match client.delete_branch(&branch_name).await {
+                    Ok(()) => {
+                        set_active_branch.emit(None);
+                        invalidate_all_caches();
+                        branch_saving.set(false);
+                        force_refresh.set(*force_refresh + 1);
+                    }
+                    Err(e) => {
+                        branch_error.set(Some(e));
+                        branch_saving.set(false);
+                    }
+                }
+            });
         })
     };
 
@@ -239,10 +603,19 @@ pub fn dashboard() -> Html {
                 filter_text.set(String::new());
                 current_path.set(entry.path);
             } else {
-                navigator.push(&Route::Editor {
-                    path: entry.path,
-                });
+                let _ = SessionStorage::set(RETURN_PATH_KEY, (*current_path).clone());
+                navigator.push(&Route::Editor { path: entry.path });
             }
+        })
+    };
+
+    // Navigate directly to a file path (used from global search results)
+    let on_navigate_to_file = {
+        let navigator = navigator.clone();
+        let current_path = current_path.clone();
+        Callback::from(move |path: String| {
+            let _ = SessionStorage::set(RETURN_PATH_KEY, (*current_path).clone());
+            navigator.push(&Route::Editor { path });
         })
     };
 
@@ -306,22 +679,20 @@ pub fn dashboard() -> Html {
     };
 
     let on_select_branch = {
-        let active_branch = active_branch.clone();
+        let set_active_branch = set_active_branch.clone();
         let force_refresh = force_refresh.clone();
         Callback::from(move |name: String| {
-            let _ = SessionStorage::set(BRANCH_KEY, &name);
-            active_branch.set(Some(name));
+            set_active_branch.emit(Some(name));
             invalidate_all_caches();
             force_refresh.set(*force_refresh + 1);
         })
     };
 
     let on_clear_branch = {
-        let active_branch = active_branch.clone();
+        let set_active_branch = set_active_branch.clone();
         let force_refresh = force_refresh.clone();
         Callback::from(move |_: MouseEvent| {
-            SessionStorage::delete(BRANCH_KEY);
-            active_branch.set(None);
+            set_active_branch.emit(None);
             invalidate_all_caches();
             force_refresh.set(*force_refresh + 1);
         })
@@ -347,6 +718,7 @@ pub fn dashboard() -> Html {
     let on_set_sort_alpha = {
         let sort_mode = sort_mode.clone();
         Callback::from(move |_: MouseEvent| {
+            let _ = SessionStorage::set(SORT_KEY, "alpha");
             sort_mode.set(SortMode::Alphabetical);
         })
     };
@@ -358,8 +730,9 @@ pub fn dashboard() -> Html {
         let entries = entries.clone();
         let token = auth.token.clone();
         let current_path = current_path.clone();
-        let active_branch = active_branch.clone();
+        let active_branch_opt = active_branch_opt.clone();
         Callback::from(move |_: MouseEvent| {
+            let _ = SessionStorage::set(SORT_KEY, "recent");
             sort_mode.set(SortMode::LastModified);
 
             // If we already have dates, nothing to do
@@ -377,7 +750,7 @@ pub fn dashboard() -> Html {
                 let commit_dates = commit_dates.clone();
                 let dates_loading = dates_loading.clone();
                 let paths: Vec<String> = entries.iter().map(|e| e.path.clone()).collect();
-                let branch = (*active_branch).clone();
+                let branch = active_branch_opt.clone();
                 let dir_path = (*current_path).clone();
 
                 let client = match token.clone() {
@@ -395,6 +768,66 @@ pub fn dashboard() -> Html {
                     dates_loading.set(false);
                 });
             }
+        })
+    };
+
+    let on_delete_request = {
+        let delete_confirm = delete_confirm.clone();
+        let delete_error   = delete_error.clone();
+        Callback::from(move |entry: ContentEntry| {
+            delete_error.set(None);
+            delete_confirm.set(Some(entry));
+        })
+    };
+
+    let on_delete_cancel = {
+        let delete_confirm = delete_confirm.clone();
+        let delete_error   = delete_error.clone();
+        Callback::from(move |_: MouseEvent| {
+            delete_confirm.set(None);
+            delete_error.set(None);
+        })
+    };
+
+    let on_delete_confirm = {
+        let delete_confirm = delete_confirm.clone();
+        let delete_error   = delete_error.clone();
+        let deleting       = deleting.clone();
+        let all_files      = all_files.clone();
+        let force_refresh  = force_refresh.clone();
+        let active_branch_opt = active_branch_opt.clone();
+        let token          = auth.token.clone();
+        Callback::from(move |_: MouseEvent| {
+            let Some(entry) = (*delete_confirm).clone() else { return };
+            let active_branch_for_cache = active_branch_opt.clone();
+            let branch = active_branch_opt.clone().unwrap_or_else(|| "source".to_string());
+            let Some(token) = token.clone() else { return };
+            let current_refresh = *force_refresh;
+            deleting.set(true);
+            let delete_confirm = delete_confirm.clone();
+            let delete_error   = delete_error.clone();
+            let deleting       = deleting.clone();
+            let all_files      = all_files.clone();
+            let force_refresh  = force_refresh.clone();
+            wasm_bindgen_futures::spawn_local(async move {
+                let client = GitHubClient::new(token);
+                let message = format!("Delete {}", entry.name);
+                match client.delete_file(&entry.path, &entry.sha, &message, &branch).await {
+                    Ok(()) => {
+                        let path = entry.path.clone();
+                        all_files.set((*all_files).iter()
+                            .filter(|f| f.path != path)
+                            .cloned()
+                            .collect());
+                        invalidate_all_caches();
+                        SessionStorage::delete(&all_files_cache_key(active_branch_for_cache.as_deref()));
+                        force_refresh.set(current_refresh + 1);
+                        delete_confirm.set(None);
+                    }
+                    Err(e) => { delete_error.set(Some(e)); }
+                }
+                deleting.set(false);
+            });
         })
     };
 
@@ -442,6 +875,21 @@ pub fn dashboard() -> Html {
     let cur_sort = *sort_mode;
     let cur_dates = (*commit_dates).clone();
 
+    // Global search results (used when filter_text is non-empty)
+    let filter_active = !filter_text.is_empty();
+    let global_search_results: Vec<ContentEntry> = if filter_active {
+        let filter_lower = (*filter_text).to_lowercase();
+        (*all_files)
+            .iter()
+            .filter(|e| e.path.to_lowercase().contains(&filter_lower))
+            .cloned()
+            .collect()
+    } else {
+        vec![]
+    };
+
+    let ci_blocks_publish = matches!(*ci_status, CiState::Pending | CiState::Failure(_));
+
     html! {
         <div class="dashboard">
             <div class="dashboard-header">
@@ -461,16 +909,37 @@ pub fn dashboard() -> Html {
                         }
                     </div>
                 </div>
-                if let Some(ref name) = *active_branch {
+                if let Some(ref name) = active_branch_opt {
                     <div class="active-branch-badge">
                         <span class="branch-label">{format!("Branch: {name}")}</span>
+                        {render_ci_indicator(&ci_status)}
+                        if let Some(ref err) = *branch_error {
+                            <span class="branch-bar-error">{err}</span>
+                        }
                         <button class="clear-branch-btn" onclick={on_clear_branch.clone()}>
                             {"\u{00D7}"}
                         </button>
+                        <div class="branch-badge-actions">
+                            <button class="publish-btn"
+                                    onclick={on_publish}
+                                    disabled={*branch_saving || *diff_loading || ci_blocks_publish}>
+                                { if *diff_loading { "Loading diff\u{2026}" } else { "Publish" } }
+                            </button>
+                            <button class="discard-btn"
+                                    onclick={on_discard}
+                                    disabled={*branch_saving}>
+                                { if *branch_saving { "Working\u{2026}" } else { "Discard" } }
+                            </button>
+                        </div>
                     </div>
+                    if *show_diff {
+                        if let Some(ref data) = *diff_data {
+                            {render_diff_panel(data, on_confirm_publish, on_cancel_diff)}
+                        }
+                    }
                 }
                 if *show_branches {
-                    {render_branch_list(&branches, &active_branch, on_select_branch.clone(), on_clear_branch.clone())}
+                    {render_branch_list(&branches, &active_branch_opt, on_select_branch.clone(), on_clear_branch.clone())}
                 }
                 <div class="breadcrumbs">{breadcrumbs}</div>
             </div>
@@ -519,7 +988,7 @@ pub fn dashboard() -> Html {
                         <input
                             type="text"
                             class="filter-input"
-                            placeholder="Filter by name\u{2026}"
+                            placeholder="Search all files\u{2026}"
                             value={(*filter_text).clone()}
                             oninput={on_filter_input}
                         />
@@ -550,19 +1019,92 @@ pub fn dashboard() -> Html {
                 </div>
             }
 
-            if *loading {
+            if filter_active {
+                if *all_files_loading && all_files.is_empty() {
+                    <p class="loading">{"Loading index\u{2026}"}</p>
+                } else if global_search_results.is_empty() {
+                    <p class="empty">{"No files match."}</p>
+                } else {
+                    <>
+                        <p class="search-count">
+                            {format!("{} result(s) for \u{2018}{}\u{2019}", global_search_results.len(), *filter_text)}
+                        </p>
+                        <div class="content-list">
+                            { for global_search_results.iter().map(|entry| {
+                                let is_media = is_media_file(&entry.name);
+                                let onclick = if is_media {
+                                    Callback::from(|_: MouseEvent| {})
+                                } else {
+                                    let path = entry.path.clone();
+                                    let on_click = on_navigate_to_file.clone();
+                                    Callback::from(move |_: MouseEvent| {
+                                        on_click.emit(path.clone());
+                                    })
+                                };
+                                let delete_btn = if is_media && is_authenticated {
+                                    let entry_for_delete = entry.clone();
+                                    let on_delete = on_delete_request.clone();
+                                    let delete_onclick = Callback::from(move |e: MouseEvent| {
+                                        e.stop_propagation();
+                                        on_delete.emit(entry_for_delete.clone());
+                                    });
+                                    html! {
+                                        <button class="entry-delete-btn"
+                                                onclick={delete_onclick}>{"Delete"}</button>
+                                    }
+                                } else {
+                                    html! {}
+                                };
+                                html! {
+                                    <div class={classes!("content-entry", is_media.then_some("is-media"))}
+                                         onclick={onclick}>
+                                        <span class="entry-icon">{"\u{00B7}"}</span>
+                                        <span class="entry-name">{&entry.path}</span>
+                                        {delete_btn}
+                                    </div>
+                                }
+                            }) }
+                        </div>
+                    </>
+                }
+            } else if *loading {
                 <p class="loading">{"Loading\u{2026}"}</p>
             } else if let Some(err) = &*error {
                 <p class="error">{err}</p>
             } else if entries.is_empty() {
                 <p class="empty">{"This directory is empty."}</p>
             } else if display_entries.is_empty() {
-                <p class="empty">{"No entries match the filter."}</p>
+                <p class="empty">{"No entries match."}</p>
             } else {
                 <div class="content-list">
                     { for display_entries.iter().map(|entry| {
-                        render_entry(entry, on_navigate.clone(), &cur_sort, &cur_dates)
+                        render_entry(entry, on_navigate.clone(), &cur_sort, &cur_dates, on_delete_request.clone(), is_authenticated)
                     }) }
+                </div>
+            }
+
+            if let Some(ref entry) = *delete_confirm {
+                <div class="modal-overlay" onclick={on_delete_cancel.clone()}>
+                    <div class="modal"
+                         onclick={Callback::from(|e: MouseEvent| e.stop_propagation())}>
+                        <h3>{"Delete file?"}</h3>
+                        <p class="modal-filename">{&entry.name}</p>
+                        <p class="modal-warning">
+                            {"This will be committed directly to the branch and cannot be undone."}
+                        </p>
+                        if let Some(ref err) = *delete_error {
+                            <p class="error">{err}</p>
+                        }
+                        <div class="modal-actions">
+                            <button onclick={on_delete_cancel.clone()}
+                                    disabled={*deleting}>{"Cancel"}</button>
+                            <button class="delete-btn"
+                                    onclick={on_delete_confirm.clone()}
+                                    disabled={*deleting}>
+                                { if *deleting { "Deleting\u{2026}" } else { "Delete" } }
+                            </button>
+                        </div>
+                    </div>
                 </div>
             }
         </div>
@@ -573,7 +1115,7 @@ pub fn dashboard() -> Html {
 
 fn render_branch_list(
     branches: &UseStateHandle<Vec<GitRef>>,
-    active_branch: &UseStateHandle<Option<String>>,
+    active_branch: &Option<String>,
     on_select: Callback<String>,
     on_clear: Callback<MouseEvent>,
 ) -> Html {
@@ -598,7 +1140,7 @@ fn render_branch_list(
             { for (**branches).iter().map(|git_ref| {
                 let name = git_ref.ref_name.strip_prefix("refs/heads/").unwrap_or(&git_ref.ref_name).to_string();
                 let display = name.strip_prefix("editor/").unwrap_or(&name).to_string();
-                let is_active = active_branch.as_ref().map_or(false, |b| *b == name);
+                let is_active = active_branch.as_deref().map_or(false, |b| b == name);
                 let on_select = on_select.clone();
                 let name_clone = name.clone();
                 let onclick = Callback::from(move |_: MouseEvent| {
@@ -624,12 +1166,20 @@ fn render_entry(
     on_click: Callback<ContentEntry>,
     sort_mode: &SortMode,
     commit_dates: &HashMap<String, f64>,
+    on_delete: Callback<ContentEntry>,
+    is_authenticated: bool,
 ) -> Html {
     let is_dir = entry.entry_type == "dir";
-    let entry_clone = entry.clone();
-    let onclick = Callback::from(move |_: MouseEvent| {
-        on_click.emit(entry_clone.clone());
-    });
+    let is_media = !is_dir && is_media_file(&entry.name);
+
+    let onclick = if is_media {
+        Callback::from(|_: MouseEvent| {})
+    } else {
+        let entry_clone = entry.clone();
+        Callback::from(move |_: MouseEvent| {
+            on_click.emit(entry_clone.clone());
+        })
+    };
 
     let date_display = if *sort_mode == SortMode::LastModified {
         commit_dates.get(&entry.path).map(|ms| format_date(*ms))
@@ -637,8 +1187,22 @@ fn render_entry(
         None
     };
 
+    let delete_btn = if is_media && is_authenticated {
+        let entry_for_delete = entry.clone();
+        let delete_onclick = Callback::from(move |e: MouseEvent| {
+            e.stop_propagation();
+            on_delete.emit(entry_for_delete.clone());
+        });
+        html! {
+            <button class="entry-delete-btn" onclick={delete_onclick}>{"Delete"}</button>
+        }
+    } else {
+        html! {}
+    };
+
     html! {
-        <div class={classes!("content-entry", is_dir.then_some("is-dir"))} onclick={onclick}>
+        <div class={classes!("content-entry", is_dir.then_some("is-dir"), is_media.then_some("is-media"))}
+             onclick={onclick}>
             <span class="entry-icon">
                 { if is_dir { "\u{25B8}" } else { "\u{00B7}" } }
             </span>
@@ -649,6 +1213,7 @@ fn render_entry(
             if !is_dir {
                 <span class="entry-size">{format_size(entry.size)}</span>
             }
+            {delete_btn}
         </div>
     }
 }
@@ -698,4 +1263,159 @@ fn format_date(epoch_ms: f64) -> String {
     let month = date.get_month() + 1;
     let day = date.get_date();
     format!("{year}-{month:02}-{day:02}")
+}
+
+// ── CI status ────────────────────────────────────────────────────
+
+async fn fetch_ci_status(token: &str, branch: &str, ci_status: &UseStateHandle<CiState>) {
+    let current = (*ci_status).clone();
+    if matches!(&*current, CiState::Success | CiState::Failure(_)) {
+        return;
+    }
+
+    let client = GitHubClient::new(token.to_string());
+    match client.get_check_runs(branch).await {
+        Ok(resp) => {
+            if resp.check_runs.is_empty() {
+                ci_status.set(CiState::None);
+                return;
+            }
+            let any_pending = resp.check_runs.iter().any(|r| r.status != "completed");
+            if any_pending {
+                ci_status.set(CiState::Pending);
+                return;
+            }
+            let failure = resp
+                .check_runs
+                .iter()
+                .find(|r| r.conclusion.as_deref() == Some("failure"));
+            if let Some(failed) = failure {
+                ci_status.set(CiState::Failure(failed.html_url.clone()));
+            } else {
+                ci_status.set(CiState::Success);
+            }
+        }
+        Err(_) => {}
+    }
+}
+
+fn render_ci_indicator(ci_status: &UseStateHandle<CiState>) -> Html {
+    match &**ci_status {
+        CiState::None => html! {},
+        CiState::Pending => html! {
+            <span class="ci-status ci-pending" title="CI check running">
+                {"\u{23F3} CI pending\u{2026}"}
+            </span>
+        },
+        CiState::Success => html! {
+            <span class="ci-status ci-success" title="CI check passed">
+                {"\u{2713} CI passed"}
+            </span>
+        },
+        CiState::Failure(url) => html! {
+            <span class="ci-status ci-failure">
+                {"\u{2717} CI failed "}
+                <a href={url.clone()} target="_blank" rel="noopener" class="ci-link">
+                    {"(view)"}
+                </a>
+            </span>
+        },
+    }
+}
+
+// ── Diff panel ───────────────────────────────────────────────────
+
+fn render_diff_panel(
+    data: &CompareResponse,
+    on_confirm: Callback<MouseEvent>,
+    on_cancel: Callback<MouseEvent>,
+) -> Html {
+    let total_additions: u32 = data.files.iter().map(|f| f.additions).sum();
+    let total_deletions: u32 = data.files.iter().map(|f| f.deletions).sum();
+
+    if data.files.is_empty() {
+        return html! {
+            <div class="diff-panel">
+                <p class="diff-empty">{"No changes to publish."}</p>
+                <div class="diff-actions">
+                    <button class="discard-btn" onclick={on_cancel}>{"Close"}</button>
+                </div>
+            </div>
+        };
+    }
+
+    html! {
+        <div class="diff-panel">
+            <div class="diff-header">
+                <h3>{"Changes to publish"}</h3>
+                <p class="diff-summary">
+                    {format!("{} file{} changed, ",
+                        data.files.len(),
+                        if data.files.len() == 1 { "" } else { "s" }
+                    )}
+                    <span class="diff-additions">{format!("+{total_additions}")}</span>
+                    {", "}
+                    <span class="diff-deletions">{format!("-{total_deletions}")}</span>
+                </p>
+            </div>
+            <div class="diff-files">
+                { for data.files.iter().map(render_diff_file) }
+            </div>
+            <div class="diff-actions">
+                <button class="publish-btn" onclick={on_confirm}>
+                    {"Confirm Publish"}
+                </button>
+                <button class="discard-btn" onclick={on_cancel}>
+                    {"Cancel"}
+                </button>
+            </div>
+        </div>
+    }
+}
+
+fn render_diff_file(file: &DiffFile) -> Html {
+    let status_class = match file.status.as_str() {
+        "added" => "added",
+        "removed" => "removed",
+        "renamed" => "renamed",
+        _ => "modified",
+    };
+    let status_letter = match file.status.as_str() {
+        "added" => "A",
+        "removed" => "D",
+        "renamed" => "R",
+        _ => "M",
+    };
+
+    html! {
+        <div class="diff-file">
+            <div class="diff-file-header">
+                <span class={classes!("diff-file-status", status_class)}>
+                    {status_letter}
+                </span>
+                <span class="diff-file-name">{&file.filename}</span>
+                <span class="diff-file-stats">
+                    <span class="diff-additions">{format!("+{}", file.additions)}</span>
+                    {" "}
+                    <span class="diff-deletions">{format!("-{}", file.deletions)}</span>
+                </span>
+            </div>
+            if let Some(ref patch) = file.patch {
+                <pre class="diff-patch">
+                    { for patch.lines().map(|line| {
+                        let class = if line.starts_with('+') {
+                            "diff-line-add"
+                        } else if line.starts_with('-') {
+                            "diff-line-del"
+                        } else if line.starts_with("@@") {
+                            "diff-line-hunk"
+                        } else {
+                            "diff-line-ctx"
+                        };
+                        html! { <div class={classes!("diff-line", class)}>{line}</div> }
+                    }) }
+                </pre>
+            }
+        </div>
+    }
 }

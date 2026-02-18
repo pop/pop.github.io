@@ -683,6 +683,45 @@ impl GitHubClient {
         }
     }
 
+    // ── Global file index ────────────────────────────────────────
+
+    /// List every file (blob) in the repo using the recursive Git Trees API.
+    pub async fn list_all_files(&self, branch: Option<&str>) -> Result<Vec<ContentEntry>, String> {
+        let sha = self.get_branch_sha(branch.unwrap_or("source")).await?;
+        let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/git/trees/{sha}?recursive=1");
+        let resp = self.get(&url).await?;
+
+        match resp.status() {
+            200 => {
+                let tree: TreeResponse = resp.json().await.map_err(|e| e.to_string())?;
+                let entries = tree
+                    .tree
+                    .into_iter()
+                    .filter(|te| te.entry_type == "blob" && te.path.starts_with("content/"))
+                    .map(|te| {
+                        let name = te
+                            .path
+                            .rsplit('/')
+                            .next()
+                            .unwrap_or(&te.path)
+                            .to_string();
+                        ContentEntry {
+                            name,
+                            path: te.path,
+                            entry_type: "file".to_string(),
+                            sha: te.sha,
+                            size: te.size.unwrap_or(0),
+                            download_url: None,
+                        }
+                    })
+                    .collect();
+                Ok(entries)
+            }
+            401 => Err("Unauthorized \u{2014} check your token".into()),
+            status => Err(format!("GitHub API error: {status}")),
+        }
+    }
+
     // ── Helpers ──────────────────────────────────────────────────
 
     async fn get(&self, url: &str) -> Result<gloo_net::http::Response, String> {
