@@ -58,7 +58,7 @@ worker/                  # Cloudflare Worker for OAuth token exchange
 
 ```bash
 trunk build --release
-wrangler pages deploy dist/ --project-name=b7e52fb82687f258
+wrangler pages deploy dist/ --project-name=$(tofu output -raw pages_project_name)
 ```
 
 The Pages project is a Direct Upload project (no git integration). Build locally with Trunk, then deploy the `dist/` directory. Production URL: https://editor.elijah.run
