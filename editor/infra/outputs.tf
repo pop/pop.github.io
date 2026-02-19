@@ -10,5 +10,5 @@ output "pages_url" {
 
 output "worker_url" {
   description = "OAuth worker URL"
-  value       = "https://${cloudflare_worker.oauth.name}.homeworkbad.workers.dev"
+  value       = "https://${cloudflare_workers_custom_domain.subdomain.hostname}"
 }
