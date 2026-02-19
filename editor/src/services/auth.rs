@@ -4,7 +4,7 @@ use serde::Deserialize;
 
 const TOKEN_KEY: &str = "github_token";
 
-const WORKER_URL: &str = "https://blog-editor-oauth.homeworkbad.workers.dev";
+const WORKER_URL: &str = "https://blog-editor-oauth.elijah.run";
 
 pub fn get_token() -> Option<String> {
     SessionStorage::get(TOKEN_KEY).ok()

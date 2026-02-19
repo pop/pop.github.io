@@ -203,7 +203,7 @@ editor/
 - [x] Implement token storage and auth state management — `AuthContext` via `ContextProvider`, sessionStorage
 - [x] Add dev-mode bypass (manual token entry) — collapsible PAT input on login page
 - [x] **TODO:** Set `GITHUB_CLIENT_ID` in `src/components/login.rs` — configured via OpenTofu, value in `terraform.tfvars`
-- [x] **TODO:** Set `WORKER_URL` in `src/services/auth.rs` after deploying the worker — set to `https://blog-editor-oauth.homeworkbad.workers.dev`
+- [x] **TODO:** Set `WORKER_URL` in `src/services/auth.rs` after deploying the worker — set to `https://blog-editor-oauth.elijah.run`
 - [x] **TODO:** Deploy Cloudflare Worker and configure secrets — deployed via OpenTofu (`cloudflare_worker` + `cloudflare_worker_version` + `cloudflare_workers_deployment`); secrets set as `secret_text` bindings
 - [ ] Verify: user can log in and token is stored (OAuth flow functional; needs end-to-end verification)
 

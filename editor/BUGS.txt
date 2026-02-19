@@ -1,2 +1,5 @@
 # Reported issues with editor.elijah.run
 
+We should see media in the rendered previews (may require de-gitlfs-ing the repo)
+
+---

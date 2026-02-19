@@ -1,10 +1,14 @@
 resource "cloudflare_worker" "oauth" {
   account_id = var.cloudflare_account_id
   name       = "blog-editor-oauth"
+}
 
-  subdomain = {
-    enabled = true
-  }
+resource "cloudflare_workers_custom_domain" "subdomain" {
+  account_id = var.cloudflare_account_id
+  zone_id = var.cloudflare_zone_id
+  hostname = "blog-editor-oauth.elijah.run"
+  service = cloudflare_worker.oauth.name
+  environment = "production"
 }
 
 resource "cloudflare_worker_version" "oauth" {
