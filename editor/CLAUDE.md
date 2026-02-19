@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Blog editor for elijah.run — a client-side Yew (Rust/WASM) web app that edits and publishes posts to a Zola blog via the GitHub API. A Cloudflare Worker handles OAuth token exchange as the only server-side component. The editor lives in the `editor/` subdirectory of the `pop/pop.github.io` repo.
 
-**Current status:** Early scaffolding phase. See `PLANNING.md` for the full architecture spec and implementation roadmap.
+**Current status:** Phases 1–13 complete and deployed. Phase 11 (automated testing) is the remaining unimplemented phase. See `PLANNING.md` for the full architecture spec and session log.
 
 ## Development Environment
 
@@ -26,28 +26,28 @@ trunk build          # Debug build
 trunk build --release  # Production build
 ```
 
-These require `Cargo.toml`, `Trunk.toml`, and `index.html` to exist (Phase 1 scaffolding).
+Requires the Nix dev shell for the correct Rust target and Trunk version.
 
 ## Architecture
 
 - **Frontend:** Yew framework compiled to WASM, bundled with Trunk. Uses yew-router for client-side routing, gloo-net for HTTP, gloo-storage for sessionStorage.
 - **Backend:** Single Cloudflare Worker (`worker/` subdirectory) that exchanges OAuth codes for GitHub access tokens. Keeps the client secret server-side.
-- **Data layer:** All content operations go directly to the GitHub REST API (Contents API for files, Git Refs API for branching, Merges API for publishing).
+- **Data layer:** Authenticated reads use the GitHub GraphQL API (`/graphql`); anonymous reads and all writes use the GitHub REST API (Contents API, Git Refs API, Merges API). `compare_branches`, `get_check_runs`, and commit-date fetching stay as REST.
 
 ### Key flows
 
 - **Auth:** GitHub OAuth redirect → Cloudflare Worker exchanges code for token → token stored in sessionStorage. Dev builds only: manual personal access token entry (hidden in release via `cfg!(debug_assertions)`).
 - **Editing:** Create branch `editor/{date}-{slug}` → commit edits to branch → merge to `source` branch on publish (or delete branch on discard).
 
-### Source layout (planned)
+### Source layout
 
 ```
 src/
 ├── main.rs              # Entry point
 ├── app.rs               # Root component, router
 ├── routes.rs            # Route enum definitions
-├── components/          # UI components (nav, login, dashboard, editor, preview, file_tree)
-├── services/            # auth.rs (OAuth), github.rs (API client)
+├── components/          # nav.rs, login.rs, dashboard.rs, editor.rs, preview.rs
+├── services/            # auth.rs (OAuth), github.rs (API client — REST + GraphQL)
 └── models/              # post.rs (frontmatter + body), github.rs (API types)
 worker/                  # Cloudflare Worker for OAuth token exchange
 ```
@@ -86,5 +86,9 @@ The blog is a Zola static site. Content uses TOML frontmatter with `+++` delimit
 - `markdown` (markdown-rs) — markdown rendering
 - `gloo-net` / `gloo-storage` / `gloo-utils` — browser API wrappers
 - `serde` / `serde_json` / `toml` — serialization
-- `base64` — GitHub API file content encoding
+- `base64` — GitHub API file content encoding (REST path; GraphQL returns plain text)
+- `futures` — `join_all` for parallel commit-date fetching
+- `js-sys` / `wasm-bindgen` / `wasm-bindgen-futures` — JS interop and async
+- `log` / `wasm-logger` — logging in WASM
+- `web-sys` — browser APIs (FileReader, DragEvent, KeyboardEvent, etc.)
 - `worker` — Cloudflare Workers Rust SDK (for the OAuth worker)
