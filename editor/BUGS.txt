@@ -3,3 +3,12 @@
 We should see media in the rendered previews (may require de-gitlfs-ing the repo)
 
 ---
+
+When deleting a branch, branch should automatically be de-selected.
+
+---
+
+We should determine if a post is a draft and indicate that at the list view.
+`.md` files with `draft = true` should have a little icon next to them.
+`.md` files with frontmatter but `draft = false` or no `draft` have a different icon.
+`.md` files without frontmatter hav eno icon.

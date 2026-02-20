@@ -16,14 +16,22 @@
     {
       devShell = pkgs.mkShell {
         buildInputs = with pkgs; [
+          # Praise the good language
           rust
+          # Wasm
           trunk
+          # Wasm
           wasm-bindgen-cli
-          gnumake
+          # Cloudflare
           wrangler
+          # Wasm build
           worker-build
+          # Infra as Code
           opentofu
+          # JSON parsing
           jq
+          # Issues tracking for Claude
+          beads
         ];
       };
     }
