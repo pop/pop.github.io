@@ -142,6 +142,9 @@ pub fn editor_page(props: &Props) -> Html {
         let content_val = (*content).clone();
         let render_gen = render_gen.clone();
         let show_preview = *view_mode != ViewMode::Edit;
+        let token = auth.token.clone();
+        let path = props.path.clone();
+        let active_branch = auth.active_branch.clone();
 
         use_effect_with((content_val, show_preview), move |(content_val, show_preview)| {
             if *show_preview {
@@ -155,12 +158,26 @@ pub fn editor_page(props: &Props) -> Html {
                 let rendered_html = rendered_html.clone();
                 let frontmatter_fields = frontmatter_fields.clone();
                 let render_gen = render_gen.clone();
+                let token = token.clone();
+                let path = path.clone();
+                let active_branch = active_branch.clone();
 
                 wasm_bindgen_futures::spawn_local(async move {
                     sleep_ms(200).await;
                     if *render_gen.borrow() == gen {
                         frontmatter_fields.set(parse_frontmatter(&content_val));
-                        rendered_html.set(render_markdown(&content_val));
+                        let raw_html = render_markdown(&content_val);
+                        let client = match token {
+                            Some(t) => GitHubClient::new(t),
+                            None => GitHubClient::anonymous(),
+                        };
+                        let branch = active_branch
+                            .as_deref()
+                            .unwrap_or(DEFAULT_BRANCH)
+                            .to_string();
+                        let resolved =
+                            client.resolve_images_in_html(&raw_html, &path, &branch).await;
+                        rendered_html.set(resolved);
                     }
                 });
             }

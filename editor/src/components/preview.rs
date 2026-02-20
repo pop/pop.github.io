@@ -16,6 +16,7 @@ pub fn preview(props: &Props) -> Html {
     let auth = use_context::<AuthContext>().expect("AuthContext not found");
 
     let content = use_state(String::new);
+    let rendered_html = use_state(String::new);
     let frontmatter_fields = use_state(Vec::<(String, String)>::new);
     let loading = use_state(|| true);
     let error = use_state(|| Option::<String>::None);
@@ -23,6 +24,7 @@ pub fn preview(props: &Props) -> Html {
     // Load file content from source branch
     {
         let content = content.clone();
+        let rendered_html = rendered_html.clone();
         let frontmatter_fields = frontmatter_fields.clone();
         let loading = loading.clone();
         let error = error.clone();
@@ -41,7 +43,11 @@ pub fn preview(props: &Props) -> Html {
                     Ok(file) => {
                         let text = file.content.unwrap_or_default();
                         frontmatter_fields.set(parse_frontmatter(&text));
-                        content.set(text);
+                        content.set(text.clone());
+                        let raw_html = render_markdown(&text);
+                        let resolved =
+                            client.resolve_images_in_html(&raw_html, &path, "source").await;
+                        rendered_html.set(resolved);
                         loading.set(false);
                     }
                     Err(e) => {
@@ -59,10 +65,9 @@ pub fn preview(props: &Props) -> Html {
 
     // Syntax highlighting after content loads
     {
-        let content_val = (*content).clone();
-        let loading_val = *loading;
-        use_effect_with((content_val, loading_val), move |(_, loading)| {
-            if !loading {
+        let rendered_html_val = (*rendered_html).clone();
+        use_effect_with(rendered_html_val, move |html| {
+            if !html.is_empty() {
                 let _ = js_sys::eval(
                     "if(typeof hljs!=='undefined'){document.querySelectorAll('pre code:not(.hljs)').forEach(el=>hljs.highlightElement(el));}",
                 );
@@ -101,7 +106,7 @@ pub fn preview(props: &Props) -> Html {
                             }) }
                         </table>
                     }
-                    {Html::from_html_unchecked(AttrValue::from(render_markdown(&content)))}
+                    {Html::from_html_unchecked(AttrValue::from((*rendered_html).clone()))}
                 </div>
             }
         </div>
