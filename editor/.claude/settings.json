@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bd:*)",
+      "Bash(cargo:*)",
+      "Bash(tofu:*)"
+    ],
+    "ask": [
+      "Bash(tofu apply:*)"
+    ]
+  }
+}

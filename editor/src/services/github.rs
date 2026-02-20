@@ -10,6 +10,7 @@ use crate::models::github::{
     CheckRunsResponse, CommitInfo, CompareResponse, ContentEntry, FileContent,
     GqlBlobData, GqlRefData, GqlRefsData, GqlTreeData, GitRef, GraphQLResponse, TreeResponse,
 };
+use crate::models::post::{bytes_to_data_url, extract_relative_image_srcs, post_dir, replace_image_srcs};
 
 const OWNER: &str = "pop";
 const REPO: &str = "pop.github.io";
@@ -246,6 +247,70 @@ impl GitHubClient {
             404 => Err(format!("File not found: {path}")),
             status => Err(format!("GitHub API error: {status}")),
         }
+    }
+
+    /// Read a single file from the repo and return its raw bytes.
+    ///
+    /// Uses the REST Contents API. The base64 content from the response is
+    /// stripped of whitespace before decoding, matching GitHub's encoding.
+    pub async fn get_file_bytes(&self, path: &str, branch: &str) -> Result<Vec<u8>, String> {
+        let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/contents/{path}?ref={branch}");
+        let resp = self.get(&url).await?;
+
+        match resp.status() {
+            200 => {
+                let fc: FileContent = resp.json().await.map_err(|e| e.to_string())?;
+                let encoded = fc.content.unwrap_or_default();
+                let cleaned: String = encoded.chars().filter(|c| !c.is_whitespace()).collect();
+                BASE64_STANDARD.decode(cleaned.as_bytes()).map_err(|e| e.to_string())
+            }
+            401 => Err("Unauthorized \u{2014} check your token".into()),
+            404 => Err(format!("File not found: {path}")),
+            status => Err(format!("GitHub API error: {status}")),
+        }
+    }
+
+    /// Resolve relative image `src` attributes in rendered HTML to data URLs.
+    ///
+    /// Fetches each relative image from the repo using `get_file_bytes` (in parallel),
+    /// converts successful results to `data:` URLs, and returns the HTML with
+    /// all resolved `src` values substituted. Images that fail to fetch (404, error)
+    /// retain their original relative `src`.
+    pub async fn resolve_images_in_html(
+        &self,
+        html: &str,
+        post_path: &str,
+        branch: &str,
+    ) -> String {
+        let srcs = extract_relative_image_srcs(html);
+        if srcs.is_empty() {
+            return html.to_string();
+        }
+
+        let dir = post_dir(post_path);
+        let branch = branch.to_string();
+
+        let futures: Vec<_> = srcs
+            .iter()
+            .map(|src| {
+                let repo_path = if dir.is_empty() {
+                    src.clone()
+                } else {
+                    format!("{dir}/{src}")
+                };
+                let src = src.clone();
+                let branch = branch.clone();
+                async move {
+                    match self.get_file_bytes(&repo_path, &branch).await {
+                        Ok(bytes) => (src.clone(), bytes_to_data_url(&bytes, &src)),
+                        Err(_) => (src.clone(), src),
+                    }
+                }
+            })
+            .collect();
+
+        let replacements: HashMap<String, String> = join_all(futures).await.into_iter().collect();
+        replace_image_srcs(html, &replacements)
     }
 
     // ── Branch operations ────────────────────────────────────────
