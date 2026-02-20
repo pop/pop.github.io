@@ -470,6 +470,23 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
 - [x] Update `components/preview.rs` — add `rendered_html` state; in the content-loading async block, call `render_markdown` then `resolve_images_in_html` (always from `source` branch) and store the result; render uses `rendered_html` state; syntax-highlighting effect depends on `rendered_html` instead of `content`
 - [x] Update `components/editor.rs` — extend the debounced preview render effect to clone `auth.token`, `props.path`, and `auth.active_branch`, create a `GitHubClient`, and call `resolve_images_in_html` with the active branch (falling back to `source`) before setting `rendered_html`
 
+### Phase 15: Draft/Published Status Icons in Dashboard
+
+**Goal:** Show per-file status icons next to `.md` files in the dashboard file list so users can tell at a glance whether a post is a draft or published.
+
+**Status logic:**
+- `draft = true` in TOML frontmatter → 🌱 (draft)
+- Frontmatter present with `draft = false` or no `draft` key → 📰 (published)
+- No frontmatter → no icon (not a blog post)
+
+**Implementation:**
+- [ ] Add `PostStatus` enum (`Draft`, `Published`, `NoFrontmatter`) and `detect_post_status(content: &str) -> PostStatus` helper to `components/dashboard.rs`; reuses existing `extract_frontmatter` + `parse_frontmatter` from `models/post.rs`
+- [ ] Add `post_statuses: use_state(HashMap<String, PostStatus>)` to dashboard component state
+- [ ] Extend `CachedListing` struct with `post_statuses: Option<HashMap<String, String>>` (serialized as `"draft"`/`"published"`/`"none"`); add `get_cached_post_statuses` and `set_cached_post_statuses` helpers
+- [ ] Add `use_effect_with(entries)` that: clears stale statuses on navigation, checks cache, then fetches content for each `.md` file via `client.get_file(path, branch)`, parses draft status, caches and sets result
+- [ ] Update `render_entry` signature to accept `post_statuses: &HashMap<String, PostStatus>` and render 🌱/📰 emoji span before the filename for `.md` files
+- [ ] Update call site to pass `&*post_statuses`
+
 ---
 
 ## Open Questions

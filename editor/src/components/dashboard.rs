@@ -894,7 +894,7 @@ pub fn dashboard() -> Html {
         <div class="dashboard">
             <div class="dashboard-header">
                 <div class="dashboard-title-row">
-                    <h2>{"Content"}</h2>
+                    <h2>{"editor.elijah.run"}</h2>
                     <div class="dashboard-actions">
                         <button class="refresh-btn" onclick={on_refresh} title="Refresh">
                             {"\u{21BB}"}
@@ -909,6 +909,9 @@ pub fn dashboard() -> Html {
                         }
                     </div>
                 </div>
+                if *show_branches {
+                    {render_branch_list(&branches, &active_branch_opt, on_select_branch.clone(), on_clear_branch.clone())}
+                }
                 if let Some(ref name) = active_branch_opt {
                     <div class="active-branch-badge">
                         <span class="branch-label">{format!("Branch: {name}")}</span>
@@ -937,9 +940,6 @@ pub fn dashboard() -> Html {
                             {render_diff_panel(data, on_confirm_publish, on_cancel_diff)}
                         }
                     }
-                }
-                if *show_branches {
-                    {render_branch_list(&branches, &active_branch_opt, on_select_branch.clone(), on_clear_branch.clone())}
                 }
                 <div class="breadcrumbs">{breadcrumbs}</div>
             </div>
