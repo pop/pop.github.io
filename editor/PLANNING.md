@@ -452,6 +452,24 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
 - [x] Remove auth redirect from Editor — uses anonymous client for file loading; when not authenticated: hides Save/Delete/Upload/Publish UI, shows "Login to save" link; textarea editing still works locally
 - [ ] Verify: unauthenticated browsing, preview, and editor viewing work end-to-end
 
+### Phase 14: Image Resolution in Preview ✓
+
+**Goal:** Co-located images in markdown posts render correctly in the editor preview pane and standalone Preview page.
+
+**Problem:** Relative image references like `![alt](photo.jpg)` in markdown produce `<img src="photo.jpg">` in the rendered HTML. On the page `/edit/content/posts/my-post/index.md`, the browser resolves this to `/edit/content/posts/my-post/photo.jpg`. Cloudflare Pages serves `index.html` for all paths (SPA fallback), so the request returns 200 with HTML rather than the image.
+
+**Solution:** After rendering markdown to HTML, fetch each relative image from the GitHub API as binary and substitute its `src` with a `data:` URL before embedding into the DOM.
+
+- [x] Add `get_file_bytes(path, branch) -> Result<Vec<u8>, String>` to `GitHubClient` in `services/github.rs` — uses the REST Contents API, parses `FileContent` JSON, strips whitespace from base64, decodes to raw bytes
+- [x] Add `post_dir(path: &str) -> &str` to `models/post.rs` — extracts parent directory from a repo file path; replaces the private `parent_dir` function in `editor.rs` (3 call sites updated to import from `models::post`)
+- [x] Add `extract_relative_image_srcs(html) -> Vec<String>` to `models/post.rs` — scans `<img` tags for `src=` values not starting with `http`, `//`, `/`, or `data:`; simple string scan, no regex dependency
+- [x] Add `replace_image_srcs(html, replacements: &HashMap<String, String>) -> String` to `models/post.rs` — character-accurate in-place replacement of `src` attribute values within `<img` tags
+- [x] Add `mime_type_for(path: &str) -> &'static str` to `models/post.rs` — maps `.png`, `.jpg`/`.jpeg`, `.gif`, `.webp`, `.svg` extensions; falls back to `application/octet-stream`
+- [x] Add `bytes_to_data_url(bytes: &[u8], path: &str) -> String` to `models/post.rs` — encodes bytes as base64 and produces `data:{mime};base64,{encoded}`
+- [x] Add `resolve_images_in_html(html, post_path, branch) -> String` to `GitHubClient` in `services/github.rs` — extracts relative srcs, computes repo paths as `{post_dir}/{src}`, fetches all in parallel via `futures::future::join_all`, replaces successful fetches with data URLs (404s/errors retain original src)
+- [x] Update `components/preview.rs` — add `rendered_html` state; in the content-loading async block, call `render_markdown` then `resolve_images_in_html` (always from `source` branch) and store the result; render uses `rendered_html` state; syntax-highlighting effect depends on `rendered_html` instead of `content`
+- [x] Update `components/editor.rs` — extend the debounced preview render effect to clone `auth.token`, `props.path`, and `auth.active_branch`, create a `GitHubClient`, and call `resolve_images_in_html` with the active branch (falling back to `source`) before setting `rendered_html`
+
 ---
 
 ## Open Questions
@@ -625,3 +643,12 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
 - Removed `decode_github_content` calls from `editor.rs` and `preview.rs` — `get_file` now returns decoded text; `decode_github_content` made private (used only by REST `get_file_rest`)
 - Kept as REST: all mutations, `compare_branches`, `get_check_runs`, `get_last_commit_date`/`get_commit_dates_bulk`
 - Compiles clean (`cargo check --target wasm32-unknown-unknown`)
+
+### Session 14 (2026-02-19) — Phase 14
+- Built Phase 14: image resolution in preview
+- Root cause: relative image `src` values in rendered markdown produce requests to `/edit/{path}`, which Cloudflare Pages serves as `index.html` (SPA fallback) rather than the actual image binary
+- `get_file_bytes(path, branch) -> Result<Vec<u8>, String>` added to `GitHubClient` in `services/github.rs` — REST Contents API, parses `FileContent` JSON, decodes base64 to raw bytes
+- Image utilities added to `models/post.rs`: `post_dir` (parent directory extraction, replaces private `parent_dir` in `editor.rs`), `extract_relative_image_srcs` (scans `<img` tags for relative `src=` values), `replace_image_srcs` (character-accurate attribute substitution), `mime_type_for` (extension-to-MIME mapping), `bytes_to_data_url` (base64 `data:` URL construction)
+- `resolve_images_in_html(html, post_path, branch) -> String` added to `GitHubClient` — orchestrates parallel image fetches via `futures::future::join_all`, converts successful results to `data:` URLs, leaves unresolvable images at their original src
+- `components/preview.rs`: added `rendered_html` state; content-loading async block now calls `render_markdown` → `resolve_images_in_html` (source branch) → `rendered_html.set`; render uses `rendered_html` state; syntax-highlighting effect moved to depend on `rendered_html`
+- `components/editor.rs`: debounced render effect extended to create `GitHubClient` from token, call `resolve_images_in_html` with active branch (or source), store resolved HTML; `parent_dir` references replaced with `post_dir` imported from `models::post`
