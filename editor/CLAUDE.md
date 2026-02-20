@@ -50,13 +50,7 @@ Blog editor for elijah.run — a client-side Yew (Rust/WASM) web app that edits 
 
 ## Development Environment
 
-Uses Nix Flakes for reproducible tooling. Enter the dev shell:
-
-```
-nix develop
-```
-
-The shell provides: stable Rust (with `wasm32-unknown-unknown` target), Trunk, wasm-bindgen-cli, and GNU Make.
+Uses Nix Flakes for reproducible tooling. The dev shell is activated automatically via `direnv` — all tools (`cargo`, `trunk`, `wasm-bindgen-cli`, `make`) are available directly in the shell without any wrapper.
 
 ## Build & Run Commands
 
@@ -64,9 +58,10 @@ The shell provides: stable Rust (with `wasm32-unknown-unknown` target), Trunk, w
 trunk serve          # Dev server with hot reload
 trunk build          # Debug build
 trunk build --release  # Production build
+cargo check --target wasm32-unknown-unknown  # Type-check
 ```
 
-Requires the Nix dev shell for the correct Rust target and Trunk version.
+Do NOT prefix commands with `nix develop --command ...`. Run them directly.
 
 ## Architecture
 

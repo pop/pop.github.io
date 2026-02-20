@@ -9,7 +9,7 @@ use yew_router::prelude::*;
 
 use crate::app::AuthContext;
 use crate::components::dashboard::invalidate_cache;
-use crate::models::post::{parse_frontmatter, render_markdown};
+use crate::models::post::{parse_frontmatter, post_dir, render_markdown};
 use crate::routes::Route;
 use crate::services::github::GitHubClient;
 
@@ -331,7 +331,7 @@ pub fn editor_page(props: &Props) -> Html {
                             file_sha.set(Some(new_sha));
                             original_content.set((*content).clone());
                             is_new.set(false);
-                            invalidate_cache(parent_dir(&path));
+                            invalidate_cache(post_dir(&path));
                             save_msg.set(Some("Saved".into()));
                             saving.set(false);
                         }
@@ -407,7 +407,7 @@ pub fn editor_page(props: &Props) -> Html {
                         .await
                     {
                         Ok(()) => {
-                            invalidate_cache(parent_dir(&path));
+                            invalidate_cache(post_dir(&path));
                             saving.set(false);
                             navigator.push(&Route::Dashboard);
                         }
@@ -455,7 +455,7 @@ pub fn editor_page(props: &Props) -> Html {
             }
 
             let file_name = sanitize_filename(&file.name());
-            let upload_dir = parent_dir(&path);
+            let upload_dir = post_dir(&path);
             let upload_path = if upload_dir.is_empty() {
                 file_name.clone()
             } else {
@@ -899,9 +899,6 @@ async fn read_file_as_bytes(file: web_sys::File) -> Result<Vec<u8>, String> {
     Ok(array.to_vec())
 }
 
-fn parent_dir(path: &str) -> &str {
-    path.rsplit_once('/').map_or("", |(dir, _)| dir)
-}
 
 fn sanitize_filename(name: &str) -> String {
     name.chars()
