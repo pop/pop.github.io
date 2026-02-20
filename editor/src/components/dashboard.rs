@@ -11,8 +11,11 @@ use yew_router::prelude::*;
 use wasm_bindgen::JsCast;
 use wasm_bindgen::closure::Closure;
 
+use futures::future::join_all;
+
 use crate::app::AuthContext;
 use crate::models::github::{CompareResponse, ContentEntry, DiffFile, GitRef};
+use crate::models::post::{extract_frontmatter, parse_frontmatter};
 use crate::routes::Route;
 use crate::services::github::GitHubClient;
 
@@ -22,6 +25,22 @@ const RETURN_PATH_KEY: &str = "dashboard_return_path";
 const ALL_FILES_KEY: &str = "all_files_index";
 const CACHE_TTL_MS: f64 = 5.0 * 60.0 * 1000.0; // 5 minutes
 const ALL_FILES_TTL_MS: f64 = 15.0 * 60.0 * 1000.0; // 15 minutes
+
+#[derive(Clone, PartialEq)]
+enum PostStatus {
+    Draft,
+    Published,
+    NoFrontmatter,
+}
+
+fn detect_post_status(content: &str) -> PostStatus {
+    if extract_frontmatter(content).is_none() {
+        return PostStatus::NoFrontmatter;
+    }
+    let fields = parse_frontmatter(content);
+    let is_draft = fields.iter().any(|(k, v)| k == "draft" && v == "true");
+    if is_draft { PostStatus::Draft } else { PostStatus::Published }
+}
 
 #[derive(Clone, PartialEq)]
 enum CiState {
@@ -45,6 +64,8 @@ struct CachedListing {
     timestamp: f64,
     #[serde(default)]
     commit_dates: Option<HashMap<String, f64>>,
+    #[serde(default)]
+    post_statuses: Option<HashMap<String, String>>,
 }
 
 fn cache_key(path: &str) -> String {
@@ -67,6 +88,7 @@ fn set_cached_listing(path: &str, entries: &[ContentEntry]) {
         entries: entries.to_vec(),
         timestamp: js_sys::Date::now(),
         commit_dates: None,
+        post_statuses: None,
     };
     let _ = SessionStorage::set(&cache_key(path), &cached);
 }
@@ -79,6 +101,18 @@ fn get_cached_commit_dates(path: &str) -> Option<HashMap<String, f64>> {
 fn set_cached_commit_dates(path: &str, dates: &HashMap<String, f64>) {
     if let Ok(mut cached) = SessionStorage::get::<CachedListing>(&cache_key(path)) {
         cached.commit_dates = Some(dates.clone());
+        let _ = SessionStorage::set(&cache_key(path), &cached);
+    }
+}
+
+fn get_cached_post_statuses(path: &str) -> Option<HashMap<String, String>> {
+    let cached: CachedListing = SessionStorage::get(&cache_key(path)).ok()?;
+    cached.post_statuses
+}
+
+fn set_cached_post_statuses(path: &str, statuses: &HashMap<String, String>) {
+    if let Ok(mut cached) = SessionStorage::get::<CachedListing>(&cache_key(path)) {
+        cached.post_statuses = Some(statuses.clone());
         let _ = SessionStorage::set(&cache_key(path), &cached);
     }
 }
@@ -195,6 +229,9 @@ pub fn dashboard() -> Html {
     });
     let commit_dates = use_state(HashMap::<String, f64>::new);
     let dates_loading = use_state(|| false);
+
+    // Phase 15: draft/published status icons
+    let post_statuses = use_state(HashMap::<String, PostStatus>::new);
 
     // Global file index for search (Bug 3)
     let all_files = use_state(|| Vec::<ContentEntry>::new());
@@ -382,6 +419,95 @@ pub fn dashboard() -> Html {
             }
             || ()
         });
+    }
+
+    // Phase 15: fetch draft/published status for .md files in the current directory
+    {
+        let post_statuses = post_statuses.clone();
+        let token = auth.token.clone();
+        let current_path = current_path.clone();
+        let entries = entries.clone();
+        let active_branch_opt = active_branch_opt.clone();
+
+        use_effect_with(
+            ((*current_path).clone(), entries.len()),
+            move |_| {
+                post_statuses.set(HashMap::new());
+
+                let md_paths: Vec<String> = entries
+                    .iter()
+                    .filter(|e| e.entry_type == "file" && e.name.ends_with(".md"))
+                    .map(|e| e.path.clone())
+                    .collect();
+
+                if !md_paths.is_empty() {
+                    let path = (*current_path).clone();
+
+                    // Check cache first
+                    if let Some(cached) = get_cached_post_statuses(&path) {
+                        let parsed: HashMap<String, PostStatus> = cached
+                            .into_iter()
+                            .map(|(k, v)| {
+                                let status = match v.as_str() {
+                                    "draft" => PostStatus::Draft,
+                                    "published" => PostStatus::Published,
+                                    _ => PostStatus::NoFrontmatter,
+                                };
+                                (k, status)
+                            })
+                            .collect();
+                        post_statuses.set(parsed);
+                    } else {
+                        // Fetch file contents in parallel
+                        let branch = active_branch_opt
+                            .clone()
+                            .unwrap_or_else(|| DEFAULT_BRANCH.to_string());
+
+                        wasm_bindgen_futures::spawn_local(async move {
+                            let futures: Vec<_> = md_paths
+                                .into_iter()
+                                .map(|file_path| {
+                                    let token = token.clone();
+                                    let branch = branch.clone();
+                                    async move {
+                                        let client = match token {
+                                            Some(t) => GitHubClient::new(t),
+                                            None => GitHubClient::anonymous(),
+                                        };
+                                        let result = client.get_file(&file_path, &branch).await;
+                                        (file_path, result)
+                                    }
+                                })
+                                .collect();
+
+                            let results = join_all(futures).await;
+
+                            let mut statuses_map: HashMap<String, PostStatus> = HashMap::new();
+                            let mut cache_map: HashMap<String, String> = HashMap::new();
+
+                            for (file_path, result) in results {
+                                let status = match result {
+                                    Ok(fc) => detect_post_status(fc.content.as_deref().unwrap_or("")),
+                                    Err(_) => PostStatus::NoFrontmatter,
+                                };
+                                let status_str = match &status {
+                                    PostStatus::Draft => "draft",
+                                    PostStatus::Published => "published",
+                                    PostStatus::NoFrontmatter => "none",
+                                };
+                                cache_map.insert(file_path.clone(), status_str.to_string());
+                                statuses_map.insert(file_path, status);
+                            }
+
+                            set_cached_post_statuses(&path, &cache_map);
+                            post_statuses.set(statuses_map);
+                        });
+                    }
+                }
+
+                || ()
+            },
+        );
     }
 
     // CI status: fetch on mount and poll every 15s while pending
@@ -874,6 +1000,7 @@ pub fn dashboard() -> Html {
 
     let cur_sort = *sort_mode;
     let cur_dates = (*commit_dates).clone();
+    let cur_post_statuses = (*post_statuses).clone();
 
     // Global search results (used when filter_text is non-empty)
     let filter_active = !filter_text.is_empty();
@@ -1078,7 +1205,7 @@ pub fn dashboard() -> Html {
             } else {
                 <div class="content-list">
                     { for display_entries.iter().map(|entry| {
-                        render_entry(entry, on_navigate.clone(), &cur_sort, &cur_dates, on_delete_request.clone(), is_authenticated)
+                        render_entry(entry, on_navigate.clone(), &cur_sort, &cur_dates, &cur_post_statuses, on_delete_request.clone(), is_authenticated)
                     }) }
                 </div>
             }
@@ -1166,6 +1293,7 @@ fn render_entry(
     on_click: Callback<ContentEntry>,
     sort_mode: &SortMode,
     commit_dates: &HashMap<String, f64>,
+    post_statuses: &HashMap<String, PostStatus>,
     on_delete: Callback<ContentEntry>,
     is_authenticated: bool,
 ) -> Html {
@@ -1187,6 +1315,16 @@ fn render_entry(
         None
     };
 
+    let status_icon = if !is_dir && entry.name.ends_with(".md") {
+        match post_statuses.get(&entry.path) {
+            Some(PostStatus::Draft) => html! { <span class="post-status-icon" title="Draft">{"\u{1F331}"}</span> },
+            Some(PostStatus::Published) => html! { <span class="post-status-icon" title="Published">{"\u{1F4F0}"}</span> },
+            _ => html! {},
+        }
+    } else {
+        html! {}
+    };
+
     let delete_btn = if is_media && is_authenticated {
         let entry_for_delete = entry.clone();
         let delete_onclick = Callback::from(move |e: MouseEvent| {
@@ -1206,6 +1344,7 @@ fn render_entry(
             <span class="entry-icon">
                 { if is_dir { "\u{25B8}" } else { "\u{00B7}" } }
             </span>
+            {status_icon}
             <span class="entry-name">{&entry.name}</span>
             if let Some(ref date) = date_display {
                 <span class="entry-date">{date}</span>

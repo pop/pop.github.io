@@ -480,12 +480,12 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
 - No frontmatter → no icon (not a blog post)
 
 **Implementation:**
-- [ ] Add `PostStatus` enum (`Draft`, `Published`, `NoFrontmatter`) and `detect_post_status(content: &str) -> PostStatus` helper to `components/dashboard.rs`; reuses existing `extract_frontmatter` + `parse_frontmatter` from `models/post.rs`
-- [ ] Add `post_statuses: use_state(HashMap<String, PostStatus>)` to dashboard component state
-- [ ] Extend `CachedListing` struct with `post_statuses: Option<HashMap<String, String>>` (serialized as `"draft"`/`"published"`/`"none"`); add `get_cached_post_statuses` and `set_cached_post_statuses` helpers
-- [ ] Add `use_effect_with(entries)` that: clears stale statuses on navigation, checks cache, then fetches content for each `.md` file via `client.get_file(path, branch)`, parses draft status, caches and sets result
-- [ ] Update `render_entry` signature to accept `post_statuses: &HashMap<String, PostStatus>` and render 🌱/📰 emoji span before the filename for `.md` files
-- [ ] Update call site to pass `&*post_statuses`
+- [x] Add `PostStatus` enum (`Draft`, `Published`, `NoFrontmatter`) and `detect_post_status(content: &str) -> PostStatus` helper to `components/dashboard.rs`; reuses existing `extract_frontmatter` + `parse_frontmatter` from `models/post.rs`
+- [x] Add `post_statuses: use_state(HashMap<String, PostStatus>)` to dashboard component state
+- [x] Extend `CachedListing` struct with `post_statuses: Option<HashMap<String, String>>` (serialized as `"draft"`/`"published"`/`"none"`); add `get_cached_post_statuses` and `set_cached_post_statuses` helpers
+- [x] Add `use_effect_with(entries)` that: clears stale statuses on navigation, checks cache, then fetches content for each `.md` file via `client.get_file(path, branch)`, parses draft status, caches and sets result
+- [x] Update `render_entry` signature to accept `post_statuses: &HashMap<String, PostStatus>` and render 🌱/📰 emoji span before the filename for `.md` files
+- [x] Update call site to pass `&*post_statuses`
 
 ---
 
@@ -669,3 +669,12 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
 - `resolve_images_in_html(html, post_path, branch) -> String` added to `GitHubClient` — orchestrates parallel image fetches via `futures::future::join_all`, converts successful results to `data:` URLs, leaves unresolvable images at their original src
 - `components/preview.rs`: added `rendered_html` state; content-loading async block now calls `render_markdown` → `resolve_images_in_html` (source branch) → `rendered_html.set`; render uses `rendered_html` state; syntax-highlighting effect moved to depend on `rendered_html`
 - `components/editor.rs`: debounced render effect extended to create `GitHubClient` from token, call `resolve_images_in_html` with active branch (or source), store resolved HTML; `parent_dir` references replaced with `post_dir` imported from `models::post`
+
+### Session 15 (2026-02-19) — Phase 15
+- Built Phase 15: draft/published status icons in dashboard
+- `PostStatus` enum (`Draft`, `Published`, `NoFrontmatter`) and `detect_post_status(content: &str) -> PostStatus` helper added to `components/dashboard.rs`; reuses `extract_frontmatter` + `parse_frontmatter` from `models/post.rs`
+- `post_statuses: Option<HashMap<String, String>>` field added to `CachedListing` (with `#[serde(default)]`); `get_cached_post_statuses` and `set_cached_post_statuses` helpers added alongside existing commit-date cache helpers
+- `post_statuses: use_state(HashMap<String, PostStatus>)` state added to dashboard component
+- `use_effect_with((path, entries.len()))` effect: clears stale statuses on navigation, checks cache, then fetches content for each `.md` file in parallel via `join_all` + `client.get_file`, parses draft status, caches and sets result
+- `render_entry` extended to accept `post_statuses: &HashMap<String, PostStatus>`; renders 🌱 before filename for draft `.md` files, 📰 for published
+- Compiles clean (`cargo check --target wasm32-unknown-unknown`)
