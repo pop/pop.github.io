@@ -23,6 +23,7 @@
           wrangler
           worker-build
           opentofu
+          jq
         ];
       };
     }
