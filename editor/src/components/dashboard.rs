@@ -1344,7 +1344,6 @@ fn render_entry(
             <span class="entry-icon">
                 { if is_dir { "\u{25B8}" } else { "\u{00B7}" } }
             </span>
-            {status_icon}
             <span class="entry-name">{&entry.name}</span>
             if let Some(ref date) = date_display {
                 <span class="entry-date">{date}</span>
@@ -1352,6 +1351,7 @@ fn render_entry(
             if !is_dir {
                 <span class="entry-size">{format_size(entry.size)}</span>
             }
+            {status_icon}
             {delete_btn}
         </div>
     }
