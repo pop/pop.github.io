@@ -1362,7 +1362,7 @@ fn render_entry(
         <div class={classes!("content-entry", is_dir.then_some("is-dir"), is_media.then_some("is-media"))}
              onclick={onclick}>
             <span class="entry-icon">
-                { if is_dir { "\u{25B8}" } else { "\u{00B7}" } }
+                { if is_dir { "📂" } else { "\u{00B7}" } }
             </span>
             <span class="entry-name">{&entry.name}</span>
             if let Some(ref date) = date_display {

@@ -856,6 +856,9 @@ title = "{title}"
 date = "{date_str}"
 description = ""
 draft = true
+
+# [taxonomies]
+# tags = ["comics", "games", "backlog", "movies", "tv", "whats-good"]
 +++
 "#
     )
