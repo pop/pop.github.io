@@ -2,3 +2,7 @@
 
 ---
 
+Deleted files are still in cache.
+Deleting a file twice results in a 404 error.
+
+---
