@@ -578,6 +578,38 @@ nav a:hover {
     color: white;
 }
 
+.format-buttons {
+    display: flex;
+    gap: 0.2rem;
+    align-items: center;
+}
+
+.format-btn {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    font-family: monospace;
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1;
+}
+
+.format-btn:hover {
+    border-color: #999;
+    background: #f6f8fa;
+    color: #333;
+}
+
+.format-btn-italic {
+    font-style: italic;
+}
+
+.format-btn-strike {
+    text-decoration: line-through;
+}
+
 /* Editor container & split layout */
 
 .editor-container {

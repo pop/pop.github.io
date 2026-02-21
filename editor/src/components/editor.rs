@@ -277,6 +277,26 @@ pub fn editor_page(props: &Props) -> Html {
         })
     };
 
+    // Phase 20: formatting toolbar callbacks
+    macro_rules! make_format_cb {
+        ($prefix:expr, $suffix:expr, $placeholder:expr) => {{
+            let content = content.clone();
+            let textarea_ref = textarea_ref.clone();
+            Callback::from(move |_: MouseEvent| {
+                let Some(textarea) = textarea_ref.cast::<HtmlTextAreaElement>() else { return };
+                let current = (*content).clone();
+                let new_content = apply_format_to_content(&textarea, &current, $prefix, $suffix, $placeholder);
+                content.set(new_content);
+                let _ = textarea.focus();
+            })
+        }};
+    }
+    let on_fmt_bold         = make_format_cb!("**", "**", "bold text");
+    let on_fmt_italic       = make_format_cb!("*", "*", "italic text");
+    let on_fmt_strike       = make_format_cb!("~~", "~~", "strikethrough text");
+    let on_fmt_code_inline  = make_format_cb!("`", "`", "code");
+    let on_fmt_code_block   = make_format_cb!("```\n", "\n```", "code");
+
     let on_save = {
         let content = content.clone();
         let original_content = original_content.clone();
@@ -720,6 +740,13 @@ pub fn editor_page(props: &Props) -> Html {
                             <Link<Route> to={Route::Login}>{"Login to save"}</Link<Route>>
                         </span>
                     }
+                    <div class="format-buttons">
+                        <button class="format-btn" onclick={on_fmt_bold} title="Bold">{"B"}</button>
+                        <button class="format-btn format-btn-italic" onclick={on_fmt_italic} title="Italic">{"I"}</button>
+                        <button class="format-btn format-btn-strike" onclick={on_fmt_strike} title="Strikethrough">{"S"}</button>
+                        <button class="format-btn" onclick={on_fmt_code_inline} title="Inline code">{"`"}</button>
+                        <button class="format-btn" onclick={on_fmt_code_block} title="Code block">{"```"}</button>
+                    </div>
                     <div class="view-toggle">
                         <button
                             class={classes!("toggle-btn", (*view_mode == ViewMode::Edit).then_some("active"))}
@@ -932,6 +959,24 @@ fn char_pos_to_byte_offset(s: &str, char_pos: usize) -> usize {
     s.char_indices()
         .nth(char_pos)
         .map_or(s.len(), |(byte_idx, _)| byte_idx)
+}
+
+/// Wrap selected text (or insert placeholder) with prefix/suffix markers.
+/// Returns the new full content string.
+fn apply_format_to_content(
+    textarea: &HtmlTextAreaElement,
+    current: &str,
+    prefix: &str,
+    suffix: &str,
+    placeholder: &str,
+) -> String {
+    let start = textarea.selection_start().ok().flatten().unwrap_or(0) as usize;
+    let end = textarea.selection_end().ok().flatten().unwrap_or(start as u32) as usize;
+    let byte_start = char_pos_to_byte_offset(current, start);
+    let byte_end = char_pos_to_byte_offset(current, end);
+    let selected = &current[byte_start..byte_end];
+    let inner = if selected.is_empty() { placeholder } else { selected };
+    format!("{}{}{}{}{}", &current[..byte_start], prefix, inner, suffix, &current[byte_end..])
 }
 
 // ── Debounce / highlighting helpers ─────────────────────────────
