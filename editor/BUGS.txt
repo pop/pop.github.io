@@ -2,6 +2,3 @@
 
 ---
 
-Can we "turn on" spell-check in the editor?
-
----

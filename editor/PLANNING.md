@@ -554,6 +554,16 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
 
 ---
 
+### Phase 21: Bug — Enable Spell-Check in Editor Textarea
+
+**Goal:** Turn on browser spell-check in the editor textarea so users get red-underline suggestions while writing.
+
+**Implementation:**
+- [ ] In `src/components/editor.rs` (approx line 754), change `spellcheck="false"` to `spellcheck="true"` on the `<textarea>` element
+- [ ] Verify: typing a misspelled word in the editor shows a squiggly underline
+
+---
+
 ## Open Questions
 
 - ~~**Hosting:** Where to deploy the built WASM app.~~ **Resolved:** Cloudflare Pages at `editor.elijah.run`, managed via OpenTofu.
