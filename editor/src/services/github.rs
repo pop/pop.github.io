@@ -549,6 +549,7 @@ impl GitHubClient {
         match resp.status() {
             200 => Ok(()),
             401 => Err("Unauthorized \u{2014} check your token".into()),
+            404 => Err("File not found \u{2014} it may have already been deleted".into()),
             status => Err(format!("Failed to delete file: {status}")),
         }
     }

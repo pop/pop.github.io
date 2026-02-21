@@ -168,7 +168,7 @@ pub fn invalidate_all_caches() {
     let mut keys_to_delete = Vec::new();
     for i in 0..len {
         if let Ok(Some(key)) = storage.key(i) {
-            if key.starts_with("dir_cache_") {
+            if key.starts_with("dir_cache_") || key.starts_with("all_files_index") {
                 keys_to_delete.push(key);
             }
         }
