@@ -7,4 +7,4 @@
 6. Mark the task as complete
 7. Update PLANNING.md to reflect the status of the project and what was done in this working session.
 8. If any follow-up work needs to be done, add it to PLANNING.md and create additional beads tasks
-9. Commit with a descriptive message referencing the task
+9. Commit with a descriptive message referencing the task ID
