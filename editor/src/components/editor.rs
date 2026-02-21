@@ -491,7 +491,7 @@ pub fn editor_page(props: &Props) -> Html {
                 return;
             }
 
-            let file_name = sanitize_filename(&file.name());
+            let file_name = crate::utils::sanitize_filename(&file.name());
             let upload_dir = post_dir(&path);
             let upload_path = if upload_dir.is_empty() {
                 file_name.clone()
@@ -565,7 +565,7 @@ pub fn editor_page(props: &Props) -> Html {
                                 if let Some(textarea) = textarea_ref.cast::<HtmlTextAreaElement>() {
                                     if let Ok(Some(pos)) = textarea.selection_start() {
                                         let insert_at =
-                                            char_pos_to_byte_offset(&current, pos as usize);
+                                            crate::utils::char_pos_to_byte_offset(&current, pos as usize);
                                         let (before, after) = current.split_at(insert_at);
                                         format!("{before}{md_ref}{after}")
                                     } else {
@@ -858,7 +858,7 @@ async fn create_editor_branch(client: &GitHubClient, path: &str) -> Result<Strin
     let day = today.get_date();
     let date_str = format!("{year}-{month:02}-{day:02}");
 
-    let slug = slug_from_path(path);
+    let slug = crate::utils::slug_from_path(path);
     let branch_name = format!("editor/{date_str}-{slug}");
 
     client.create_branch(&branch_name, &source_sha).await?;
@@ -874,8 +874,8 @@ fn generate_template(path: &str) -> String {
     let day = today.get_date();
     let date_str = format!("{year}-{month:02}-{day:02}");
 
-    let slug = slug_from_path(path);
-    let title = title_from_slug(&slug);
+    let slug = crate::utils::slug_from_path(path);
+    let title = crate::utils::title_from_slug(&slug);
 
     format!(
         r#"+++
@@ -887,27 +887,6 @@ draft = true
 +++
 "#
     )
-}
-
-fn slug_from_path(path: &str) -> String {
-    let parts: Vec<&str> = path.trim_end_matches('/').split('/').collect();
-    match parts.last() {
-        Some(&"index.md") | Some(&"_index.md") => parts
-            .get(parts.len().wrapping_sub(2))
-            .unwrap_or(&"untitled")
-            .to_string(),
-        Some(last) => last.trim_end_matches(".md").to_string(),
-        None => "untitled".to_string(),
-    }
-}
-
-fn title_from_slug(slug: &str) -> String {
-    let title = slug.replace('-', " ");
-    let mut chars = title.chars();
-    match chars.next() {
-        None => String::new(),
-        Some(c) => c.to_uppercase().to_string() + chars.as_str(),
-    }
 }
 
 // ── Image upload helpers ─────────────────────────────────────────
@@ -945,20 +924,6 @@ async fn read_file_as_bytes(file: web_sys::File) -> Result<Vec<u8>, String> {
 }
 
 
-fn sanitize_filename(name: &str) -> String {
-    name.chars()
-        .map(|c| if c == ' ' { '-' } else { c })
-        .filter(|c| c.is_alphanumeric() || *c == '-' || *c == '_' || *c == '.')
-        .collect::<String>()
-        .to_lowercase()
-}
-
-fn char_pos_to_byte_offset(s: &str, char_pos: usize) -> usize {
-    s.char_indices()
-        .nth(char_pos)
-        .map_or(s.len(), |(byte_idx, _)| byte_idx)
-}
-
 /// Wrap selected text (or insert placeholder) with prefix/suffix markers.
 /// Returns the new full content string.
 fn apply_format_to_content(
@@ -970,8 +935,8 @@ fn apply_format_to_content(
 ) -> String {
     let start = textarea.selection_start().ok().flatten().unwrap_or(0) as usize;
     let end = textarea.selection_end().ok().flatten().unwrap_or(start as u32) as usize;
-    let byte_start = char_pos_to_byte_offset(current, start);
-    let byte_end = char_pos_to_byte_offset(current, end);
+    let byte_start = crate::utils::char_pos_to_byte_offset(current, start);
+    let byte_end = crate::utils::char_pos_to_byte_offset(current, end);
     let selected = &current[byte_start..byte_end];
     let inner = if selected.is_empty() { placeholder } else { selected };
     format!("{}{}{}{}{}", &current[..byte_start], prefix, inner, suffix, &current[byte_end..])

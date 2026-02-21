@@ -1644,7 +1644,7 @@ fn render_entry(
                 <span class="entry-date">{date}</span>
             }
             if !is_dir {
-                <span class="entry-size">{format_size(entry.size)}</span>
+                <span class="entry-size">{crate::utils::format_size(entry.size)}</span>
             }
             {delete_btn}
         </div>
@@ -1677,16 +1677,6 @@ fn render_breadcrumbs(
                 }
             }
         }) }
-    }
-}
-
-fn format_size(bytes: u64) -> String {
-    if bytes < 1024 {
-        format!("{bytes} B")
-    } else if bytes < 1024 * 1024 {
-        format!("{:.1} KB", bytes as f64 / 1024.0)
-    } else {
-        format!("{:.1} MB", bytes as f64 / (1024.0 * 1024.0))
     }
 }
 
