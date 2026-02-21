@@ -15,6 +15,7 @@
     in
     {
       devShell = pkgs.mkShell {
+        BD_NO_DAEMON = "true";
         buildInputs = with pkgs; [
           # Praise the good language
           rust

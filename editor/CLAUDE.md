@@ -1,8 +1,19 @@
-# Agent Instructions
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+Blog editor for elijah.run — a client-side Yew (Rust/WASM) web app that edits and publishes posts to a Zola blog via the GitHub API. A Cloudflare Worker handles OAuth token exchange as the only server-side component. The editor lives in the `editor/` subdirectory of the `pop/pop.github.io` repo.
+
+## Planning
+
+When asked to create a plan or tasks, write them to the appropriate doc (PLANNING.md, TODO.md) WITHOUT executing any implementation unless explicitly told to proceed.
+Create beads tasks for all tasks created in the plan.
 
 This project uses **bd** (beads) for issue tracking. Run `bd onboard` to get started.
 
-## Quick Reference
+### Quick Reference
 
 ```bash
 bd ready              # Find available work
@@ -12,7 +23,7 @@ bd close <id>         # Complete work
 bd sync               # Sync with git
 ```
 
-## Landing the Plane (Session Completion)
+### Landing the Plane (Session Completion)
 
 **When ending a work session**, you MUST complete ALL steps below. Work is NOT complete until `git push` succeeds.
 
@@ -38,7 +49,7 @@ bd sync               # Sync with git
 - NEVER say "ready to push when you are" - YOU must push
 - If push fails, resolve and retry until it succeeds
 
-## Session Rules
+### Session Rules
 
 These are hard constraints enforced from recurring friction patterns. Violations will cause build failures, deploy errors, or lost work.
 
@@ -48,16 +59,6 @@ These are hard constraints enforced from recurring friction patterns. Violations
 4. **Always deploy to production** — use `wrangler pages deploy --branch=source` for the frontend. Never deploy to preview unless explicitly asked.
 5. **`nix develop --command` is for CI only** — do not use it in interactive sessions; the shell is already loaded.
 6. **Verify `bd` is on PATH before use** — run `which bd` if there is any doubt about the binary being available.
-
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
-## Project Overview
-
-Blog editor for elijah.run — a client-side Yew (Rust/WASM) web app that edits and publishes posts to a Zola blog via the GitHub API. A Cloudflare Worker handles OAuth token exchange as the only server-side component. The editor lives in the `editor/` subdirectory of the `pop/pop.github.io` repo.
-
-**Current status:** Phases 1–13 complete and deployed. Phase 11 (automated testing) is the remaining unimplemented phase. See `PLANNING.md` for the full architecture spec and session log.
 
 ## Development Environment
 
@@ -75,6 +76,14 @@ cargo check --target wasm32-unknown-unknown  # Type-check
 ```
 
 Do NOT prefix commands with `nix develop --command ...`. Run them directly.
+
+Prefer to run a single command over chaining commands together with `&&`.
+For example:
+```
+git add file1 file2 file3
+git commit -m 'useful commit message goes here'
+```
+is prefered to `git add file1 file2 fil3 && git commit -m 'useful commit message goes here'`.
 
 ## Architecture
 
@@ -143,11 +152,6 @@ The blog is a Zola static site. Content uses TOML frontmatter with `+++` delimit
 - `log` / `wasm-logger` — logging in WASM
 - `web-sys` — browser APIs (FileReader, DragEvent, KeyboardEvent, etc.)
 - `worker` — Cloudflare Workers Rust SDK (for the OAuth worker)
-
-
-## Planning
-
-When asked to create a plan or tasks, write them to the appropriate doc (PLANNING.md, TODO.md) WITHOUT executing any implementation unless explicitly told to proceed.
 
 ## Deployment Notes
 

@@ -487,6 +487,71 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
 - [x] Update `render_entry` signature to accept `post_statuses: &HashMap<String, PostStatus>` and render 🌱/📰 emoji span before the filename for `.md` files
 - [x] Update call site to pass `&*post_statuses`
 
+### Phase 16: Bug Fix — Branch Deselection on Delete
+
+**Goal:** When a branch is deleted (via Publish or Discard in the editor), the dashboard should immediately deselect it and refresh content from `source`, rather than leaving a stale broken state.
+
+**Problem:** After deletion the sessionStorage key `editor_branch` is cleared, but the dashboard's `active_branch` state is not refreshed in the same render cycle. The user sees "fail to load" errors and must manually click "View source" and force-reload.
+
+**Implementation:**
+- [ ] Investigate `on_confirm_publish` and `on_discard` callbacks in `components/dashboard.rs` (approx lines 645–721) to confirm whether `set_active_branch.emit(None)` fires before or after the content-loading effect re-runs
+- [ ] If the branch selector panel is open during deletion, ensure it is closed and the panel state is reset alongside branch deselection
+- [ ] Ensure the `force_refresh` counter is incremented (or invalidate-all-caches is called) *after* `set_active_branch` so the refetch uses `source` branch, not the deleted one
+- [ ] Verify fix: deleting a branch (Publish or Discard) in the editor, then returning to dashboard, shows source-branch content with no errors and no stale branch badge
+
+### Phase 17: Bug Fix — Post Status Filter (All / Draft / Published)
+
+**Goal:** Add filter buttons to the dashboard so users can view All posts, only Drafts, or only Published posts. The existing search bar and sort options remain; this adds a third control group.
+
+**Implementation:**
+- [ ] Add `StatusFilter` enum (`All`, `Draft`, `Published`) and `status_filter: use_state(StatusFilter::All)` to dashboard component state in `components/dashboard.rs`
+- [ ] Extend the `display_entries` filtering block (approx line 970) to skip `.md` files whose `PostStatus` does not match the selected `StatusFilter`; directories and non-`.md` files always pass through
+- [ ] Add a "Filter:" button group (`All` / `Draft` / `Published`) to the `.filter-sort-bar` section in the dashboard render (approx line 1113), styled consistently with the existing sort toggle buttons
+- [ ] Add CSS for the new filter buttons (`.status-filter-bar`, `.status-btn`, `.status-btn.active`) in `styles/main.css`, matching the look of `.sort-btn`
+- [ ] Reset `status_filter` to `All` on directory navigation (alongside existing `filter_text` reset in `on_navigate` etc.)
+- [ ] Verify fix: switching to "Draft" shows only 🌱 files; "Published" shows only 📰 files; "All" restores full list
+
+### Phase 18: Bug Fix — Directory Icon
+
+**Goal:** Display the 📂 emoji for directory entries instead of the current `▸` (U+25B8) triangle.
+
+**Implementation:**
+- [ ] In `components/dashboard.rs` `render_entry` (approx line 1345), replace `"\u{25B8}"` with `"📂"`
+- [ ] Verify fix: directory rows in the dashboard show 📂 and file rows continue to show `·`
+
+### Phase 19: Bug Fix — Template Tags
+
+**Goal:** Include a `taxonomies.tags` line in the new-post TOML frontmatter template so users have a ready-made example they can uncomment.
+
+**Implementation:**
+- [ ] In `components/editor.rs` `generate_template` function (approx line 843), extend the template string to include a commented-out tags line after `draft = true`:
+  ```toml
+  # taxonomies.tags = ["comics", "games", "backlog", "movies", "tv", "whats-good"]
+  ```
+- [ ] Verify fix: creating a new post shows the tags comment in the frontmatter
+
+### Phase 20: Feature — Editor Formatting Toolbar
+
+**Goal:** Add five Markdown formatting buttons to the editor toolbar: Bold, Italic, Strikethrough, Inline code, Code block. Each wraps the selected text (or inserts placeholder syntax at the cursor if nothing is selected).
+
+**Implementation:**
+- [ ] Add a shared `apply_format` helper in `components/editor.rs` that:
+  - Casts `textarea_ref` to `HtmlTextAreaElement`
+  - Reads `selection_start()` / `selection_end()` (char positions)
+  - Converts to byte offsets via `char_pos_to_byte_offset`
+  - Builds new string: `prefix + selected_or_placeholder + suffix`
+  - Updates `content` state and calls `on_content_change` to mark dirty
+  - Restores focus to the textarea after update
+- [ ] Create five `Callback<MouseEvent>` closures (or a single parameterised factory) using `apply_format` for:
+  - **Bold** — wrap with `**` / `**`; placeholder `bold text`
+  - **Italic** — wrap with `*` / `*`; placeholder `italic text`
+  - **Strikethrough** — wrap with `~~` / `~~`; placeholder `strikethrough text`
+  - **Inline code** — wrap with `` ` `` / `` ` ``; placeholder `code`
+  - **Code block** — wrap with ```` ```\n ```` / ```` \n``` ````; placeholder `code`
+- [ ] Add a `.format-buttons` `<div>` to the editor toolbar (approx line 685), rendered unconditionally (formatting is always available regardless of auth state), containing the five buttons
+- [ ] Add CSS for `.format-buttons` and `.format-btn` in `styles/main.css`: compact, visually distinct from action buttons (e.g. monospace label, subtle border, smaller font)
+- [ ] Verify fix: selecting text and clicking each button wraps it in the correct markdown; clicking with no selection inserts the syntax with a placeholder
+
 ---
 
 ## Open Questions

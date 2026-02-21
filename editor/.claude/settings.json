@@ -3,7 +3,8 @@
     "allow": [
       "Bash(bd:*)",
       "Bash(cargo:*)",
-      "Bash(tofu:*)"
+      "Bash(tofu:*)",
+      "Bash(git push:*)"
     ],
     "ask": [
       "Bash(tofu apply:*)"
