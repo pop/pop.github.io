@@ -494,10 +494,10 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
 **Problem:** After deletion the sessionStorage key `editor_branch` is cleared, but the dashboard's `active_branch` state is not refreshed in the same render cycle. The user sees "fail to load" errors and must manually click "View source" and force-reload.
 
 **Implementation:**
-- [ ] Investigate `on_confirm_publish` and `on_discard` callbacks in `components/dashboard.rs` (approx lines 645–721) to confirm whether `set_active_branch.emit(None)` fires before or after the content-loading effect re-runs
-- [ ] If the branch selector panel is open during deletion, ensure it is closed and the panel state is reset alongside branch deselection
-- [ ] Ensure the `force_refresh` counter is incremented (or invalidate-all-caches is called) *after* `set_active_branch` so the refetch uses `source` branch, not the deleted one
-- [ ] Verify fix: deleting a branch (Publish or Discard) in the editor, then returning to dashboard, shows source-branch content with no errors and no stale branch badge
+- [x] Investigate `on_confirm_publish` and `on_discard` callbacks in `components/dashboard.rs` — confirmed `force_refresh.set(N+1)` fires before parent propagates `active_branch = None`, causing the effect to run with the deleted branch
+- [x] Branch selector panel already closed via `show_branches.set(false)` before the async block
+- [x] Removed `force_refresh.set(*force_refresh + 1)` from both handlers — the `active_branch_opt` dependency in the content-loading effect naturally triggers a re-fetch when the parent propagates `None`; `invalidate_all_caches()` ensures fresh data from source
+- [x] Verify fix: deleting a branch shows source-branch content with no errors
 
 ### Phase 17: Bug Fix — Post Status Filter (All / Draft / Published)
 

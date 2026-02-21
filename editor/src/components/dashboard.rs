@@ -619,7 +619,6 @@ pub fn dashboard() -> Html {
         let show_diff = show_diff.clone();
         let branch_saving = branch_saving.clone();
         let branch_error = branch_error.clone();
-        let force_refresh = force_refresh.clone();
         let show_branches = show_branches.clone();
         let branches = branches.clone();
 
@@ -634,7 +633,6 @@ pub fn dashboard() -> Html {
             let show_diff = show_diff.clone();
             let branch_saving = branch_saving.clone();
             let branch_error = branch_error.clone();
-            let force_refresh = force_refresh.clone();
             let show_branches = show_branches.clone();
             let branches = branches.clone();
 
@@ -664,7 +662,6 @@ pub fn dashboard() -> Html {
                         set_active_branch.emit(None);
                         invalidate_all_caches();
                         branch_saving.set(false);
-                        force_refresh.set(*force_refresh + 1);
                     }
                     Err(e) => {
                         branch_error.set(Some(e));
@@ -688,7 +685,6 @@ pub fn dashboard() -> Html {
         let token = auth.token.clone();
         let branch_saving = branch_saving.clone();
         let branch_error = branch_error.clone();
-        let force_refresh = force_refresh.clone();
         let show_branches = show_branches.clone();
         let branches = branches.clone();
 
@@ -712,7 +708,6 @@ pub fn dashboard() -> Html {
             let set_active_branch = set_active_branch.clone();
             let branch_saving = branch_saving.clone();
             let branch_error = branch_error.clone();
-            let force_refresh = force_refresh.clone();
             let show_branches = show_branches.clone();
             let branches = branches.clone();
 
@@ -735,7 +730,6 @@ pub fn dashboard() -> Html {
                         set_active_branch.emit(None);
                         invalidate_all_caches();
                         branch_saving.set(false);
-                        force_refresh.set(*force_refresh + 1);
                     }
                     Err(e) => {
                         branch_error.set(Some(e));
