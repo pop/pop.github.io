@@ -38,6 +38,17 @@ bd sync               # Sync with git
 - NEVER say "ready to push when you are" - YOU must push
 - If push fails, resolve and retry until it succeeds
 
+## Session Rules
+
+These are hard constraints enforced from recurring friction patterns. Violations will cause build failures, deploy errors, or lost work.
+
+1. **Never wrap commands in `nix develop`** — the dev shell is already active via direnv. Run `cargo`, `trunk`, `tofu`, etc. directly.
+2. **Never use `#[allow(dead_code)]`** — remove unused code instead. Suppression hides rot.
+3. **Search only within the project root** — never glob or grep globally across the filesystem. Scope to relevant subdirectories (`src/`, `content/`, etc.).
+4. **Always deploy to production** — use `wrangler pages deploy --branch=source` for the frontend. Never deploy to preview unless explicitly asked.
+5. **`nix develop --command` is for CI only** — do not use it in interactive sessions; the shell is already loaded.
+6. **Verify `bd` is on PATH before use** — run `which bd` if there is any doubt about the binary being available.
+
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
@@ -51,6 +62,8 @@ Blog editor for elijah.run — a client-side Yew (Rust/WASM) web app that edits 
 ## Development Environment
 
 Uses Nix Flakes for reproducible tooling. The dev shell is activated automatically via `direnv` — all tools (`cargo`, `trunk`, `wasm-bindgen-cli`, `make`) are available directly in the shell without any wrapper.
+
+Do NOT wrap commands in `nix develop` - the dev shell is already active when running commands in this project.
 
 ## Build & Run Commands
 
@@ -131,3 +144,22 @@ The blog is a Zola static site. Content uses TOML frontmatter with `+++` delimit
 - `web-sys` — browser APIs (FileReader, DragEvent, KeyboardEvent, etc.)
 - `worker` — Cloudflare Workers Rust SDK (for the OAuth worker)
 
+
+## Planning
+
+When asked to create a plan or tasks, write them to the appropriate doc (PLANNING.md, TODO.md) WITHOUT executing any implementation unless explicitly told to proceed.
+
+## Deployment Notes
+
+For Cloudflare deployments: production deploys go to the production branch/environment.
+Do not deploy to preview when production is requested. Use `wrangler pages deploy --branch=source` or the OpenTofu/Terraform config for production. (The production branch is `source`, not `main`.)
+
+## Code Search / File Operations
+
+When searching or modifying content files, scope to the `content/` directory and be branch-aware.
+Do not search globally across the entire filesystem.
+
+## Rust Conventions
+
+Prefer removing dead code over suppressing warnings with `#[allow(dead_code)]`.
+This project uses Nix with rust-overlay, NOT rustup.
