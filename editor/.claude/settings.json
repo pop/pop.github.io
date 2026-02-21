@@ -4,7 +4,8 @@
       "Bash(bd:*)",
       "Bash(cargo:*)",
       "Bash(tofu:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(git add:*)"
     ],
     "ask": [
       "Bash(tofu apply:*)"

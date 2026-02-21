@@ -1,2 +1,15 @@
 # bugs, issues, feature requests
 
+---
+
+When a directory contains sub-directories it should have the folder icon.
+
+---
+
+It seems that draft = false aren't displaying any icon when they are the only .md file in a folder.
+
+---
+
+Files without `draft` keys should not have an icon. They currently have the published icon.
+
+---
