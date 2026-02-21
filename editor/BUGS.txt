@@ -2,6 +2,11 @@
 
 ---
 
+The build and publish CI job should not run when files in `editor` or `.beads` are changed.
+Should only run when `content` or `templates` or `config.toml` changes.
+
+---
+
 When a directory contains sub-directories it should have the folder icon.
 
 ---
