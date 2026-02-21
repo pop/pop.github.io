@@ -562,6 +562,28 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
 - [ ] In `src/components/editor.rs` (approx line 754), change `spellcheck="false"` to `spellcheck="true"` on the `<textarea>` element
 - [ ] Verify: typing a misspelled word in the editor shows a squiggly underline
 
+### Phase 22: Bug Fix — File Deletion Cache & Double-Delete
+
+**Goal:** Fix two related bugs in the file deletion flow.
+
+#### Bug 1: Deleted files still appear in cache after deletion
+
+**Root cause:** `invalidate_all_caches()` in `components/dashboard.rs` (~line 161) only clears keys with the `dir_cache_` prefix. The global all-files index cache (`all_files_index` / `all_files_index_{branch}`) is not cleared. As a result, deleted files can reappear when the 5-minute TTL on directory caches is still active.
+
+**Fix:** Extend the key-scan loop in `invalidate_all_caches()` to also remove keys starting with `all_files_index`.
+
+- [ ] In `components/dashboard.rs` `invalidate_all_caches()` (approx line 161), update the `starts_with` check to also match `"all_files_index"` so both cache families are invalidated together
+- [ ] Verify: deleting a file and navigating back to the same directory does not show the deleted file
+
+#### Bug 2: Deleting a file twice results in a 404 error
+
+**Root cause:** When a file is already deleted, calling `delete_file()` with its old SHA returns 404 from the GitHub Contents API. The current match in `services/github.rs` (~line 549) only handles 200 and 401; everything else becomes a generic "Failed to delete file: 404" error.
+
+**Fix:** Add an explicit `404` arm to the response match in `delete_file()` returning a clear user-facing error message.
+
+- [ ] In `services/github.rs` `delete_file()` (approx line 549), add `404 => Err("File not found — it may have already been deleted".into())` before the catch-all arm
+- [ ] Verify: attempting to delete a previously-deleted file shows a meaningful error instead of "Failed to delete file: 404"
+
 ---
 
 ## Open Questions
