@@ -778,7 +778,7 @@ pub fn editor_page(props: &Props) -> Html {
                             class="editor-textarea"
                             value={(*content).clone()}
                             oninput={on_input}
-                            spellcheck="false"
+                            spellcheck="true"
                         />
                     }
                     if show_preview {
@@ -883,9 +883,7 @@ title = "{title}"
 date = "{date_str}"
 description = ""
 draft = true
-
-# [taxonomies]
-# tags = ["comics", "games", "backlog", "movies", "tv", "whats-good"]
+# taxonomies.tags = ["comics", "games", "backlog", "movies", "tv", "whats-good"]
 +++
 "#
     )
