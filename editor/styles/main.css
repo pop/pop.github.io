@@ -650,6 +650,39 @@ nav a:hover {
     min-width: 0;
 }
 
+/* Split mode: bound height so panes scroll independently */
+.editor-container.split {
+    height: 80vh;
+    align-items: stretch;
+}
+
+.editor-container.split .editor-textarea {
+    height: 100%;
+    min-height: unset;
+    resize: none;
+    box-sizing: border-box;
+}
+
+.editor-container.split .preview-pane {
+    height: 100%;
+    min-height: unset;
+    box-sizing: border-box;
+}
+
+/* Mobile: stack split panes vertically */
+@media (max-width: 768px) {
+    .editor-container.split {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .editor-container.split .editor-textarea,
+    .editor-container.split .preview-pane {
+        height: 60vh;
+        min-height: unset;
+    }
+}
+
 .editor-page-wide {
     max-width: 100%;
 }
