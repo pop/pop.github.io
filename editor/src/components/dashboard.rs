@@ -620,6 +620,8 @@ pub fn dashboard() -> Html {
         let branch_saving = branch_saving.clone();
         let branch_error = branch_error.clone();
         let force_refresh = force_refresh.clone();
+        let show_branches = show_branches.clone();
+        let branches = branches.clone();
 
         Callback::from(move |_: MouseEvent| {
             let Some(branch_name) = branch_opt.clone() else {
@@ -633,8 +635,11 @@ pub fn dashboard() -> Html {
             let branch_saving = branch_saving.clone();
             let branch_error = branch_error.clone();
             let force_refresh = force_refresh.clone();
+            let show_branches = show_branches.clone();
+            let branches = branches.clone();
 
             show_diff.set(false);
+            show_branches.set(false);
             branch_saving.set(true);
             branch_error.set(None);
 
@@ -648,6 +653,14 @@ pub fn dashboard() -> Html {
                 {
                     Ok(()) => {
                         let _ = client.delete_branch(&branch_name).await;
+                        let full_ref = format!("refs/heads/{branch_name}");
+                        branches.set(
+                            (*branches)
+                                .iter()
+                                .filter(|b| b.ref_name != full_ref)
+                                .cloned()
+                                .collect(),
+                        );
                         set_active_branch.emit(None);
                         invalidate_all_caches();
                         branch_saving.set(false);
@@ -676,6 +689,8 @@ pub fn dashboard() -> Html {
         let branch_saving = branch_saving.clone();
         let branch_error = branch_error.clone();
         let force_refresh = force_refresh.clone();
+        let show_branches = show_branches.clone();
+        let branches = branches.clone();
 
         Callback::from(move |_: MouseEvent| {
             let window = gloo_utils::window();
@@ -698,7 +713,10 @@ pub fn dashboard() -> Html {
             let branch_saving = branch_saving.clone();
             let branch_error = branch_error.clone();
             let force_refresh = force_refresh.clone();
+            let show_branches = show_branches.clone();
+            let branches = branches.clone();
 
+            show_branches.set(false);
             branch_saving.set(true);
             branch_error.set(None);
 
@@ -706,6 +724,14 @@ pub fn dashboard() -> Html {
                 let client = GitHubClient::new(token);
                 match client.delete_branch(&branch_name).await {
                     Ok(()) => {
+                        let full_ref = format!("refs/heads/{branch_name}");
+                        branches.set(
+                            (*branches)
+                                .iter()
+                                .filter(|b| b.ref_name != full_ref)
+                                .cloned()
+                                .collect(),
+                        );
                         set_active_branch.emit(None);
                         invalidate_all_caches();
                         branch_saving.set(false);
