@@ -833,6 +833,12 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
 - `components/preview.rs`: added `rendered_html` state; content-loading async block now calls `render_markdown` → `resolve_images_in_html` (source branch) → `rendered_html.set`; render uses `rendered_html` state; syntax-highlighting effect moved to depend on `rendered_html`
 - `components/editor.rs`: debounced render effect extended to create `GitHubClient` from token, call `resolve_images_in_html` with active branch (or source), store resolved HTML; `parent_dir` references replaced with `post_dir` imported from `models::post`
 
+### Session 16 (2026-02-21) — Dashboard Icon Improvements
+
+- **Media icon (🖼️):** Media files now show 🖼️ in both global search results (was `·`) and regular directory listings (was no icon). `is_media` guard already existed in both code paths; added `else if is_media` branch in `render_entry` status_icon logic and an `if is_media` branch in the search result HTML.
+- **Folder single-.md status icon:** Added `folder_md_statuses: use_state(HashMap<String, PostStatus>)` state. New `use_effect_with` effect (same dependency as `post_statuses`) fetches directory children for each folder in the current listing, then fetches the `.md` file for folders with exactly one `.md` child, runs `detect_post_status`, and populates the map. `render_entry` now checks `folder_md_statuses.get(&entry.path)` for directories and shows 🌱/📰 (or 📂 if no single `.md` or status is `NoFrontmatter`). Phase 1 uses the existing listing cache, so redundant API calls are rare.
+- BUGS.txt cleared (both items implemented).
+
 ### Session 15 (2026-02-19) — Phase 15
 - Built Phase 15: draft/published status icons in dashboard
 - `PostStatus` enum (`Draft`, `Published`, `NoFrontmatter`) and `detect_post_status(content: &str) -> PostStatus` helper added to `components/dashboard.rs`; reuses `extract_frontmatter` + `parse_frontmatter` from `models/post.rs`

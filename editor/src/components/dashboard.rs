@@ -240,6 +240,9 @@ pub fn dashboard() -> Html {
     // Phase 15: draft/published status icons
     let post_statuses = use_state(HashMap::<String, PostStatus>::new);
 
+    // Folder single-.md status: maps folder_path → PostStatus of its single .md child
+    let folder_md_statuses = use_state(HashMap::<String, PostStatus>::new);
+
     // Phase 17: post status filter
     let status_filter = use_state(|| StatusFilter::All);
 
@@ -513,6 +516,107 @@ pub fn dashboard() -> Html {
                             post_statuses.set(statuses_map);
                         });
                     }
+                }
+
+                || ()
+            },
+        );
+    }
+
+    // Folder single-.md status effect: for each dir entry, if it has exactly one .md child,
+    // fetch that child and detect draft/published status.
+    {
+        let folder_md_statuses = folder_md_statuses.clone();
+        let token = auth.token.clone();
+        let current_path = current_path.clone();
+        let entries = entries.clone();
+        let active_branch_opt = active_branch_opt.clone();
+
+        use_effect_with(
+            ((*current_path).clone(), entries.len()),
+            move |_| {
+                folder_md_statuses.set(HashMap::new());
+
+                let dir_entries: Vec<ContentEntry> = entries
+                    .iter()
+                    .filter(|e| e.entry_type == "dir")
+                    .cloned()
+                    .collect();
+
+                if !dir_entries.is_empty() {
+                    let branch = active_branch_opt
+                        .clone()
+                        .unwrap_or_else(|| DEFAULT_BRANCH.to_string());
+
+                    wasm_bindgen_futures::spawn_local(async move {
+                        // Phase 1: fetch listing for each dir (use cache if available)
+                        let listing_futures: Vec<_> = dir_entries
+                            .iter()
+                            .map(|dir| {
+                                let dir_path = dir.path.clone();
+                                let token = token.clone();
+                                let branch = branch.clone();
+                                async move {
+                                    let children = if let Some(cached) = get_cached_listing(&dir_path) {
+                                        Some(cached)
+                                    } else {
+                                        let client = match token {
+                                            Some(ref t) => GitHubClient::new(t.clone()),
+                                            None => GitHubClient::anonymous(),
+                                        };
+                                        client.list_contents(&dir_path, Some(&branch)).await.ok()
+                                    };
+                                    (dir_path, children)
+                                }
+                            })
+                            .collect();
+
+                        let listings = join_all(listing_futures).await;
+
+                        // Phase 2: collect dirs with exactly one .md child, fetch those files
+                        let single_md_futures: Vec<_> = listings
+                            .into_iter()
+                            .filter_map(|(dir_path, children)| {
+                                let children = children?;
+                                let md_children: Vec<ContentEntry> = children
+                                    .into_iter()
+                                    .filter(|e| e.entry_type == "file" && e.name.ends_with(".md"))
+                                    .collect();
+                                if md_children.len() == 1 {
+                                    Some((dir_path, md_children.into_iter().next().unwrap()))
+                                } else {
+                                    None
+                                }
+                            })
+                            .map(|(dir_path, md_entry)| {
+                                let token = token.clone();
+                                let branch = branch.clone();
+                                async move {
+                                    let client = match token {
+                                        Some(ref t) => GitHubClient::new(t.clone()),
+                                        None => GitHubClient::anonymous(),
+                                    };
+                                    let result = client.get_file(&md_entry.path, &branch).await;
+                                    (dir_path, result)
+                                }
+                            })
+                            .collect();
+
+                        let file_results = join_all(single_md_futures).await;
+
+                        let mut map: HashMap<String, PostStatus> = HashMap::new();
+                        for (dir_path, result) in file_results {
+                            let status = match result {
+                                Ok(fc) => detect_post_status(fc.content.as_deref().unwrap_or("")),
+                                Err(_) => PostStatus::NoFrontmatter,
+                            };
+                            if matches!(status, PostStatus::Draft | PostStatus::Published) {
+                                map.insert(dir_path, status);
+                            }
+                        }
+
+                        folder_md_statuses.set(map);
+                    });
                 }
 
                 || ()
@@ -1069,6 +1173,7 @@ pub fn dashboard() -> Html {
     let cur_sort = *sort_mode;
     let cur_dates = (*commit_dates).clone();
     let cur_post_statuses = (*post_statuses).clone();
+    let cur_folder_md_statuses = (*folder_md_statuses).clone();
 
     // Global search results (used when filter_text is non-empty)
     let filter_active = !filter_text.is_empty();
@@ -1274,7 +1379,11 @@ pub fn dashboard() -> Html {
                                 html! {
                                     <div class={classes!("content-entry", is_media.then_some("is-media"))}
                                          onclick={onclick}>
-                                        <span class="entry-icon">{"\u{00B7}"}</span>
+                                        if is_media {
+                                            <span class="entry-icon">{"\u{1F5BC}\u{FE0F}"}</span>
+                                        } else {
+                                            <span class="entry-icon">{"\u{00B7}"}</span>
+                                        }
                                         <span class="entry-name">{&entry.path}</span>
                                         {delete_btn}
                                     </div>
@@ -1294,7 +1403,7 @@ pub fn dashboard() -> Html {
             } else {
                 <div class="content-list">
                     { for display_entries.iter().map(|entry| {
-                        render_entry(entry, on_navigate.clone(), &cur_sort, &cur_dates, &cur_post_statuses, on_delete_request.clone(), is_authenticated)
+                        render_entry(entry, on_navigate.clone(), &cur_sort, &cur_dates, &cur_post_statuses, &cur_folder_md_statuses, on_delete_request.clone(), is_authenticated)
                     }) }
                 </div>
             }
@@ -1383,6 +1492,7 @@ fn render_entry(
     sort_mode: &SortMode,
     commit_dates: &HashMap<String, f64>,
     post_statuses: &HashMap<String, PostStatus>,
+    folder_md_statuses: &HashMap<String, PostStatus>,
     on_delete: Callback<ContentEntry>,
     is_authenticated: bool,
 ) -> Html {
@@ -1410,6 +1520,8 @@ fn render_entry(
             Some(PostStatus::Published) => html! { <span class="post-status-icon" title="Published">{ "\u{1F4F0}" }</span> },
             _ => html! {},
         }
+    } else if is_media {
+        html! { <span class="entry-icon">{ "\u{1F5BC}\u{FE0F}" }</span> }
     } else {
         html! {}
     };
@@ -1431,7 +1543,16 @@ fn render_entry(
         <div class={classes!("content-entry", is_dir.then_some("is-dir"), is_media.then_some("is-media"))}
              onclick={onclick}>
             if is_dir {
-                <span class="entry-icon"> { "📂" } </span>
+                {
+                    match folder_md_statuses.get(&entry.path) {
+                        Some(PostStatus::Draft) =>
+                            html! { <span class="post-status-icon" title="Draft">{ "\u{1F331}" }</span> },
+                        Some(PostStatus::Published) =>
+                            html! { <span class="post-status-icon" title="Published">{ "\u{1F4F0}" }</span> },
+                        _ =>
+                            html! { <span class="entry-icon">{ "📂" }</span> },
+                    }
+                }
             } else {
                 {status_icon}
             }
