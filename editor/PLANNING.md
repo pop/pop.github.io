@@ -584,6 +584,72 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
 - [ ] In `services/github.rs` `delete_file()` (approx line 549), add `404 => Err("File not found — it may have already been deleted".into())` before the catch-all arm
 - [ ] Verify: attempting to delete a previously-deleted file shows a meaningful error instead of "Failed to delete file: 404"
 
+### Phase 23: Feature — CI-Aware Publish Button Colors and Warning Modal
+
+**Goal:** Color the Publish button based on CI state and show a modal warning when CI has not yet passed, rather than silently disabling it.
+
+**Current behavior:** The button is always green (`#28a745`). It is disabled when `ci_blocks_publish = true` (Pending or Failure states). There is no visual distinction between pending/failure, and no path to publish despite pending CI.
+
+**Desired behavior:**
+- **Yellow (amber):** CI is pending or no CI runs detected yet — button is enabled, but clicking shows a modal warning ("CI has not passed yet — publish anyway?")
+- **Green:** CI passed — normal publish flow
+- **Red (disabled):** CI failed — button cannot be clicked
+
+**Implementation:**
+- In `components/dashboard.rs`:
+  - Add `show_ci_warning_modal: use_state(|| false)` state
+  - Change `ci_blocks_publish` to only block on `CiState::Failure(_)`
+  - Update Publish button's `onclick` to: if `CiState::Pending | CiState::None`, set `show_ci_warning_modal(true)` instead of starting publish; otherwise proceed normally
+  - Add a conditional CI warning modal (`<div class="modal-overlay">`) with "Publish anyway" + "Cancel" buttons; "Publish anyway" triggers the existing diff/publish flow
+  - Add dynamic CSS class to Publish button: `publish-btn pending` for Pending/None, `publish-btn failure` for Failure, default (green) for Success
+- In `styles/main.css`:
+  - Add `.publish-btn.pending { background: #d97706; }` (amber) — override the default green
+  - Add `.publish-btn.failure { background: #dc3545; }` (red)
+  - Add modal overlay styles: `.modal-overlay`, `.modal-box`, `.modal-actions`
+
+---
+
+### Phase 24: Bug Fix — Split Editor Independent Scrolling
+
+**Goal:** In Split view mode, the editor textarea and preview pane should scroll independently; currently they share a single scroll context.
+
+**Root cause:** The `.editor-container` is a flex row, but neither child has a bounded height with independent overflow. The textarea has `min-height: 60vh` (no `overflow-y`), and `.preview-pane` has `overflow-y: auto` but also only `min-height` — so both expand to their content height rather than scrolling within a fixed viewport.
+
+**Implementation:**
+- In `styles/main.css`, within the `.editor-container.split` context (or globally for split mode):
+  - Set `.editor-container` to `align-items: stretch` and a fixed height (e.g. `height: calc(100vh - 180px)`)
+  - Set `.editor-container .editor-textarea { height: 100%; overflow-y: auto; resize: none; }` — removes `min-height`, gives independent scroll
+  - Set `.editor-container .preview-pane { height: 100%; overflow-y: auto; }` — existing `overflow-y: auto` may suffice once height is bounded
+- Scope these rules to `.editor-container.split` to avoid affecting Edit-only or Preview-only modes
+
+---
+
+### Phase 25: Feature — Mobile Split Editor Stacking
+
+**Goal:** On small screens, Split mode should stack the editor and preview vertically (one above the other) instead of side-by-side.
+
+**Current state:** There are no `@media` queries in `styles/main.css`. The split layout uses `display: flex` with the default `flex-direction: row`, making both panes narrow on mobile.
+
+**Implementation:**
+- In `styles/main.css`, add a responsive breakpoint (≤768px):
+  ```css
+  @media (max-width: 768px) {
+    .editor-container.split {
+      flex-direction: column;
+    }
+    .editor-container.split .editor-textarea,
+    .editor-container.split .preview-pane {
+      width: 100%;
+      min-height: 50vh;
+    }
+    .editor-page-wide {
+      max-width: 100%;
+      padding: 0 0.5rem;
+    }
+  }
+  ```
+- No Rust changes needed — CSS-only fix
+
 ---
 
 ## Open Questions

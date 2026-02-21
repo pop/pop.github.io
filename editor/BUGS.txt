@@ -1,10 +1,2 @@
 # bugs, issues, feature requests
 
----
-
-If a branch has not passed CI yet, or CI status cannot be determined, make the 'Publish' button Yellow.
-Allow merging but pop up a modal adivising against it.
-If CI passes, the button is green.
-If CI fails the button is read and cannot be clicked.
-
----
