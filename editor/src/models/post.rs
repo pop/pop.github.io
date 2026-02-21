@@ -177,6 +177,99 @@ pub fn replace_image_srcs(html: &str, replacements: &HashMap<String, String>) ->
     result
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // ── strip_frontmatter ──────────────────────────────────────────────────
+
+    #[test]
+    fn strip_frontmatter_with_frontmatter() {
+        let content = "+++\ntitle = \"Hello\"\n+++\n# Body";
+        assert_eq!(strip_frontmatter(content), "# Body");
+    }
+
+    #[test]
+    fn strip_frontmatter_no_frontmatter() {
+        let content = "# No frontmatter here";
+        assert_eq!(strip_frontmatter(content), content);
+    }
+
+    #[test]
+    fn strip_frontmatter_empty_string() {
+        assert_eq!(strip_frontmatter(""), "");
+    }
+
+    #[test]
+    fn strip_frontmatter_unclosed_delimiter() {
+        // No closing +++, so the whole string is returned unchanged
+        let content = "+++\ntitle = \"Hello\"\n# Body";
+        assert_eq!(strip_frontmatter(content), content);
+    }
+
+    #[test]
+    fn strip_frontmatter_leading_whitespace() {
+        let content = "\n+++\ntitle = \"x\"\n+++\nbody";
+        assert_eq!(strip_frontmatter(content), "body");
+    }
+
+    #[test]
+    fn strip_frontmatter_no_newline_after_closing() {
+        let content = "+++\ntitle = \"x\"\n+++";
+        // After stripping, the body is empty
+        assert_eq!(strip_frontmatter(content), "");
+    }
+
+    // ── render_markdown ────────────────────────────────────────────────────
+
+    #[test]
+    fn render_markdown_basic() {
+        let html = render_markdown("# Hello");
+        assert!(html.contains("<h1>"), "expected h1 tag, got: {html}");
+        assert!(html.contains("Hello"));
+    }
+
+    #[test]
+    fn render_markdown_strips_frontmatter() {
+        let content = "+++\ntitle = \"x\"\n+++\n**bold**";
+        let html = render_markdown(content);
+        assert!(html.contains("<strong>bold</strong>"), "got: {html}");
+        assert!(!html.contains("title"), "frontmatter leaked into output: {html}");
+    }
+
+    #[test]
+    fn render_markdown_gfm_strikethrough() {
+        let html = render_markdown("~~struck~~");
+        assert!(html.contains("<del>struck</del>"), "got: {html}");
+    }
+
+    // ── post_dir ───────────────────────────────────────────────────────────
+
+    #[test]
+    fn post_dir_nested() {
+        assert_eq!(post_dir("content/blog/my-post.md"), "content/blog");
+    }
+
+    #[test]
+    fn post_dir_top_level() {
+        assert_eq!(post_dir("README.md"), "");
+    }
+
+    // ── extract_relative_image_srcs ───────────────────────────────────────
+
+    #[test]
+    fn extract_relative_srcs_finds_relative() {
+        let html = r#"<img src="photo.png" alt="x">"#;
+        assert_eq!(extract_relative_image_srcs(html), vec!["photo.png"]);
+    }
+
+    #[test]
+    fn extract_relative_srcs_ignores_absolute() {
+        let html = r#"<img src="https://example.com/photo.png">"#;
+        assert!(extract_relative_image_srcs(html).is_empty());
+    }
+}
+
 /// Map a file path's extension to a MIME type string.
 pub fn mime_type_for(path: &str) -> &'static str {
     let ext = path.rsplit('.').next().unwrap_or("").to_ascii_lowercase();

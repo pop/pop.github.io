@@ -845,3 +845,38 @@ fn decode_github_content(encoded: &str) -> String {
         Err(_) => String::new(),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn decode_valid_base64() {
+        // "hello" in base64
+        let encoded = "aGVsbG8=";
+        assert_eq!(decode_github_content(encoded), "hello");
+    }
+
+    #[test]
+    fn decode_base64_with_newlines() {
+        // GitHub REST API splits base64 into 60-char lines
+        let encoded = "aGVs\nbG8=";
+        assert_eq!(decode_github_content(encoded), "hello");
+    }
+
+    #[test]
+    fn decode_base64_with_mixed_whitespace() {
+        let encoded = "  aGVs bG8=\n";
+        assert_eq!(decode_github_content(encoded), "hello");
+    }
+
+    #[test]
+    fn decode_invalid_base64_returns_empty() {
+        assert_eq!(decode_github_content("!!!not-base64!!!"), "");
+    }
+
+    #[test]
+    fn decode_empty_string() {
+        assert_eq!(decode_github_content(""), "");
+    }
+}
