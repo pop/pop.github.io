@@ -1406,8 +1406,8 @@ fn render_entry(
 
     let status_icon = if !is_dir && entry.name.ends_with(".md") {
         match post_statuses.get(&entry.path) {
-            Some(PostStatus::Draft) => html! { <span class="post-status-icon" title="Draft">{"\u{1F331}"}</span> },
-            Some(PostStatus::Published) => html! { <span class="post-status-icon" title="Published">{"\u{1F4F0}"}</span> },
+            Some(PostStatus::Draft) => html! { <span class="post-status-icon" title="Draft">{ "\u{1F331}" }</span> },
+            Some(PostStatus::Published) => html! { <span class="post-status-icon" title="Published">{ "\u{1F4F0}" }</span> },
             _ => html! {},
         }
     } else {
@@ -1430,9 +1430,11 @@ fn render_entry(
     html! {
         <div class={classes!("content-entry", is_dir.then_some("is-dir"), is_media.then_some("is-media"))}
              onclick={onclick}>
-            <span class="entry-icon">
-                { if is_dir { "📂" } else { "\u{00B7}" } }
-            </span>
+            if is_dir {
+                <span class="entry-icon"> { "📂" } </span>
+            } else {
+                {status_icon}
+            }
             <span class="entry-name">{&entry.name}</span>
             if let Some(ref date) = date_display {
                 <span class="entry-date">{date}</span>
@@ -1440,7 +1442,6 @@ fn render_entry(
             if !is_dir {
                 <span class="entry-size">{format_size(entry.size)}</span>
             }
-            {status_icon}
             {delete_btn}
         </div>
     }
