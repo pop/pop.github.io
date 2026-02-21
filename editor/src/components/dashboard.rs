@@ -56,6 +56,13 @@ enum SortMode {
     LastModified,
 }
 
+#[derive(Clone, Copy, PartialEq)]
+enum StatusFilter {
+    All,
+    Draft,
+    Published,
+}
+
 // ── Directory listing cache ─────────────────────────────────────
 
 #[derive(Serialize, Deserialize)]
@@ -232,6 +239,9 @@ pub fn dashboard() -> Html {
 
     // Phase 15: draft/published status icons
     let post_statuses = use_state(HashMap::<String, PostStatus>::new);
+
+    // Phase 17: post status filter
+    let status_filter = use_state(|| StatusFilter::All);
 
     // Global file index for search (Bug 3)
     let all_files = use_state(|| Vec::<ContentEntry>::new());
@@ -744,9 +754,11 @@ pub fn dashboard() -> Html {
         let current_path = current_path.clone();
         let navigator = navigator.clone();
         let filter_text = filter_text.clone();
+        let status_filter = status_filter.clone();
         Callback::from(move |entry: ContentEntry| {
             if entry.entry_type == "dir" {
                 filter_text.set(String::new());
+                status_filter.set(StatusFilter::All);
                 current_path.set(entry.path);
             } else {
                 let _ = SessionStorage::set(RETURN_PATH_KEY, (*current_path).clone());
@@ -768,10 +780,12 @@ pub fn dashboard() -> Html {
     let on_navigate_up = {
         let current_path = current_path.clone();
         let filter_text = filter_text.clone();
+        let status_filter = status_filter.clone();
         Callback::from(move |_: MouseEvent| {
             let path = (*current_path).clone();
             if let Some(pos) = path.rfind('/') {
                 filter_text.set(String::new());
+                status_filter.set(StatusFilter::All);
                 current_path.set(path[..pos].to_string());
             }
         })
@@ -926,6 +940,20 @@ pub fn dashboard() -> Html {
         })
     };
 
+    // Phase 17: status filter callbacks
+    let on_filter_all = {
+        let status_filter = status_filter.clone();
+        Callback::from(move |_: MouseEvent| status_filter.set(StatusFilter::All))
+    };
+    let on_filter_draft = {
+        let status_filter = status_filter.clone();
+        Callback::from(move |_: MouseEvent| status_filter.set(StatusFilter::Draft))
+    };
+    let on_filter_published = {
+        let status_filter = status_filter.clone();
+        Callback::from(move |_: MouseEvent| status_filter.set(StatusFilter::Published))
+    };
+
     let on_delete_cancel = {
         let delete_confirm = delete_confirm.clone();
         let delete_error   = delete_error.clone();
@@ -989,15 +1017,35 @@ pub fn dashboard() -> Html {
     // Compute filtered and sorted entries for display
     let display_entries: Vec<ContentEntry> = {
         let filter = (*filter_text).to_lowercase();
-        let mut filtered: Vec<ContentEntry> = if filter.is_empty() {
-            (*entries).clone()
-        } else {
-            (*entries)
-                .iter()
-                .filter(|e| e.name.to_lowercase().contains(&filter))
-                .cloned()
-                .collect()
-        };
+        let cur_status_filter = *status_filter;
+        let mut filtered: Vec<ContentEntry> = (*entries)
+            .iter()
+            .filter(|e| {
+                // Text filter
+                if !filter.is_empty() && !e.name.to_lowercase().contains(&filter) {
+                    return false;
+                }
+                // Status filter: only applies to .md files; dirs and other files always pass
+                if cur_status_filter != StatusFilter::All && e.entry_type != "dir" && e.name.ends_with(".md") {
+                    let status = post_statuses.get(&e.path);
+                    match cur_status_filter {
+                        StatusFilter::Draft => {
+                            if !matches!(status, Some(PostStatus::Draft)) {
+                                return false;
+                            }
+                        }
+                        StatusFilter::Published => {
+                            if !matches!(status, Some(PostStatus::Published)) {
+                                return false;
+                            }
+                        }
+                        StatusFilter::All => {}
+                    }
+                }
+                true
+            })
+            .cloned()
+            .collect();
 
         if *sort_mode == SortMode::LastModified {
             let dates = &*commit_dates;
@@ -1162,6 +1210,27 @@ pub fn dashboard() -> Html {
                         if *dates_loading {
                             <span class="loading-dates">{"Loading dates\u{2026}"}</span>
                         }
+                    </div>
+                    <div class="status-filter-bar">
+                        <span class="sort-label">{"Filter:"}</span>
+                        <button
+                            class={classes!("status-btn", (*status_filter == StatusFilter::All).then_some("active"))}
+                            onclick={on_filter_all}
+                        >
+                            {"All"}
+                        </button>
+                        <button
+                            class={classes!("status-btn", (*status_filter == StatusFilter::Draft).then_some("active"))}
+                            onclick={on_filter_draft}
+                        >
+                            {"\u{1F331} Draft"}
+                        </button>
+                        <button
+                            class={classes!("status-btn", (*status_filter == StatusFilter::Published).then_some("active"))}
+                            onclick={on_filter_published}
+                        >
+                            {"\u{1F4F0} Published"}
+                        </button>
                     </div>
                 </div>
             }

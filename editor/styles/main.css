@@ -1179,6 +1179,34 @@ nav a:hover {
     color: white;
 }
 
+.status-filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    white-space: nowrap;
+}
+
+.status-btn {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: #555;
+}
+
+.status-btn:hover {
+    border-color: #999;
+    color: #333;
+}
+
+.status-btn.active {
+    background: #0366d6;
+    border-color: #0366d6;
+    color: white;
+}
+
 .loading-dates {
     font-size: 0.8rem;
     color: #dbab09;
