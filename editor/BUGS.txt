@@ -1,23 +1,7 @@
-# Reported issues with editor.elijah.run
+# bugs, issues, feature requests
 
 ---
 
-When deleting a branch, branch should automatically be de-selected.
-Currently there is a bug where when you delete the branch you still have it selected, but entries fail to load so you have to de-select and force a reload of the page.
+Can we "turn on" spell-check in the editor?
 
 ---
-
-Optional filter posts: All, Draft, Published
-
----
-
-Use the 📂 icon for directories
-
----
-
-Include tags in the base template with a few options commented out
-Example tags: comics, games, backlog, movies, tv, whats-good
-
----
-
-Explore: buttons for basic text manipulation like bold, italic, crossed out, inline code, code blocks.
