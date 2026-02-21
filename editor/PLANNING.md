@@ -596,16 +596,18 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
 - **Red (disabled):** CI failed — button cannot be clicked
 
 **Implementation:**
-- In `components/dashboard.rs`:
-  - Add `show_ci_warning_modal: use_state(|| false)` state
-  - Change `ci_blocks_publish` to only block on `CiState::Failure(_)`
-  - Update Publish button's `onclick` to: if `CiState::Pending | CiState::None`, set `show_ci_warning_modal(true)` instead of starting publish; otherwise proceed normally
-  - Add a conditional CI warning modal (`<div class="modal-overlay">`) with "Publish anyway" + "Cancel" buttons; "Publish anyway" triggers the existing diff/publish flow
-  - Add dynamic CSS class to Publish button: `publish-btn pending` for Pending/None, `publish-btn failure` for Failure, default (green) for Success
-- In `styles/main.css`:
-  - Add `.publish-btn.pending { background: #d97706; }` (amber) — override the default green
-  - Add `.publish-btn.failure { background: #dc3545; }` (red)
-  - Add modal overlay styles: `.modal-overlay`, `.modal-box`, `.modal-actions`
+- [x] In `components/dashboard.rs`:
+  - Added `show_ci_warning_modal: use_state(|| false)` state
+  - Changed `ci_blocks_publish` to only block on `CiState::Failure(_)`
+  - Updated Publish button's `onclick`: if `CiState::Pending | CiState::None`, sets `show_ci_warning_modal(true)` instead of starting publish; otherwise proceeds normally
+  - Added `on_ci_warning_publish` callback (proceeds with diff/publish flow, closes modal first)
+  - Added `on_ci_warning_cancel` callback (closes modal)
+  - Added conditional CI warning modal with "Publish anyway" + "Cancel" buttons
+  - Added dynamic CSS class to Publish button: `publish-btn pending` for Pending/None, `publish-btn failure` for Failure, default (green) for Success
+- [x] In `styles/main.css`:
+  - Added `.publish-btn.pending { background: #d97706; }` (amber) with hover state
+  - Added `.publish-btn.failure { background: #dc3545; }` (red) with hover state
+  - Existing modal overlay styles reused (`.modal-overlay`, `.modal`, `.modal-actions` already present)
 
 ---
 
@@ -832,6 +834,18 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
 - `resolve_images_in_html(html, post_path, branch) -> String` added to `GitHubClient` — orchestrates parallel image fetches via `futures::future::join_all`, converts successful results to `data:` URLs, leaves unresolvable images at their original src
 - `components/preview.rs`: added `rendered_html` state; content-loading async block now calls `render_markdown` → `resolve_images_in_html` (source branch) → `rendered_html.set`; render uses `rendered_html` state; syntax-highlighting effect moved to depend on `rendered_html`
 - `components/editor.rs`: debounced render effect extended to create `GitHubClient` from token, call `resolve_images_in_html` with active branch (or source), store resolved HTML; `parent_dir` references replaced with `post_dir` imported from `models::post`
+
+### Session 17 (2026-02-21) — Phase 23: CI-Aware Publish Button
+
+- Built Phase 23: CI-aware Publish button colors and warning modal
+- `show_ci_warning_modal` state added to dashboard component
+- `ci_blocks_publish` now only blocks on `CiState::Failure` (was Pending|Failure)
+- Publish button onclick: if CI is Pending or None, shows warning modal instead of proceeding; if Success, proceeds normally; if Failure, button is disabled
+- Added `on_ci_warning_publish` and `on_ci_warning_cancel` callbacks
+- CI warning modal: "CI has not passed yet" heading, explanatory text, "Cancel" + "Publish anyway" buttons
+- Dynamic Publish button class: `publish-btn pending` (amber `#d97706`) for Pending/None, `publish-btn failure` (red `#dc3545`) for Failure, default green for Success
+- CSS: `.publish-btn.pending` and `.publish-btn.failure` overrides with hover states added to `styles/main.css`
+- Compiles clean (`cargo check --target wasm32-unknown-unknown`)
 
 ### Session 16 (2026-02-21) — Dashboard Icon Improvements
 

@@ -256,12 +256,13 @@ pub fn dashboard() -> Html {
     let deleting       = use_state(|| false);
 
     // Branch publish/discard/CI state
-    let show_diff     = use_state(|| false);
-    let diff_data     = use_state(|| Option::<CompareResponse>::None);
-    let diff_loading  = use_state(|| false);
-    let ci_status     = use_state(|| CiState::None);
-    let branch_saving = use_state(|| false);
-    let branch_error  = use_state(|| Option::<String>::None);
+    let show_diff            = use_state(|| false);
+    let diff_data            = use_state(|| Option::<CompareResponse>::None);
+    let diff_loading         = use_state(|| false);
+    let ci_status            = use_state(|| CiState::None);
+    let branch_saving        = use_state(|| false);
+    let branch_error         = use_state(|| Option::<String>::None);
+    let show_ci_warning_modal = use_state(|| false);
 
     // Active branch from shared context (replaces local use_state)
     let active_branch_opt = auth.active_branch.clone();
@@ -692,6 +693,8 @@ pub fn dashboard() -> Html {
         let diff_data = diff_data.clone();
         let diff_loading = diff_loading.clone();
         let branch_error = branch_error.clone();
+        let ci_status_for_publish = ci_status.clone();
+        let show_ci_warning_modal = show_ci_warning_modal.clone();
 
         Callback::from(move |_: MouseEvent| {
             let Some(branch_name) = branch_opt.clone() else {
@@ -699,6 +702,12 @@ pub fn dashboard() -> Html {
                 return;
             };
             let Some(token) = token.clone() else { return };
+
+            // Show warning modal if CI has not yet passed
+            if matches!(&*ci_status_for_publish, CiState::Pending | CiState::None) {
+                show_ci_warning_modal.set(true);
+                return;
+            }
 
             let show_diff = show_diff.clone();
             let diff_data = diff_data.clone();
@@ -723,6 +732,54 @@ pub fn dashboard() -> Html {
                     }
                 }
             });
+        })
+    };
+
+    let on_ci_warning_publish = {
+        let branch_opt = active_branch_opt.clone();
+        let token = auth.token.clone();
+        let show_diff = show_diff.clone();
+        let diff_data = diff_data.clone();
+        let diff_loading = diff_loading.clone();
+        let branch_error = branch_error.clone();
+        let show_ci_warning_modal = show_ci_warning_modal.clone();
+
+        Callback::from(move |_: MouseEvent| {
+            let Some(branch_name) = branch_opt.clone() else { return };
+            let Some(token) = token.clone() else { return };
+
+            show_ci_warning_modal.set(false);
+
+            let show_diff = show_diff.clone();
+            let diff_data = diff_data.clone();
+            let diff_loading = diff_loading.clone();
+            let branch_error = branch_error.clone();
+
+            diff_loading.set(true);
+            show_diff.set(false);
+            branch_error.set(None);
+
+            wasm_bindgen_futures::spawn_local(async move {
+                let client = GitHubClient::new(token);
+                match client.compare_branches(DEFAULT_BRANCH, &branch_name).await {
+                    Ok(data) => {
+                        diff_data.set(Some(data));
+                        show_diff.set(true);
+                        diff_loading.set(false);
+                    }
+                    Err(e) => {
+                        branch_error.set(Some(e));
+                        diff_loading.set(false);
+                    }
+                }
+            });
+        })
+    };
+
+    let on_ci_warning_cancel = {
+        let show_ci_warning_modal = show_ci_warning_modal.clone();
+        Callback::from(move |_: MouseEvent| {
+            show_ci_warning_modal.set(false);
         })
     };
 
@@ -1188,7 +1245,12 @@ pub fn dashboard() -> Html {
         vec![]
     };
 
-    let ci_blocks_publish = matches!(*ci_status, CiState::Pending | CiState::Failure(_));
+    let ci_blocks_publish = matches!(*ci_status, CiState::Failure(_));
+    let publish_btn_class = match &*ci_status {
+        CiState::Pending | CiState::None => "publish-btn pending",
+        CiState::Failure(_) => "publish-btn failure",
+        CiState::Success => "publish-btn",
+    };
 
     html! {
         <div class="dashboard">
@@ -1223,7 +1285,7 @@ pub fn dashboard() -> Html {
                             {"\u{00D7}"}
                         </button>
                         <div class="branch-badge-actions">
-                            <button class="publish-btn"
+                            <button class={publish_btn_class}
                                     onclick={on_publish}
                                     disabled={*branch_saving || *diff_loading || ci_blocks_publish}>
                                 { if *diff_loading { "Loading diff\u{2026}" } else { "Publish" } }
@@ -1427,6 +1489,27 @@ pub fn dashboard() -> Html {
                                     onclick={on_delete_confirm.clone()}
                                     disabled={*deleting}>
                                 { if *deleting { "Deleting\u{2026}" } else { "Delete" } }
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            if *show_ci_warning_modal {
+                <div class="modal-overlay" onclick={on_ci_warning_cancel.clone()}>
+                    <div class="modal"
+                         onclick={Callback::from(|e: MouseEvent| e.stop_propagation())}>
+                        <h3>{"CI has not passed yet"}</h3>
+                        <p class="modal-warning">
+                            {"The automated build check has not completed successfully. \
+                              Publishing now may deploy a broken build. Are you sure you \
+                              want to publish anyway?"}
+                        </p>
+                        <div class="modal-actions">
+                            <button onclick={on_ci_warning_cancel.clone()}>{"Cancel"}</button>
+                            <button class="publish-btn pending"
+                                    onclick={on_ci_warning_publish.clone()}>
+                                {"Publish anyway"}
                             </button>
                         </div>
                     </div>

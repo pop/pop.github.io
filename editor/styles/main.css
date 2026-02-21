@@ -490,6 +490,22 @@ nav a:hover {
     cursor: default;
 }
 
+.publish-btn.pending {
+    background: #d97706;
+}
+
+.publish-btn.pending:hover {
+    background: #b45309;
+}
+
+.publish-btn.failure {
+    background: #dc3545;
+}
+
+.publish-btn.failure:hover {
+    background: #b02a37;
+}
+
 .discard-btn {
     padding: 0.5rem 1.2rem;
     border: 1px solid #d73a49;
