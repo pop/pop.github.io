@@ -1,7 +1,7 @@
 +++
 title = "Vibing"
 date = "2026-02-21"
-description = "I start to hang out with Claude and I don't hate it yet"
+description = "I start hanging out with Claude and I don't hate it yet"
 draft = true
 +++
 
