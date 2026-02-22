@@ -6,10 +6,14 @@ taxonomies.tags = ["podcast","backlog"]
 draft = false
 +++
 
-![shell-game-s1.jpg](shell-game-s1.jpg)
-
 Shell Game is a podcast about things that aren't what they seem, which in both cases are AI agents acting like real human people.
 The show is funny and shocking with the hosts willingness to push things just a bit further than most people would for the sake of journalist rigor.
+
+![shell-game-s1.jpg](shell-game-s1.jpg)
+
+I think everybody should listen to this podcast.
+It does a perfect job of describing the AI landscape _as it is_ with all of it's strengths and limitations without any of the hype that clouds the conversation.
+If you keep hearing about AI and think it'll steal your job or fizzle out (or somewhere between those extremes) check this out, it will ground you I promise.
 
 In Season 1 the host, Evan Ratliff, creates an AI "clone" of his voice and wires it up to receive phone calls.
 He then plays the most chaotic neutral game ever: let the bot talk to customer service folks.
