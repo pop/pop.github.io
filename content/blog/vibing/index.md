@@ -2,7 +2,6 @@
 title = "Vibing"
 date = "2026-02-21"
 description = "I start hanging out with Claude and I don't hate it yet"
-draft = true
 +++
 
 > You can check out this blog's editor at https://editor.elijah.run.
