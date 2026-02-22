@@ -5,7 +5,7 @@ description = "I start hanging out with Claude and I don't hate it yet"
 +++
 
 > You can check out this blog's editor at https://editor.elijah.run.
-> It supports anonomous browsing and is under very active development.
+> It is under very active development, but you can do the "read only" view to see what I'm talking about.
 
 If for some reason you follow the history of this repo you might have noted a lot of commits co-authored by Claude Code recently.
 That is because I am... vibe coding.
