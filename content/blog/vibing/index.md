@@ -4,8 +4,9 @@ date = "2026-02-21"
 description = "I start hanging out with Claude and I don't hate it yet"
 +++
 
-> You can check out this blog's editor at https://editor.elijah.run.
-> It is under very active development, but you can do the "read only" view to see what I'm talking about.
+> _**TLDR**_ I've started using LLMs to code up hobby projects I don't have the time for.
+> I am _**not**_ using Generative AI for writing and visual art.
+> This blog is Gen-AI free unless otherwise stated.
 
 If for some reason you follow the history of this repo you might have noted a lot of commits co-authored by Claude Code recently.
 That is because I am... vibe coding.
@@ -56,6 +57,10 @@ So I started my first Claude Code Vibe-project: editor.elijah.run.
 I had a clear vision for how _I_ would implement it, so I wrote that up, paid for Claude Pro, and had it spin it's wheels for a few minutes coming up with a plan.
 The first iteration was good, but not perfect so we iterated over the next few days until I got it good enough to write a few of my Backlog posts in it.
 Check it out for yourself, the read-only view covers about half of the features, the publishing side of things being the other half.
+
+> You can check out the editor at https://editor.elijah.run.
+> It is under very active development, so features might be a bit funky.
+> You can use the Anonomous "Read Only" view to get a feel for most of the features.
 
 My workflow turned out to be _similar_ to that described in [this post](https://boristane.com/blog/how-i-use-claude-code) except I really like to fully break up planning and execution, so I get Claude to use `beads` to create tasks from Claude's plans, then clear the context and pick tasks off the stack in priority order.
 
