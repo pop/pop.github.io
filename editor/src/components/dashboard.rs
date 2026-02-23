@@ -38,11 +38,14 @@ fn detect_post_status(content: &str) -> PostStatus {
         return PostStatus::NoFrontmatter;
     }
     let fields = parse_frontmatter(content);
-    let is_draft = fields.iter().any(|(k, v)| k == "draft" && v == "true");
-    if is_draft {
-        PostStatus::Draft
-    } else {
-        PostStatus::Published
+    match fields
+        .iter()
+        .find(|(k, _)| k == "draft")
+        .map(|(_, v)| v.as_str())
+    {
+        Some("true") => PostStatus::Draft,
+        Some(_) => PostStatus::Published,
+        None => PostStatus::NoFrontmatter,
     }
 }
 
