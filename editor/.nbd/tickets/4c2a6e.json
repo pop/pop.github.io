@@ -1,0 +1,8 @@
+{
+  "title": "Phase 11a: Unit tests for pure functions",
+  "body": "Add #[cfg(test)] unit test modules for pure functions — no browser or WASM runtime needed. Targets:\n- models/post.rs: strip_frontmatter (with/without frontmatter, empty, unclosed), render_markdown (basic markdown, GFM, frontmatter stripping)\n- services/github.rs: decode_github_content (valid base64, whitespace/newlines, invalid, empty)\n- components/editor.rs: slug_from_path, title_from_slug, sanitize_filename, char_pos_to_byte_offset, parent_dir, generate_template\n- components/dashboard.rs: format_size (bytes, KB, MB boundaries)\nConsider extracting testable pure functions into a shared utils.rs module to avoid pulling in Yew dependencies.",
+  "priority": 7,
+  "status": "todo",
+  "dependencies": [],
+  "ticket_type": "task"
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Bug: enable spell-check in editor textarea",
+  "body": "The editor textarea has spellcheck=\"false\" explicitly set (editor.rs ~line 754). Change it to spellcheck=\"true\" so the browser underlines misspelled words. One-line fix.",
+  "priority": 5,
+  "status": "todo",
+  "dependencies": [],
+  "ticket_type": "bug"
+}

@@ -835,6 +835,14 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
 - `components/preview.rs`: added `rendered_html` state; content-loading async block now calls `render_markdown` → `resolve_images_in_html` (source branch) → `rendered_html.set`; render uses `rendered_html` state; syntax-highlighting effect moved to depend on `rendered_html`
 - `components/editor.rs`: debounced render effect extended to create `GitHubClient` from token, call `resolve_images_in_html` with active branch (or source), store resolved HTML; `parent_dir` references replaced with `post_dir` imported from `models::post`
 
+### Session 18 (2026-02-23) — Ticket system migration: bd → nbd
+
+- Migrated all 33 bd tickets from `.beads/issues.jsonl` into nbd
+- Priority mapping applied: bd 1→9, bd 2→7, bd 3→5, bd 4→3
+- Dependencies wired up between nbd tickets (6 tickets with deps)
+- 7 closed bd tickets archived in nbd
+- 26 open bd tickets are now active nbd todos
+
 ### Session 17 (2026-02-21) — Phase 23: CI-Aware Publish Button
 
 - Built Phase 23: CI-aware Publish button colors and warning modal

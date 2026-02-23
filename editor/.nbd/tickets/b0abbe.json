@@ -1,0 +1,11 @@
+{
+  "title": "Phase 11d: CI integration for test suite",
+  "body": "Add automated test execution to CI:\n- Add a test job to the GitHub Actions workflow (or create a new editor-tests.yml workflow)\n- Run cargo test (native unit tests — Phase 11a)\n- Run wasm-pack test --headless --chrome (WASM integration tests — Phase 11b)\n- Trigger on push to editor/** branches alongside the existing zola build check\n- Add a Makefile target: make test that runs both test suites locally",
+  "priority": 5,
+  "status": "todo",
+  "dependencies": [
+    "4c2a6e",
+    "cc5ba0"
+  ],
+  "ticket_type": "task"
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Testing: add test job to GitHub Actions CI",
+  "body": "Add automated test execution to CI.\\n\\n- Add test job to GitHub Actions workflow (or create new workflow)\\n- Run cargo test (native unit tests) and wasm-pack test --headless --chrome (WASM integration tests)\\n- Run on push to editor/** branches alongside existing zola build check\\n- Add Makefile target: make test that runs both test suites locally",
+  "priority": 3,
+  "status": "todo",
+  "dependencies": [
+    "053610",
+    "9da619"
+  ],
+  "ticket_type": "task"
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Testing: WASM integration tests for GitHubClient",
+  "body": "Add wasm-bindgen-test integration tests for the GitHub API client.\\n\\n- Add wasm-bindgen-test as dev-dependency\\n- Create tests/ directory with WASM integration tests\\n- Mock HTTP responses to test GitHubClient methods: response parsing (200/error/malformed), 401 handling, list_contents fallback, create_or_update_file request body\\n- Evaluate gloo-net mocking options (may need trait-based HTTP abstraction or mockito-style approach)\\n- Run with: wasm-pack test --headless --chrome",
+  "priority": 3,
+  "status": "todo",
+  "dependencies": [],
+  "ticket_type": "task"
+}

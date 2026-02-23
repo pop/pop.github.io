@@ -1,0 +1,8 @@
+{
+  "title": "Optimization: GraphQL query batching opportunities",
+  "body": "Future optimization: batch multiple GraphQL reads into single queries.\\n\\n- Editor load: batch get_branch_sha + get_file into a single query\\n- Dashboard sort-by-date: batch directory listing + per-file last-commit-date into one query using history(first: 1) on each tree entry\\n- Branch selector + CI status: batch branch list + check suite status per branch",
+  "priority": 3,
+  "status": "todo",
+  "dependencies": [],
+  "ticket_type": "task"
+}

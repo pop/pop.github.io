@@ -1,0 +1,8 @@
+{
+  "title": "Phase 11c: Component tests (stretch goal)",
+  "body": "Stretch goal: evaluate Yew's testing utilities for rendering components in isolation.\n- Test key flows: auth redirect when no token, editor loading states, view mode toggling\n- Yew component testing is limited — decide if the effort is justified vs. relying on unit tests + manual verification",
+  "priority": 3,
+  "status": "todo",
+  "dependencies": [],
+  "ticket_type": "task"
+}

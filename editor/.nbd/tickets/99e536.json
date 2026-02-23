@@ -1,0 +1,8 @@
+{
+  "title": "Phase 12e: GraphQL batching optimizations",
+  "body": "Future optimization: batch multiple GraphQL queries into single round-trips where possible.\n- Editor load: batch get_branch_sha + get_file into a single query (saves one round-trip on every editor open)\n- Dashboard sort-by-date: batch directory listing + per-file last-commit-date using history(first: 1) on each tree entry's path (eliminates N parallel REST calls for N files)\n- Branch selector + CI status: batch branch list + check suite status per branch",
+  "priority": 3,
+  "status": "todo",
+  "dependencies": [],
+  "ticket_type": "feature"
+}
