@@ -1,0 +1,1 @@
+¦etitlex7Phase 19: Bug fix â€” include tags in new post templatedbodyxïAdd a commented-out taxonomies.tags line to the generate_template() function in components/editor.rs so new posts have example tags ready to uncomment. Example tags: comics, games, backlog, movies, tv, whats-good. See PLANNING.md Phase 19.hpriorityfstatusddoneldependencies€kticket_typecbug

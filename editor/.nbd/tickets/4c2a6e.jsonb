@@ -1,13 +1,6 @@
-+++
-title = "Phase 11a: Unit tests for pure functions"
-priority = 7
-status = "done"
-ticket_type = "task"
-dependencies = []
-+++
-Add #[cfg(test)] unit test modules for pure functions â€” no browser or WASM runtime needed. Targets:
+¦etitlex(Phase 11a: Unit tests for pure functionsdbodyyˆAdd #[cfg(test)] unit test modules for pure functions â€” no browser or WASM runtime needed. Targets:
 - models/post.rs: strip_frontmatter (with/without frontmatter, empty, unclosed), render_markdown (basic markdown, GFM, frontmatter stripping)
 - services/github.rs: decode_github_content (valid base64, whitespace/newlines, invalid, empty)
 - components/editor.rs: slug_from_path, title_from_slug, sanitize_filename, char_pos_to_byte_offset, parent_dir, generate_template
 - components/dashboard.rs: format_size (bytes, KB, MB boundaries)
-Consider extracting testable pure functions into a shared utils.rs module to avoid pulling in Yew dependencies.
+Consider extracting testable pure functions into a shared utils.rs module to avoid pulling in Yew dependencies.hpriorityfstatusddoneldependencies€kticket_typedtask

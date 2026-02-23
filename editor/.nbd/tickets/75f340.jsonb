@@ -1,0 +1,1 @@
+¦etitlex1Fix: deleting a file twice results in a 404 errordbodyxþdelete_file() in services/github.rs only handles HTTP 200 and 401; a 404 (file already deleted) falls through to a cryptic generic error. Fix: add explicit 404 arm returning 'File not found â€” it may have already been deleted'. See PLANNING.md Phase 22.hpriorityfstatusddoneldependencies€kticket_typecbug
