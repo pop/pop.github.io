@@ -2,6 +2,7 @@
 title = "Vibing"
 date = "2026-02-21"
 description = "I start hanging out with Claude and I don't hate it yet"
+taxonomies.tags = ["gen-ai"]
 +++
 
 > _**TLDR**_ I've started using LLMs to code up hobby projects I don't have the time for.
