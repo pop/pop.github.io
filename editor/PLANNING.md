@@ -835,7 +835,15 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
 - `components/preview.rs`: added `rendered_html` state; content-loading async block now calls `render_markdown` → `resolve_images_in_html` (source branch) → `rendered_html.set`; render uses `rendered_html` state; syntax-highlighting effect moved to depend on `rendered_html`
 - `components/editor.rs`: debounced render effect extended to create `GitHubClient` from token, call `resolve_images_in_html` with active branch (or source), store resolved HTML; `parent_dir` references replaced with `post_dir` imported from `models::post`
 
-### Session 19 (2026-02-23) — Ticket 279208: Sync action in editor
+### Session 19 (2026-02-23) — Tickets 279208, 623c82
+
+#### Ticket 623c82: Fix missing-draft-key icon bug
+
+- `detect_post_status()` in `dashboard.rs` was treating "no draft key" the same as "draft = false" — both returned `Published` (📰)
+- Fixed by switching from `any(k == "draft" && v == "true")` to `find(k == "draft").map(v.as_str())` with three arms: `Some("true")` → Draft, `Some(_)` → Published, `None` → NoFrontmatter (no icon)
+- Files with frontmatter but no `draft` key now show no icon (consistent with Zola's implicit-published behaviour but without claiming a Published status we can't confirm)
+
+#### Ticket 279208: Sync action in editor
 
 - Built: "Sync from source" button in the editor toolbar
 - Added `syncing: use_state(|| false)` to track async operation
