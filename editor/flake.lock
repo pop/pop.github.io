@@ -7,11 +7,11 @@
       },
       "locked": {
         "dir": "nbd",
-        "lastModified": 1771870854,
-        "narHash": "sha256-WU6Kpqzk7FxTWXE/i1IOVh9WBICC8Dmf5aSsh8HurHM=",
+        "lastModified": 1771885408,
+        "narHash": "sha256-1RuqZgMJVPHOtq6AS3f7t6ellHNFt4Xi15mBHt/7w8g=",
         "ref": "refs/heads/main",
-        "rev": "1d21a481cbbfa5c245df40b544a6410073dcada4",
-        "revCount": 39,
+        "rev": "5ddf9a56e1d2dd9d2b6c41f3a8c14c4199115ef1",
+        "revCount": 46,
         "type": "git",
         "url": "https://gitea.elijah.run/pop/vibed"
       },
