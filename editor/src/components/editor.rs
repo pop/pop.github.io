@@ -37,6 +37,7 @@ pub fn editor_page(props: &Props) -> Html {
     let file_sha = use_state(|| Option::<String>::None);
     let loading = use_state(|| true);
     let saving = use_state(|| false);
+    let syncing = use_state(|| false);
     let uploading = use_state(|| false);
     let error = use_state(|| Option::<String>::None);
     let save_msg = use_state(|| Option::<String>::None);
@@ -463,6 +464,50 @@ pub fn editor_page(props: &Props) -> Html {
         })
     };
 
+    let on_sync = {
+        let branch_opt = auth.active_branch.clone();
+        let syncing = syncing.clone();
+        let error = error.clone();
+        let set_error = set_error.clone();
+        let save_msg = save_msg.clone();
+        let token = auth.token.clone();
+
+        Callback::from(move |_: MouseEvent| {
+            let Some(branch_name) = branch_opt.clone() else {
+                return;
+            };
+
+            let syncing = syncing.clone();
+            let error = error.clone();
+            let set_error = set_error.clone();
+            let save_msg = save_msg.clone();
+
+            if let Some(token) = token.clone() {
+                syncing.set(true);
+                error.set(None);
+                save_msg.set(None);
+
+                wasm_bindgen_futures::spawn_local(async move {
+                    let client = GitHubClient::new(token);
+                    let message = format!("Sync {DEFAULT_BRANCH} into {branch_name}");
+                    match client
+                        .merge_branch(DEFAULT_BRANCH, &branch_name, &message)
+                        .await
+                    {
+                        Ok(()) => {
+                            save_msg.set(Some("Synced from source".into()));
+                            syncing.set(false);
+                        }
+                        Err(e) => {
+                            set_error(e);
+                            syncing.set(false);
+                        }
+                    }
+                });
+            }
+        })
+    };
+
     // Shared image upload callback (used by file input and drag-and-drop)
     let upload_image = {
         let content = content.clone();
@@ -716,7 +761,7 @@ pub fn editor_page(props: &Props) -> Html {
                             ref={save_btn_ref.clone()}
                             class="save-btn"
                             onclick={on_save}
-                            disabled={*saving || !has_changes}
+                            disabled={*saving || *syncing || !has_changes}
                         >
                             { if *saving { "Saving\u{2026}" } else { "Save" } }
                         </button>
@@ -724,15 +769,25 @@ pub fn editor_page(props: &Props) -> Html {
                             <button
                                 class="delete-btn"
                                 onclick={on_delete}
-                                disabled={*saving || *uploading}
+                                disabled={*saving || *uploading || *syncing}
                             >
                                 {"Delete"}
+                            </button>
+                        }
+                        if auth.active_branch.is_some() {
+                            <button
+                                class="sync-btn"
+                                onclick={on_sync}
+                                disabled={*saving || *uploading || *syncing}
+                                title={format!("Merge {} into your editor branch", DEFAULT_BRANCH)}
+                            >
+                                { if *syncing { "Syncing\u{2026}" } else { "Sync from source" } }
                             </button>
                         }
                         <button
                             class="upload-btn"
                             onclick={on_upload_click}
-                            disabled={*saving || *uploading}
+                            disabled={*saving || *uploading || *syncing}
                         >
                             { if *uploading { "Uploading\u{2026}" } else { "Upload Image" } }
                         </button>
