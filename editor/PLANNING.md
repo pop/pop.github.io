@@ -652,40 +652,32 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
   ```
 - No Rust changes needed — CSS-only fix
 
-### Phase 26: Bug Fix — Move Sync Button to Branch Badge with Consistent Styling [064aaa]
+### Phase 26: Bug Fix — Move Sync Button to Branch Badge with Consistent Styling [064aaa] ✓
 
 **Goal:** The "Sync from source" button belongs in the active branch badge on the
 dashboard, not in the editor toolbar. It also has no CSS styling.
 
-**Current state:** `sync-btn` rendered in `editor.rs` ~line 792; `.sync-btn` has no
-CSS definition in `styles/main.css`.
-
 **Implementation:**
 
-- Remove the sync button, `syncing` state, and `on_sync` callback from `editor.rs`
-- Add sync logic (state + callback) to `dashboard.rs` inside the active branch badge
-  (`branch-badge-actions` div, ~line 1327)
-- Add `.sync-btn` CSS to `styles/main.css` with a neutral/secondary style (grey
-  outlined) consistent with the other branch-badge buttons
+- [x] Removed `syncing` state, `on_sync` callback, and sync button from `editor.rs`
+- [x] Added `syncing` state, `on_sync` callback, and "Sync from source" button to
+  `dashboard.rs` inside `.branch-badge-actions` (between Publish and Discard)
+- [x] Added `.sync-btn` CSS to `styles/main.css` (neutral grey outlined style)
 
-### Phase 27: Bug Fix — Dashboard Filter Skips Folder-Posts [c5d99b]
+### Phase 27: Bug Fix — Dashboard Filter Skips Folder-Posts [c5d99b] ✓
 
 **Goal:** The Draft / Published status filter should apply to folder-posts
 (directories containing a single `index.md`) using the already-computed
 `folder_md_statuses` data.
 
-**Root cause:** The filter block in `dashboard.rs` (~line 1237) has
-`e.entry_type != "dir"` which unconditionally passes all directories through,
-bypassing the filter even when `folder_md_statuses` has a status for them.
-
 **Implementation:**
 
-- Replace the single-condition filter block with a branched approach:
+- [x] Replaced single-condition filter block with a branched approach:
   - `.md` files → check `post_statuses`
   - `dir` entries with a known `folder_md_statuses` entry → check that status
   - Everything else (section dirs, media dirs, etc.) → always pass through
 
-### Phase 28: Feature — Trailing `/` on Folder-Posts in Dashboard [e9f800]
+### Phase 28: Feature — Trailing `/` on Folder-Posts in Dashboard [e9f800] ✓
 
 **Goal:** Append a trailing `/` to the display name of directory entries in the
 dashboard list so folder-posts are visually distinguishable from standalone `.md` files
@@ -693,9 +685,8 @@ at a glance.
 
 **Implementation:**
 
-- In `render_entry` (~line 1696 in `dashboard.rs`), change
-  `{&entry.name}` to `{ format!("{}{}", &entry.name, if is_dir { "/" } else { "" }) }`
-- No CSS changes needed; bold weight already applies to the slash
+- [x] Changed `{&entry.name}` to `{ format!("{}{}", &entry.name, if is_dir { "/" } else { "" }) }`
+  in `render_entry` in `dashboard.rs`
 
 ---
 
