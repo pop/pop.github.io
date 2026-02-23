@@ -8,7 +8,7 @@ use serde_json::json;
 
 use crate::models::github::{
     CheckRunsResponse, CommitInfo, CompareResponse, ContentEntry, FileContent, GitRef, GqlBlobData,
-    GqlRefData, GqlRefsData, GqlTreeData, GraphQLResponse, TreeResponse,
+    GqlRefAndBlobData, GqlRefData, GqlRefsData, GqlTreeData, GraphQLResponse, TreeResponse,
 };
 use crate::models::post::{
     bytes_to_data_url, extract_relative_image_srcs, post_dir, replace_image_srcs,
@@ -371,6 +371,67 @@ impl GitHubClient {
         }
     }
 
+    /// Fetch branch SHA and file content in a single GraphQL round-trip (authenticated only).
+    ///
+    /// Returns `Ok(None)` if the branch does not exist.
+    /// Returns `Ok(Some((sha, None)))` if the branch exists but the file was not found.
+    /// Returns `Ok(Some((sha, Some(file))))` if both branch and file were found.
+    pub async fn get_branch_sha_and_file(
+        &self,
+        branch: &str,
+        path: &str,
+    ) -> Result<Option<(String, Option<FileContent>)>, String> {
+        let qualified = format!("refs/heads/{branch}");
+        let expression = format!("{branch}:{path}");
+
+        let query = r#"
+            query($owner: String!, $name: String!, $ref: String!, $expression: String!) {
+                repository(owner: $owner, name: $name) {
+                    ref(qualifiedName: $ref) {
+                        target { oid }
+                    }
+                    object(expression: $expression) {
+                        ... on Blob {
+                            text
+                            oid
+                            byteSize
+                        }
+                    }
+                }
+            }
+        "#;
+
+        let data: GqlRefAndBlobData = self
+            .graphql(
+                query,
+                json!({
+                    "owner": OWNER,
+                    "name": REPO,
+                    "ref": qualified,
+                    "expression": expression,
+                }),
+            )
+            .await?;
+
+        let Some(git_ref) = data.repository.git_ref else {
+            return Ok(None);
+        };
+
+        let sha = git_ref.target.oid;
+        let name = path.rsplit('/').next().unwrap_or(path).to_string();
+
+        let file = data.repository.object.map(|blob| FileContent {
+            name,
+            path: path.to_string(),
+            sha: blob.oid,
+            size: blob.byte_size,
+            content: blob.text,
+            encoding: None,
+        });
+
+        Ok(Some((sha, file)))
+    }
+
     /// Create a new branch pointing at the given SHA.
     pub async fn create_branch(&self, branch_name: &str, from_sha: &str) -> Result<(), String> {
         let token = self.require_token()?;
@@ -693,14 +754,26 @@ impl GitHubClient {
         }
     }
 
-    /// Fetch last commit dates for multiple file paths in parallel.
-    /// Returns a map of path -> epoch milliseconds.
-    /// Entries that fail to fetch are silently omitted.
+    /// Fetch last commit dates for multiple file paths.
+    ///
+    /// When authenticated, uses a single batched GraphQL query.
+    /// When anonymous, falls back to parallel REST calls.
+    /// Returns a map of path -> epoch milliseconds. Entries that fail are silently omitted.
     pub async fn get_commit_dates_bulk(
         &self,
         paths: &[String],
         branch: Option<&str>,
     ) -> HashMap<String, f64> {
+        if paths.is_empty() {
+            return HashMap::new();
+        }
+
+        if self.token.is_some() {
+            return self
+                .get_commit_dates_bulk_graphql(paths, branch.unwrap_or("source"))
+                .await;
+        }
+
         let futures: Vec<_> = paths
             .iter()
             .map(|path| {
@@ -729,6 +802,85 @@ impl GitHubClient {
 
         let results = join_all(futures).await;
         results.into_iter().flatten().collect()
+    }
+
+    /// Batch-fetch last commit dates for multiple paths in a single GraphQL query.
+    ///
+    /// Builds a dynamic query with one aliased `history(path:)` field per path,
+    /// reducing N REST round-trips to 1 GraphQL round-trip.
+    async fn get_commit_dates_bulk_graphql(
+        &self,
+        paths: &[String],
+        branch: &str,
+    ) -> HashMap<String, f64> {
+        let qualified_branch = format!("refs/heads/{branch}");
+
+        let params: String = paths
+            .iter()
+            .enumerate()
+            .map(|(i, _)| format!("$p{i}: String!"))
+            .collect::<Vec<_>>()
+            .join(", ");
+
+        let history_fields: String = paths
+            .iter()
+            .enumerate()
+            .map(|(i, _)| {
+                format!("h{i}: history(path: $p{i}, first: 1) {{ nodes {{ committedDate }} }}")
+            })
+            .collect::<Vec<_>>()
+            .join("\n                        ");
+
+        let query = format!(
+            r#"
+            query($owner: String!, $name: String!, $branch: String!, {params}) {{
+                repository(owner: $owner, name: $name) {{
+                    ref(qualifiedName: $branch) {{
+                        target {{
+                            ... on Commit {{
+                                {history_fields}
+                            }}
+                        }}
+                    }}
+                }}
+            }}
+            "#
+        );
+
+        let mut vars = json!({
+            "owner": OWNER,
+            "name": REPO,
+            "branch": qualified_branch,
+        });
+        for (i, path) in paths.iter().enumerate() {
+            vars[format!("p{i}")] = serde_json::json!(path);
+        }
+
+        let data: serde_json::Value = match self.graphql(&query, vars).await {
+            Ok(d) => d,
+            Err(_) => return HashMap::new(),
+        };
+
+        let Some(target) = data["repository"]["ref"]["target"].as_object() else {
+            return HashMap::new();
+        };
+
+        let mut result = HashMap::new();
+        for (i, path) in paths.iter().enumerate() {
+            let alias = format!("h{i}");
+            if let Some(date) = target
+                .get(&alias)
+                .and_then(|h| h["nodes"].as_array())
+                .and_then(|nodes| nodes.first())
+                .and_then(|n| n["committedDate"].as_str())
+            {
+                let ms = js_sys::Date::parse(date);
+                if !ms.is_nan() {
+                    result.insert(path.clone(), ms);
+                }
+            }
+        }
+        result
     }
 
     // ── CI status ───────────────────────────────────────────────

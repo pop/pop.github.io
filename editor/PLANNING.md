@@ -432,11 +432,11 @@ Mutations stay as REST. `createCommitOnBranch` requires `expectedHeadOid` (extra
 - [x] REST-specific types (`ContentEntry`, `FileContent`, `GitRef`, `CompareResponse`, etc.) unchanged — GraphQL responses mapped to same types internally
 - [x] `decode_github_content` made private — `get_file` now returns decoded text from both paths
 
-#### 12e. Batching opportunities (future optimization)
+#### 12e. Batching opportunities ✓ (partial)
 
-- [ ] **Editor load:** batch `get_branch_sha` + `get_file` into a single query
-- [ ] **Dashboard sort-by-date:** batch directory listing + per-file last-commit-date into one query using `history(first: 1)` on each tree entry's associated path
-- [ ] **Branch selector + CI status:** batch branch list + check suite status per branch
+- [x] **Editor load:** `get_branch_sha_and_file()` — new GraphQL method that fetches branch SHA and file content in one round-trip; editor mount effect uses it when authenticated with an active branch, returning early if file found (saves 1 round-trip per editor open)
+- [x] **Dashboard sort-by-date:** `get_commit_dates_bulk_graphql()` — builds a dynamic query with one aliased `history(path: $pN, first: 1)` field per path, reducing N parallel REST calls to 1 GraphQL round-trip; `get_commit_dates_bulk()` routes to GraphQL when authenticated
+- [ ] **Branch selector + CI status:** batch branch list + check suite status per branch (deferred — CI polling makes this awkward)
 
 ### Phase 13: Public View Mode ✓
 

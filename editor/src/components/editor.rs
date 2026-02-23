@@ -223,19 +223,34 @@ pub fn editor_page(props: &Props) -> Html {
             wasm_bindgen_futures::spawn_local(async move {
                 let mut active_branch = initial_branch;
 
-                // Verify stored branch still exists (only when authenticated)
+                // When authenticated with an active branch, verify it exists and load
+                // the file in a single batched GraphQL query (saves one round-trip).
                 if has_token {
-                    if let Some(ref branch_name) = active_branch {
-                        match client.get_branch_sha(branch_name).await {
-                            Ok(_) => {}
-                            Err(e) if e.contains("not found") => {
-                                set_active_branch.emit(None);
-                                active_branch = None;
-                            }
+                    if let Some(ref branch_name) = active_branch.clone() {
+                        match client.get_branch_sha_and_file(branch_name, &path).await {
                             Err(e) => {
                                 set_error(e);
                                 loading.set(false);
                                 return;
+                            }
+                            Ok(None) => {
+                                // Branch no longer exists — fall back to source
+                                set_active_branch.emit(None);
+                                active_branch = None;
+                            }
+                            Ok(Some((_, Some(file)))) => {
+                                // File found on active branch — done
+                                let text = file.content.unwrap_or_default();
+                                content.set(text.clone());
+                                original_content.set(text);
+                                file_sha.set(Some(file.sha));
+                                is_new.set(false);
+                                loading.set(false);
+                                return;
+                            }
+                            Ok(Some((_, None))) => {
+                                // Branch exists but file not on it — fall back to source
+                                active_branch = None;
                             }
                         }
                     }
