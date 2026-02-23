@@ -1,8 +1,0 @@
-{
-  "title": "CI build/publish job should not trigger on editor/ or .beads/ changes",
-  "body": "The build and publish CI job (main.yml) currently fires on any push to the source branch, including changes to editor/ or .beads/ directories. It should only run when content/, templates/, or config.toml changes.\n\nRelevant file: .github/workflows/main.yml (in parent repo root, not editor/)\nFix: Add paths-ignore or paths filter to the workflow's push trigger to skip editor/ and .beads/ directories.\n\nExample fix:\non:\n  push:\n    branches: [source]\n    paths:\n      - 'content/**'\n      - 'templates/**'\n      - 'config.toml'",
-  "priority": 7,
-  "status": "todo",
-  "dependencies": [],
-  "ticket_type": "bug"
-}

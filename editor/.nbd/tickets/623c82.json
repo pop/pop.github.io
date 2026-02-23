@@ -1,8 +1,0 @@
-{
-  "title": "Files without draft key should show no icon, not published icon",
-  "body": "Standalone .md files (not in a folder) that have no 'draft' key in their frontmatter should display no icon. Currently they show the Published icon (🗞).\n\nRoot cause: detect_post_status() in dashboard.rs (~line 36):\n  let is_draft = fields.iter().any(|(k, v)| k == \"draft\" && v == \"true\");\n  if is_draft { PostStatus::Draft } else { PostStatus::Published }\n\nThis conflates 'draft = false' with 'no draft key' — both return Published. Need to add a third case: if the draft key is absent, return a NoKey variant (or reuse NoFrontmatter). Then update render_entry() (~line 1600) to not render an icon for that case.",
-  "priority": 6,
-  "status": "todo",
-  "dependencies": [],
-  "ticket_type": "bug"
-}

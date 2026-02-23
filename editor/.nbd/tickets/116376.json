@@ -1,8 +1,0 @@
-{
-  "title": "Verify end-to-end: OAuth login, editing, and publish flows",
-  "body": "End-to-end verification for Phases 1-6. Requires a valid GitHub token (dev-mode PAT entry). Checklist:\n- Phase 1: user can log in via OAuth and token is stored in sessionStorage\n- Phase 2: user can browse all content directories\n- Phase 3: edits appear as commits on the editor branch\n- Phase 4: markdown renders correctly for existing posts\n- Phase 5: images upload and display correctly in preview\n- Phase 6: published posts appear on the default (source) branch after merge",
-  "priority": 7,
-  "status": "todo",
-  "dependencies": [],
-  "ticket_type": "task"
-}

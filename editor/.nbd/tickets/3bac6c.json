@@ -1,8 +1,0 @@
-{
-  "title": "Verify end-to-end: unauthenticated browsing and preview",
-  "body": "Phase 13 verification. Confirm that without a GitHub token:\n- Dashboard loads and content directory is browsable\n- Subdirectory navigation works\n- Search and sort work\n- Preview page renders markdown correctly\n- Editor page loads file content and renders preview pane\n- Save/Upload/Publish UI is hidden; 'Login to save' link is shown",
-  "priority": 7,
-  "status": "todo",
-  "dependencies": [],
-  "ticket_type": "task"
-}

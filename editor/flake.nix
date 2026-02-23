@@ -1,9 +1,11 @@
 {
   inputs = {
+    nbd.url = "git+https://gitea.elijah.run/pop/vibed?dir=nbd";
     utils.url = "github:numtide/flake-utils";
     rust-overlay.url = "github:oxalica/rust-overlay";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
   };
-  outputs = { self, nixpkgs, utils, rust-overlay }: utils.lib.eachDefaultSystem (system:
+  outputs = { self, nixpkgs, utils, rust-overlay, nbd }: utils.lib.eachDefaultSystem (system:
     let
       pkgs = import nixpkgs {
         inherit system;
@@ -15,7 +17,6 @@
     in
     {
       devShell = pkgs.mkShell {
-        BD_NO_DAEMON = "true";
         buildInputs = with pkgs; [
           # Praise the good language
           rust
@@ -31,8 +32,10 @@
           opentofu
           # JSON parsing
           jq
-          # Issues tracking for Claude
+          # Temp: Porting to nbd
           beads
+          # Issues tracking for Claude
+          nbd.packages.${system}.nbd
         ];
       };
     }

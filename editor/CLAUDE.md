@@ -6,49 +6,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Blog editor for elijah.run — a client-side Yew (Rust/WASM) web app that edits and publishes posts to a Zola blog via the GitHub API. A Cloudflare Worker handles OAuth token exchange as the only server-side component. The editor lives in the `editor/` subdirectory of the `pop/pop.github.io` repo.
 
-## Planning
-
-When asked to create a plan or tasks, write them to the appropriate doc (PLANNING.md, TODO.md) WITHOUT executing any implementation unless explicitly told to proceed.
-Create beads tasks for all tasks created in the plan.
-
-This project uses **bd** (beads) for issue tracking. Run `bd onboard` to get started.
-
-### Quick Reference
-
-```bash
-bd ready              # Find available work
-bd show <id>          # View issue details
-bd update <id> --status in_progress  # Claim work
-bd close <id>         # Complete work
-bd sync               # Sync with git
-```
-
-### Landing the Plane (Session Completion)
-
-**When ending a work session**, you MUST complete ALL steps below. Work is NOT complete until `git push` succeeds.
-
-**MANDATORY WORKFLOW:**
-
-1. **File issues for remaining work** - Create issues for anything that needs follow-up
-2. **Run quality gates** (if code changed) - Tests, linters, builds
-3. **Update issue status** - Close finished work, update in-progress items
-4. **PUSH TO REMOTE** - This is MANDATORY:
-   ```bash
-   git pull --rebase
-   bd sync
-   git push
-   git status  # MUST show "up to date with origin"
-   ```
-5. **Clean up** - Clear stashes, prune remote branches
-6. **Verify** - All changes committed AND pushed
-7. **Hand off** - Provide context for next session
-
-**CRITICAL RULES:**
-- Work is NOT complete until `git push` succeeds
-- NEVER stop before pushing - that leaves work stranded locally
-- NEVER say "ready to push when you are" - YOU must push
-- If push fails, resolve and retry until it succeeds
-
 ### Session Rules
 
 These are hard constraints enforced from recurring friction patterns. Violations will cause build failures, deploy errors, or lost work.
@@ -58,7 +15,7 @@ These are hard constraints enforced from recurring friction patterns. Violations
 3. **Search only within the project root** — never glob or grep globally across the filesystem. Scope to relevant subdirectories (`src/`, `content/`, etc.).
 4. **Always deploy to production** — use `wrangler pages deploy --branch=source` for the frontend. Never deploy to preview unless explicitly asked.
 5. **`nix develop --command` is for CI only** — do not use it in interactive sessions; the shell is already loaded.
-6. **Verify `bd` is on PATH before use** — run `which bd` if there is any doubt about the binary being available.
+6. **Verify `nbd` is on PATH before use** — run `which nbd` if there is any doubt about the binary being available.
 
 ## Development Environment
 

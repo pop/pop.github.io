@@ -1,8 +1,0 @@
-{
-  "title": "Verify: end-to-end OAuth and editing flows",
-  "body": "Verify all core flows work end-to-end with a real GitHub token.\\n\\nPhase 1: user can log in and token is stored (OAuth flow functional)\\nPhase 2: user can browse all content directories\\nPhase 3: edits appear as commits on the editor branch\\nPhase 4: markdown renders correctly for existing posts\\nPhase 5: images upload and display correctly\\nPhase 6: published posts appear on default branch\\nPhase 13: unauthenticated browsing, preview, and editor viewing work end-to-end\\n\\nRequires valid GitHub token via dev-mode PAT entry or full OAuth flow.",
-  "priority": 7,
-  "status": "todo",
-  "dependencies": [],
-  "ticket_type": "task"
-}

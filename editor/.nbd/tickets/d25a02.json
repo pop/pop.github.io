@@ -1,8 +1,0 @@
-{
-  "title": "Testing: extract pure functions into utils.rs module",
-  "body": "Extract testable pure functions from component files into a shared utils.rs module to simplify testing and avoid pulling in Yew dependencies.\\n\\nFunctions to extract from components/editor.rs: slug_from_path, title_from_slug, sanitize_filename, char_pos_to_byte_offset, parent_dir, generate_template\\nFunctions to extract from components/dashboard.rs: format_size",
-  "priority": 5,
-  "status": "todo",
-  "dependencies": [],
-  "ticket_type": "task"
-}
