@@ -284,6 +284,7 @@ pub fn dashboard() -> Html {
     let branch_saving = use_state(|| false);
     let branch_error = use_state(|| Option::<String>::None);
     let show_ci_warning_modal = use_state(|| false);
+    let syncing = use_state(|| false);
 
     // Active branch from shared context (replaces local use_state)
     let active_branch_opt = auth.active_branch.clone();
@@ -944,6 +945,43 @@ pub fn dashboard() -> Html {
         })
     };
 
+    let on_sync = {
+        let branch_opt = active_branch_opt.clone();
+        let syncing = syncing.clone();
+        let branch_error = branch_error.clone();
+        let token = auth.token.clone();
+
+        Callback::from(move |_: MouseEvent| {
+            let Some(branch_name) = branch_opt.clone() else {
+                return;
+            };
+            let Some(token) = token.clone() else { return };
+
+            let syncing = syncing.clone();
+            let branch_error = branch_error.clone();
+
+            syncing.set(true);
+            branch_error.set(None);
+
+            wasm_bindgen_futures::spawn_local(async move {
+                let client = GitHubClient::new(token);
+                let message = format!("Sync {DEFAULT_BRANCH} into {branch_name}");
+                match client
+                    .merge_branch(DEFAULT_BRANCH, &branch_name, &message)
+                    .await
+                {
+                    Ok(()) => {
+                        syncing.set(false);
+                    }
+                    Err(e) => {
+                        branch_error.set(Some(e));
+                        syncing.set(false);
+                    }
+                }
+            });
+        })
+    };
+
     let on_navigate = {
         let current_path = current_path.clone();
         let navigator = navigator.clone();
@@ -1233,24 +1271,39 @@ pub fn dashboard() -> Html {
                 if !filter.is_empty() && !e.name.to_lowercase().contains(&filter) {
                     return false;
                 }
-                // Status filter: only applies to .md files; dirs and other files always pass
-                if cur_status_filter != StatusFilter::All
-                    && e.entry_type != "dir"
-                    && e.name.ends_with(".md")
-                {
-                    let status = post_statuses.get(&e.path);
-                    match cur_status_filter {
-                        StatusFilter::Draft => {
-                            if !matches!(status, Some(PostStatus::Draft)) {
-                                return false;
+                // Status filter: applies to .md files and known folder-posts
+                if cur_status_filter != StatusFilter::All {
+                    if e.name.ends_with(".md") {
+                        let status = post_statuses.get(&e.path);
+                        match cur_status_filter {
+                            StatusFilter::Draft => {
+                                if !matches!(status, Some(PostStatus::Draft)) {
+                                    return false;
+                                }
+                            }
+                            StatusFilter::Published => {
+                                if !matches!(status, Some(PostStatus::Published)) {
+                                    return false;
+                                }
+                            }
+                            StatusFilter::All => {}
+                        }
+                    } else if e.entry_type == "dir" {
+                        if let Some(status) = folder_md_statuses.get(&e.path) {
+                            match cur_status_filter {
+                                StatusFilter::Draft => {
+                                    if !matches!(status, PostStatus::Draft) {
+                                        return false;
+                                    }
+                                }
+                                StatusFilter::Published => {
+                                    if !matches!(status, PostStatus::Published) {
+                                        return false;
+                                    }
+                                }
+                                StatusFilter::All => {}
                             }
                         }
-                        StatusFilter::Published => {
-                            if !matches!(status, Some(PostStatus::Published)) {
-                                return false;
-                            }
-                        }
-                        StatusFilter::All => {}
                     }
                 }
                 true
@@ -1339,6 +1392,12 @@ pub fn dashboard() -> Html {
                                     onclick={on_publish}
                                     disabled={*branch_saving || *diff_loading || ci_blocks_publish}>
                                 { if *diff_loading { "Loading diff\u{2026}" } else { "Publish" } }
+                            </button>
+                            <button class="sync-btn"
+                                    onclick={on_sync}
+                                    disabled={*branch_saving || *syncing}
+                                    title={format!("Merge {} into your editor branch", DEFAULT_BRANCH)}>
+                                { if *syncing { "Syncing\u{2026}" } else { "Sync from source" } }
                             </button>
                             <button class="discard-btn"
                                     onclick={on_discard}
@@ -1693,7 +1752,7 @@ fn render_entry(
             } else {
                 {status_icon}
             }
-            <span class="entry-name">{&entry.name}</span>
+            <span class="entry-name">{ format!("{}{}", &entry.name, if is_dir { "/" } else { "" }) }</span>
             if let Some(ref date) = date_display {
                 <span class="entry-date">{date}</span>
             }

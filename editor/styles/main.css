@@ -526,6 +526,26 @@ nav a:hover {
     cursor: default;
 }
 
+.sync-btn {
+    padding: 0.4rem 0.9rem;
+    border: 1px solid #6a737d;
+    border-radius: 4px;
+    background: #fff;
+    color: #24292e;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.sync-btn:hover:not(:disabled) {
+    background: #f3f4f6;
+    border-color: #24292e;
+}
+
+.sync-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .publish-hint {
     color: #6a737d;
     font-size: 0.85rem;
