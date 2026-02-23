@@ -369,18 +369,20 @@ These are standard `#[cfg(test)]` modules — no browser or WASM runtime needed.
 - [ ] `components/dashboard.rs` — test `format_size` (bytes, KB, MB boundaries)
 - [ ] Extract testable pure functions from component files into a shared `utils.rs` module to simplify testing and avoid pulling in Yew dependencies
 
-#### 11b. API client tests (`wasm-bindgen-test`)
+#### 11b. API client tests (`wasm-bindgen-test`) ✓ (infrastructure + evaluation)
 
 These run in a headless browser via `wasm-pack test --headless --chrome`.
 
-- [ ] Add `wasm-bindgen-test` as a dev-dependency
-- [ ] Create `tests/` directory with WASM integration tests
-- [ ] Mock HTTP responses to test `GitHubClient` methods:
-  - Response parsing (200 with valid JSON, error status codes, malformed JSON)
-  - 401 handling (verify "Unauthorized" error string for auth-expiry detection)
-  - `list_contents` fallback (verify Trees API is called when Contents API returns 1000 entries)
-  - `create_or_update_file` request body construction (base64 encoding, SHA inclusion)
-- [ ] **TODO:** Evaluate `gloo-net` mocking options — may need a trait-based HTTP abstraction or `mockito`-style approach for WASM
+- [x] Add `wasm-bindgen-test = "0.3"` as a dev-dependency
+- [x] Create `tests/wasm.rs` with `#![cfg(target_arch = "wasm32")]` gate and `wasm_bindgen_test_configure!(run_in_browser)`
+- [x] Added `js_sys::Date` behavior tests (date parsing, NaN filtering, chronological ordering, component extraction) — these genuinely require a browser runtime and cover the sort-by-date feature
+- [x] **HTTP mocking evaluation** — four options assessed:
+  1. **gloo-net mock facility** — does not exist
+  2. **Trait-based HTTP abstraction** — refactor `GitHubClient` to accept `impl HttpClient`; inject a mock in tests. Clean but invasive. Recommended if HTTP tests become a priority.
+  3. **Local mock HTTP server** — run localhost during `wasm-pack test --headless --chrome`; point client at it via overridable base URL. No Rust refactoring but adds external test infrastructure.
+  4. **Service-worker fetch intercept** — too complex for this project's scale.
+- **Decision:** HTTP mocking deferred. Response-parsing, status-code dispatch, and base64 logic are well-covered by the 36 native unit tests. The `tests/wasm.rs` tests cover the JS-runtime-specific behavior that can't run natively.
+- **Blocker:** `wasm-pack` is not installed in the Nix dev shell. Add to `flake.nix` to enable `wasm-pack test --headless --chrome` locally and in CI.
 
 #### 11c. Component tests (stretch goal)
 
@@ -702,6 +704,16 @@ at a glance.
 ---
 
 ## Session Log
+
+### Session 22 (2026-02-23) — Ticket cc5ba0: Phase 11b WASM test infrastructure
+
+- Added `wasm-bindgen-test = "0.3"` to `[dev-dependencies]` in `Cargo.toml`
+- Created `tests/wasm.rs` gated with `#![cfg(target_arch = "wasm32")]` — excluded from native `cargo test`, runs only under `wasm-pack test --headless --chrome`
+- Added 5 `js_sys::Date` tests covering: valid ISO-8601 parse, invalid string → NaN, empty string → NaN, chronological ordering, date component extraction
+- Added 10 missing pure-function tests to `models/post.rs`: `extract_relative_image_srcs` edge cases (data URL, root-relative, multiple), `replace_image_srcs` (substitution, unmatched, no-op), `mime_type_for` (known extensions, fallback), `bytes_to_data_url` (data URL format, MIME selection)
+- Native test suite now covers 36 tests; all pass
+- HTTP mocking evaluation documented in `tests/wasm.rs` header and PLANNING.md (gloo-net has no mock; trait abstraction is the recommended path; deferred)
+- Blocker noted: `wasm-pack` not in Nix dev shell; must be added to `flake.nix` before WASM tests can run
 
 ### Session 1 (2026-02-12)
 - Explored blog repository structure

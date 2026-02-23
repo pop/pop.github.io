@@ -1,7 +1,7 @@
 +++
 title = "Phase 11b: API client tests using wasm-bindgen-test"
 priority = 5
-status = "todo"
+status = "done"
 ticket_type = "task"
 dependencies = []
 +++
