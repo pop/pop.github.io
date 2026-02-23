@@ -835,6 +835,16 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
 - `components/preview.rs`: added `rendered_html` state; content-loading async block now calls `render_markdown` → `resolve_images_in_html` (source branch) → `rendered_html.set`; render uses `rendered_html` state; syntax-highlighting effect moved to depend on `rendered_html`
 - `components/editor.rs`: debounced render effect extended to create `GitHubClient` from token, call `resolve_images_in_html` with active branch (or source), store resolved HTML; `parent_dir` references replaced with `post_dir` imported from `models::post`
 
+### Session 19 (2026-02-23) — Ticket 279208: Sync action in editor
+
+- Built: "Sync from source" button in the editor toolbar
+- Added `syncing: use_state(|| false)` to track async operation
+- Added `on_sync` callback: calls `merge_branch(head=DEFAULT_BRANCH, base=editor_branch, ...)` to pull source changes into the current editor branch
+- Button only appears when `auth.active_branch.is_some()` (i.e. an editor branch exists)
+- All other toolbar buttons (Save, Delete, Upload Image) disabled while syncing
+- Shows "Syncing…" label during operation, "Synced from source" success message
+- Compiles clean (`cargo check --target wasm32-unknown-unknown`)
+
 ### Session 18 (2026-02-23) — Ticket system migration: bd → nbd
 
 - Migrated all 33 bd tickets from `.beads/issues.jsonl` into nbd
