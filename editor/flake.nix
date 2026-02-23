@@ -32,8 +32,6 @@
           opentofu
           # JSON parsing
           jq
-          # Temp: Porting to nbd
-          beads
           # Issues tracking for Claude
           nbd.packages.${system}.nbd
         ];

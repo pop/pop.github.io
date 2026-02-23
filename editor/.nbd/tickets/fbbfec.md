@@ -1,7 +1,7 @@
 +++
 title = "Remove beads from flake.nix"
 priority = 5
-status = "todo"
+status = "done"
 ticket_type = "task"
 dependencies = []
 +++

@@ -7,11 +7,11 @@
       },
       "locked": {
         "dir": "nbd",
-        "lastModified": 1771822575,
-        "narHash": "sha256-Hml6+g+XWBhx/2XC3467Y7X+hvzM3Zjkitk7IoS8mXs=",
+        "lastModified": 1771870854,
+        "narHash": "sha256-WU6Kpqzk7FxTWXE/i1IOVh9WBICC8Dmf5aSsh8HurHM=",
         "ref": "refs/heads/main",
-        "rev": "ffbb0157e31df2349ae5df3816624415bbdc0898",
-        "revCount": 35,
+        "rev": "1d21a481cbbfa5c245df40b544a6410073dcada4",
+        "revCount": 39,
         "type": "git",
         "url": "https://gitea.elijah.run/pop/vibed"
       },
@@ -103,11 +103,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1771297684,
-        "narHash": "sha256-wieWskQxZLPlNXX06JEB0bMoS/ZYQ89xBzF0RL9lyLs=",
+        "lastModified": 1771816254,
+        "narHash": "sha256-vkp3iTF6QmHMvL+34DI93IiMPjS2lqcMlA1fl7nXVsQ=",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "755d3669699a7c62aef35af187d75dc2728cfd85",
+        "rev": "085bdbf5dde5477538e4c87d1684b6c6df56c0ad",
         "type": "github"
       },
       "original": {

@@ -45,8 +45,9 @@ pub fn preview(props: &Props) -> Html {
                         frontmatter_fields.set(parse_frontmatter(&text));
                         content.set(text.clone());
                         let raw_html = render_markdown(&text);
-                        let resolved =
-                            client.resolve_images_in_html(&raw_html, &path, "source").await;
+                        let resolved = client
+                            .resolve_images_in_html(&raw_html, &path, "source")
+                            .await;
                         rendered_html.set(resolved);
                         loading.set(false);
                     }

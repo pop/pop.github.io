@@ -1,7 +1,7 @@
 +++
 title = "Delete .beads/ directory"
 priority = 3
-status = "todo"
+status = "done"
 ticket_type = "task"
 dependencies = []
 +++

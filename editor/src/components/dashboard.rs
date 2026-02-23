@@ -8,8 +8,8 @@ use web_sys::HtmlInputElement;
 use yew::prelude::*;
 use yew_router::prelude::*;
 
-use wasm_bindgen::JsCast;
 use wasm_bindgen::closure::Closure;
+use wasm_bindgen::JsCast;
 
 use futures::future::join_all;
 
@@ -39,7 +39,11 @@ fn detect_post_status(content: &str) -> PostStatus {
     }
     let fields = parse_frontmatter(content);
     let is_draft = fields.iter().any(|(k, v)| k == "draft" && v == "true");
-    if is_draft { PostStatus::Draft } else { PostStatus::Published }
+    if is_draft {
+        PostStatus::Draft
+    } else {
+        PostStatus::Published
+    }
 }
 
 #[derive(Clone, PartialEq)]
@@ -166,10 +170,7 @@ pub fn invalidate_cache(path: &str) {
 
 /// Invalidate all directory cache entries.
 pub fn invalidate_all_caches() {
-    let storage = gloo_utils::window()
-        .session_storage()
-        .ok()
-        .flatten();
+    let storage = gloo_utils::window().session_storage().ok().flatten();
     let Some(storage) = storage else { return };
     let len = storage.length().unwrap_or(0);
     let mut keys_to_delete = Vec::new();
@@ -187,11 +188,29 @@ pub fn invalidate_all_caches() {
 
 fn is_media_file(name: &str) -> bool {
     matches!(
-        name.rsplit('.').next().unwrap_or("").to_lowercase().as_str(),
-        "jpg" | "jpeg" | "png" | "gif" | "webp" | "svg"
-            | "mp4" | "webm" | "mov" | "avi"
-            | "mp3" | "wav" | "ogg" | "flac"
-            | "pdf" | "zip" | "gz" | "tar"
+        name.rsplit('.')
+            .next()
+            .unwrap_or("")
+            .to_lowercase()
+            .as_str(),
+        "jpg"
+            | "jpeg"
+            | "png"
+            | "gif"
+            | "webp"
+            | "svg"
+            | "mp4"
+            | "webm"
+            | "mov"
+            | "avi"
+            | "mp3"
+            | "wav"
+            | "ogg"
+            | "flac"
+            | "pdf"
+            | "zip"
+            | "gz"
+            | "tar"
     )
 }
 
@@ -252,16 +271,16 @@ pub fn dashboard() -> Html {
 
     // Delete confirmation state
     let delete_confirm = use_state(|| Option::<ContentEntry>::None);
-    let delete_error   = use_state(|| Option::<String>::None);
-    let deleting       = use_state(|| false);
+    let delete_error = use_state(|| Option::<String>::None);
+    let deleting = use_state(|| false);
 
     // Branch publish/discard/CI state
-    let show_diff            = use_state(|| false);
-    let diff_data            = use_state(|| Option::<CompareResponse>::None);
-    let diff_loading         = use_state(|| false);
-    let ci_status            = use_state(|| CiState::None);
-    let branch_saving        = use_state(|| false);
-    let branch_error         = use_state(|| Option::<String>::None);
+    let show_diff = use_state(|| false);
+    let diff_data = use_state(|| Option::<CompareResponse>::None);
+    let diff_loading = use_state(|| false);
+    let ci_status = use_state(|| CiState::None);
+    let branch_saving = use_state(|| false);
+    let branch_error = use_state(|| Option::<String>::None);
     let show_ci_warning_modal = use_state(|| false);
 
     // Active branch from shared context (replaces local use_state)
@@ -334,14 +353,12 @@ pub fn dashboard() -> Html {
                         match client.list_contents(&path, branch.as_deref()).await {
                             Ok(mut items) => {
                                 items.sort_by(|a, b| {
-                                    let type_ord = match (
-                                        a.entry_type.as_str(),
-                                        b.entry_type.as_str(),
-                                    ) {
-                                        ("dir", "file") => Ordering::Less,
-                                        ("file", "dir") => Ordering::Greater,
-                                        _ => Ordering::Equal,
-                                    };
+                                    let type_ord =
+                                        match (a.entry_type.as_str(), b.entry_type.as_str()) {
+                                            ("dir", "file") => Ordering::Less,
+                                            ("file", "dir") => Ordering::Greater,
+                                            _ => Ordering::Equal,
+                                        };
                                     type_ord.then_with(|| a.name.cmp(&b.name))
                                 });
                                 set_cached_listing(&path, &items);
@@ -443,85 +460,82 @@ pub fn dashboard() -> Html {
         let entries = entries.clone();
         let active_branch_opt = active_branch_opt.clone();
 
-        use_effect_with(
-            ((*current_path).clone(), entries.len()),
-            move |_| {
-                post_statuses.set(HashMap::new());
+        use_effect_with(((*current_path).clone(), entries.len()), move |_| {
+            post_statuses.set(HashMap::new());
 
-                let md_paths: Vec<String> = entries
-                    .iter()
-                    .filter(|e| e.entry_type == "file" && e.name.ends_with(".md"))
-                    .map(|e| e.path.clone())
-                    .collect();
+            let md_paths: Vec<String> = entries
+                .iter()
+                .filter(|e| e.entry_type == "file" && e.name.ends_with(".md"))
+                .map(|e| e.path.clone())
+                .collect();
 
-                if !md_paths.is_empty() {
-                    let path = (*current_path).clone();
+            if !md_paths.is_empty() {
+                let path = (*current_path).clone();
 
-                    // Check cache first
-                    if let Some(cached) = get_cached_post_statuses(&path) {
-                        let parsed: HashMap<String, PostStatus> = cached
+                // Check cache first
+                if let Some(cached) = get_cached_post_statuses(&path) {
+                    let parsed: HashMap<String, PostStatus> = cached
+                        .into_iter()
+                        .map(|(k, v)| {
+                            let status = match v.as_str() {
+                                "draft" => PostStatus::Draft,
+                                "published" => PostStatus::Published,
+                                _ => PostStatus::NoFrontmatter,
+                            };
+                            (k, status)
+                        })
+                        .collect();
+                    post_statuses.set(parsed);
+                } else {
+                    // Fetch file contents in parallel
+                    let branch = active_branch_opt
+                        .clone()
+                        .unwrap_or_else(|| DEFAULT_BRANCH.to_string());
+
+                    wasm_bindgen_futures::spawn_local(async move {
+                        let futures: Vec<_> = md_paths
                             .into_iter()
-                            .map(|(k, v)| {
-                                let status = match v.as_str() {
-                                    "draft" => PostStatus::Draft,
-                                    "published" => PostStatus::Published,
-                                    _ => PostStatus::NoFrontmatter,
-                                };
-                                (k, status)
+                            .map(|file_path| {
+                                let token = token.clone();
+                                let branch = branch.clone();
+                                async move {
+                                    let client = match token {
+                                        Some(t) => GitHubClient::new(t),
+                                        None => GitHubClient::anonymous(),
+                                    };
+                                    let result = client.get_file(&file_path, &branch).await;
+                                    (file_path, result)
+                                }
                             })
                             .collect();
-                        post_statuses.set(parsed);
-                    } else {
-                        // Fetch file contents in parallel
-                        let branch = active_branch_opt
-                            .clone()
-                            .unwrap_or_else(|| DEFAULT_BRANCH.to_string());
 
-                        wasm_bindgen_futures::spawn_local(async move {
-                            let futures: Vec<_> = md_paths
-                                .into_iter()
-                                .map(|file_path| {
-                                    let token = token.clone();
-                                    let branch = branch.clone();
-                                    async move {
-                                        let client = match token {
-                                            Some(t) => GitHubClient::new(t),
-                                            None => GitHubClient::anonymous(),
-                                        };
-                                        let result = client.get_file(&file_path, &branch).await;
-                                        (file_path, result)
-                                    }
-                                })
-                                .collect();
+                        let results = join_all(futures).await;
 
-                            let results = join_all(futures).await;
+                        let mut statuses_map: HashMap<String, PostStatus> = HashMap::new();
+                        let mut cache_map: HashMap<String, String> = HashMap::new();
 
-                            let mut statuses_map: HashMap<String, PostStatus> = HashMap::new();
-                            let mut cache_map: HashMap<String, String> = HashMap::new();
+                        for (file_path, result) in results {
+                            let status = match result {
+                                Ok(fc) => detect_post_status(fc.content.as_deref().unwrap_or("")),
+                                Err(_) => PostStatus::NoFrontmatter,
+                            };
+                            let status_str = match &status {
+                                PostStatus::Draft => "draft",
+                                PostStatus::Published => "published",
+                                PostStatus::NoFrontmatter => "none",
+                            };
+                            cache_map.insert(file_path.clone(), status_str.to_string());
+                            statuses_map.insert(file_path, status);
+                        }
 
-                            for (file_path, result) in results {
-                                let status = match result {
-                                    Ok(fc) => detect_post_status(fc.content.as_deref().unwrap_or("")),
-                                    Err(_) => PostStatus::NoFrontmatter,
-                                };
-                                let status_str = match &status {
-                                    PostStatus::Draft => "draft",
-                                    PostStatus::Published => "published",
-                                    PostStatus::NoFrontmatter => "none",
-                                };
-                                cache_map.insert(file_path.clone(), status_str.to_string());
-                                statuses_map.insert(file_path, status);
-                            }
-
-                            set_cached_post_statuses(&path, &cache_map);
-                            post_statuses.set(statuses_map);
-                        });
-                    }
+                        set_cached_post_statuses(&path, &cache_map);
+                        post_statuses.set(statuses_map);
+                    });
                 }
+            }
 
-                || ()
-            },
-        );
+            || ()
+        });
     }
 
     // Folder single-.md status effect: for each dir entry, if it has exactly one .md child,
@@ -533,96 +547,93 @@ pub fn dashboard() -> Html {
         let entries = entries.clone();
         let active_branch_opt = active_branch_opt.clone();
 
-        use_effect_with(
-            ((*current_path).clone(), entries.len()),
-            move |_| {
-                folder_md_statuses.set(HashMap::new());
+        use_effect_with(((*current_path).clone(), entries.len()), move |_| {
+            folder_md_statuses.set(HashMap::new());
 
-                let dir_entries: Vec<ContentEntry> = entries
-                    .iter()
-                    .filter(|e| e.entry_type == "dir")
-                    .cloned()
-                    .collect();
+            let dir_entries: Vec<ContentEntry> = entries
+                .iter()
+                .filter(|e| e.entry_type == "dir")
+                .cloned()
+                .collect();
 
-                if !dir_entries.is_empty() {
-                    let branch = active_branch_opt
-                        .clone()
-                        .unwrap_or_else(|| DEFAULT_BRANCH.to_string());
+            if !dir_entries.is_empty() {
+                let branch = active_branch_opt
+                    .clone()
+                    .unwrap_or_else(|| DEFAULT_BRANCH.to_string());
 
-                    wasm_bindgen_futures::spawn_local(async move {
-                        // Phase 1: fetch listing for each dir (use cache if available)
-                        let listing_futures: Vec<_> = dir_entries
-                            .iter()
-                            .map(|dir| {
-                                let dir_path = dir.path.clone();
-                                let token = token.clone();
-                                let branch = branch.clone();
-                                async move {
-                                    let children = if let Some(cached) = get_cached_listing(&dir_path) {
-                                        Some(cached)
-                                    } else {
-                                        let client = match token {
-                                            Some(ref t) => GitHubClient::new(t.clone()),
-                                            None => GitHubClient::anonymous(),
-                                        };
-                                        client.list_contents(&dir_path, Some(&branch)).await.ok()
-                                    };
-                                    (dir_path, children)
-                                }
-                            })
-                            .collect();
-
-                        let listings = join_all(listing_futures).await;
-
-                        // Phase 2: collect dirs with exactly one .md child, fetch those files
-                        let single_md_futures: Vec<_> = listings
-                            .into_iter()
-                            .filter_map(|(dir_path, children)| {
-                                let children = children?;
-                                let md_children: Vec<ContentEntry> = children
-                                    .into_iter()
-                                    .filter(|e| e.entry_type == "file" && e.name.ends_with(".md"))
-                                    .collect();
-                                if md_children.len() == 1 {
-                                    Some((dir_path, md_children.into_iter().next().unwrap()))
+                wasm_bindgen_futures::spawn_local(async move {
+                    // Phase 1: fetch listing for each dir (use cache if available)
+                    let listing_futures: Vec<_> = dir_entries
+                        .iter()
+                        .map(|dir| {
+                            let dir_path = dir.path.clone();
+                            let token = token.clone();
+                            let branch = branch.clone();
+                            async move {
+                                let children = if let Some(cached) = get_cached_listing(&dir_path) {
+                                    Some(cached)
                                 } else {
-                                    None
-                                }
-                            })
-                            .map(|(dir_path, md_entry)| {
-                                let token = token.clone();
-                                let branch = branch.clone();
-                                async move {
                                     let client = match token {
                                         Some(ref t) => GitHubClient::new(t.clone()),
                                         None => GitHubClient::anonymous(),
                                     };
-                                    let result = client.get_file(&md_entry.path, &branch).await;
-                                    (dir_path, result)
-                                }
-                            })
-                            .collect();
-
-                        let file_results = join_all(single_md_futures).await;
-
-                        let mut map: HashMap<String, PostStatus> = HashMap::new();
-                        for (dir_path, result) in file_results {
-                            let status = match result {
-                                Ok(fc) => detect_post_status(fc.content.as_deref().unwrap_or("")),
-                                Err(_) => PostStatus::NoFrontmatter,
-                            };
-                            if matches!(status, PostStatus::Draft | PostStatus::Published) {
-                                map.insert(dir_path, status);
+                                    client.list_contents(&dir_path, Some(&branch)).await.ok()
+                                };
+                                (dir_path, children)
                             }
+                        })
+                        .collect();
+
+                    let listings = join_all(listing_futures).await;
+
+                    // Phase 2: collect dirs with exactly one .md child, fetch those files
+                    let single_md_futures: Vec<_> = listings
+                        .into_iter()
+                        .filter_map(|(dir_path, children)| {
+                            let children = children?;
+                            let md_children: Vec<ContentEntry> = children
+                                .into_iter()
+                                .filter(|e| e.entry_type == "file" && e.name.ends_with(".md"))
+                                .collect();
+                            if md_children.len() == 1 {
+                                Some((dir_path, md_children.into_iter().next().unwrap()))
+                            } else {
+                                None
+                            }
+                        })
+                        .map(|(dir_path, md_entry)| {
+                            let token = token.clone();
+                            let branch = branch.clone();
+                            async move {
+                                let client = match token {
+                                    Some(ref t) => GitHubClient::new(t.clone()),
+                                    None => GitHubClient::anonymous(),
+                                };
+                                let result = client.get_file(&md_entry.path, &branch).await;
+                                (dir_path, result)
+                            }
+                        })
+                        .collect();
+
+                    let file_results = join_all(single_md_futures).await;
+
+                    let mut map: HashMap<String, PostStatus> = HashMap::new();
+                    for (dir_path, result) in file_results {
+                        let status = match result {
+                            Ok(fc) => detect_post_status(fc.content.as_deref().unwrap_or("")),
+                            Err(_) => PostStatus::NoFrontmatter,
+                        };
+                        if matches!(status, PostStatus::Draft | PostStatus::Published) {
+                            map.insert(dir_path, status);
                         }
+                    }
 
-                        folder_md_statuses.set(map);
-                    });
-                }
+                    folder_md_statuses.set(map);
+                });
+            }
 
-                || ()
-            },
-        );
+            || ()
+        });
     }
 
     // CI status: fetch on mount and poll every 15s while pending
@@ -745,7 +756,9 @@ pub fn dashboard() -> Html {
         let show_ci_warning_modal = show_ci_warning_modal.clone();
 
         Callback::from(move |_: MouseEvent| {
-            let Some(branch_name) = branch_opt.clone() else { return };
+            let Some(branch_name) = branch_opt.clone() else {
+                return;
+            };
             let Some(token) = token.clone() else { return };
 
             show_ci_warning_modal.set(false);
@@ -862,9 +875,7 @@ pub fn dashboard() -> Html {
         Callback::from(move |_: MouseEvent| {
             let window = gloo_utils::window();
             if !window
-                .confirm_with_message(
-                    "Discard all changes? This will delete the editor branch.",
-                )
+                .confirm_with_message("Discard all changes? This will delete the editor branch.")
                 .unwrap_or(false)
             {
                 return;
@@ -1094,7 +1105,7 @@ pub fn dashboard() -> Html {
 
     let on_delete_request = {
         let delete_confirm = delete_confirm.clone();
-        let delete_error   = delete_error.clone();
+        let delete_error = delete_error.clone();
         Callback::from(move |entry: ContentEntry| {
             delete_error.set(None);
             delete_confirm.set(Some(entry));
@@ -1117,7 +1128,7 @@ pub fn dashboard() -> Html {
 
     let on_delete_cancel = {
         let delete_confirm = delete_confirm.clone();
-        let delete_error   = delete_error.clone();
+        let delete_error = delete_error.clone();
         Callback::from(move |_: MouseEvent| {
             delete_confirm.set(None);
             delete_error.set(None);
@@ -1126,40 +1137,54 @@ pub fn dashboard() -> Html {
 
     let on_delete_confirm = {
         let delete_confirm = delete_confirm.clone();
-        let delete_error   = delete_error.clone();
-        let deleting       = deleting.clone();
-        let all_files      = all_files.clone();
-        let force_refresh  = force_refresh.clone();
+        let delete_error = delete_error.clone();
+        let deleting = deleting.clone();
+        let all_files = all_files.clone();
+        let force_refresh = force_refresh.clone();
         let active_branch_opt = active_branch_opt.clone();
-        let token          = auth.token.clone();
+        let token = auth.token.clone();
         Callback::from(move |_: MouseEvent| {
-            let Some(entry) = (*delete_confirm).clone() else { return };
+            let Some(entry) = (*delete_confirm).clone() else {
+                return;
+            };
             let active_branch_for_cache = active_branch_opt.clone();
-            let branch = active_branch_opt.clone().unwrap_or_else(|| "source".to_string());
+            let branch = active_branch_opt
+                .clone()
+                .unwrap_or_else(|| "source".to_string());
             let Some(token) = token.clone() else { return };
             let current_refresh = *force_refresh;
             deleting.set(true);
             let delete_confirm = delete_confirm.clone();
-            let delete_error   = delete_error.clone();
-            let deleting       = deleting.clone();
-            let all_files      = all_files.clone();
-            let force_refresh  = force_refresh.clone();
+            let delete_error = delete_error.clone();
+            let deleting = deleting.clone();
+            let all_files = all_files.clone();
+            let force_refresh = force_refresh.clone();
             wasm_bindgen_futures::spawn_local(async move {
                 let client = GitHubClient::new(token);
                 let message = format!("Delete {}", entry.name);
-                match client.delete_file(&entry.path, &entry.sha, &message, &branch).await {
+                match client
+                    .delete_file(&entry.path, &entry.sha, &message, &branch)
+                    .await
+                {
                     Ok(()) => {
                         let path = entry.path.clone();
-                        all_files.set((*all_files).iter()
-                            .filter(|f| f.path != path)
-                            .cloned()
-                            .collect());
+                        all_files.set(
+                            (*all_files)
+                                .iter()
+                                .filter(|f| f.path != path)
+                                .cloned()
+                                .collect(),
+                        );
                         invalidate_all_caches();
-                        SessionStorage::delete(&all_files_cache_key(active_branch_for_cache.as_deref()));
+                        SessionStorage::delete(&all_files_cache_key(
+                            active_branch_for_cache.as_deref(),
+                        ));
                         force_refresh.set(current_refresh + 1);
                         delete_confirm.set(None);
                     }
-                    Err(e) => { delete_error.set(Some(e)); }
+                    Err(e) => {
+                        delete_error.set(Some(e));
+                    }
                 }
                 deleting.set(false);
             });
@@ -1187,7 +1212,10 @@ pub fn dashboard() -> Html {
                     return false;
                 }
                 // Status filter: only applies to .md files; dirs and other files always pass
-                if cur_status_filter != StatusFilter::All && e.entry_type != "dir" && e.name.ends_with(".md") {
+                if cur_status_filter != StatusFilter::All
+                    && e.entry_type != "dir"
+                    && e.name.ends_with(".md")
+                {
                     let status = post_statuses.get(&e.path);
                     match cur_status_filter {
                         StatusFilter::Draft => {
@@ -1599,8 +1627,12 @@ fn render_entry(
 
     let status_icon = if !is_dir && entry.name.ends_with(".md") {
         match post_statuses.get(&entry.path) {
-            Some(PostStatus::Draft) => html! { <span class="post-status-icon" title="Draft">{ "\u{1F331}" }</span> },
-            Some(PostStatus::Published) => html! { <span class="post-status-icon" title="Published">{ "\u{1F4F0}" }</span> },
+            Some(PostStatus::Draft) => {
+                html! { <span class="post-status-icon" title="Draft">{ "\u{1F331}" }</span> }
+            }
+            Some(PostStatus::Published) => {
+                html! { <span class="post-status-icon" title="Published">{ "\u{1F4F0}" }</span> }
+            }
             _ => html! {},
         }
     } else if is_media {

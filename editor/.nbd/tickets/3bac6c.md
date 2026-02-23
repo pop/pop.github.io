@@ -1,7 +1,7 @@
 +++
 title = "Verify end-to-end: unauthenticated browsing and preview"
 priority = 7
-status = "todo"
+status = "backlog"
 ticket_type = "task"
 dependencies = []
 +++

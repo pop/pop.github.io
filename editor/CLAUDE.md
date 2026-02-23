@@ -17,6 +17,61 @@ These are hard constraints enforced from recurring friction patterns. Violations
 5. **`nix develop --command` is for CI only** — do not use it in interactive sessions; the shell is already loaded.
 6. **Verify `nbd` is on PATH before use** — run `which nbd` if there is any doubt about the binary being available.
 
+## Task Tracking with nbd
+
+`nbd` is a CLI tool for managing work tickets, designed for agent workflows.
+
+### Initialisation
+
+```sh
+nbd init
+```
+
+Run once in the project root. Creates `.nbd/tickets/`. Safe to run multiple times.
+
+### Core commands
+
+```sh
+# Create a new ticket (use --ftype md for a human-readable body)
+nbd create --title "Add OAuth login" --type feature --priority 7 --ftype md
+
+# List all open tickets (sorted by priority)
+nbd list
+
+# Read a specific ticket
+nbd read <id>
+
+# Update a ticket
+nbd update <id> --status in_progress
+nbd update <id> --status done
+```
+
+### Finding what to work on
+
+```sh
+# All tickets that are unblocked and ready to start
+nbd ready
+
+# The single highest-priority unblocked ticket
+nbd next
+```
+
+### Workflow
+
+1. **Before starting** — create a ticket: `nbd create --title "..." --json`
+2. **When starting** — mark it in progress: `nbd update <id> --status in_progress`
+3. **When done** — mark it complete: `nbd update <id> --status done`
+
+### Guidelines
+
+- **Always pass `--json`** to every command for structured, unambiguous output.
+- **Always pass `--ftype md`** when creating tickets — markdown format keeps the body human-readable.
+- Use `jq` to parse and transform JSON output when needed.
+- Priority scale 0–10: use **7–9** for bugs, **5** for normal tasks, **3** for nice-to-haves.
+- `--type` choices: `project`, `feature`, `task`, `bug`.
+- Use `--deps id1,id2` to express blockers — tickets that must be done first.
+- Create tickets *before* starting non-trivial tasks, not after.
+
 ## Development Environment
 
 Uses Nix Flakes for reproducible tooling. The dev shell is activated automatically via `direnv` — all tools (`cargo`, `trunk`, `wasm-bindgen-cli`, `make`) are available directly in the shell without any wrapper.

@@ -7,10 +7,12 @@ use serde::de::DeserializeOwned;
 use serde_json::json;
 
 use crate::models::github::{
-    CheckRunsResponse, CommitInfo, CompareResponse, ContentEntry, FileContent,
-    GqlBlobData, GqlRefData, GqlRefsData, GqlTreeData, GitRef, GraphQLResponse, TreeResponse,
+    CheckRunsResponse, CommitInfo, CompareResponse, ContentEntry, FileContent, GitRef, GqlBlobData,
+    GqlRefData, GqlRefsData, GqlTreeData, GraphQLResponse, TreeResponse,
 };
-use crate::models::post::{bytes_to_data_url, extract_relative_image_srcs, post_dir, replace_image_srcs};
+use crate::models::post::{
+    bytes_to_data_url, extract_relative_image_srcs, post_dir, replace_image_srcs,
+};
 
 const OWNER: &str = "pop";
 const REPO: &str = "pop.github.io";
@@ -83,7 +85,10 @@ impl GitHubClient {
         "#;
 
         let data: GqlTreeData = self
-            .graphql(query, json!({ "owner": OWNER, "name": REPO, "expression": expression }))
+            .graphql(
+                query,
+                json!({ "owner": OWNER, "name": REPO, "expression": expression }),
+            )
             .await?;
 
         let tree = data
@@ -102,7 +107,12 @@ impl GitHubClient {
                     format!("{path}/{}", e.name)
                 },
                 name: e.name,
-                entry_type: if e.entry_type == "tree" { "dir" } else { "file" }.to_string(),
+                entry_type: if e.entry_type == "tree" {
+                    "dir"
+                } else {
+                    "file"
+                }
+                .to_string(),
                 sha: e.oid,
                 size: e.object.and_then(|o| o.byte_size).unwrap_or(0),
                 download_url: None,
@@ -121,8 +131,7 @@ impl GitHubClient {
 
         match resp.status() {
             200 => {
-                let entries: Vec<ContentEntry> =
-                    resp.json().await.map_err(|e| e.to_string())?;
+                let entries: Vec<ContentEntry> = resp.json().await.map_err(|e| e.to_string())?;
                 if entries.len() >= 1000 {
                     self.list_contents_via_tree(path).await
                 } else {
@@ -186,11 +195,7 @@ impl GitHubClient {
         }
     }
 
-    async fn get_file_graphql(
-        &self,
-        path: &str,
-        branch: &str,
-    ) -> Result<FileContent, String> {
+    async fn get_file_graphql(&self, path: &str, branch: &str) -> Result<FileContent, String> {
         let expression = format!("{branch}:{path}");
 
         let query = r#"
@@ -208,7 +213,10 @@ impl GitHubClient {
         "#;
 
         let data: GqlBlobData = self
-            .graphql(query, json!({ "owner": OWNER, "name": REPO, "expression": expression }))
+            .graphql(
+                query,
+                json!({ "owner": OWNER, "name": REPO, "expression": expression }),
+            )
             .await?;
 
         let blob = data
@@ -228,11 +236,7 @@ impl GitHubClient {
         })
     }
 
-    async fn get_file_rest(
-        &self,
-        path: &str,
-        branch: &str,
-    ) -> Result<FileContent, String> {
+    async fn get_file_rest(&self, path: &str, branch: &str) -> Result<FileContent, String> {
         let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/contents/{path}?ref={branch}");
         let resp = self.get(&url).await?;
 
@@ -262,7 +266,9 @@ impl GitHubClient {
                 let fc: FileContent = resp.json().await.map_err(|e| e.to_string())?;
                 let encoded = fc.content.unwrap_or_default();
                 let cleaned: String = encoded.chars().filter(|c| !c.is_whitespace()).collect();
-                BASE64_STANDARD.decode(cleaned.as_bytes()).map_err(|e| e.to_string())
+                BASE64_STANDARD
+                    .decode(cleaned.as_bytes())
+                    .map_err(|e| e.to_string())
             }
             401 => Err("Unauthorized \u{2014} check your token".into()),
             404 => Err(format!("File not found: {path}")),
@@ -338,7 +344,10 @@ impl GitHubClient {
         "#;
 
         let data: GqlRefData = self
-            .graphql(query, json!({ "owner": OWNER, "name": REPO, "ref": qualified }))
+            .graphql(
+                query,
+                json!({ "owner": OWNER, "name": REPO, "ref": qualified }),
+            )
             .await?;
 
         data.repository
@@ -363,11 +372,7 @@ impl GitHubClient {
     }
 
     /// Create a new branch pointing at the given SHA.
-    pub async fn create_branch(
-        &self,
-        branch_name: &str,
-        from_sha: &str,
-    ) -> Result<(), String> {
+    pub async fn create_branch(&self, branch_name: &str, from_sha: &str) -> Result<(), String> {
         let token = self.require_token()?;
         let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/git/refs");
         let body = json!({
@@ -491,7 +496,9 @@ impl GitHubClient {
         });
 
         if let Some(sha) = sha {
-            body.as_object_mut().unwrap().insert("sha".into(), json!(sha));
+            body.as_object_mut()
+                .unwrap()
+                .insert("sha".into(), json!(sha));
         }
 
         let resp = Request::put(&url)
@@ -506,8 +513,7 @@ impl GitHubClient {
 
         match resp.status() {
             200 | 201 => {
-                let result: serde_json::Value =
-                    resp.json().await.map_err(|e| e.to_string())?;
+                let result: serde_json::Value = resp.json().await.map_err(|e| e.to_string())?;
                 let sha = result["content"]["sha"]
                     .as_str()
                     .ok_or("Missing SHA in response")?
@@ -578,7 +584,9 @@ impl GitHubClient {
         });
 
         if let Some(sha) = sha {
-            body.as_object_mut().unwrap().insert("sha".into(), json!(sha));
+            body.as_object_mut()
+                .unwrap()
+                .insert("sha".into(), json!(sha));
         }
 
         let resp = Request::put(&url)
@@ -593,8 +601,7 @@ impl GitHubClient {
 
         match resp.status() {
             200 | 201 => {
-                let result: serde_json::Value =
-                    resp.json().await.map_err(|e| e.to_string())?;
+                let result: serde_json::Value = resp.json().await.map_err(|e| e.to_string())?;
                 let sha = result["content"]["sha"]
                     .as_str()
                     .ok_or("Missing SHA in response")?
@@ -637,11 +644,7 @@ impl GitHubClient {
             .graphql(query, json!({ "owner": OWNER, "name": REPO }))
             .await?;
 
-        let nodes = data
-            .repository
-            .refs
-            .map(|r| r.nodes)
-            .unwrap_or_default();
+        let nodes = data.repository.refs.map(|r| r.nodes).unwrap_or_default();
 
         Ok(nodes
             .into_iter()
@@ -653,8 +656,7 @@ impl GitHubClient {
     }
 
     async fn list_editor_branches_rest(&self) -> Result<Vec<GitRef>, String> {
-        let url =
-            format!("{API_BASE}/repos/{OWNER}/{REPO}/git/matching-refs/heads/editor/");
+        let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/git/matching-refs/heads/editor/");
         let resp = self.get(&url).await?;
 
         match resp.status() {
@@ -680,8 +682,7 @@ impl GitHubClient {
 
         match resp.status() {
             200 => {
-                let commits: Vec<CommitInfo> =
-                    resp.json().await.map_err(|e| e.to_string())?;
+                let commits: Vec<CommitInfo> = resp.json().await.map_err(|e| e.to_string())?;
                 commits
                     .first()
                     .map(|c| c.commit.committer.date.clone())
@@ -711,10 +712,7 @@ impl GitHubClient {
                         Some(t) => GitHubClient::new(t),
                         None => GitHubClient::anonymous(),
                     };
-                    match client
-                        .get_last_commit_date(&path, branch.as_deref())
-                        .await
-                    {
+                    match client.get_last_commit_date(&path, branch.as_deref()).await {
                         Ok(date_str) => {
                             let ms = js_sys::Date::parse(&date_str);
                             if ms.is_nan() {
@@ -737,8 +735,7 @@ impl GitHubClient {
 
     /// Get check runs for a given git ref (branch name or SHA).
     pub async fn get_check_runs(&self, git_ref: &str) -> Result<CheckRunsResponse, String> {
-        let url =
-            format!("{API_BASE}/repos/{OWNER}/{REPO}/commits/{git_ref}/check-runs");
+        let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/commits/{git_ref}/check-runs");
         let resp = self.get(&url).await?;
 
         match resp.status() {
@@ -765,12 +762,7 @@ impl GitHubClient {
                     .into_iter()
                     .filter(|te| te.entry_type == "blob" && te.path.starts_with("content/"))
                     .map(|te| {
-                        let name = te
-                            .path
-                            .rsplit('/')
-                            .next()
-                            .unwrap_or(&te.path)
-                            .to_string();
+                        let name = te.path.rsplit('/').next().unwrap_or(&te.path).to_string();
                         ContentEntry {
                             name,
                             path: te.path,

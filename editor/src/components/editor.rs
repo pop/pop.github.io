@@ -121,10 +121,8 @@ pub fn editor_page(props: &Props) -> Html {
             ));
 
             let document = gloo_utils::document();
-            let _ = document.add_event_listener_with_callback(
-                "keydown",
-                listener.as_ref().unchecked_ref(),
-            );
+            let _ = document
+                .add_event_listener_with_callback("keydown", listener.as_ref().unchecked_ref());
 
             move || {
                 let _ = document.remove_event_listener_with_callback(
@@ -146,44 +144,48 @@ pub fn editor_page(props: &Props) -> Html {
         let path = props.path.clone();
         let active_branch = auth.active_branch.clone();
 
-        use_effect_with((content_val, show_preview), move |(content_val, show_preview)| {
-            if *show_preview {
-                let gen = {
-                    let mut g = render_gen.borrow_mut();
-                    *g = g.wrapping_add(1);
-                    *g
-                };
+        use_effect_with(
+            (content_val, show_preview),
+            move |(content_val, show_preview)| {
+                if *show_preview {
+                    let gen = {
+                        let mut g = render_gen.borrow_mut();
+                        *g = g.wrapping_add(1);
+                        *g
+                    };
 
-                let content_val = content_val.clone();
-                let rendered_html = rendered_html.clone();
-                let frontmatter_fields = frontmatter_fields.clone();
-                let render_gen = render_gen.clone();
-                let token = token.clone();
-                let path = path.clone();
-                let active_branch = active_branch.clone();
+                    let content_val = content_val.clone();
+                    let rendered_html = rendered_html.clone();
+                    let frontmatter_fields = frontmatter_fields.clone();
+                    let render_gen = render_gen.clone();
+                    let token = token.clone();
+                    let path = path.clone();
+                    let active_branch = active_branch.clone();
 
-                wasm_bindgen_futures::spawn_local(async move {
-                    sleep_ms(200).await;
-                    if *render_gen.borrow() == gen {
-                        frontmatter_fields.set(parse_frontmatter(&content_val));
-                        let raw_html = render_markdown(&content_val);
-                        let client = match token {
-                            Some(t) => GitHubClient::new(t),
-                            None => GitHubClient::anonymous(),
-                        };
-                        let branch = active_branch
-                            .as_deref()
-                            .unwrap_or(DEFAULT_BRANCH)
-                            .to_string();
-                        let resolved =
-                            client.resolve_images_in_html(&raw_html, &path, &branch).await;
-                        rendered_html.set(resolved);
-                    }
-                });
-            }
+                    wasm_bindgen_futures::spawn_local(async move {
+                        sleep_ms(200).await;
+                        if *render_gen.borrow() == gen {
+                            frontmatter_fields.set(parse_frontmatter(&content_val));
+                            let raw_html = render_markdown(&content_val);
+                            let client = match token {
+                                Some(t) => GitHubClient::new(t),
+                                None => GitHubClient::anonymous(),
+                            };
+                            let branch = active_branch
+                                .as_deref()
+                                .unwrap_or(DEFAULT_BRANCH)
+                                .to_string();
+                            let resolved = client
+                                .resolve_images_in_html(&raw_html, &path, &branch)
+                                .await;
+                            rendered_html.set(resolved);
+                        }
+                    });
+                }
 
-            || ()
-        });
+                || ()
+            },
+        );
     }
 
     // Syntax highlighting after preview render
@@ -283,19 +285,22 @@ pub fn editor_page(props: &Props) -> Html {
             let content = content.clone();
             let textarea_ref = textarea_ref.clone();
             Callback::from(move |_: MouseEvent| {
-                let Some(textarea) = textarea_ref.cast::<HtmlTextAreaElement>() else { return };
+                let Some(textarea) = textarea_ref.cast::<HtmlTextAreaElement>() else {
+                    return;
+                };
                 let current = (*content).clone();
-                let new_content = apply_format_to_content(&textarea, &current, $prefix, $suffix, $placeholder);
+                let new_content =
+                    apply_format_to_content(&textarea, &current, $prefix, $suffix, $placeholder);
                 content.set(new_content);
                 let _ = textarea.focus();
             })
         }};
     }
-    let on_fmt_bold         = make_format_cb!("**", "**", "bold text");
-    let on_fmt_italic       = make_format_cb!("*", "*", "italic text");
-    let on_fmt_strike       = make_format_cb!("~~", "~~", "strikethrough text");
-    let on_fmt_code_inline  = make_format_cb!("`", "`", "code");
-    let on_fmt_code_block   = make_format_cb!("```\n", "\n```", "code");
+    let on_fmt_bold = make_format_cb!("**", "**", "bold text");
+    let on_fmt_italic = make_format_cb!("*", "*", "italic text");
+    let on_fmt_strike = make_format_cb!("~~", "~~", "strikethrough text");
+    let on_fmt_code_inline = make_format_cb!("`", "`", "code");
+    let on_fmt_code_block = make_format_cb!("```\n", "\n```", "code");
 
     let on_save = {
         let content = content.clone();
@@ -561,19 +566,22 @@ pub fn editor_page(props: &Props) -> Html {
                             let md_ref = format!("![{file_name}]({file_name})");
                             let current = (*content).clone();
 
-                            let new_content =
-                                if let Some(textarea) = textarea_ref.cast::<HtmlTextAreaElement>() {
-                                    if let Ok(Some(pos)) = textarea.selection_start() {
-                                        let insert_at =
-                                            crate::utils::char_pos_to_byte_offset(&current, pos as usize);
-                                        let (before, after) = current.split_at(insert_at);
-                                        format!("{before}{md_ref}{after}")
-                                    } else {
-                                        format!("{current}\n{md_ref}")
-                                    }
+                            let new_content = if let Some(textarea) =
+                                textarea_ref.cast::<HtmlTextAreaElement>()
+                            {
+                                if let Ok(Some(pos)) = textarea.selection_start() {
+                                    let insert_at = crate::utils::char_pos_to_byte_offset(
+                                        &current,
+                                        pos as usize,
+                                    );
+                                    let (before, after) = current.split_at(insert_at);
+                                    format!("{before}{md_ref}{after}")
                                 } else {
                                     format!("{current}\n{md_ref}")
-                                };
+                                }
+                            } else {
+                                format!("{current}\n{md_ref}")
+                            };
 
                             content.set(new_content);
                             save_msg.set(Some(format!("Uploaded {file_name}")));
@@ -923,7 +931,6 @@ async fn read_file_as_bytes(file: web_sys::File) -> Result<Vec<u8>, String> {
     Ok(array.to_vec())
 }
 
-
 /// Wrap selected text (or insert placeholder) with prefix/suffix markers.
 /// Returns the new full content string.
 fn apply_format_to_content(
@@ -934,12 +941,27 @@ fn apply_format_to_content(
     placeholder: &str,
 ) -> String {
     let start = textarea.selection_start().ok().flatten().unwrap_or(0) as usize;
-    let end = textarea.selection_end().ok().flatten().unwrap_or(start as u32) as usize;
+    let end = textarea
+        .selection_end()
+        .ok()
+        .flatten()
+        .unwrap_or(start as u32) as usize;
     let byte_start = crate::utils::char_pos_to_byte_offset(current, start);
     let byte_end = crate::utils::char_pos_to_byte_offset(current, end);
     let selected = &current[byte_start..byte_end];
-    let inner = if selected.is_empty() { placeholder } else { selected };
-    format!("{}{}{}{}{}", &current[..byte_start], prefix, inner, suffix, &current[byte_end..])
+    let inner = if selected.is_empty() {
+        placeholder
+    } else {
+        selected
+    };
+    format!(
+        "{}{}{}{}{}",
+        &current[..byte_start],
+        prefix,
+        inner,
+        suffix,
+        &current[byte_end..]
+    )
 }
 
 // ── Debounce / highlighting helpers ─────────────────────────────
