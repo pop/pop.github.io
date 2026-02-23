@@ -594,6 +594,11 @@ pub fn dashboard() -> Html {
                         .into_iter()
                         .filter_map(|(dir_path, children)| {
                             let children = children?;
+                            // [a066f2] Directories that contain sub-directories are sections,
+                            // not posts — always show the folder icon for these.
+                            if children.iter().any(|e| e.entry_type == "dir") {
+                                return None;
+                            }
                             let md_children: Vec<ContentEntry> = children
                                 .into_iter()
                                 .filter(|e| e.entry_type == "file" && e.name.ends_with(".md"))
@@ -622,8 +627,23 @@ pub fn dashboard() -> Html {
 
                     let mut map: HashMap<String, PostStatus> = HashMap::new();
                     for (dir_path, result) in file_results {
+                        // [469284] For folder icons, treat any file with frontmatter that
+                        // isn't explicitly draft=true as Published. This differs from
+                        // file-level rendering where absent draft key shows no icon.
                         let status = match result {
-                            Ok(fc) => detect_post_status(fc.content.as_deref().unwrap_or("")),
+                            Ok(fc) => {
+                                let content = fc.content.as_deref().unwrap_or("");
+                                if extract_frontmatter(content).is_none() {
+                                    PostStatus::NoFrontmatter
+                                } else {
+                                    let fields = parse_frontmatter(content);
+                                    if fields.iter().any(|(k, v)| k == "draft" && v == "true") {
+                                        PostStatus::Draft
+                                    } else {
+                                        PostStatus::Published
+                                    }
+                                }
+                            }
                             Err(_) => PostStatus::NoFrontmatter,
                         };
                         if matches!(status, PostStatus::Draft | PostStatus::Published) {

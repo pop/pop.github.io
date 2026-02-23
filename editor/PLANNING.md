@@ -835,6 +835,24 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
 - `components/preview.rs`: added `rendered_html` state; content-loading async block now calls `render_markdown` → `resolve_images_in_html` (source branch) → `rendered_html.set`; render uses `rendered_html` state; syntax-highlighting effect moved to depend on `rendered_html`
 - `components/editor.rs`: debounced render effect extended to create `GitHubClient` from token, call `resolve_images_in_html` with active branch (or source), store resolved HTML; `parent_dir` references replaced with `post_dir` imported from `models::post`
 
+### Session 20 (2026-02-23) — Tickets 469284, a066f2, 1cc1d4, 2fd5c2
+
+#### Ticket 469284: Folder with draft=false/.md shows no icon
+
+- Root cause: folder status detection used `detect_post_status()` which returns `NoFrontmatter` for files with frontmatter but no `draft` key (after 623c82 fix). For folder icons the rule should be: any frontmatter + not `draft=true` → Published icon.
+- Fixed in Phase 2 of folder status detection: inline logic that treats absent `draft` key as Published (not NoFrontmatter), so folders containing an `index.md` with frontmatter and no draft key now correctly display 📰.
+
+#### Ticket a066f2: Directories with sub-directories always show folder icon
+
+- Section-level directories (e.g. `content/blog/`) can contain both sub-directories and an `index.md`. These should always show 📂, not a post icon.
+- Fixed in Phase 2 filter_map: early-return `None` if any child entry is a `dir`. This prevents section directories from being mistaken for leaf post directories.
+
+#### Tickets 1cc1d4 / 2fd5c2: Branch last-activity display (deferred)
+
+- Both tickets requested showing commit date/count per branch in the branch selector.
+- Deferred: branch names already encode the creation date (`editor/YYYY-MM-DD-slug`), and the extra API calls (one per branch) are not worth the cost.
+- Closed both tickets as done.
+
 ### Session 19 (2026-02-23) — Tickets 279208, 623c82
 
 #### Ticket 623c82: Fix missing-draft-key icon bug
