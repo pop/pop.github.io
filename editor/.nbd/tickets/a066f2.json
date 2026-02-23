@@ -1,0 +1,8 @@
+{
+  "title": "Directory with sub-directories should show folder icon",
+  "body": "When a directory in the file tree contains sub-directories, it should always display the folder icon (📂) regardless of whether it also contains an .md file.\n\nCurrently the icon logic at dashboard.rs render_entry() (~line 1628) shows Draft/Published icons based on folder_md_statuses but only falls back to the folder icon if there is no .md file status — it does not check whether the directory has sub-directories.\n\nFix: Before checking folder_md_statuses, check if the directory has any sub-directory children. If so, always render the folder icon (📂) regardless of .md file status.",
+  "priority": 5,
+  "status": "todo",
+  "dependencies": [],
+  "ticket_type": "bug"
+}

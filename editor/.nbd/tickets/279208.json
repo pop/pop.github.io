@@ -1,0 +1,8 @@
+{
+  "title": "Add sync action to merge source into current editor branch",
+  "body": "Add a 'sync' button/action in the editor UI that merges the source (DEFAULT_BRANCH) into the current editor/{date}-{slug} branch. This keeps the edit branch up-to-date when the source branch has moved ahead.\n\nRelevant code:\n- src/services/github.rs: merge_branch() at ~line 418 already exists and accepts head_branch, base_branch, commit_message\n- src/components/editor.rs: create_editor_branch() at ~line 852 — branch naming pattern is editor/{date_str}-{slug}\n\nImplementation: Add a sync button to the editor toolbar. On click, call merge_branch(base=current_editor_branch, head=source, ...) so source changes are merged into the edit branch.",
+  "priority": 6,
+  "status": "todo",
+  "dependencies": [],
+  "ticket_type": "feature"
+}
