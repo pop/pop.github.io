@@ -835,6 +835,14 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
 - `components/preview.rs`: added `rendered_html` state; content-loading async block now calls `render_markdown` → `resolve_images_in_html` (source branch) → `rendered_html.set`; render uses `rendered_html` state; syntax-highlighting effect moved to depend on `rendered_html`
 - `components/editor.rs`: debounced render effect extended to create `GitHubClient` from token, call `resolve_images_in_html` with active branch (or source), store resolved HTML; `parent_dir` references replaced with `post_dir` imported from `models::post`
 
+### Session 21 (2026-02-23) — Ticket f2abcd: Fix absent-draft-key icon for standalone .md files
+
+- `detect_post_status()` in `dashboard.rs` was returning `PostStatus::NoFrontmatter` for `.md` files with valid frontmatter but no explicit `draft` key (the `None` arm in the match was wrong).
+- Zola's default when `draft` is absent is `draft = false` (published), so absent key → Published is correct.
+- Fixed by collapsing `Some(_) => Published` and `None => NoFrontmatter` into a single `_ => Published` arm; the early-return at the top of `detect_post_status()` already handles the true no-frontmatter case.
+- This is the standalone-file counterpart of the folder fix applied in session 20 (ticket 469284).
+- Compiles clean (`cargo check --target wasm32-unknown-unknown`)
+
 ### Session 20 (2026-02-23) — Tickets 469284, a066f2, 1cc1d4, 2fd5c2
 
 #### Ticket 469284: Folder with draft=false/.md shows no icon

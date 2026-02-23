@@ -1,7 +1,7 @@
 +++
 title = "*.md files with frontmatter but no draft key show no icon"
 priority = 7
-status = "todo"
+status = "done"
 ticket_type = "bug"
 dependencies = []
 +++

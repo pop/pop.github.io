@@ -44,8 +44,7 @@ fn detect_post_status(content: &str) -> PostStatus {
         .map(|(_, v)| v.as_str())
     {
         Some("true") => PostStatus::Draft,
-        Some(_) => PostStatus::Published,
-        None => PostStatus::NoFrontmatter,
+        _ => PostStatus::Published,
     }
 }
 
