@@ -432,11 +432,11 @@ Mutations stay as REST. `createCommitOnBranch` requires `expectedHeadOid` (extra
 - [x] REST-specific types (`ContentEntry`, `FileContent`, `GitRef`, `CompareResponse`, etc.) unchanged — GraphQL responses mapped to same types internally
 - [x] `decode_github_content` made private — `get_file` now returns decoded text from both paths
 
-#### 12e. Batching opportunities (future optimization)
+#### 12e. Batching opportunities ✓ (partial)
 
-- [ ] **Editor load:** batch `get_branch_sha` + `get_file` into a single query
-- [ ] **Dashboard sort-by-date:** batch directory listing + per-file last-commit-date into one query using `history(first: 1)` on each tree entry's associated path
-- [ ] **Branch selector + CI status:** batch branch list + check suite status per branch
+- [x] **Editor load:** `get_branch_sha_and_file()` — new GraphQL method that fetches branch SHA and file content in one round-trip; editor mount effect uses it when authenticated with an active branch, returning early if file found (saves 1 round-trip per editor open)
+- [x] **Dashboard sort-by-date:** `get_commit_dates_bulk_graphql()` — builds a dynamic query with one aliased `history(path: $pN, first: 1)` field per path, reducing N parallel REST calls to 1 GraphQL round-trip; `get_commit_dates_bulk()` routes to GraphQL when authenticated
+- [ ] **Branch selector + CI status:** batch branch list + check suite status per branch (deferred — CI polling makes this awkward)
 
 ### Phase 13: Public View Mode ✓
 
@@ -652,6 +652,42 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
   ```
 - No Rust changes needed — CSS-only fix
 
+### Phase 26: Bug Fix — Move Sync Button to Branch Badge with Consistent Styling [064aaa] ✓
+
+**Goal:** The "Sync from source" button belongs in the active branch badge on the
+dashboard, not in the editor toolbar. It also has no CSS styling.
+
+**Implementation:**
+
+- [x] Removed `syncing` state, `on_sync` callback, and sync button from `editor.rs`
+- [x] Added `syncing` state, `on_sync` callback, and "Sync from source" button to
+  `dashboard.rs` inside `.branch-badge-actions` (between Publish and Discard)
+- [x] Added `.sync-btn` CSS to `styles/main.css` (neutral grey outlined style)
+
+### Phase 27: Bug Fix — Dashboard Filter Skips Folder-Posts [c5d99b] ✓
+
+**Goal:** The Draft / Published status filter should apply to folder-posts
+(directories containing a single `index.md`) using the already-computed
+`folder_md_statuses` data.
+
+**Implementation:**
+
+- [x] Replaced single-condition filter block with a branched approach:
+  - `.md` files → check `post_statuses`
+  - `dir` entries with a known `folder_md_statuses` entry → check that status
+  - Everything else (section dirs, media dirs, etc.) → always pass through
+
+### Phase 28: Feature — Trailing `/` on Folder-Posts in Dashboard [e9f800] ✓
+
+**Goal:** Append a trailing `/` to the display name of directory entries in the
+dashboard list so folder-posts are visually distinguishable from standalone `.md` files
+at a glance.
+
+**Implementation:**
+
+- [x] Changed `{&entry.name}` to `{ format!("{}{}", &entry.name, if is_dir { "/" } else { "" }) }`
+  in `render_entry` in `dashboard.rs`
+
 ---
 
 ## Open Questions
@@ -834,6 +870,58 @@ The underlying repo (`pop/pop.github.io`) is public, so the GitHub REST API supp
 - `resolve_images_in_html(html, post_path, branch) -> String` added to `GitHubClient` — orchestrates parallel image fetches via `futures::future::join_all`, converts successful results to `data:` URLs, leaves unresolvable images at their original src
 - `components/preview.rs`: added `rendered_html` state; content-loading async block now calls `render_markdown` → `resolve_images_in_html` (source branch) → `rendered_html.set`; render uses `rendered_html` state; syntax-highlighting effect moved to depend on `rendered_html`
 - `components/editor.rs`: debounced render effect extended to create `GitHubClient` from token, call `resolve_images_in_html` with active branch (or source), store resolved HTML; `parent_dir` references replaced with `post_dir` imported from `models::post`
+
+### Session 21 (2026-02-23) — Ticket f2abcd: Fix absent-draft-key icon for standalone .md files
+
+- `detect_post_status()` in `dashboard.rs` was returning `PostStatus::NoFrontmatter` for `.md` files with valid frontmatter but no explicit `draft` key (the `None` arm in the match was wrong).
+- Zola's default when `draft` is absent is `draft = false` (published), so absent key → Published is correct.
+- Fixed by collapsing `Some(_) => Published` and `None => NoFrontmatter` into a single `_ => Published` arm; the early-return at the top of `detect_post_status()` already handles the true no-frontmatter case.
+- This is the standalone-file counterpart of the folder fix applied in session 20 (ticket 469284).
+- Compiles clean (`cargo check --target wasm32-unknown-unknown`)
+
+### Session 20 (2026-02-23) — Tickets 469284, a066f2, 1cc1d4, 2fd5c2
+
+#### Ticket 469284: Folder with draft=false/.md shows no icon
+
+- Root cause: folder status detection used `detect_post_status()` which returns `NoFrontmatter` for files with frontmatter but no `draft` key (after 623c82 fix). For folder icons the rule should be: any frontmatter + not `draft=true` → Published icon.
+- Fixed in Phase 2 of folder status detection: inline logic that treats absent `draft` key as Published (not NoFrontmatter), so folders containing an `index.md` with frontmatter and no draft key now correctly display 📰.
+
+#### Ticket a066f2: Directories with sub-directories always show folder icon
+
+- Section-level directories (e.g. `content/blog/`) can contain both sub-directories and an `index.md`. These should always show 📂, not a post icon.
+- Fixed in Phase 2 filter_map: early-return `None` if any child entry is a `dir`. This prevents section directories from being mistaken for leaf post directories.
+
+#### Tickets 1cc1d4 / 2fd5c2: Branch last-activity display (deferred)
+
+- Both tickets requested showing commit date/count per branch in the branch selector.
+- Deferred: branch names already encode the creation date (`editor/YYYY-MM-DD-slug`), and the extra API calls (one per branch) are not worth the cost.
+- Closed both tickets as done.
+
+### Session 19 (2026-02-23) — Tickets 279208, 623c82
+
+#### Ticket 623c82: Fix missing-draft-key icon bug
+
+- `detect_post_status()` in `dashboard.rs` was treating "no draft key" the same as "draft = false" — both returned `Published` (📰)
+- Fixed by switching from `any(k == "draft" && v == "true")` to `find(k == "draft").map(v.as_str())` with three arms: `Some("true")` → Draft, `Some(_)` → Published, `None` → NoFrontmatter (no icon)
+- Files with frontmatter but no `draft` key now show no icon (consistent with Zola's implicit-published behaviour but without claiming a Published status we can't confirm)
+
+#### Ticket 279208: Sync action in editor
+
+- Built: "Sync from source" button in the editor toolbar
+- Added `syncing: use_state(|| false)` to track async operation
+- Added `on_sync` callback: calls `merge_branch(head=DEFAULT_BRANCH, base=editor_branch, ...)` to pull source changes into the current editor branch
+- Button only appears when `auth.active_branch.is_some()` (i.e. an editor branch exists)
+- All other toolbar buttons (Save, Delete, Upload Image) disabled while syncing
+- Shows "Syncing…" label during operation, "Synced from source" success message
+- Compiles clean (`cargo check --target wasm32-unknown-unknown`)
+
+### Session 18 (2026-02-23) — Ticket system migration: bd → nbd
+
+- Migrated all 33 bd tickets from `.beads/issues.jsonl` into nbd
+- Priority mapping applied: bd 1→9, bd 2→7, bd 3→5, bd 4→3
+- Dependencies wired up between nbd tickets (6 tickets with deps)
+- 7 closed bd tickets archived in nbd
+- 26 open bd tickets are now active nbd todos
 
 ### Session 17 (2026-02-21) — Phase 23: CI-Aware Publish Button
 

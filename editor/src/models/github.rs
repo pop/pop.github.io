@@ -194,6 +194,19 @@ pub struct GqlRefTarget {
     pub oid: String,
 }
 
+/// Response for a batched ref + blob query (get_branch_sha_and_file).
+#[derive(Deserialize)]
+pub struct GqlRefAndBlobData {
+    pub repository: GqlRepoRefAndBlob,
+}
+
+#[derive(Deserialize)]
+pub struct GqlRepoRefAndBlob {
+    #[serde(rename = "ref")]
+    pub git_ref: Option<GqlRef>,
+    pub object: Option<GqlBlob>,
+}
+
 /// Response for a refs query (list_editor_branches).
 #[derive(Deserialize)]
 pub struct GqlRefsData {

@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - source
+    paths:
+      - 'content/**'
+      - 'templates/**'
+      - 'config.toml'
 
 jobs:
   build-deploy:

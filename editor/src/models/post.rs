@@ -159,7 +159,10 @@ pub fn replace_image_srcs(html: &str, replacements: &HashMap<String, String>) ->
                     .unwrap_or(after_quote.len());
                 (&after_quote[..end], &after_quote[end..])
             };
-            let replacement = replacements.get(src_value).map(|s| s.as_str()).unwrap_or(src_value);
+            let replacement = replacements
+                .get(src_value)
+                .map(|s| s.as_str())
+                .unwrap_or(src_value);
             if quote != '\0' {
                 result.push(quote);
                 result.push_str(replacement);
@@ -234,7 +237,10 @@ mod tests {
         let content = "+++\ntitle = \"x\"\n+++\n**bold**";
         let html = render_markdown(content);
         assert!(html.contains("<strong>bold</strong>"), "got: {html}");
-        assert!(!html.contains("title"), "frontmatter leaked into output: {html}");
+        assert!(
+            !html.contains("title"),
+            "frontmatter leaked into output: {html}"
+        );
     }
 
     #[test]

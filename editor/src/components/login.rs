@@ -66,10 +66,7 @@ pub fn login() -> Html {
     }
 
     let on_github_login = Callback::from(|_: MouseEvent| {
-        let origin = gloo_utils::window()
-            .location()
-            .origin()
-            .unwrap_or_default();
+        let origin = gloo_utils::window().location().origin().unwrap_or_default();
         let url = format!(
             "https://github.com/login/oauth/authorize?client_id={GITHUB_CLIENT_ID}&redirect_uri={origin}/login&scope=repo"
         );

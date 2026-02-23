@@ -1,0 +1,1 @@
+¦etitlex*Bug: enable spell-check in editor textareadbodyx©The editor textarea has spellcheck="false" explicitly set (editor.rs ~line 754). Change it to spellcheck="true" so the browser underlines misspelled words. One-line fix.hpriorityfstatusddoneldependencies€kticket_typecbug

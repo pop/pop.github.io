@@ -1,0 +1,1 @@
+¦etitlex+Phase 18: Bug fix â€” directory icon (ðŸ“‚)dbodyx­Replace the â–¸ (U+25B8) triangle icon for directories with ðŸ“‚ emoji in components/dashboard.rs render_entry (approx line 1345). One-line change. See PLANNING.md Phase 18.hpriorityfstatusddoneldependencies€kticket_typecbug
