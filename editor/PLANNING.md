@@ -380,8 +380,7 @@ These run in a headless browser via `wasm-pack test --headless --chrome`.
   2. **Trait-based HTTP abstraction** — refactor `GitHubClient` to accept `impl HttpClient`; inject a mock in tests. Clean but invasive. Recommended if HTTP tests become a priority.
   3. **Local mock HTTP server** — run localhost during `wasm-pack test --headless --chrome`; point client at it via overridable base URL. No Rust refactoring but adds external test infrastructure.
   4. **Service-worker fetch intercept** — too complex for this project's scale.
-- **Decision:** HTTP mocking deferred. Response-parsing, status-code dispatch, and base64 logic are well-covered by the 36 native unit tests. The `tests/wasm.rs` tests cover the JS-runtime-specific behavior that can't run natively.
-- **Blocker:** `wasm-pack` is not installed in the Nix dev shell. Add to `flake.nix` to enable `wasm-pack test --headless --chrome` locally and in CI.
+- **Decision:** HTTP mocking deferred. Response-parsing, status-code dispatch, and base64 logic are well-covered by the 36 native unit tests. The `tests/wasm.rs` tests cover the JS-runtime-specific behavior that can't run natively. (Ticket 9da619 closed — resolved by this evaluation.)
 
 #### 11c. Component tests (stretch goal) ✓ (evaluated — not worth implementing)
 
@@ -705,6 +704,13 @@ at a glance.
 ---
 
 ## Session Log
+
+### Session 25 (2026-02-23) — Ticket 9da619: WASM integration tests for GitHubClient
+
+- Evaluated ticket against the HTTP mocking evaluation already documented in `tests/wasm.rs` and cc5ba0
+- All four mocking approaches were already assessed in Phase 11b; decision was to defer
+- No new implementation needed — closed ticket as resolved by prior evaluation
+- Removed stale "Blocker" note from PLANNING.md (wasm-pack is now in the Nix dev shell and CI)
 
 ### Session 24 (2026-02-23) — Ticket cd3540: Phase 11c Component tests evaluation
 
