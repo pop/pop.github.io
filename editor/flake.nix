@@ -28,12 +28,17 @@
           wrangler
           # Wasm build
           worker-build
+          # Wasm tests
+          wasm-pack
           # Infra as Code
           opentofu
           # JSON parsing
           jq
           # Issues tracking for Claude
           nbd.packages.${system}.nbd
+          # For wasm-pack test
+          chromium
+          chromedriver
         ];
       };
     }
