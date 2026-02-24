@@ -274,6 +274,92 @@ mod tests {
         let html = r#"<img src="https://example.com/photo.png">"#;
         assert!(extract_relative_image_srcs(html).is_empty());
     }
+
+    #[test]
+    fn extract_relative_srcs_ignores_data_url() {
+        let html = r#"<img src="data:image/png;base64,abc">"#;
+        assert!(extract_relative_image_srcs(html).is_empty());
+    }
+
+    #[test]
+    fn extract_relative_srcs_ignores_root_relative() {
+        let html = r#"<img src="/images/photo.png">"#;
+        assert!(extract_relative_image_srcs(html).is_empty());
+    }
+
+    #[test]
+    fn extract_relative_srcs_multiple() {
+        let html = r#"<img src="a.png"><img src="https://x.com/b.png"><img src="c.jpg">"#;
+        assert_eq!(extract_relative_image_srcs(html), vec!["a.png", "c.jpg"]);
+    }
+
+    // ── replace_image_srcs ────────────────────────────────────────────────
+
+    #[test]
+    fn replace_image_srcs_substitutes_matching() {
+        let html = r#"<img src="photo.png" alt="x">"#;
+        let mut map = HashMap::new();
+        map.insert(
+            "photo.png".to_string(),
+            "data:image/png;base64,ABC".to_string(),
+        );
+        let result = replace_image_srcs(html, &map);
+        assert!(
+            result.contains("data:image/png;base64,ABC"),
+            "got: {result}"
+        );
+        assert!(!result.contains("photo.png"), "got: {result}");
+    }
+
+    #[test]
+    fn replace_image_srcs_leaves_unmatched_alone() {
+        let html = r#"<img src="other.png">"#;
+        let map = HashMap::new();
+        let result = replace_image_srcs(html, &map);
+        assert_eq!(result, html);
+    }
+
+    #[test]
+    fn replace_image_srcs_no_img_tags() {
+        let html = "<p>No images here</p>";
+        let map = HashMap::new();
+        assert_eq!(replace_image_srcs(html, &map), html);
+    }
+
+    // ── mime_type_for ─────────────────────────────────────────────────────
+
+    #[test]
+    fn mime_type_for_known_extensions() {
+        assert_eq!(mime_type_for("photo.png"), "image/png");
+        assert_eq!(mime_type_for("photo.jpg"), "image/jpeg");
+        assert_eq!(mime_type_for("photo.jpeg"), "image/jpeg");
+        assert_eq!(mime_type_for("anim.gif"), "image/gif");
+        assert_eq!(mime_type_for("img.webp"), "image/webp");
+        assert_eq!(mime_type_for("icon.svg"), "image/svg+xml");
+    }
+
+    #[test]
+    fn mime_type_for_unknown_falls_back() {
+        assert_eq!(mime_type_for("file.txt"), "application/octet-stream");
+        assert_eq!(mime_type_for("noext"), "application/octet-stream");
+    }
+
+    // ── bytes_to_data_url ─────────────────────────────────────────────────
+
+    #[test]
+    fn bytes_to_data_url_produces_valid_data_url() {
+        let bytes = b"hello";
+        let url = bytes_to_data_url(bytes, "image.png");
+        assert!(url.starts_with("data:image/png;base64,"), "got: {url}");
+        // "hello" in base64 is "aGVsbG8="
+        assert!(url.ends_with("aGVsbG8="), "got: {url}");
+    }
+
+    #[test]
+    fn bytes_to_data_url_uses_correct_mime() {
+        let url = bytes_to_data_url(b"x", "photo.jpg");
+        assert!(url.starts_with("data:image/jpeg;base64,"), "got: {url}");
+    }
 }
 
 /// Map a file path's extension to a MIME type string.

@@ -78,6 +78,19 @@ Uses Nix Flakes for reproducible tooling. The dev shell is activated automatical
 
 Do NOT wrap commands in `nix develop` - the dev shell is already active when running commands in this project.
 
+## Validation
+
+Validate changes with `cargo` for valid syntax, formatting, and linting:
+
+```bash
+cargo fmt
+cargo check
+cargo clippy
+```
+
+All checks should pass. If they do not, fix any issues reported by these commands.
+Dead code should be deleted, not ignored.
+
 ## Build & Run Commands
 
 ```bash
@@ -85,6 +98,26 @@ trunk serve          # Dev server with hot reload
 trunk build          # Debug build
 trunk build --release  # Production build
 cargo check --target wasm32-unknown-unknown  # Type-check
+```
+
+## Testing
+
+### WASM tests (browser)
+
+WASM integration tests live in `tests/wasm.rs` and run in a headless Chrome browser via `wasm-pack`.
+
+```bash
+wasm-pack test --headless --chrome --chromedriver $(which chromedriver)
+```
+
+**Always pass `--chromedriver $(which chromedriver)`** — without it, wasm-pack tries to download a matching driver from Google's CDN, which 404s for Chrome versions above 114. The Nix devShell provides `chromium` and `chromedriver` at matching versions; use them directly.
+
+### Native unit tests
+
+Pure-Rust logic (frontmatter parsing, slug generation, etc.) is tested with standard `#[cfg(test)]` modules and runs natively:
+
+```bash
+cargo test
 ```
 
 Do NOT prefix commands with `nix develop --command ...`. Run them directly.
