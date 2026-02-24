@@ -359,15 +359,14 @@ editor/
 
 **Goal:** Add unit and integration tests to catch regressions, especially before the GraphQL migration refactor.
 
-#### 11a. Unit tests (pure functions)
+#### 11a. Unit tests (pure functions) ✓
 
 These are standard `#[cfg(test)]` modules — no browser or WASM runtime needed.
 
-- [ ] `models/post.rs` — test `strip_frontmatter` (with/without frontmatter, empty input, unclosed delimiters) and `render_markdown` (basic markdown, GFM features, frontmatter stripping)
-- [ ] `services/github.rs` — test `decode_github_content` (valid base64, base64 with whitespace/newlines, invalid input, empty string)
-- [ ] `components/editor.rs` — test `slug_from_path` (index.md, _index.md, standalone .md, nested paths, edge cases), `title_from_slug` (hyphenated, single word, empty), `sanitize_filename` (spaces, special chars, uppercase, unicode), `char_pos_to_byte_offset` (ASCII, multi-byte UTF-8, out-of-bounds), `parent_dir` (nested path, root-level file, no slash), `generate_template` (verify frontmatter structure)
-- [ ] `components/dashboard.rs` — test `format_size` (bytes, KB, MB boundaries)
-- [ ] Extract testable pure functions from component files into a shared `utils.rs` module to simplify testing and avoid pulling in Yew dependencies
+- [x] `models/post.rs` — `strip_frontmatter`, `render_markdown`, `extract_relative_image_srcs`, `replace_image_srcs`, `mime_type_for`, `bytes_to_data_url`
+- [x] `services/github.rs` — `decode_github_content` (valid base64, whitespace/newlines, invalid, empty)
+- [x] `utils.rs` — `slug_from_path`, `title_from_slug`, `sanitize_filename`, `char_pos_to_byte_offset`, `parent_dir`, `generate_template`, `format_size` (pure functions extracted from component files)
+- [x] 36 tests total; all pass under `cargo test`
 
 #### 11b. API client tests (`wasm-bindgen-test`) ✓ (infrastructure + evaluation)
 
@@ -384,11 +383,14 @@ These run in a headless browser via `wasm-pack test --headless --chrome`.
 - **Decision:** HTTP mocking deferred. Response-parsing, status-code dispatch, and base64 logic are well-covered by the 36 native unit tests. The `tests/wasm.rs` tests cover the JS-runtime-specific behavior that can't run natively.
 - **Blocker:** `wasm-pack` is not installed in the Nix dev shell. Add to `flake.nix` to enable `wasm-pack test --headless --chrome` locally and in CI.
 
-#### 11c. Component tests (stretch goal)
+#### 11c. Component tests (stretch goal) ✓ (evaluated — not worth implementing)
 
-- [ ] Evaluate Yew's testing utilities for rendering components in isolation
-- [ ] Test key flows: auth redirect when no token, editor loading states, view mode toggling
-- [ ] **TODO:** Yew component testing is limited — decide if the effort is justified vs. relying on unit tests + manual verification
+- [x] **Evaluated Yew 0.21 testing capabilities** — no `testing` feature flag, no built-in test utilities, no ecosystem equivalent of React Testing Library.
+- **Decision: not worth the effort.** Reasons:
+  1. Every component uses `use_context::<Auth>()` + yew-router hooks (`use_navigator`, `use_route`) — all require a full browser + provider tree to render, so "component tests" would be headless-Chrome wasm-pack tests with a full app bootstrap, not isolated unit tests.
+  2. Auth-redirect and editor loading flows require live OAuth / GitHub API responses; no mocking layer exists.
+  3. All testable pure logic is already covered by the 36 native unit tests. The `js_sys::Date` WASM tests cover the only browser-specific behaviour that matters.
+  4. If E2E component coverage ever becomes a priority, Playwright or Selenium against `trunk serve` is the right tool — not Yew-internal tests.
 
 #### 11d. CI integration ✓
 
@@ -703,6 +705,14 @@ at a glance.
 ---
 
 ## Session Log
+
+### Session 24 (2026-02-23) — Ticket cd3540: Phase 11c Component tests evaluation
+
+- Evaluated Yew 0.21 testing capabilities: no testing feature, no component testing library in ecosystem
+- Confirmed all components are tightly coupled to `use_context::<Auth>()` + yew-router — isolation impossible without a full browser + provider tree
+- Decision: component tests not worth implementing; existing 36 native tests + 5 WASM `js_sys::Date` tests provide sufficient coverage
+- Updated PLANNING.md: marked Phase 11a items done (they were still `[ ]`), closed Phase 11c with evaluation rationale
+- Phase 11 (Automated Testing) is fully resolved
 
 ### Session 23 (2026-02-23) — Ticket b0abbe: Phase 11d CI integration for test suite
 
