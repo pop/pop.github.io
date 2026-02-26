@@ -1,10 +1,9 @@
 +++
 title = "Solitaire"
 date = "2026-02-25"
-description = "What to do when you're alone..."
+description = "What to do when you have nobody to play with..."
 taxonomies.tags = ["games","backlog"]
 +++
-
 
 ![zachtronics-solitaire.jpg](zachtronics-solitaire.jpg)
 
