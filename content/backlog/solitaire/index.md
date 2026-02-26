@@ -2,7 +2,7 @@
 title = "Solitaire"
 date = "2026-02-25"
 description = "What to do when you're alone..."
-taxonomies.tags = ["games",]
+taxonomies.tags = ["games","backlog"]
 +++
 
 
