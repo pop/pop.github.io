@@ -1,3 +1,17 @@
 # bugs, issues, feature requests
 
 ---
+
+Add a "history" widget that allows you to "undo" previous changes.
+Should include a list of commits (short sha), dates, and file modifications
++ file_name -> file was added
+- file_name -> file was deleted
+~ file_name -> file was modified
+"undoing" a commit is to revert the changes in that commit, so a commit adding a file, undone would delete the file.
+undoing a commit that modified a file would undo those modifications.
+
+If this is untenible, we can also simply track the history of a file (lets scope this to just the `.md` files)
+Users can then "roll back" to a prevoius version.
+Similarly this should include dates and short commit shas and maybe a preview of the old version before confirming.
+
+---
