@@ -51,7 +51,7 @@ And it was!
 * Shenzhen solitaire (Shenzhen I/O) is OK but for some reason hasn't grabbed me.
 * Fortune's Foundation scares me. It is brutally difficult.
 
-I appreciate the genre of Solitaire a lot more now and will probably continue to invest time into a prevoiusly overlooked genre.
+I appreciate the genre of Solitaire a lot more now and will probably continue to invest time into a previously overlooked genre.
 
 # [Strange Pictures](https://www.powells.com/book/9780063433090)
 
