@@ -2,7 +2,6 @@
 title = "What's Good #17"
 date = "2026-02-23"
 description = "Indika, Solitaire(s), Strange Pictures, Orange World, Shell Game, and In This Economy?"
-draft = true
 taxonomies.tags = ["whats-good"]
 +++
 
