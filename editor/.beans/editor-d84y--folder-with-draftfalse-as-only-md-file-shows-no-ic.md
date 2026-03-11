@@ -1,0 +1,13 @@
+---
+# editor-d84y
+title: Folder with draft=false as only .md file shows no icon
+status: completed
+type: bug
+priority: normal
+created_at: 2026-03-11T17:36:30Z
+updated_at: 2026-03-11T17:36:30Z
+---
+
+When a directory contains exactly one .md file with 'draft = false' in its frontmatter, the folder displays no icon. It should display the Published icon (🗞).
+
+Root cause: detect_post_status() in dashboard.rs (~line 36) uses fields.iter().any(|(k, v)| k == "draft" && v == "true") to detect drafts. Both 'draft = false' and 'no draft key' produce PostStatus::Published. However, the folder status mapping at ~line 614 stores Draft|Published correctly. The render logic for folders (~line 1630) should be catching Published and showing the icon — investigate whether the status is not being stored in folder_md_statuses at all for this case.

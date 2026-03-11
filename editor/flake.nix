@@ -36,6 +36,7 @@
           jq
           # Issues tracking for Claude
           nbd.packages.${system}.nbd
+          beans
           # For wasm-pack test
           chromium
           chromedriver

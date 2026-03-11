@@ -15,62 +15,43 @@ These are hard constraints enforced from recurring friction patterns. Violations
 3. **Search only within the project root** — never glob or grep globally across the filesystem. Scope to relevant subdirectories (`src/`, `content/`, etc.).
 4. **Always deploy to production** — use `wrangler pages deploy --branch=source` for the frontend. Never deploy to preview unless explicitly asked.
 5. **`nix develop --command` is for CI only** — do not use it in interactive sessions; the shell is already loaded.
-6. **Verify `nbd` is on PATH before use** — run `which nbd` if there is any doubt about the binary being available.
+6. **Verify `beans` is on PATH before use** — run `which beans` if there is any doubt about the binary being available.
 
-## Task Tracking with nbd
+## Task Tracking with beans
 
-`nbd` is a CLI tool for managing work tickets, designed for agent workflows.
-
-### Initialisation
-
-```sh
-nbd init
-```
-
-Run once in the project root. Creates `.nbd/tickets/`. Safe to run multiple times.
+`beans` is a CLI tool for managing work tickets, designed for agent workflows. Run `beans prime` for full agent usage instructions.
 
 ### Core commands
 
 ```sh
-# Create a new ticket (use --ftype md for a human-readable body)
-nbd create --title "Add OAuth login" --type feature --priority 7 --ftype md
+# Create a bean
+beans create --json "Add OAuth login" -t feature -p high
 
-# List all open tickets (sorted by priority)
-nbd list
+# List beans ready to work on
+beans list --json --ready
 
-# Read a specific ticket
-nbd read <id>
+# Show a specific bean
+beans show --json <id>
 
-# Update a ticket
-nbd update <id> --status in_progress
-nbd update <id> --status done
-```
-
-### Finding what to work on
-
-```sh
-# All tickets that are unblocked and ready to start
-nbd ready
-
-# The single highest-priority unblocked ticket
-nbd next
+# Update a bean
+beans update --json <id> -s in-progress
+beans update --json <id> -s completed
 ```
 
 ### Workflow
 
-1. **Before starting** — create a ticket: `nbd create --title "..." --json`
-2. **When starting** — mark it in progress: `nbd update <id> --status in_progress`
-3. **When done** — mark it complete: `nbd update <id> --status done`
+1. **Before starting** — check for an existing bean: `beans list --json --ready`; create one if needed.
+2. **When starting** — mark it in progress: `beans update <id> -s in-progress`
+3. **When done** — mark it complete: `beans update <id> -s completed`
 
 ### Guidelines
 
 - **Always pass `--json`** to every command for structured, unambiguous output.
-- **Always pass `--ftype md`** when creating tickets — markdown format keeps the body human-readable.
 - Use `jq` to parse and transform JSON output when needed.
-- Priority scale 0–10: use **7–9** for bugs, **5** for normal tasks, **3** for nice-to-haves.
-- `--type` choices: `project`, `feature`, `task`, `bug`.
-- Use `--deps id1,id2` to express blockers — tickets that must be done first.
-- Create tickets *before* starting non-trivial tasks, not after.
+- `-t` choices: `milestone`, `epic`, `feature`, `task`, `bug`.
+- `-p` choices: `critical`, `high`, `normal`, `low`, `deferred`.
+- Use `--blocked-by <id>` to express blockers.
+- Create beans *before* starting non-trivial tasks, not after.
 
 ## Development Environment
 
