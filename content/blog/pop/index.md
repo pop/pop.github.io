@@ -21,7 +21,17 @@ eventually i scooped up the freenode handle `pop` (i don't have receipts for tha
 the thought crossed my mind "i wonder if i can get pop... everywhere."
 this was 2016 so of course i was too late for the big sites like twitter but maybe... was github.com/pop taken?
 i checked it out and well... technically yes but the account was _not_ active; at least not publicly.
+so i submitted a support ticket to request it.
 
 ![rejection.png](rejection.png)
 
+and got rejected.
+womp womp.
+oh well, maybe i can just settle for popnfresh.
+
+a little over a year later i submitted _another_ request and this time...
+
 ![thank you laurie](redemption.png)
+
+it worked!
+the pop name was freed and i did a little digital land-grab and scooped it up!
