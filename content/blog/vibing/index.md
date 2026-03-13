@@ -14,3 +14,4 @@ so yeah i started vibe coding.
 or maybe we're calling it pair-programming with an llm.
 or maybe it's just reviewing the plan and hitting accept.
 
+![1000008082.jpg](1000008082.jpg)
