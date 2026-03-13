@@ -1,7 +1,7 @@
 +++
 title = "vibing"
 date = "2026-02-21"
-description = "i start hanging out with claude and i don't hate it"
+description = "i start hanging out with some robot named claude"
 taxonomies.tags = ["gen-ai"]
 +++
 
