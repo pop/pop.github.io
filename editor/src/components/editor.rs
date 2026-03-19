@@ -920,32 +920,36 @@ pub fn editor_page(props: &Props) -> Html {
         let active_branch = auth.active_branch.clone();
         let show_history_val = *show_history;
 
-        use_effect_with(
-            (show_history_val, auth.active_branch.clone()),
-            move |_| {
-                if show_history_val && history_commits.is_empty() {
-                    if let (Some(token), Some(branch)) = (token, active_branch) {
-                        history_loading.set(true);
-                        history_error.set(None);
-                        wasm_bindgen_futures::spawn_local(async move {
-                            let client = GitHubClient::new(token);
-                            match client.list_commits_for_path(&path, &branch).await {
-                                Ok(commits) => {
-                                    history_commits.set(commits);
-                                    history_loading.set(false);
-                                }
-                                Err(e) => {
-                                    history_error.set(Some(e));
-                                    history_loading.set(false);
-                                }
+        use_effect_with((show_history_val, auth.active_branch.clone()), move |_| {
+            if show_history_val && history_commits.is_empty() {
+                if let (Some(token), Some(branch)) = (token, active_branch) {
+                    history_loading.set(true);
+                    history_error.set(None);
+                    wasm_bindgen_futures::spawn_local(async move {
+                        let client = GitHubClient::new(token);
+                        match client.list_commits_for_path(&path, &branch).await {
+                            Ok(commits) => {
+                                history_commits.set(commits);
+                                history_loading.set(false);
                             }
-                        });
-                    }
+                            Err(e) => {
+                                history_error.set(Some(e));
+                                history_loading.set(false);
+                            }
+                        }
+                    });
                 }
-                || ()
-            },
-        );
+            }
+            || ()
+        });
     }
+
+    let on_dismiss_save_msg = {
+        let save_msg = save_msg.clone();
+        Callback::from(move |_: MouseEvent| {
+            save_msg.set(None);
+        })
+    };
 
     let has_changes = *content != *original_content || *is_new;
     let show_editor = *view_mode != ViewMode::Preview;
@@ -976,7 +980,10 @@ pub fn editor_page(props: &Props) -> Html {
             }
 
             if let Some(ref msg) = *save_msg {
-                <p class="save-msg">{msg}</p>
+                <div class="save-msg">
+                    <span>{msg}</span>
+                    <button class="save-msg-dismiss" onclick={on_dismiss_save_msg.clone()}>{"×"}</button>
+                </div>
             }
 
             if *loading {
