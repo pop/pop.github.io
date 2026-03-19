@@ -5,3 +5,6 @@ description = ""
 draft = true
 taxonomies.tags = ["books", "backlog"]
 +++
+
+I wish this was not self published.
+It deserves to be published by Tor.
