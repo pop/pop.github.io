@@ -7,8 +7,9 @@ use serde::de::DeserializeOwned;
 use serde_json::json;
 
 use crate::models::github::{
-    CheckRunsResponse, CommitInfo, CompareResponse, ContentEntry, FileContent, GitRef, GqlBlobData,
-    GqlRefAndBlobData, GqlRefData, GqlRefsData, GqlTreeData, GraphQLResponse, TreeResponse,
+    CheckRunsResponse, CommitInfo, CommitSummary, CompareResponse, ContentEntry, FileContent,
+    GitRef, GqlBlobData, GqlHistoryData, GqlRefAndBlobData, GqlRefData, GqlRefsData, GqlTreeData,
+    GraphQLResponse, TreeResponse,
 };
 use crate::models::post::{
     bytes_to_data_url, extract_relative_image_srcs, post_dir, replace_image_srcs,
@@ -916,6 +917,66 @@ impl GitHubClient {
             }
         }
         result
+    }
+
+    // ── Commit history ───────────────────────────────────────────
+
+    /// List commits on `branch` that touched `path`, up to 50 most recent.
+    /// Returns commit SHA, message, date, and additions/deletions counts.
+    /// Requires authentication (GraphQL).
+    pub async fn list_commits_for_path(
+        &self,
+        path: &str,
+        branch: &str,
+    ) -> Result<Vec<CommitSummary>, String> {
+        let qualified = format!("refs/heads/{branch}");
+
+        let query = r#"
+            query($owner: String!, $name: String!, $branch: String!, $path: String!) {
+                repository(owner: $owner, name: $name) {
+                    ref(qualifiedName: $branch) {
+                        target {
+                            ... on Commit {
+                                history(path: $path, first: 50) {
+                                    nodes {
+                                        oid
+                                        message
+                                        committedDate
+                                        additions
+                                        deletions
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        "#;
+
+        let data: GqlHistoryData = self
+            .graphql(
+                query,
+                json!({ "owner": OWNER, "name": REPO, "branch": qualified, "path": path }),
+            )
+            .await?;
+
+        let nodes = data
+            .repository
+            .git_ref
+            .and_then(|r| r.target.history)
+            .map(|h| h.nodes)
+            .unwrap_or_default();
+
+        Ok(nodes
+            .into_iter()
+            .map(|n| CommitSummary {
+                sha: n.oid,
+                message: n.message,
+                date: n.committed_date,
+                additions: n.additions,
+                deletions: n.deletions,
+            })
+            .collect())
     }
 
     // ── CI status ───────────────────────────────────────────────
