@@ -319,6 +319,41 @@ impl GitHubClient {
         replace_image_srcs(html, &replacements)
     }
 
+    // ── Tree operations ──────────────────────────────────────────
+
+    /// List all blob entries under `dir_prefix` in the repo tree at `commit_sha`.
+    /// Returns a flat list of (repo_path, blob_sha) pairs.
+    /// Uses the Git Trees API (REST) with recursive=1.
+    pub async fn get_directory_tree_at_commit(
+        &self,
+        commit_sha: &str,
+        dir_prefix: &str,
+    ) -> Result<Vec<(String, String)>, String> {
+        let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/git/trees/{commit_sha}?recursive=1");
+        let resp = self.get(&url).await?;
+
+        match resp.status() {
+            200 => {
+                let tree: TreeResponse = resp.json().await.map_err(|e| e.to_string())?;
+                let entries = tree
+                    .tree
+                    .into_iter()
+                    .filter(|te| {
+                        te.entry_type == "blob"
+                            && (dir_prefix.is_empty()
+                                || te.path.starts_with(&format!("{dir_prefix}/"))
+                                || te.path == dir_prefix)
+                    })
+                    .map(|te| (te.path, te.sha))
+                    .collect();
+                Ok(entries)
+            }
+            401 => Err("Unauthorized — check your token".into()),
+            404 => Err(format!("Commit not found: {commit_sha}")),
+            status => Err(format!("GitHub API error: {status}")),
+        }
+    }
+
     // ── Branch operations ────────────────────────────────────────
 
     /// Get the HEAD SHA of a branch.
