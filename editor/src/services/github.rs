@@ -979,6 +979,87 @@ impl GitHubClient {
             .collect())
     }
 
+    // ── Revert operations ────────────────────────────────────────
+
+    /// Restore all files in the post directory to their state at `target_commit_sha`.
+    /// Writes commits directly to `branch`.
+    /// Returns the new SHA of the primary `post_path` file.
+    pub async fn revert_directory_to_commit(
+        &self,
+        post_path: &str,
+        target_commit_sha: &str,
+        branch: &str,
+    ) -> Result<String, String> {
+        let dir = post_dir(post_path).to_string();
+        let is_standalone = dir.is_empty();
+
+        // 1. Get tree at target commit (historical state)
+        let historical = self
+            .get_directory_tree_at_commit(target_commit_sha, &dir)
+            .await?;
+        let historical_map: HashMap<String, String> = if is_standalone {
+            historical
+                .into_iter()
+                .filter(|(p, _)| p == post_path)
+                .collect()
+        } else {
+            historical.into_iter().collect()
+        };
+
+        // 2. Get tree at branch HEAD
+        let branch_head_sha = self.get_branch_sha(branch).await?;
+        let current = self
+            .get_directory_tree_at_commit(&branch_head_sha, &dir)
+            .await?;
+        let current_map: HashMap<String, String> = if is_standalone {
+            current
+                .into_iter()
+                .filter(|(p, _)| p == post_path)
+                .collect()
+        } else {
+            current.into_iter().collect()
+        };
+
+        // 3. Compute diff
+        let to_restore: Vec<String> = historical_map
+            .keys()
+            .filter(|p| current_map.get(*p) != Some(&historical_map[*p]))
+            .cloned()
+            .collect();
+
+        let to_delete: Vec<String> = current_map
+            .keys()
+            .filter(|p| !historical_map.contains_key(*p))
+            .cloned()
+            .collect();
+
+        // Early return if nothing differs
+        if to_restore.is_empty() && to_delete.is_empty() {
+            let primary = self.get_file(post_path, branch).await?;
+            return Ok(primary.sha);
+        }
+
+        // 4. Delete files added after target
+        for path in &to_delete {
+            let sha = &current_map[path];
+            let message = format!("Revert: remove {path}");
+            self.delete_file(path, sha, &message, branch).await?;
+        }
+
+        // 5. Restore changed/missing files
+        for path in &to_restore {
+            let bytes = self.get_file_bytes(path, target_commit_sha).await?;
+            let existing_sha = self.get_file(path, branch).await.ok().map(|f| f.sha);
+            let message = format!("Restore version: {path}");
+            self.upload_binary_file(path, &bytes, &message, existing_sha.as_deref(), branch)
+                .await?;
+        }
+
+        // 6. Return the new SHA of the primary file
+        let primary = self.get_file(post_path, branch).await?;
+        Ok(primary.sha)
+    }
+
     // ── CI status ───────────────────────────────────────────────
 
     /// Get check runs for a given git ref (branch name or SHA).
