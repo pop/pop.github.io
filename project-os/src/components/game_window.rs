@@ -1,6 +1,10 @@
 use yew::prelude::*;
 use crate::config::Game;
 
+fn is_url(s: &str) -> bool {
+    s.starts_with("http") || s.starts_with("data:") || s.contains('/')
+}
+
 #[derive(Properties, PartialEq)]
 pub struct GameWindowProps {
     pub game: Game,
@@ -39,14 +43,16 @@ pub fn game_window(props: &GameWindowProps) -> Html {
             }
             <div class="tech-stack">
                 { for game.tech.iter().map(|t| {
-                    let icon_src = if t.icon.is_empty() {
-                        "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><rect width='16' height='16' fill='%23808080'/></svg>".to_string()
+                    let tech_icon = if is_url(&t.icon) {
+                        html! { <img src={t.icon.clone()} alt={t.name.clone()} /> }
+                    } else if !t.icon.is_empty() {
+                        html! { <span class="tech-icon-emoji">{ &t.icon }</span> }
                     } else {
-                        t.icon.clone()
+                        html! { <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><rect width='16' height='16' fill='%23808080'/></svg>" alt={t.name.clone()} /> }
                     };
                     html! {
                         <span class="tech-item" key={t.name.clone()}>
-                            <img src={icon_src} alt={t.name.clone()} />
+                            { tech_icon }
                             { &t.name }
                         </span>
                     }
