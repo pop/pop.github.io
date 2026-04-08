@@ -38,6 +38,8 @@
           # For wasm-pack test
           chromium
           chromedriver
+          # Like make
+          just
         ];
       };
     }
