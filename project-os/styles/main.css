@@ -56,6 +56,23 @@
     background: rgba(255, 255, 255, 0.2);
 }
 
+/* Window positioning — win95.css provides .window, .title-bar, etc. chrome */
+.window {
+    position: absolute;
+    min-width: 400px;
+    min-height: 300px;
+}
+
+.window .title-bar {
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.window .title-bar:active {
+    cursor: grabbing;
+}
+
 .clippy-widget {
     position: fixed;
     bottom: 44px;
