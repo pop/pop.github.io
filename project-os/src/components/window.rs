@@ -45,20 +45,21 @@ pub fn window(props: &WindowProps) -> Html {
             drag_offset.set(Some((offset_x, offset_y)));
 
             let on_move_mv = on_move.clone();
-            let on_move_up = on_move.clone();
+            let drag_offset_mv = drag_offset.clone();
             let drag_offset_up = drag_offset.clone();
+            let move_listener_state_up = move_listener_state.clone();
             let offset = (offset_x, offset_y);
 
             let document = web_sys::window().unwrap().document().unwrap();
 
             let move_cb = EventListener::new(&document, "mousemove", move |e| {
+                if (*drag_offset_mv).is_none() { return; }
                 let e = e.dyn_ref::<MouseEvent>().unwrap();
                 on_move_mv.emit((e.client_x() - offset.0, e.client_y() - offset.1));
             });
             let up_cb = EventListener::new(&document, "mouseup", move |_| {
                 drag_offset_up.set(None);
-                // drop listeners implicitly when replaced below — but we emit nothing
-                let _ = &on_move_up; // keep alive
+                move_listener_state_up.set(None);
             });
 
             move_listener_state.set(Some(move_cb));
@@ -85,13 +86,15 @@ pub fn window(props: &WindowProps) -> Html {
                 drag_offset.set(Some((offset_x, offset_y)));
 
                 let on_move_mv = on_move.clone();
-                let on_move_end = on_move.clone();
+                let drag_offset_mv = drag_offset.clone();
                 let drag_offset_end = drag_offset.clone();
+                let move_listener_state_end = move_listener_state.clone();
                 let offset = (offset_x, offset_y);
 
                 let document = web_sys::window().unwrap().document().unwrap();
 
                 let move_cb = EventListener::new(&document, "touchmove", move |e| {
+                    if (*drag_offset_mv).is_none() { return; }
                     let e = e.dyn_ref::<TouchEvent>().unwrap();
                     if let Some(t) = e.touches().get(0) {
                         on_move_mv.emit((t.client_x() - offset.0, t.client_y() - offset.1));
@@ -99,7 +102,7 @@ pub fn window(props: &WindowProps) -> Html {
                 });
                 let up_cb = EventListener::new(&document, "touchend", move |_| {
                     drag_offset_end.set(None);
-                    let _ = &on_move_end;
+                    move_listener_state_end.set(None);
                 });
 
                 move_listener_state.set(Some(move_cb));

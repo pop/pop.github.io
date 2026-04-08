@@ -30,6 +30,9 @@
     align-items: center;
     gap: 4px;
     padding: 2px 4px;
+    background: #c0c0c0;
+    border-top: 2px solid #ffffff;
+    box-shadow: inset 0 1px 0 0 #dfdfdf;
 }
 .start-button {
     display: flex;
