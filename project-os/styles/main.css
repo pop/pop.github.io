@@ -28,6 +28,34 @@
     z-index: 1000;
 }
 
+.game-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    padding: 8px;
+    width: 72px;
+    text-align: center;
+}
+
+.game-icon img {
+    width: 48px;
+    height: 48px;
+    image-rendering: pixelated;
+}
+
+.game-icon-label {
+    color: white;
+    font-size: 11px;
+    text-shadow: 1px 1px 1px black;
+    word-break: break-word;
+}
+
+.game-icon:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
 .clippy-widget {
     position: fixed;
     bottom: 44px;
