@@ -15,6 +15,6 @@ toml = "0.8"
 gloo-timers = { version = "0.3", features = ["futures"] }
 gloo-events = "0.2"
 js-sys = "0.3"
-web-sys = { version = "0.3", features = ["Window", "Document", "Element", "HtmlElement", "MouseEvent", "TouchEvent", "Touch", "TouchList", "EventTarget"] }
+web-sys = { version = "0.3", features = ["Window", "Document", "Element", "HtmlElement", "MouseEvent", "TouchEvent", "Touch", "TouchList", "EventTarget", "DomRect"] }
 wasm-logger = "0.2"
 log = "0.4"
