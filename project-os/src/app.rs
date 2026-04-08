@@ -2,6 +2,7 @@ use yew::prelude::*;
 use crate::config::load_config;
 use crate::state::WindowManager;
 use crate::components::desktop::Desktop;
+use crate::components::taskbar::Taskbar;
 use crate::components::window::Window;
 use crate::components::game_window::GameWindow;
 
@@ -9,6 +10,7 @@ use crate::components::game_window::GameWindow;
 pub fn app() -> Html {
     let config = load_config();
     let wm = use_state(|| WindowManager::new(config.games.iter().map(|g| g.id.clone()).collect()));
+    let start_menu_open = use_state(|| false);
 
     let on_open = {
         let wm = wm.clone();
@@ -18,6 +20,24 @@ pub fn app() -> Html {
             let z = new_wm.z_counter;
             if let Some(w) = new_wm.windows.iter_mut().find(|w| w.game_id == game_id) {
                 w.open = true;
+                w.z_index = z;
+            }
+            wm.set(new_wm);
+        })
+    };
+
+    let on_start_click = {
+        let smo = start_menu_open.clone();
+        Callback::from(move |_| smo.set(!*smo))
+    };
+
+    let on_taskbar_focus = {
+        let wm = wm.clone();
+        Callback::from(move |game_id: String| {
+            let mut new_wm = (*wm).clone();
+            new_wm.z_counter += 1;
+            let z = new_wm.z_counter;
+            if let Some(w) = new_wm.windows.iter_mut().find(|w| w.game_id == game_id) {
                 w.z_index = z;
             }
             wm.set(new_wm);
@@ -88,6 +108,13 @@ pub fn app() -> Html {
                     }
                 } else { html! {} }
             })}
+            <Taskbar
+                windows={wm.windows.clone()}
+                games={config.games.clone()}
+                on_focus={on_taskbar_focus}
+                on_start_click={on_start_click}
+                start_menu_open={*start_menu_open}
+            />
         </>
     }
 }

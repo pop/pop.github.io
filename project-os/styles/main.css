@@ -26,6 +26,37 @@
     right: 0;
     height: 40px;
     z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 4px;
+}
+.start-button {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: bold;
+    min-width: 80px;
+    white-space: nowrap;
+}
+.taskbar-windows {
+    flex: 1;
+    display: flex;
+    gap: 2px;
+    overflow: hidden;
+}
+.taskbar-window-btn {
+    min-width: 120px;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.taskbar-clock {
+    white-space: nowrap;
+    padding: 2px 8px;
+    border: 1px inset #808080;
+    font-size: 11px;
 }
 
 .game-icon {
