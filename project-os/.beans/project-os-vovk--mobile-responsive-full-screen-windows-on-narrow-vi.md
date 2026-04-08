@@ -1,11 +1,11 @@
 ---
 # project-os-vovk
 title: 'mobile responsive: full-screen windows on narrow viewports'
-status: todo
+status: completed
 type: task
 priority: normal
 created_at: 2026-04-08T04:55:31Z
-updated_at: 2026-04-08T04:55:31Z
+updated_at: 2026-04-08T18:11:18Z
 parent: project-os-zsw7
 ---
 
@@ -15,3 +15,5 @@ Make the portfolio work well on mobile screens.
 - Icon grid reflows to smaller icons on mobile
 - Taskbar remains visible and functional on mobile
 - Test: open on phone-sized viewport, click icon, window fills screen, X closes it
+
+## Summary of Changes\n\nAdded @media (max-width: 768px) rules: full-screen windows via position:fixed, compact icon grid, hidden Clippy widget on mobile.

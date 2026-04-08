@@ -250,3 +250,38 @@
     color: white;
 }
 .start-menu-shutdown { color: inherit; }
+
+@media (max-width: 768px) {
+    .window {
+        position: fixed !important;
+        inset: 0 !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        height: calc(100vh - 40px) !important;
+        z-index: 500 !important;
+    }
+
+    .icon-grid {
+        gap: 4px;
+        padding: 8px;
+    }
+
+    .game-icon {
+        width: 56px;
+        padding: 4px;
+    }
+
+    .game-icon img {
+        width: 36px;
+        height: 36px;
+    }
+
+    .game-icon-label {
+        font-size: 10px;
+    }
+
+    .clippy-widget {
+        display: none;
+    }
+}
