@@ -79,3 +79,63 @@
     right: 8px;
     z-index: 10;
 }
+
+/* Game window content */
+.game-window-content {
+    padding: 12px;
+    font-family: 'Arial', sans-serif;
+    font-size: 12px;
+}
+
+.game-window-content h2 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+}
+
+.contributors {
+    margin: 4px 0;
+    color: #555;
+}
+
+.tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 8px 0;
+}
+
+.tech-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+}
+
+.tech-item img {
+    width: 16px;
+    height: 16px;
+}
+
+.description {
+    margin: 8px 0;
+    line-height: 1.4;
+}
+
+.game-demo {
+    display: block;
+    max-width: 100%;
+    max-height: 200px;
+    margin: 8px 0;
+    background: #808080;
+}
+
+.game-demo-placeholder {
+    width: 100%;
+    height: 150px;
+    background: #808080;
+    margin: 8px 0;
+}
+
+.launch-row {
+    margin-top: 12px;
+}

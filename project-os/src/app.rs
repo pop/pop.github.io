@@ -3,6 +3,7 @@ use crate::config::load_config;
 use crate::state::WindowManager;
 use crate::components::desktop::Desktop;
 use crate::components::window::Window;
+use crate::components::game_window::GameWindow;
 
 #[function_component(App)]
 pub fn app() -> Html {
@@ -70,19 +71,22 @@ pub fn app() -> Html {
                     })
                 };
 
-                html! {
-                    <Window
-                        key={w.game_id.clone()}
-                        title={w.game_id.clone()}
-                        z_index={w.z_index}
-                        pos={w.pos}
-                        on_close={on_close}
-                        on_focus={on_focus}
-                        on_move={on_move}
-                    >
-                        <p>{ "Game content goes here" }</p>
-                    </Window>
-                }
+                let game = config.games.iter().find(|g| g.id == w.game_id).cloned();
+                if let Some(game) = game {
+                    html! {
+                        <Window
+                            key={w.game_id.clone()}
+                            title={game.title.clone()}
+                            z_index={w.z_index}
+                            pos={w.pos}
+                            on_close={on_close}
+                            on_focus={on_focus}
+                            on_move={on_move}
+                        >
+                            <GameWindow game={game} />
+                        </Window>
+                    }
+                } else { html! {} }
             })}
         </>
     }
