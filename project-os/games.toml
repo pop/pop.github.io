@@ -1,0 +1,56 @@
+[[games]]
+id = "snake"
+title = "Snake"
+description = "Classic snake game written in Rust and compiled to WebAssembly. Eat the apples, grow your snake, don't hit the walls!"
+contributors = ["Elijah Voigt"]
+icon = "🐍"
+demo = "assets/screenshots/snake.png"
+launch_url = "https://elijah.run/games/snake"
+launch_type = "wasm"
+
+[[games.tech]]
+name = "Rust"
+icon = "🦀"
+
+[[games.tech]]
+name = "WebAssembly"
+icon = "🕸️"
+
+[[games]]
+id = "tetris"
+title = "Tetris"
+description = "A faithful recreation of the classic block-stacking puzzle game. Clear lines, level up, and beat your high score!"
+contributors = ["Elijah Voigt"]
+icon = "🧱"
+demo = "assets/screenshots/tetris.png"
+launch_url = "https://elijah.run/games/tetris"
+launch_type = "wasm"
+
+[[games.tech]]
+name = "Rust"
+icon = "🦀"
+
+[[games.tech]]
+name = "WebAssembly"
+icon = "🕸️"
+
+[[games.tech]]
+name = "Canvas"
+icon = "🎨"
+
+[[quotes]]
+text = "It looks like you're having fun! Would you like help with that?"
+
+[[quotes]]
+text = "Did you know? These games were written in Rust and compiled to WebAssembly!"
+
+[[quotes]]
+text = "I'm Clippy, your friendly assistant. Click me to learn more about this portfolio!"
+
+[[quotes]]
+text = "Tip: You can drag these windows around just like in Windows 95!"
+
+[start_menu]
+about_url = "https://elijah.run/about"
+github_url = "https://github.com/pop"
+itchio_url = "https://pop.itch.io"
