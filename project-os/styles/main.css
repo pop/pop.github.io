@@ -109,6 +109,51 @@
     bottom: 44px;
     right: 8px;
     z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+}
+.clippy-bubble {
+    background: white;
+    border: 2px solid #000;
+    border-radius: 8px;
+    padding: 8px 12px;
+    max-width: 200px;
+    font-size: 11px;
+    position: relative;
+    box-shadow: 2px 2px 0 #808080;
+}
+.clippy-bubble p {
+    margin: 0;
+}
+.clippy-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #000;
+}
+.clippy-icon {
+    font-size: 32px;
+    line-height: 1;
+}
+.clippy-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.clippy-modal {
+    position: static;
+    min-width: 300px;
+    max-width: 400px;
 }
 
 /* Game window content */

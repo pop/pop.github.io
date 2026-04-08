@@ -1,6 +1,7 @@
 use yew::prelude::*;
 use crate::config::load_config;
 use crate::state::WindowManager;
+use crate::components::clippy::Clippy;
 use crate::components::desktop::Desktop;
 use crate::components::start_menu::StartMenuComp;
 use crate::components::taskbar::Taskbar;
@@ -117,6 +118,7 @@ pub fn app() -> Html {
                     move |_| smo.set(false)
                 })}
             />
+            <Clippy quotes={config.quotes.clone()} />
             <Taskbar
                 windows={wm.windows.clone()}
                 games={config.games.clone()}

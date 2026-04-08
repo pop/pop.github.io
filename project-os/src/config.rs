@@ -26,7 +26,7 @@ pub struct Tech {
     pub icon: String,
 }
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Clone, PartialEq)]
 pub struct Quote {
     pub text: String,
 }
