@@ -1,0 +1,20 @@
+[package]
+name = "project-os"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "project-os"
+path = "src/main.rs"
+
+[dependencies]
+yew = { version = "0.21", features = ["csr"] }
+wasm-bindgen = "0.2"
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"
+gloo-timers = { version = "0.3", features = ["futures"] }
+gloo-events = "0.2"
+js-sys = "0.3"
+web-sys = { version = "0.3", features = ["Window", "Document", "Element", "HtmlElement"] }
+wasm-logger = "0.2"
+log = "0.4"
