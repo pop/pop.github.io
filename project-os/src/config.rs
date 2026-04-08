@@ -31,7 +31,7 @@ pub struct Quote {
     pub text: String,
 }
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Clone, PartialEq)]
 pub struct StartMenu {
     pub about_url: String,
     pub github_url: String,

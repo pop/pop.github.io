@@ -2,6 +2,7 @@ use yew::prelude::*;
 use crate::config::load_config;
 use crate::state::WindowManager;
 use crate::components::desktop::Desktop;
+use crate::components::start_menu::StartMenuComp;
 use crate::components::taskbar::Taskbar;
 use crate::components::window::Window;
 use crate::components::game_window::GameWindow;
@@ -108,6 +109,14 @@ pub fn app() -> Html {
                     }
                 } else { html! {} }
             })}
+            <StartMenuComp
+                config={config.start_menu.clone()}
+                visible={*start_menu_open}
+                on_close={Callback::from({
+                    let smo = start_menu_open.clone();
+                    move |_| smo.set(false)
+                })}
+            />
             <Taskbar
                 windows={wm.windows.clone()}
                 games={config.games.clone()}

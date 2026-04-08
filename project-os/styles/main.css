@@ -170,3 +170,38 @@
 .launch-row {
     margin-top: 12px;
 }
+
+/* Start menu */
+.start-menu-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+}
+.start-menu.window {
+    position: fixed;
+    bottom: 40px;
+    left: 0;
+    z-index: 1000;
+    min-width: 180px;
+    min-height: unset;
+    padding: 4px;
+}
+.start-menu-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.start-menu-item {
+    width: 100%;
+    text-align: left;
+    padding: 4px 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+}
+.start-menu-item:hover {
+    background: #000080;
+    color: white;
+}
+.start-menu-shutdown { color: inherit; }
