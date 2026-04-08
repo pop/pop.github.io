@@ -5,5 +5,42 @@
     <link rel="stylesheet" href="https://alexbsoft.github.io/win95.css/win95.css"/>
     <link data-trunk rel="css" href="styles/main.css"/>
   </head>
-  <body></body>
+  <body>
+    <noscript>
+      <!-- TODO: Keep this in sync with games.toml manually -->
+      <style>
+        .ns-container { max-width: 800px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif; }
+        .ns-game { border: 1px solid #ccc; padding: 16px; margin: 16px 0; }
+        .ns-game h2 { margin: 0 0 8px 0; }
+        .ns-tech { list-style: none; padding: 0; display: flex; gap: 8px; flex-wrap: wrap; }
+        .ns-tech li { background: #eee; padding: 2px 8px; font-size: 12px; }
+        .ns-launch { display: inline-block; margin-top: 8px; padding: 4px 16px; background: #000080; color: white; text-decoration: none; }
+      </style>
+      <div class="ns-container">
+        <h1>Games Portfolio</h1>
+        <p>JavaScript is required for the full Win95 experience. Here is a plain HTML version:</p>
+
+        <div class="ns-game">
+          <h2>🐍 Snake</h2>
+          <p>Classic snake game written in Rust and compiled to WebAssembly. Eat the apples, grow your snake, don't hit the walls!</p>
+          <ul class="ns-tech">
+            <li>🦀 Rust</li>
+            <li>🕸️ WebAssembly</li>
+          </ul>
+          <a class="ns-launch" href="https://elijah.run/games/snake">Launch</a>
+        </div>
+
+        <div class="ns-game">
+          <h2>🧱 Tetris</h2>
+          <p>A faithful recreation of the classic block-stacking puzzle game. Clear lines, level up, and beat your high score!</p>
+          <ul class="ns-tech">
+            <li>🦀 Rust</li>
+            <li>🕸️ WebAssembly</li>
+            <li>🎨 Canvas</li>
+          </ul>
+          <a class="ns-launch" href="https://elijah.run/games/tetris">Launch</a>
+        </div>
+      </div>
+    </noscript>
+  </body>
 </html>
