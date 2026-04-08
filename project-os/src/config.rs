@@ -7,7 +7,7 @@ pub struct Config {
     pub start_menu: StartMenu,
 }
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Clone, PartialEq)]
 pub struct Game {
     pub id: String,
     pub title: String,
@@ -20,7 +20,7 @@ pub struct Game {
     pub launch_type: String,
 }
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Clone, PartialEq)]
 pub struct Tech {
     pub name: String,
     pub icon: String,
