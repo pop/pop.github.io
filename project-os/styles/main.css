@@ -124,6 +124,7 @@
     font-size: 11px;
     position: relative;
     box-shadow: 2px 2px 0 #808080;
+    color: #000000;
 }
 .clippy-bubble p {
     margin: 0;
