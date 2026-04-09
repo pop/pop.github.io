@@ -1,5 +1,6 @@
 use yew::prelude::*;
 use gloo_events::EventListener;
+use gloo_timers::callback::Timeout;
 use wasm_bindgen::JsCast;
 use web_sys::MouseEvent;
 use crate::config::{ClippyConfig, Quote};
@@ -14,6 +15,9 @@ pub struct ClippyProps {
 pub fn clippy(props: &ClippyProps) -> Html {
     let quote_idx = use_state(|| 0usize);
     let modal_open = use_state(|| false);
+    let bubble_visible = use_state(|| true);
+    // Holds the pending 60s restore timer so we can cancel it on early re-show
+    let hide_timer: UseStateHandle<Option<Timeout>> = use_state(|| None);
     // None = CSS bottom/right positioning; Some = dragged to (left, top)
     let pos: UseStateHandle<Option<(i32, i32)>> = use_state(|| None);
     let _move_listener: UseStateHandle<Option<EventListener>> = use_state(|| None);
@@ -85,19 +89,36 @@ pub fn clippy(props: &ClippyProps) -> Html {
         })
     };
 
-    // Only open modal if the user clicked the icon without dragging
+    // Icon click: if bubble is hidden, restore it and cancel any pending timer.
+    // Otherwise open the info modal (normal behaviour).
     let open_modal = {
         let mo = modal_open.clone();
         let has_dragged = has_dragged.clone();
+        let bubble_visible = bubble_visible.clone();
+        let hide_timer = hide_timer.clone();
         Callback::from(move |_: MouseEvent| {
             if !*has_dragged.borrow() {
-                mo.set(true);
+                if !*bubble_visible {
+                    hide_timer.set(None); // drops Timeout → cancels JS timer
+                    bubble_visible.set(true);
+                } else {
+                    mo.set(true);
+                }
             }
         })
     };
+    // Closing the modal hides the bubble and starts a 60s restore timer.
     let close_modal = {
         let mo = modal_open.clone();
-        Callback::from(move |_: MouseEvent| mo.set(false))
+        let bubble_visible = bubble_visible.clone();
+        let hide_timer = hide_timer.clone();
+        Callback::from(move |_: MouseEvent| {
+            mo.set(false);
+            bubble_visible.set(false);
+            let bv = bubble_visible.clone();
+            let t = Timeout::new(60_000, move || bv.set(true));
+            hide_timer.set(Some(t));
+        })
     };
 
     let style = match *pos {
@@ -111,7 +132,7 @@ pub fn clippy(props: &ClippyProps) -> Html {
     html! {
         <>
             <div class="clippy-widget" ref={widget_ref} style={style}>
-                if !current_quote.is_empty() {
+                if *bubble_visible && !current_quote.is_empty() {
                     <div class="clippy-bubble" onclick={cycle_quote} title="Click to change quote">
                         <p>{ &current_quote }</p>
                     </div>
