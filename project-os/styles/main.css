@@ -110,14 +110,12 @@
 }
 
 .clippy-widget {
+    /* The icon is the sole normal-flow child; the bubble is absolutely
+       positioned above it so bubble width changes never shift the icon. */
     position: fixed;
     bottom: 44px;
     right: 8px;
     z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
 }
 .clippy-bubble {
     background: white;
@@ -126,7 +124,11 @@
     padding: 8px 12px;
     max-width: 200px;
     font-size: 11px;
-    position: relative;
+    /* Float above the icon without affecting the widget's layout box */
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    margin-bottom: 8px;
     box-shadow: 2px 2px 0 #808080;
     color: #000000;
     cursor: pointer;
@@ -138,8 +140,8 @@
     content: '';
     position: absolute;
     bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
+    /* Align tail with the icon, which sits at the right edge of the widget */
+    right: 12px;
     border: 5px solid transparent;
     border-top-color: #000;
 }
