@@ -27,10 +27,50 @@ pub fn clippy(props: &ClippyProps) -> Html {
     // Shared mutable flag: did the user drag since last mousedown?
     // use_mut_ref gives Rc<RefCell<T>> — all clones share the same cell, no stale-value issue
     let has_dragged = use_mut_ref(|| false);
+    // Document-level click listener for "click outside to dismiss". Stored in a ref so
+    // attaching/detaching it doesn't trigger an extra render cycle.
+    let click_listener = use_mut_ref(|| None::<EventListener>);
 
     let current_quote = props.quotes.get(*quote_idx)
         .map(|q| q.text.clone())
         .unwrap_or_default();
+
+    // Register or unregister the click-outside listener based on bubble + modal state.
+    // The listener is active only when the bubble is visible and no modal is open.
+    use_effect_with((*bubble_visible, *modal_open), {
+        let click_listener = click_listener.clone();
+        let widget_ref = widget_ref.clone();
+        let bubble_visible = bubble_visible.clone();
+        let hide_timer = hide_timer.clone();
+        move |(is_visible, modal_is_open): &(bool, bool)| {
+            if *is_visible && !*modal_is_open {
+                let bv = bubble_visible.clone();
+                let ht = hide_timer.clone();
+                let wr = widget_ref.clone();
+                let doc = web_sys::window().unwrap().document().unwrap();
+                let listener = EventListener::new(&doc, "click", move |e| {
+                    let target = e.dyn_ref::<MouseEvent>()
+                        .and_then(|me| me.target())
+                        .and_then(|t| t.dyn_into::<web_sys::Node>().ok());
+                    let inside = target.zip(wr.cast::<web_sys::Node>())
+                        .map(|(t, w)| w.contains(Some(&t)))
+                        .unwrap_or(false);
+                    if !inside {
+                        ht.set(None); // cancel any existing restore timer
+                        bv.set(false);
+                        let bv2 = bv.clone();
+                        let timer = Timeout::new(60_000, move || bv2.set(true));
+                        ht.set(Some(timer));
+                    }
+                });
+                *click_listener.borrow_mut() = Some(listener);
+            } else {
+                *click_listener.borrow_mut() = None; // drops → JS removeEventListener
+            }
+            let cl = click_listener.clone();
+            move || { *cl.borrow_mut() = None; } // cleanup when deps change
+        }
+    });
 
     let onmousedown = {
         let pos = pos.clone();
@@ -90,7 +130,7 @@ pub fn clippy(props: &ClippyProps) -> Html {
     };
 
     // Icon click: if bubble is hidden, restore it and cancel any pending timer.
-    // Otherwise open the info modal (normal behaviour).
+    // Otherwise open the info modal (existing behaviour).
     let open_modal = {
         let mo = modal_open.clone();
         let has_dragged = has_dragged.clone();
@@ -107,18 +147,12 @@ pub fn clippy(props: &ClippyProps) -> Html {
             }
         })
     };
-    // Closing the modal hides the bubble and starts a 60s restore timer.
+
+    // Close the modal; the document click listener (re-registered on next render)
+    // handles any subsequent "click outside" dismiss behaviour.
     let close_modal = {
         let mo = modal_open.clone();
-        let bubble_visible = bubble_visible.clone();
-        let hide_timer = hide_timer.clone();
-        Callback::from(move |_: MouseEvent| {
-            mo.set(false);
-            bubble_visible.set(false);
-            let bv = bubble_visible.clone();
-            let t = Timeout::new(60_000, move || bv.set(true));
-            hide_timer.set(Some(t));
-        })
+        Callback::from(move |_: MouseEvent| mo.set(false))
     };
 
     let style = match *pos {
