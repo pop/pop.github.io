@@ -47,8 +47,6 @@ pub struct StartMenu {
     pub about_label: String,
     pub github_label: String,
     pub itchio_label: String,
-    pub shutdown_label: String,
-    pub shutdown_message: String,
 }
 
 #[derive(Deserialize, Clone, PartialEq)]
