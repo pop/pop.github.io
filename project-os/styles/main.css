@@ -27,7 +27,7 @@
     height: 40px;
     z-index: 1000;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     gap: 4px;
     padding: 2px 4px;
     background: #c0c0c0;
@@ -60,6 +60,8 @@
     padding: 2px 8px;
     border: 1px inset #808080;
     font-size: 11px;
+    display: flex;
+    align-items: center;
 }
 
 .game-icon {
@@ -116,9 +118,6 @@
     flex-direction: column;
     align-items: center;
     gap: 4px;
-    cursor: grab;
-    user-select: none;
-    -webkit-user-select: none;
 }
 .clippy-bubble {
     background: white;
@@ -130,6 +129,7 @@
     position: relative;
     box-shadow: 2px 2px 0 #808080;
     color: #000000;
+    cursor: pointer;
 }
 .clippy-bubble p {
     margin: 0;
@@ -146,6 +146,12 @@
 .clippy-icon {
     font-size: 32px;
     line-height: 1;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+}
+.clippy-icon:active {
+    cursor: grabbing;
 }
 .clippy-modal-backdrop {
     position: fixed;

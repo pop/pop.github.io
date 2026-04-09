@@ -89,7 +89,18 @@ pub fn clippy(props: &ClippyProps) -> Html {
         })
     };
 
-    // Only open modal if the user clicked without dragging
+    // Cycle to the next quote when the speech bubble is clicked
+    let cycle_quote = {
+        let qi = quote_idx.clone();
+        let total = props.quotes.len();
+        Callback::from(move |_: MouseEvent| {
+            if total > 0 {
+                qi.set((*qi + 1) % total);
+            }
+        })
+    };
+
+    // Only open modal if the user clicked the icon without dragging
     let open_modal = {
         let mo = modal_open.clone();
         let has_dragged = has_dragged.clone();
@@ -114,13 +125,13 @@ pub fn clippy(props: &ClippyProps) -> Html {
 
     html! {
         <>
-            <div class="clippy-widget" ref={widget_ref} style={style} onmousedown={onmousedown}>
+            <div class="clippy-widget" ref={widget_ref} style={style}>
                 if !current_quote.is_empty() {
-                    <div class="clippy-bubble">
+                    <div class="clippy-bubble" onclick={cycle_quote} title="Click to change quote">
                         <p>{ &current_quote }</p>
                     </div>
                 }
-                <div class="clippy-icon" onclick={open_modal} title="Click for info">
+                <div class="clippy-icon" onmousedown={onmousedown} onclick={open_modal} title="Drag to move · click for info">
                     { "📎" }
                 </div>
             </div>
