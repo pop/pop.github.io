@@ -1,10 +1,11 @@
 ---
 # project-os-zv6y
 title: Use win98icons for tech stack icons
-status: todo
+status: in-progress
 type: task
+priority: normal
 created_at: 2026-04-09T04:37:17Z
-updated_at: 2026-04-09T04:37:17Z
+updated_at: 2026-04-09T05:00:56Z
 ---
 
 Tech stack icons in [[games.tech]] entries in games.toml currently use emoji (e.g. Rust=🦀, Bevy=🐦️, WebAssembly=🕸️). The game_window.rs component already supports URL-based icons via is_url() — if the icon field starts with 'http' or contains '/', it renders an <img> tag instead of a <span> with emoji text.

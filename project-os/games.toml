@@ -12,11 +12,11 @@ launch_label = "Download Now"
 
 [[games.tech]]
 name = "Rust"
-icon = "🦀"
+icon = "https://raw.githubusercontent.com/zhaotianff/Win98-Icons/main/icons/gears-0.png"
 
 [[games.tech]]
 name = "Bevy"
-icon = "🐦️"
+icon = "https://raw.githubusercontent.com/zhaotianff/Win98-Icons/main/icons/joystick-2.png"
 
 ### Set
 [[games]]
@@ -32,15 +32,15 @@ launch_label = "Play Now"
 
 [[games.tech]]
 name = "Rust"
-icon = "🦀"
+icon = "https://raw.githubusercontent.com/zhaotianff/Win98-Icons/main/icons/gears-0.png"
 
 [[games.tech]]
 name = "Bevy"
-icon = "🐦️"
+icon = "https://raw.githubusercontent.com/zhaotianff/Win98-Icons/main/icons/joystick-2.png"
 
 [[games.tech]]
 name = "WebAssembly"
-icon = "🕸️"
+icon = "https://raw.githubusercontent.com/zhaotianff/Win98-Icons/main/icons/globe_map-0.png"
 
 ### Flappy Bird (With Rewind)
 [[games]]
@@ -56,15 +56,15 @@ launch_label = "Play Now"
 
 [[games.tech]]
 name = "Rust"
-icon = "🦀"
+icon = "https://raw.githubusercontent.com/zhaotianff/Win98-Icons/main/icons/gears-0.png"
 
 [[games.tech]]
 name = "Bevy"
-icon = "🐦️"
+icon = "https://raw.githubusercontent.com/zhaotianff/Win98-Icons/main/icons/joystick-2.png"
 
 [[games.tech]]
 name = "WebAssembly"
-icon = "🕸️"
+icon = "https://raw.githubusercontent.com/zhaotianff/Win98-Icons/main/icons/globe_map-0.png"
 
 ### Clippy Quotes
 [[quotes]]
