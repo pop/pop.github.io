@@ -35,6 +35,10 @@
           beans
           # Like make
           just
+          # Image processing
+          imagemagick
+          # Video processing
+          ffmpeg
         ];
       };
     }
