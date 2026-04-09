@@ -18,6 +18,11 @@ pub fn clippy(props: &ClippyProps) -> Html {
     let pos: UseStateHandle<Option<(i32, i32)>> = use_state(|| None);
     let _move_listener: UseStateHandle<Option<EventListener>> = use_state(|| None);
     let _up_listener: UseStateHandle<Option<EventListener>> = use_state(|| None);
+    // Stable ref to the widget div — avoids currentTarget issues in Yew's event system
+    let widget_ref = use_node_ref();
+    // Shared mutable flag: did the user drag since last mousedown?
+    // use_mut_ref gives Rc<RefCell<T>> — all clones share the same cell, no stale-value issue
+    let has_dragged = use_mut_ref(|| false);
 
     // Rotate quotes every 5s
     {
@@ -42,14 +47,18 @@ pub fn clippy(props: &ClippyProps) -> Html {
         let pos = pos.clone();
         let move_listener = _move_listener.clone();
         let up_listener = _up_listener.clone();
+        let widget_ref = widget_ref.clone();
+        let has_dragged = has_dragged.clone();
         Callback::from(move |e: MouseEvent| {
             e.prevent_default();
+            // Reset drag flag on every new press
+            *has_dragged.borrow_mut() = false;
 
-            // Get current top-left of the widget from DOM or stored state
+            // Get the widget's current screen position via node ref (reliable, no currentTarget issues)
             let start_pos = match *pos {
                 Some(p) => p,
-                None => e.current_target()
-                    .and_then(|t| t.dyn_into::<web_sys::Element>().ok())
+                None => widget_ref
+                    .cast::<web_sys::Element>()
                     .map(|el| {
                         let r = el.get_bounding_client_rect();
                         (r.left() as i32, r.top() as i32)
@@ -62,10 +71,12 @@ pub fn clippy(props: &ClippyProps) -> Html {
 
             let pos_mv = pos.clone();
             let move_ls_up = move_listener.clone();
+            let has_dragged_mv = has_dragged.clone();
 
             let document = web_sys::window().unwrap().document().unwrap();
 
             let move_cb = EventListener::new(&document, "mousemove", move |e| {
+                *has_dragged_mv.borrow_mut() = true;
                 let e = e.dyn_ref::<MouseEvent>().unwrap();
                 pos_mv.set(Some((e.client_x() - offset_x, e.client_y() - offset_y)));
             });
@@ -78,9 +89,15 @@ pub fn clippy(props: &ClippyProps) -> Html {
         })
     };
 
+    // Only open modal if the user clicked without dragging
     let open_modal = {
         let mo = modal_open.clone();
-        Callback::from(move |_: MouseEvent| mo.set(true))
+        let has_dragged = has_dragged.clone();
+        Callback::from(move |_: MouseEvent| {
+            if !*has_dragged.borrow() {
+                mo.set(true);
+            }
+        })
     };
     let close_modal = {
         let mo = modal_open.clone();
@@ -97,7 +114,7 @@ pub fn clippy(props: &ClippyProps) -> Html {
 
     html! {
         <>
-            <div class="clippy-widget" style={style} onmousedown={onmousedown}>
+            <div class="clippy-widget" ref={widget_ref} style={style} onmousedown={onmousedown}>
                 if !current_quote.is_empty() {
                     <div class="clippy-bubble">
                         <p>{ &current_quote }</p>
