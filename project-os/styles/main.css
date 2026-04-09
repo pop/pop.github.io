@@ -121,7 +121,7 @@ html, body {
        positioned above it so bubble width changes never shift the icon. */
     position: fixed;
     bottom: 44px;
-    right: 8px;
+    right: 60px;
     z-index: 10;
 }
 .clippy-bubble {
