@@ -120,8 +120,8 @@ html, body {
     /* The icon is the sole normal-flow child; the bubble is absolutely
        positioned above it so bubble width changes never shift the icon. */
     position: fixed;
-    bottom: 44px;
-    right: 60px;
+    bottom: 100px;
+    right: 100px;
     z-index: 10;
 }
 .clippy-bubble {
@@ -129,6 +129,7 @@ html, body {
     border: 2px solid #000;
     border-radius: 8px;
     padding: 8px 12px;
+    min-width: 200px;
     max-width: 280px;
     font-size: 11px;
     /* Float above the icon without affecting the widget's layout box */
@@ -249,7 +250,6 @@ html, body {
     left: 0;
     z-index: 1000;
     min-width: 180px;
-    min-height: 120px;
     padding: 4px;
 }
 .start-menu-list {
@@ -260,7 +260,7 @@ html, body {
 .start-menu-item {
     width: 100%;
     text-align: left;
-    padding: 6px 12px;
+    padding: 12px 12px;
     background: none;
     border: none;
     cursor: pointer;
