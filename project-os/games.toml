@@ -4,7 +4,7 @@ id = "martian-chess"
 title = "Martian Chess"
 description = "..."
 contributors = ["Elijah Voigt", "Sam Hall"]
-icon = "♟️"
+icon = "/martian-chess.png"
 demo = "assets/screenshots/martian-chess.png"
 launch_url = "https://liquidmirror.itch.io/martian-chess"
 launch_type = "native"
@@ -12,11 +12,11 @@ launch_label = "Download Now"
 
 [[games.tech]]
 name = "Rust"
-icon = "https://raw.githubusercontent.com/zhaotianff/Win98-Icons/main/icons/gears-0.png"
+icon = "/rust-icon.png"
 
 [[games.tech]]
 name = "Bevy"
-icon = "https://raw.githubusercontent.com/zhaotianff/Win98-Icons/main/icons/joystick-2.png"
+icon = "/bevy-icon.png"
 
 ### Set
 [[games]]
@@ -24,7 +24,7 @@ id = "set"
 title = "Set"
 description = "..."
 contributors = ["Elijah Voigt", "Sam Hall"]
-icon = "🎴"
+icon = "/placeholder.png"
 demo = "assets/screenshots/set.png"
 launch_url = "https://games.elijah.run/set/"
 launch_type = "wasm"
@@ -32,15 +32,15 @@ launch_label = "Play Now"
 
 [[games.tech]]
 name = "Rust"
-icon = "https://raw.githubusercontent.com/zhaotianff/Win98-Icons/main/icons/gears-0.png"
+icon = "/rust-icon.png"
 
 [[games.tech]]
 name = "Bevy"
-icon = "https://raw.githubusercontent.com/zhaotianff/Win98-Icons/main/icons/joystick-2.png"
+icon = "/bevy-icon.png"
 
 [[games.tech]]
 name = "WebAssembly"
-icon = "https://raw.githubusercontent.com/zhaotianff/Win98-Icons/main/icons/globe_map-0.png"
+icon = "/wasm-icon.png"
 
 ### Flappy Bird (With Rewind)
 [[games]]
@@ -48,7 +48,7 @@ id = "flappy"
 title = "Flappy Bird (with rewind)"
 description = "..."
 contributors = ["Elijah Voigt"]
-icon = "🐦️"
+icon = "/placeholder.png"
 demo = "assets/screenshots/flappy.png"
 launch_url = "https://popgame.itch.io/flappy"
 launch_type = "wasm"
@@ -56,15 +56,15 @@ launch_label = "Play Now"
 
 [[games.tech]]
 name = "Rust"
-icon = "https://raw.githubusercontent.com/zhaotianff/Win98-Icons/main/icons/gears-0.png"
+icon = "/rust-icon.png"
 
 [[games.tech]]
 name = "Bevy"
-icon = "https://raw.githubusercontent.com/zhaotianff/Win98-Icons/main/icons/joystick-2.png"
+icon = "/bevy-icon.png"
 
 [[games.tech]]
 name = "WebAssembly"
-icon = "https://raw.githubusercontent.com/zhaotianff/Win98-Icons/main/icons/globe_map-0.png"
+icon = "/wasm-icon.png"
 
 ### Clippy Quotes
 [[quotes]]
@@ -81,27 +81,28 @@ text = "So, how about those Epstein files?"
 
 ### Taskbar
 [taskbar]
-start_label = "⊞ Start"
+start_icon = "/placeholder.png"
+start_label = "Start"
 
 ### Start menu
 [[start_menu.items]]
-icon = "📄"
+icon = "/placeholder.png"
 title = "Homepage"
 url = "https://elijah.run/about"
 
 [[start_menu.items]]
-icon = "🐙"
+icon = "/placeholder.png"
 title = "GitHub"
 url = "https://github.com/pop"
 
 [[start_menu.items]]
-icon = "🎮"
+icon = "/placeholder.png"
 title = "itch.io"
 url = "https://pop.itch.io"
 
 ### Clippy widget
 [clippy]
-icon = "📎"
+icon = "/placeholder.png"
 modal_title = "About this Portfolio"
 modal_ok_label = "OK"
 modal_paragraphs = [

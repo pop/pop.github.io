@@ -1,5 +1,9 @@
 use yew::prelude::*;
 use gloo_events::EventListener;
+
+fn is_url(s: &str) -> bool {
+    s.starts_with("http") || s.starts_with("data:") || s.contains('/')
+}
 use gloo_timers::callback::Timeout;
 use wasm_bindgen::JsCast;
 use web_sys::MouseEvent;
@@ -172,7 +176,11 @@ pub fn clippy(props: &ClippyProps) -> Html {
                     </div>
                 }
                 <div class="clippy-icon" onmousedown={onmousedown} onclick={open_modal} title="Drag to move · click for info">
-                    { &props.clippy_config.icon }
+                    if is_url(&props.clippy_config.icon) {
+                        <img src={props.clippy_config.icon.clone()} alt="Clippy" />
+                    } else {
+                        { &props.clippy_config.icon }
+                    }
                 </div>
             </div>
             if *modal_open {

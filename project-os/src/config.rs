@@ -36,6 +36,7 @@ pub struct Quote {
 
 #[derive(Deserialize, Clone, PartialEq)]
 pub struct TaskbarConfig {
+    pub start_icon: String,
     pub start_label: String,
 }
 

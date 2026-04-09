@@ -1,6 +1,10 @@
 use yew::prelude::*;
 use crate::config::{StartMenu, StartMenuItem};
 
+fn is_url(s: &str) -> bool {
+    s.starts_with("http") || s.starts_with("data:") || s.contains('/')
+}
+
 #[derive(Properties, PartialEq)]
 pub struct StartMenuProps {
     pub config: StartMenu,
@@ -26,11 +30,18 @@ pub fn start_menu(props: &StartMenuProps) -> Html {
     let backdrop_close = Callback::from(move |_: MouseEvent| on_close.emit(()));
 
     let items = props.config.items.iter().map(|item: &StartMenuItem| {
-        let label = format!("{} {}", item.icon, item.title);
+        let icon_html = if is_url(&item.icon) {
+            html! { <img src={item.icon.clone()} alt="" class="start-menu-icon" /> }
+        } else if !item.icon.is_empty() {
+            html! { <span class="start-menu-icon-emoji">{ &item.icon }</span> }
+        } else {
+            html! {}
+        };
         html! {
             <li>
                 <button class="start-menu-item" onclick={open(item.url.clone())}>
-                    { label }
+                    { icon_html }
+                    { &item.title }
                 </button>
             </li>
         }

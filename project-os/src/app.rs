@@ -125,6 +125,7 @@ pub fn app() -> Html {
                 on_focus={on_taskbar_focus}
                 on_start_click={on_start_click}
                 start_menu_open={*start_menu_open}
+                start_icon={config.taskbar.start_icon.clone()}
                 start_label={config.taskbar.start_label.clone()}
             />
         </>

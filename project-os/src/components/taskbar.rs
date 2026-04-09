@@ -10,7 +10,12 @@ pub struct TaskbarProps {
     pub on_focus: Callback<String>,
     pub on_start_click: Callback<()>,
     pub start_menu_open: bool,
+    pub start_icon: String,
     pub start_label: String,
+}
+
+fn is_url(s: &str) -> bool {
+    s.starts_with("http") || s.starts_with("data:") || s.contains('/')
 }
 
 fn current_time() -> String {
@@ -47,6 +52,11 @@ pub fn taskbar(props: &TaskbarProps) -> Html {
     html! {
         <div class="taskbar win95-panel">
             <button class={classes!("start-button", props.start_menu_open.then_some("active"))} onclick={on_start}>
+                if is_url(&props.start_icon) {
+                    <img src={props.start_icon.clone()} alt="" class="start-button-icon" />
+                } else if !props.start_icon.is_empty() {
+                    <span class="start-button-icon">{ &props.start_icon }</span>
+                }
                 { &props.start_label }
             </button>
             <div class="taskbar-windows">
