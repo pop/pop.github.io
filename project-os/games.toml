@@ -84,13 +84,20 @@ text = "So, how about those Epstein files?"
 start_label = "⊞ Start"
 
 ### Start menu
-[start_menu]
-about_url = "https://elijah.run/about"
-github_url = "https://github.com/pop"
-itchio_url = "https://pop.itch.io"
-about_label = "📄 Homepage"
-github_label = "🐙 GitHub"
-itchio_label = "🎮 itch.io"
+[[start_menu.items]]
+icon = "📄"
+title = "Homepage"
+url = "https://elijah.run/about"
+
+[[start_menu.items]]
+icon = "🐙"
+title = "GitHub"
+url = "https://github.com/pop"
+
+[[start_menu.items]]
+icon = "🎮"
+title = "itch.io"
+url = "https://pop.itch.io"
 
 ### Clippy widget
 [clippy]

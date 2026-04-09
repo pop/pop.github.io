@@ -40,13 +40,15 @@ pub struct TaskbarConfig {
 }
 
 #[derive(Deserialize, Clone, PartialEq)]
+pub struct StartMenuItem {
+    pub icon: String,
+    pub title: String,
+    pub url: String,
+}
+
+#[derive(Deserialize, Clone, PartialEq)]
 pub struct StartMenu {
-    pub about_url: String,
-    pub github_url: String,
-    pub itchio_url: String,
-    pub about_label: String,
-    pub github_label: String,
-    pub itchio_label: String,
+    pub items: Vec<StartMenuItem>,
 }
 
 #[derive(Deserialize, Clone, PartialEq)]

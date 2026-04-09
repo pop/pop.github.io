@@ -1,5 +1,5 @@
 use yew::prelude::*;
-use crate::config::StartMenu;
+use crate::config::{StartMenu, StartMenuItem};
 
 #[derive(Properties, PartialEq)]
 pub struct StartMenuProps {
@@ -25,27 +25,24 @@ pub fn start_menu(props: &StartMenuProps) -> Html {
     let on_close = props.on_close.clone();
     let backdrop_close = Callback::from(move |_: MouseEvent| on_close.emit(()));
 
+    let items = props.config.items.iter().map(|item: &StartMenuItem| {
+        let label = format!("{} {}", item.icon, item.title);
+        html! {
+            <li>
+                <button class="start-menu-item" onclick={open(item.url.clone())}>
+                    { label }
+                </button>
+            </li>
+        }
+    }).collect::<Html>();
+
     html! {
         <>
             // Backdrop to catch outside clicks
             <div class="start-menu-backdrop" onclick={backdrop_close}></div>
             <div class="start-menu window">
                 <ul class="start-menu-list">
-                    <li>
-                        <button class="start-menu-item" onclick={open(props.config.about_url.clone())}>
-                            { &props.config.about_label }
-                        </button>
-                    </li>
-                    <li>
-                        <button class="start-menu-item" onclick={open(props.config.github_url.clone())}>
-                            { &props.config.github_label }
-                        </button>
-                    </li>
-                    <li>
-                        <button class="start-menu-item" onclick={open(props.config.itchio_url.clone())}>
-                            { &props.config.itchio_label }
-                        </button>
-                    </li>
+                    { items }
                 </ul>
             </div>
         </>

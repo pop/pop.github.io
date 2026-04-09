@@ -1,10 +1,11 @@
 ---
 # project-os-1272
 title: Refactor start menu to array of items in games.toml
-status: todo
+status: in-progress
 type: task
+priority: normal
 created_at: 2026-04-09T04:37:38Z
-updated_at: 2026-04-09T04:37:38Z
+updated_at: 2026-04-09T04:59:47Z
 ---
 
 Currently the [start_menu] section in games.toml uses individual named fields (about_url, github_url, itchio_url, about_label, github_label, itchio_label) and the StartMenu struct in src/config.rs mirrors these flat fields. The start_menu.rs component hardcodes three <li> buttons referencing each field by name.
