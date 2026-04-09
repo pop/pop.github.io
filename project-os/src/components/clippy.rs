@@ -1,6 +1,5 @@
 use yew::prelude::*;
 use gloo_events::EventListener;
-use gloo_timers::callback::Interval;
 use wasm_bindgen::JsCast;
 use web_sys::MouseEvent;
 use crate::config::Quote;
@@ -23,21 +22,6 @@ pub fn clippy(props: &ClippyProps) -> Html {
     // Shared mutable flag: did the user drag since last mousedown?
     // use_mut_ref gives Rc<RefCell<T>> — all clones share the same cell, no stale-value issue
     let has_dragged = use_mut_ref(|| false);
-
-    // Rotate quotes every 5s
-    {
-        let qi = quote_idx.clone();
-        let total = props.quotes.len();
-        use_effect_with(total, move |_| -> Box<dyn FnOnce()> {
-            if total == 0 {
-                return Box::new(move || {});
-            }
-            let interval = Interval::new(5000, move || {
-                qi.set((*qi + 1) % total);
-            });
-            Box::new(move || drop(interval))
-        });
-    }
 
     let current_quote = props.quotes.get(*quote_idx)
         .map(|q| q.text.clone())
