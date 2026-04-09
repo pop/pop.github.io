@@ -10,6 +10,7 @@ pub struct TaskbarProps {
     pub on_focus: Callback<String>,
     pub on_start_click: Callback<()>,
     pub start_menu_open: bool,
+    pub start_label: String,
 }
 
 fn current_time() -> String {
@@ -46,7 +47,7 @@ pub fn taskbar(props: &TaskbarProps) -> Html {
     html! {
         <div class="taskbar win95-panel">
             <button class={classes!("start-button", props.start_menu_open.then_some("active"))} onclick={on_start}>
-                { "\u{229E} Start" }
+                { &props.start_label }
             </button>
             <div class="taskbar-windows">
                 { for props.windows.iter().filter(|w| w.open).map(|w| {

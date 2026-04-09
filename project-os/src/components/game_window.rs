@@ -14,7 +14,7 @@ pub struct GameWindowProps {
 pub fn game_window(props: &GameWindowProps) -> Html {
     let game = &props.game;
 
-    let launch_label = if game.launch_type == "wasm" { "Launch" } else { "Download" };
+    let launch_label = game.launch_label.clone();
     let launch_url = game.launch_url.clone();
 
     let on_launch = Callback::from(move |_: MouseEvent| {
@@ -61,7 +61,7 @@ pub fn game_window(props: &GameWindowProps) -> Html {
             <p class="description">{ &game.description }</p>
             { demo_html }
             <div class="launch-row">
-                <button class="button" onclick={on_launch}>{ launch_label }</button>
+                <button class="button" onclick={on_launch}>{ &launch_label }</button>
             </div>
         </div>
     }

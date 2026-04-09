@@ -2,11 +2,12 @@ use yew::prelude::*;
 use gloo_events::EventListener;
 use wasm_bindgen::JsCast;
 use web_sys::MouseEvent;
-use crate::config::Quote;
+use crate::config::{ClippyConfig, Quote};
 
 #[derive(Properties, PartialEq)]
 pub struct ClippyProps {
     pub quotes: Vec<Quote>,
+    pub clippy_config: ClippyConfig,
 }
 
 #[function_component(Clippy)]
@@ -116,21 +117,19 @@ pub fn clippy(props: &ClippyProps) -> Html {
                     </div>
                 }
                 <div class="clippy-icon" onmousedown={onmousedown} onclick={open_modal} title="Drag to move · click for info">
-                    { "📎" }
+                    { &props.clippy_config.icon }
                 </div>
             </div>
             if *modal_open {
                 <div class="clippy-modal-backdrop">
                     <div class="window clippy-modal">
                         <div class="title-bar">
-                            <div class="title-bar-text">{ "About this Portfolio" }</div>
+                            <div class="title-bar-text">{ &props.clippy_config.modal_title }</div>
                         </div>
                         <div class="window-body" style="padding: 16px;">
-                            <p>{ "This portfolio was built with assistance from Claude AI (Anthropic)." }</p>
-                            <p>{ "The games and creative work are by the portfolio author." }</p>
-                            <p>{ "Claude helped with Rust/WASM code and UI implementation." }</p>
+                            { for props.clippy_config.modal_paragraphs.iter().map(|p| html! { <p>{ p }</p> }) }
                             <div style="text-align: right; margin-top: 12px;">
-                                <button onclick={close_modal}>{ "OK" }</button>
+                                <button onclick={close_modal}>{ &props.clippy_config.modal_ok_label }</button>
                             </div>
                         </div>
                     </div>

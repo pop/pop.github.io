@@ -1,56 +1,106 @@
+### Martian Chess
 [[games]]
-id = "snake"
-title = "Snake"
-description = "Classic snake game written in Rust and compiled to WebAssembly. Eat the apples, grow your snake, don't hit the walls!"
-contributors = ["Elijah Voigt"]
-icon = "🐍"
-demo = "assets/screenshots/snake.png"
-launch_url = "https://elijah.run/games/snake"
-launch_type = "wasm"
+id = "martian-chess"
+title = "Martian Chess"
+description = "..."
+contributors = ["Elijah Voigt", "Sam Hall"]
+icon = "♟️"
+demo = "assets/screenshots/martian-chess.png"
+launch_url = "https://liquidmirror.itch.io/martian-chess"
+launch_type = "native"
+launch_label = "Download Now"
 
 [[games.tech]]
 name = "Rust"
 icon = "🦀"
 
 [[games.tech]]
-name = "WebAssembly"
-icon = "🕸️"
+name = "Bevy"
+icon = "🐦️"
 
+### Set
 [[games]]
-id = "tetris"
-title = "Tetris"
-description = "A faithful recreation of the classic block-stacking puzzle game. Clear lines, level up, and beat your high score!"
-contributors = ["Elijah Voigt"]
-icon = "🧱"
-demo = "assets/screenshots/tetris.png"
-launch_url = "https://elijah.run/games/tetris"
+id = "set"
+title = "Set"
+description = "..."
+contributors = ["Elijah Voigt", "Sam Hall"]
+icon = "🎴"
+demo = "assets/screenshots/set.png"
+launch_url = "https://games.elijah.run/set/"
 launch_type = "wasm"
+launch_label = "Play Now"
 
 [[games.tech]]
 name = "Rust"
 icon = "🦀"
 
 [[games.tech]]
+name = "Bevy"
+icon = "🐦️"
+
+[[games.tech]]
 name = "WebAssembly"
 icon = "🕸️"
 
+### Flappy Bird (With Rewind)
+[[games]]
+id = "flappy"
+title = "Flappy Bird (with rewind)"
+description = "..."
+contributors = ["Elijah Voigt"]
+icon = "🐦️"
+demo = "assets/screenshots/flappy.png"
+launch_url = "https://popgame.itch.io/flappy"
+launch_type = "wasm"
+launch_label = "Play Now"
+
 [[games.tech]]
-name = "Canvas"
-icon = "🎨"
+name = "Rust"
+icon = "🦀"
+
+[[games.tech]]
+name = "Bevy"
+icon = "🐦️"
+
+[[games.tech]]
+name = "WebAssembly"
+icon = "🕸️"
+
+### Clippy Quotes
+[[quotes]]
+text = "Hello fellow gamer."
 
 [[quotes]]
-text = "It looks like you're having fun! Would you like help with that?"
+text = "Click here to learn about this portfolio site."
 
 [[quotes]]
-text = "Did you know? These games were written in Rust and compiled to WebAssembly!"
+text = "I'm legally distinct from Microsoft Clippy!"
 
 [[quotes]]
-text = "I'm Clippy, your friendly assistant. Click me to learn more about this portfolio!"
+text = "So, how about those Epstein files?"
 
-[[quotes]]
-text = "Tip: You can drag these windows around just like in Windows 95!"
+### Taskbar
+[taskbar]
+start_label = "⊞ Start"
 
+### Start menu
 [start_menu]
 about_url = "https://elijah.run/about"
 github_url = "https://github.com/pop"
 itchio_url = "https://pop.itch.io"
+about_label = "📄 Homepage"
+github_label = "🐙 GitHub"
+itchio_label = "🎮 itch.io"
+shutdown_label = "⏻ Shut Down..."
+shutdown_message = "It is now safe to turn off your computer."
+
+### Clippy widget
+[clippy]
+icon = "📎"
+modal_title = "About this Portfolio"
+modal_ok_label = "OK"
+modal_paragraphs = [
+    "The games and creative work are by the portfolio author.",
+    "Styled with [win95.css](https://alexbsoft.github.io/win95.css).",
+    "AI Disclosure: This portfolio was built with assistance of Claude Code using the Sonnet 4.6 model.",
+]

@@ -4,7 +4,9 @@ use serde::Deserialize;
 pub struct Config {
     pub games: Vec<Game>,
     pub quotes: Vec<Quote>,
+    pub taskbar: TaskbarConfig,
     pub start_menu: StartMenu,
+    pub clippy: ClippyConfig,
 }
 
 #[derive(Deserialize, Clone, PartialEq)]
@@ -18,6 +20,7 @@ pub struct Game {
     pub demo: Option<String>,
     pub launch_url: String,
     pub launch_type: String,
+    pub launch_label: String,
 }
 
 #[derive(Deserialize, Clone, PartialEq)]
@@ -32,10 +35,28 @@ pub struct Quote {
 }
 
 #[derive(Deserialize, Clone, PartialEq)]
+pub struct TaskbarConfig {
+    pub start_label: String,
+}
+
+#[derive(Deserialize, Clone, PartialEq)]
 pub struct StartMenu {
     pub about_url: String,
     pub github_url: String,
     pub itchio_url: String,
+    pub about_label: String,
+    pub github_label: String,
+    pub itchio_label: String,
+    pub shutdown_label: String,
+    pub shutdown_message: String,
+}
+
+#[derive(Deserialize, Clone, PartialEq)]
+pub struct ClippyConfig {
+    pub icon: String,
+    pub modal_title: String,
+    pub modal_ok_label: String,
+    pub modal_paragraphs: Vec<String>,
 }
 
 pub fn load_config() -> Config {

@@ -22,9 +22,10 @@ pub fn start_menu(props: &StartMenuProps) -> Html {
         })
     };
 
-    let on_shutdown = Callback::from(|_: MouseEvent| {
+    let shutdown_message = props.config.shutdown_message.clone();
+    let on_shutdown = Callback::from(move |_: MouseEvent| {
         if let Some(w) = web_sys::window() {
-            let _ = w.alert_with_message("It is now safe to turn off your computer.");
+            let _ = w.alert_with_message(&shutdown_message);
         }
     });
 
@@ -39,23 +40,23 @@ pub fn start_menu(props: &StartMenuProps) -> Html {
                 <ul class="start-menu-list">
                     <li>
                         <button class="start-menu-item" onclick={open(props.config.about_url.clone())}>
-                            { "\u{1F4C4} About" }
+                            { &props.config.about_label }
                         </button>
                     </li>
                     <li>
                         <button class="start-menu-item" onclick={open(props.config.github_url.clone())}>
-                            { "\u{1F419} GitHub" }
+                            { &props.config.github_label }
                         </button>
                     </li>
                     <li>
                         <button class="start-menu-item" onclick={open(props.config.itchio_url.clone())}>
-                            { "\u{1F3AE} itch.io" }
+                            { &props.config.itchio_label }
                         </button>
                     </li>
                     <li><hr /></li>
                     <li>
                         <button class="start-menu-item start-menu-shutdown" onclick={on_shutdown}>
-                            { "\u{23FB} Shut Down..." }
+                            { &props.config.shutdown_label }
                         </button>
                     </li>
                 </ul>

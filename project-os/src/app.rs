@@ -118,13 +118,14 @@ pub fn app() -> Html {
                     move |_| smo.set(false)
                 })}
             />
-            <Clippy quotes={config.quotes.clone()} />
+            <Clippy quotes={config.quotes.clone()} clippy_config={config.clippy.clone()} />
             <Taskbar
                 windows={wm.windows.clone()}
                 games={config.games.clone()}
                 on_focus={on_taskbar_focus}
                 on_start_click={on_start_click}
                 start_menu_open={*start_menu_open}
+                start_label={config.taskbar.start_label.clone()}
             />
         </>
     }
