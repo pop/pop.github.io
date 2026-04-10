@@ -82,6 +82,15 @@ text = "Help I'm stuck in a 90's tech nostalgia factory!"
 [[quotes]]
 text = "So, how about those Epstein files?"
 
+### Splash Screen
+[splash]
+title = "PortfoliOS"
+logo = "/portfolios-logo.png"
+
+### Desktop
+[desktop]
+background_color = "#008080"
+
 ### Taskbar
 [taskbar]
 start_icon = "/netshow_notransm-sm.png"

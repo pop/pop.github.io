@@ -4,6 +4,8 @@ use serde::Deserialize;
 pub struct Config {
     pub games: Vec<Game>,
     pub quotes: Vec<Quote>,
+    pub splash: SplashConfig,
+    pub desktop: DesktopConfig,
     pub taskbar: TaskbarConfig,
     pub start_menu: StartMenu,
     pub clippy: ClippyConfig,
@@ -35,6 +37,17 @@ pub struct Quote {
 }
 
 #[derive(Deserialize, Clone, PartialEq)]
+pub struct SplashConfig {
+    pub title: String,
+    pub logo: String,
+}
+
+#[derive(Deserialize, Clone, PartialEq)]
+pub struct DesktopConfig {
+    pub background_color: String,
+}
+
+#[derive(Deserialize, Clone, PartialEq)]
 pub struct TaskbarConfig {
     pub start_icon: String,
     pub start_label: String,
@@ -61,6 +74,6 @@ pub struct ClippyConfig {
 }
 
 pub fn load_config() -> Config {
-    let raw = include_str!("../games.toml");
-    toml::from_str(raw).expect("failed to parse games.toml")
+    let raw = include_str!("../portfolios.toml");
+    toml::from_str(raw).expect("failed to parse portfolios.toml")
 }
