@@ -3,7 +3,6 @@ use crate::config::load_config;
 use crate::state::WindowManager;
 use crate::components::clippy::Clippy;
 use crate::components::desktop::Desktop;
-use crate::components::splash::Splash;
 use crate::components::start_menu::StartMenuComp;
 use crate::components::taskbar::Taskbar;
 use crate::components::window::Window;
@@ -14,7 +13,6 @@ pub fn app() -> Html {
     let config = load_config();
     let wm = use_state(|| WindowManager::new(config.games.iter().map(|g| g.id.clone()).collect()));
     let start_menu_open = use_state(|| false);
-    let splash_visible = use_state(|| true);
 
     let on_open = {
         let wm = wm.clone();
@@ -50,16 +48,8 @@ pub fn app() -> Html {
 
     let open_windows: Vec<_> = wm.windows.iter().filter(|w| w.open).cloned().collect();
 
-    let on_splash_dismiss = {
-        let sv = splash_visible.clone();
-        Callback::from(move |_: ()| sv.set(false))
-    };
-
     html! {
         <>
-            if *splash_visible {
-                <Splash config={config.splash.clone()} on_dismiss={on_splash_dismiss} />
-            }
             <Desktop games={config.games.clone()} on_open={on_open} background_color={config.desktop.background_color.clone()} />
             { for open_windows.iter().map(|w| {
                 let wm_close = wm.clone();

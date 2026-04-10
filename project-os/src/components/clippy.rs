@@ -1,4 +1,5 @@
 use yew::prelude::*;
+use yew::virtual_dom::AttrValue;
 use gloo_events::EventListener;
 
 fn is_url(s: &str) -> bool {
@@ -18,7 +19,7 @@ pub struct ClippyProps {
 #[function_component(Clippy)]
 pub fn clippy(props: &ClippyProps) -> Html {
     let quote_idx = use_state(|| 0usize);
-    let modal_open = use_state(|| false);
+    let modal_open = use_state(|| true);
     let bubble_visible = use_state(|| true);
     // Holds the pending 60s restore timer so we can cancel it on early re-show
     let hide_timer: UseStateHandle<Option<Timeout>> = use_state(|| None);
@@ -190,7 +191,13 @@ pub fn clippy(props: &ClippyProps) -> Html {
                             <div class="title-bar-text">{ &props.clippy_config.modal_title }</div>
                         </div>
                         <div class="window-body" style="padding: 16px;">
-                            { for props.clippy_config.modal_paragraphs.iter().map(|p| html! { <p>{ p }</p> }) }
+                            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                                <img src={props.clippy_config.logo.clone()} style="width:48px;height:48px;image-rendering:pixelated;" alt="logo" />
+                                <span style="font-size:20px;font-weight:bold;">{ &props.clippy_config.brand_title }</span>
+                            </div>
+                            { for props.clippy_config.modal_paragraphs.iter().map(|p| html! {
+                                <p>{ Html::from_html_unchecked(AttrValue::from(p.clone())) }</p>
+                            }) }
                             <div style="text-align: right; margin-top: 12px;">
                                 <button onclick={close_modal}>{ &props.clippy_config.modal_ok_label }</button>
                             </div>

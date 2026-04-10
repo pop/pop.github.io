@@ -82,11 +82,6 @@ text = "Help I'm stuck in a 90's tech nostalgia factory!"
 [[quotes]]
 text = "So, how about those Epstein files?"
 
-### Splash Screen
-[splash]
-title = "PortfoliOS"
-logo = "/portfolios-logo.png"
-
 ### Desktop
 [desktop]
 background_color = "#008080"
@@ -115,6 +110,8 @@ url = "https://pop.itch.io"
 ### Clippy widget
 [clippy]
 icon = "/memory.png"
+brand_title = "PortfoliOS"
+logo = "/portfolios-logo.png"
 modal_title = "About this Portfolio"
 modal_ok_label = "OK"
 modal_paragraphs = [

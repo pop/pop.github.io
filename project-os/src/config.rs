@@ -4,7 +4,6 @@ use serde::Deserialize;
 pub struct Config {
     pub games: Vec<Game>,
     pub quotes: Vec<Quote>,
-    pub splash: SplashConfig,
     pub desktop: DesktopConfig,
     pub taskbar: TaskbarConfig,
     pub start_menu: StartMenu,
@@ -37,12 +36,6 @@ pub struct Quote {
 }
 
 #[derive(Deserialize, Clone, PartialEq)]
-pub struct SplashConfig {
-    pub title: String,
-    pub logo: String,
-}
-
-#[derive(Deserialize, Clone, PartialEq)]
 pub struct DesktopConfig {
     pub background_color: String,
 }
@@ -68,6 +61,8 @@ pub struct StartMenu {
 #[derive(Deserialize, Clone, PartialEq)]
 pub struct ClippyConfig {
     pub icon: String,
+    pub brand_title: String,
+    pub logo: String,
     pub modal_title: String,
     pub modal_ok_label: String,
     pub modal_paragraphs: Vec<String>,
