@@ -24,7 +24,7 @@ id = "set"
 title = "Set"
 description = "..."
 contributors = ["Elijah Voigt", "Sam Hall"]
-icon = "/placeholder.png"
+icon = "/set.png"
 demo = "assets/screenshots/set.png"
 launch_url = "https://games.elijah.run/set/"
 launch_type = "wasm"
@@ -48,7 +48,7 @@ id = "flappy"
 title = "Flappy Bird (with rewind)"
 description = "..."
 contributors = ["Elijah Voigt"]
-icon = "/placeholder.png"
+icon = "/flappy.png"
 demo = "assets/screenshots/flappy.png"
 launch_url = "https://popgame.itch.io/flappy"
 launch_type = "wasm"
@@ -71,42 +71,47 @@ icon = "/wasm-icon.png"
 text = "Hello fellow gamer."
 
 [[quotes]]
-text = "Click here to learn about this portfolio site."
+text = "Click me to learn about this page."
 
 [[quotes]]
 text = "I'm legally distinct from Microsoft Clippy!"
+
+[[quotes]]
+text = "Help I'm stuck in a 90's tech nostalgia factory!"
 
 [[quotes]]
 text = "So, how about those Epstein files?"
 
 ### Taskbar
 [taskbar]
-start_icon = "/placeholder.png"
+start_icon = "/netshow_notransm-sm.png"
 start_label = "Start"
 
 ### Start menu
 [[start_menu.items]]
-icon = "/placeholder.png"
+icon = "/hobbes.png"
 title = "Homepage"
 url = "https://elijah.run/about"
 
 [[start_menu.items]]
-icon = "/placeholder.png"
+icon = "/github.png"
 title = "GitHub"
 url = "https://github.com/pop"
 
 [[start_menu.items]]
-icon = "/placeholder.png"
+icon = "/itchio.png"
 title = "itch.io"
 url = "https://pop.itch.io"
 
 ### Clippy widget
 [clippy]
-icon = "/placeholder.png"
+icon = "/memory.png"
 modal_title = "About this Portfolio"
 modal_ok_label = "OK"
 modal_paragraphs = [
     "The games and creative work are by the portfolio author.",
-    "Styled with [win95.css](https://alexbsoft.github.io/win95.css).",
-    "AI Disclosure: This portfolio was built with assistance of Claude Code using the Sonnet 4.6 model.",
+    "This page styled with <a href=https://alexbsoft.github.io/win95.css>win95.css</a>.",
+    "Icons from <a href=https://win98icons.alexmeub.com/>win98icons</a>, with custom icons designed by Elijah Voigt",
+    "<b>AI Disclosure</b>",
+    "This page was largely programmed by Claude Code with Sonnet 4.6.",
 ]
