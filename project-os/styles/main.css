@@ -5,51 +5,6 @@ html, body {
     height: 100%;
 }
 
-/* Splash screen */
-.splash-backdrop {
-    position: fixed;
-    inset: 0;
-    background: #000080;
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-.splash-content {
-    text-align: center;
-    color: white;
-    user-select: none;
-    -webkit-user-select: none;
-}
-.splash-title-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-}
-.splash-title {
-    font-size: 48px;
-    font-weight: bold;
-    font-family: 'Arial', sans-serif;
-    letter-spacing: 2px;
-}
-.splash-logo {
-    width: 64px;
-    height: 64px;
-    image-rendering: pixelated;
-}
-.splash-hint {
-    font-size: 14px;
-    margin-top: 24px;
-    opacity: 0.7;
-    font-family: 'Arial', sans-serif;
-    animation: splash-blink 1.5s step-end infinite;
-}
-@keyframes splash-blink {
-    0%, 100% { opacity: 0.7; }
-    50% { opacity: 0.2; }
-}
 
 #desktop {
     width: 100vw;
@@ -311,6 +266,15 @@ html, body {
     border: none;
     cursor: pointer;
     font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.start-menu-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    flex-shrink: 0;
 }
 .start-menu-item:hover {
     background: #000080;
