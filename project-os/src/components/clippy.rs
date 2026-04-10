@@ -191,7 +191,7 @@ pub fn clippy(props: &ClippyProps) -> Html {
                             <div class="title-bar-text">{ &props.clippy_config.modal_title }</div>
                         </div>
                         <div class="window-body" style="padding: 16px;">
-                            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                            <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:16px;">
                                 <img src={props.clippy_config.logo.clone()} style="width:48px;height:48px;image-rendering:pixelated;" alt="logo" />
                                 <span style="font-size:20px;font-weight:bold;">{ &props.clippy_config.brand_title }</span>
                             </div>
