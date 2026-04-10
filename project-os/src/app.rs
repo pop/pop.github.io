@@ -11,7 +11,7 @@ use crate::components::game_window::GameWindow;
 #[function_component(App)]
 pub fn app() -> Html {
     let config = load_config();
-    let wm = use_state(|| WindowManager::new(config.games.iter().map(|g| g.id.clone()).collect()));
+    let wm = use_state(|| WindowManager::new(config.projects.iter().map(|g| g.id.clone()).collect()));
     let start_menu_open = use_state(|| false);
 
     let on_open = {
@@ -50,7 +50,7 @@ pub fn app() -> Html {
 
     html! {
         <>
-            <Desktop games={config.games.clone()} on_open={on_open} background_color={config.desktop.background_color.clone()} />
+            <Desktop projects={config.projects.clone()} on_open={on_open} background_color={config.desktop.background_color.clone()} />
             { for open_windows.iter().map(|w| {
                 let wm_close = wm.clone();
                 let game_id_close = w.game_id.clone();
@@ -93,7 +93,7 @@ pub fn app() -> Html {
                     })
                 };
 
-                let game = config.games.iter().find(|g| g.id == w.game_id).cloned();
+                let game = config.projects.iter().find(|g| g.id == w.game_id).cloned();
                 if let Some(game) = game {
                     html! {
                         <Window
@@ -121,7 +121,7 @@ pub fn app() -> Html {
             <Clippy quotes={config.quotes.clone()} clippy_config={config.clippy.clone()} />
             <Taskbar
                 windows={wm.windows.clone()}
-                games={config.games.clone()}
+                projects={config.projects.clone()}
                 on_focus={on_taskbar_focus}
                 on_start_click={on_start_click}
                 start_menu_open={*start_menu_open}

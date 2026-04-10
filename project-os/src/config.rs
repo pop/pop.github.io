@@ -2,7 +2,7 @@ use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct Config {
-    pub games: Vec<Game>,
+    pub projects: Vec<Game>,
     pub quotes: Vec<Quote>,
     pub desktop: DesktopConfig,
     pub taskbar: TaskbarConfig,

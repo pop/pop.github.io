@@ -1,5 +1,5 @@
 ### Martian Chess
-[[games]]
+[[projects]]
 id = "martian-chess"
 title = "Martian Chess"
 description = "..."
@@ -10,16 +10,16 @@ launch_url = "https://liquidmirror.itch.io/martian-chess"
 launch_type = "native"
 launch_label = "Download Now"
 
-[[games.tech]]
+[[projects.tech]]
 name = "Rust"
 icon = "/rust-icon.png"
 
-[[games.tech]]
+[[projects.tech]]
 name = "Bevy"
 icon = "/bevy-icon.png"
 
 ### Set
-[[games]]
+[[projects]]
 id = "set"
 title = "Set"
 description = "..."
@@ -30,20 +30,20 @@ launch_url = "https://games.elijah.run/set/"
 launch_type = "wasm"
 launch_label = "Play Now"
 
-[[games.tech]]
+[[projects.tech]]
 name = "Rust"
 icon = "/rust-icon.png"
 
-[[games.tech]]
+[[projects.tech]]
 name = "Bevy"
 icon = "/bevy-icon.png"
 
-[[games.tech]]
+[[projects.tech]]
 name = "WebAssembly"
 icon = "/wasm-icon.png"
 
 ### Flappy Bird (With Rewind)
-[[games]]
+[[projects]]
 id = "flappy"
 title = "Flappy Bird (with rewind)"
 description = "..."
@@ -54,15 +54,15 @@ launch_url = "https://popgame.itch.io/flappy"
 launch_type = "wasm"
 launch_label = "Play Now"
 
-[[games.tech]]
+[[projects.tech]]
 name = "Rust"
 icon = "/rust-icon.png"
 
-[[games.tech]]
+[[projects.tech]]
 name = "Bevy"
 icon = "/bevy-icon.png"
 
-[[games.tech]]
+[[projects.tech]]
 name = "WebAssembly"
 icon = "/wasm-icon.png"
 
@@ -111,8 +111,8 @@ url = "https://pop.itch.io"
 [clippy]
 icon = "/memory.png"
 brand_title = "PortfoliOS"
-logo = "/portfolios-logo.png"
-modal_title = "About this Portfolio"
+logo = "/netshow_notransm.png"
+modal_title = "<center>About this Portfolio</center>"
 modal_ok_label = "OK"
 modal_paragraphs = [
     "The games and creative work are by the portfolio author.",

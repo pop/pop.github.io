@@ -4,7 +4,7 @@ use super::game_icon::GameIcon;
 
 #[derive(Properties, PartialEq)]
 pub struct DesktopProps {
-    pub games: Vec<Game>,
+    pub projects: Vec<Game>,
     pub on_open: Callback<String>,
     pub background_color: String,
 }
@@ -15,7 +15,7 @@ pub fn desktop(props: &DesktopProps) -> Html {
     html! {
         <div id="desktop" style={style}>
             <div class="icon-grid">
-                { for props.games.iter().map(|g| html! {
+                { for props.projects.iter().map(|g| html! {
                     <GameIcon key={g.id.clone()} game={g.clone()} on_open={props.on_open.clone()} />
                 })}
             </div>

@@ -6,7 +6,7 @@ use crate::state::WindowState;
 #[derive(Properties, PartialEq)]
 pub struct TaskbarProps {
     pub windows: Vec<WindowState>,
-    pub games: Vec<Game>,
+    pub projects: Vec<Game>,
     pub on_focus: Callback<String>,
     pub on_start_click: Callback<()>,
     pub start_menu_open: bool,
@@ -61,7 +61,7 @@ pub fn taskbar(props: &TaskbarProps) -> Html {
             </button>
             <div class="taskbar-windows">
                 { for props.windows.iter().filter(|w| w.open).map(|w| {
-                    let game_title = props.games.iter()
+                    let game_title = props.projects.iter()
                         .find(|g| g.id == w.game_id)
                         .map(|g| g.title.clone())
                         .unwrap_or_else(|| w.game_id.clone());
