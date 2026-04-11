@@ -112,12 +112,12 @@ url = "https://pop.itch.io"
 icon = "/memory.png"
 brand_title = "PortfoliOS"
 logo = "/netshow_notransm.png"
-modal_title = "<center>About this Portfolio</center>"
+modal_title = "About this Portfolio"
 modal_ok_label = "OK"
 modal_paragraphs = [
-    "The games and creative work are by the portfolio author.",
-    "This page styled with <a href=https://alexbsoft.github.io/win95.css>win95.css</a>.",
-    "Icons from <a href=https://win98icons.alexmeub.com/>win98icons</a>, with custom icons designed by Elijah Voigt",
-    "<b>AI Disclosure</b>",
-    "This page was largely programmed by Claude Code with Sonnet 4.6.",
+    "<center>The games and creative work are by the portfolio author.</center>",
+    "<center>This page styled with <a href=https://alexbsoft.github.io/win95.css>win95.css</a>.</center>",
+    "<center>Icons from <a href=https://win98icons.alexmeub.com/>win98icons</a>, with custom icons designed by Elijah Voigt</center>",
+    "<center><b>AI Disclosure</b></center>",
+    "<center>This page was largely programmed by Claude Code with Sonnet 4.6.</center>",
 ]
