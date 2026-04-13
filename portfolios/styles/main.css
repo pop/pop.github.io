@@ -103,7 +103,6 @@ html, body {
 /* Window positioning — win95.css provides .window, .title-bar, etc. chrome */
 .window {
     position: absolute;
-    min-width: 400px;
     min-height: 300px;
 }
 
@@ -297,35 +296,120 @@ html, body {
 
 @media (max-width: 768px) {
     .window {
-        position: fixed !important;
-        inset: 0 !important;
-        left: 0 !important;
-        top: 0 !important;
-        width: 100% !important;
-        height: calc(100vh - 40px) !important;
-        z-index: 500 !important;
+        max-width: 95vw;
+        min-width: unset !important;
+        min-height: unset !important;
+    }
+
+    .window .window-body {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        max-height: calc(100vh - 90px);
     }
 
     .icon-grid {
-        gap: 4px;
-        padding: 8px;
+        gap: 12px;
+        padding: 16px;
     }
 
     .game-icon {
-        width: 56px;
-        padding: 4px;
+        width: 80px;
+        padding: 8px;
     }
 
     .game-icon img {
-        width: 36px;
-        height: 36px;
+        width: 56px;
+        height: 56px;
+    }
+
+    .game-icon-emoji {
+        font-size: 48px;
+        width: 56px;
+        height: 56px;
     }
 
     .game-icon-label {
-        font-size: 10px;
+        font-size: 13px;
+    }
+
+    .taskbar {
+        height: 56px;
+        padding: 4px 6px;
+    }
+
+    .start-button {
+        min-width: 100px;
+        font-size: 14px;
+    }
+
+    .taskbar-clock {
+        font-size: 14px;
+        padding: 4px 10px;
+    }
+
+    .taskbar-window-btn {
+        min-width: 100px;
+        font-size: 13px;
+    }
+
+    .icon-grid {
+        max-height: calc(100vh - 56px);
+    }
+
+    .game-window-content {
+        flex-direction: column;
+        font-size: 15px;
+        padding: 16px;
+        gap: 16px;
+    }
+
+    .game-window-content h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .game-demo {
+        max-width: 240px;
+        width: auto;
+        max-height: 180px;
+        align-self: center;
+    }
+
+    .tech-item {
+        font-size: 14px;
+    }
+
+    .tech-item img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .tech-icon-emoji {
+        font-size: 18px;
+    }
+
+    .launch-row button {
+        font-size: 15px;
+        padding: 6px 16px;
+    }
+
+    .start-menu.window {
+        bottom: 56px;
+        min-width: 220px;
+    }
+
+    .start-menu-item {
+        font-size: 16px;
+        padding: 14px 16px;
+    }
+
+    .start-menu-icon {
+        width: 24px;
+        height: 24px;
     }
 
     .clippy-widget {
-        display: none;
+        bottom: 10vh;
+        right: 5vw;
     }
 }
