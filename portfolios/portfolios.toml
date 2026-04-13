@@ -90,6 +90,13 @@ text = "Help I'm stuck in a 90's tech nostalgia factory!"
 [[quotes]]
 text = "So, how about those Epstein files?"
 
+### Preview / Open Graph
+[preview]
+title = "PortfoliOS — Elijah Voigt's Games Portfolio"
+description = "A Win95-themed games portfolio showcasing Rust + WebAssembly game projects."
+url = "https://games.elijah.run"
+image = ""
+
 ### Desktop
 [desktop]
 background_color = "#008080"
