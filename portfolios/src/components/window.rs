@@ -22,9 +22,13 @@ pub fn window(props: &WindowProps) -> Html {
     let _move_listener: UseStateHandle<Option<EventListener>> = use_state(|| None);
     let _up_listener: UseStateHandle<Option<EventListener>> = use_state(|| None);
 
+    // Per-window jitter — initialized once on mount, used by mobile CSS transform
+    let jitter_x = use_state(|| ((js_sys::Math::random() * 20.0) as i32) - 10);
+    let jitter_y = use_state(|| (js_sys::Math::random() * 40.0) as i32);
+
     let style = format!(
-        "position:absolute; left:{}px; top:{}px; z-index:{}; width:480px; min-height:300px;",
-        props.pos.0, props.pos.1, props.z_index
+        "position:absolute; left:{}px; top:{}px; z-index:{}; width:480px; min-height:300px; --jitter-x:{}px; --jitter-y:{}px;",
+        props.pos.0, props.pos.1, props.z_index, *jitter_x, *jitter_y
     );
 
     // --- mouse drag on title bar ---

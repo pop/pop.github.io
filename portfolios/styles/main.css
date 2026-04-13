@@ -297,12 +297,13 @@ html, body {
 @media (max-width: 768px) {
     .window {
         position: fixed !important;
-        left: 5vw !important;
+        left: 18vw !important;
         top: 8px !important;
-        width: 90vw !important;
+        width: 80vw !important;
         min-width: unset !important;
         min-height: unset !important;
         z-index: 500;
+        transform: translateX(var(--jitter-x, 0px)) translateY(var(--jitter-y, 0px));
     }
 
     .window .window-body {
