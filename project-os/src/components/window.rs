@@ -23,7 +23,7 @@ pub fn window(props: &WindowProps) -> Html {
     let _up_listener: UseStateHandle<Option<EventListener>> = use_state(|| None);
 
     let style = format!(
-        "position:absolute; left:{}px; top:{}px; z-index:{}; min-width:400px; min-height:300px;",
+        "position:absolute; left:{}px; top:{}px; z-index:{}; width:480px; min-height:300px;",
         props.pos.0, props.pos.1, props.z_index
     );
 

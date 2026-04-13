@@ -2,7 +2,7 @@
 [[projects]]
 id = "martian-chess"
 title = "Martian Chess"
-description = "..."
+description = "The classic <a href=https://en.wikipedia.org/wiki/Martian_Chess>Martian Chess</a> imagined in 3d with stunning visuals and music by Sam Hall and programming by Elijah Voigt."
 contributors = ["Elijah Voigt", "Sam Hall"]
 icon = "/martian-chess.png"
 demo = "assets/screenshots/martian-chess.png"
@@ -13,16 +13,18 @@ launch_label = "Download Now"
 [[projects.tech]]
 name = "Rust"
 icon = "/rust-icon.png"
+url = "https://www.rust-lang.org/"
 
 [[projects.tech]]
 name = "Bevy"
 icon = "/bevy-icon.png"
+url = "https://bevyengine.org/"
 
 ### Set
 [[projects]]
 id = "set"
 title = "Set"
-description = "..."
+description = "A simple single-player variant of Set created for a house art show with Balatro-inspired music by Sam Hall."
 contributors = ["Elijah Voigt", "Sam Hall"]
 icon = "/set.png"
 demo = "assets/screenshots/set.png"
@@ -33,20 +35,23 @@ launch_label = "Play Now"
 [[projects.tech]]
 name = "Rust"
 icon = "/rust-icon.png"
+url = "https://www.rust-lang.org/"
 
 [[projects.tech]]
 name = "Bevy"
 icon = "/bevy-icon.png"
+url = "https://bevyengine.org/"
 
 [[projects.tech]]
 name = "WebAssembly"
 icon = "/wasm-icon.png"
+url = "https://webassembly.org/"
 
 ### Flappy Bird (With Rewind)
 [[projects]]
 id = "flappy"
 title = "Flappy Bird (with rewind)"
-description = "..."
+description = "The classic Flapp Bird with a Braid-inspired time twist."
 contributors = ["Elijah Voigt"]
 icon = "/flappy.png"
 demo = "assets/screenshots/flappy.png"
@@ -57,14 +62,17 @@ launch_label = "Play Now"
 [[projects.tech]]
 name = "Rust"
 icon = "/rust-icon.png"
+url = "https://www.rust-lang.org/"
 
 [[projects.tech]]
 name = "Bevy"
 icon = "/bevy-icon.png"
+url = "https://bevyengine.org/"
 
 [[projects.tech]]
 name = "WebAssembly"
 icon = "/wasm-icon.png"
+url = "https://webassembly.org/"
 
 ### Clippy Quotes
 [[quotes]]

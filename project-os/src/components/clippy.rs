@@ -5,6 +5,19 @@ use gloo_events::EventListener;
 fn is_url(s: &str) -> bool {
     s.starts_with("http") || s.starts_with("data:") || s.contains('/')
 }
+
+fn has_dismissed_about() -> bool {
+    web_sys::window()
+        .and_then(|w| w.local_storage().ok().flatten())
+        .and_then(|s| s.get_item("about_dismissed").ok().flatten())
+        .is_some()
+}
+
+fn set_dismissed_about() {
+    if let Some(storage) = web_sys::window().and_then(|w| w.local_storage().ok().flatten()) {
+        let _ = storage.set_item("about_dismissed", "1");
+    }
+}
 use gloo_timers::callback::Timeout;
 use wasm_bindgen::JsCast;
 use web_sys::MouseEvent;
@@ -19,7 +32,7 @@ pub struct ClippyProps {
 #[function_component(Clippy)]
 pub fn clippy(props: &ClippyProps) -> Html {
     let quote_idx = use_state(|| 0usize);
-    let modal_open = use_state(|| true);
+    let modal_open = use_state(|| !has_dismissed_about());
     let bubble_visible = use_state(|| true);
     // Holds the pending 60s restore timer so we can cancel it on early re-show
     let hide_timer: UseStateHandle<Option<Timeout>> = use_state(|| None);
@@ -35,6 +48,11 @@ pub fn clippy(props: &ClippyProps) -> Html {
     // Document-level click listener for "click outside to dismiss". Stored in a ref so
     // attaching/detaching it doesn't trigger an extra render cycle.
     let click_listener = use_mut_ref(|| None::<EventListener>);
+    // None = CSS-centered; Some = dragged to (left, top)
+    let modal_pos: UseStateHandle<Option<(i32, i32)>> = use_state(|| None);
+    let _modal_move_listener: UseStateHandle<Option<EventListener>> = use_state(|| None);
+    let _modal_up_listener: UseStateHandle<Option<EventListener>> = use_state(|| None);
+    let modal_ref = use_node_ref();
 
     let current_quote = props.quotes.get(*quote_idx)
         .map(|q| q.text.clone())
@@ -123,6 +141,40 @@ pub fn clippy(props: &ClippyProps) -> Html {
         })
     };
 
+    let onmousedown_modal = {
+        let modal_pos = modal_pos.clone();
+        let move_listener = _modal_move_listener.clone();
+        let up_listener = _modal_up_listener.clone();
+        let modal_ref = modal_ref.clone();
+        Callback::from(move |e: MouseEvent| {
+            e.prevent_default();
+            let start_pos = match *modal_pos {
+                Some(p) => p,
+                None => modal_ref
+                    .cast::<web_sys::Element>()
+                    .map(|el| {
+                        let r = el.get_bounding_client_rect();
+                        (r.left() as i32, r.top() as i32)
+                    })
+                    .unwrap_or((0, 0)),
+            };
+            let offset_x = e.client_x() - start_pos.0;
+            let offset_y = e.client_y() - start_pos.1;
+            let modal_pos_mv = modal_pos.clone();
+            let move_ls_up = move_listener.clone();
+            let document = web_sys::window().unwrap().document().unwrap();
+            let move_cb = EventListener::new(&document, "mousemove", move |e| {
+                let e = e.dyn_ref::<MouseEvent>().unwrap();
+                modal_pos_mv.set(Some((e.client_x() - offset_x, e.client_y() - offset_y)));
+            });
+            let up_cb = EventListener::new(&document, "mouseup", move |_| {
+                move_ls_up.set(None);
+            });
+            move_listener.set(Some(move_cb));
+            up_listener.set(Some(up_cb));
+        })
+    };
+
     // Cycle to the next quote when the speech bubble is clicked
     let cycle_quote = {
         let qi = quote_idx.clone();
@@ -138,6 +190,7 @@ pub fn clippy(props: &ClippyProps) -> Html {
     // Otherwise open the info modal (existing behaviour).
     let open_modal = {
         let mo = modal_open.clone();
+        let modal_pos = modal_pos.clone();
         let has_dragged = has_dragged.clone();
         let bubble_visible = bubble_visible.clone();
         let hide_timer = hide_timer.clone();
@@ -147,6 +200,7 @@ pub fn clippy(props: &ClippyProps) -> Html {
                     hide_timer.set(None); // drops Timeout → cancels JS timer
                     bubble_visible.set(true);
                 } else {
+                    modal_pos.set(None); // reset to centered on each open
                     mo.set(true);
                 }
             }
@@ -157,7 +211,10 @@ pub fn clippy(props: &ClippyProps) -> Html {
     // handles any subsequent "click outside" dismiss behaviour.
     let close_modal = {
         let mo = modal_open.clone();
-        Callback::from(move |_: MouseEvent| mo.set(false))
+        Callback::from(move |_: MouseEvent| {
+            set_dismissed_about();
+            mo.set(false);
+        })
     };
 
     let style = match *pos {
@@ -166,6 +223,11 @@ pub fn clippy(props: &ClippyProps) -> Html {
             x, y
         ),
         None => String::new(),
+    };
+
+    let modal_style = match *modal_pos {
+        Some((x, y)) => format!("position:fixed; left:{}px; top:{}px; z-index:100;", x, y),
+        None => "position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:100;".to_string(),
     };
 
     html! {
@@ -185,22 +247,20 @@ pub fn clippy(props: &ClippyProps) -> Html {
                 </div>
             </div>
             if *modal_open {
-                <div class="clippy-modal-backdrop">
-                    <div class="window clippy-modal">
-                        <div class="title-bar">
-                            <div class="title-bar-text">{ &props.clippy_config.modal_title }</div>
+                <div class="window clippy-modal" ref={modal_ref} style={modal_style}>
+                    <div class="title-bar" onmousedown={onmousedown_modal} style="cursor:move;">
+                        <div class="title-bar-text">{ &props.clippy_config.modal_title }</div>
+                    </div>
+                    <div class="window-body" style="padding: 16px;">
+                        <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:16px;">
+                            <img src={props.clippy_config.logo.clone()} style="width:48px;height:48px;image-rendering:pixelated;" alt="logo" />
+                            <span style="font-size:20px;font-weight:bold;">{ &props.clippy_config.brand_title }</span>
                         </div>
-                        <div class="window-body" style="padding: 16px;">
-                            <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:16px;">
-                                <img src={props.clippy_config.logo.clone()} style="width:48px;height:48px;image-rendering:pixelated;" alt="logo" />
-                                <span style="font-size:20px;font-weight:bold;">{ &props.clippy_config.brand_title }</span>
-                            </div>
-                            { for props.clippy_config.modal_paragraphs.iter().map(|p| html! {
-                                <p>{ Html::from_html_unchecked(AttrValue::from(p.clone())) }</p>
-                            }) }
-                            <div style="text-align: right; margin-top: 12px;">
-                                <button onclick={close_modal}>{ &props.clippy_config.modal_ok_label }</button>
-                            </div>
+                        { for props.clippy_config.modal_paragraphs.iter().map(|p| html! {
+                            <p>{ Html::from_html_unchecked(AttrValue::from(p.clone())) }</p>
+                        }) }
+                        <div style="text-align: right; margin-top: 12px;">
+                            <button onclick={close_modal}>{ &props.clippy_config.modal_ok_label }</button>
                         </div>
                     </div>
                 </div>

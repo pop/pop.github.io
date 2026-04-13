@@ -164,17 +164,7 @@ html, body {
 .clippy-icon:active {
     cursor: grabbing;
 }
-.clippy-modal-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.3);
-    z-index: 50;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 .clippy-modal {
-    position: static;
     min-width: 300px;
     max-width: 400px;
 }
@@ -218,6 +208,7 @@ html, body {
 .description {
     margin: 8px 0;
     line-height: 1.4;
+    overflow-wrap: break-word;
 }
 
 .game-demo {

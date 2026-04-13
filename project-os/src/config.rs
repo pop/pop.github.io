@@ -28,6 +28,7 @@ pub struct Game {
 pub struct Tech {
     pub name: String,
     pub icon: String,
+    pub url: Option<String>,
 }
 
 #[derive(Deserialize, Clone, PartialEq)]
