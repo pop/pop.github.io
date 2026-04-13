@@ -37,36 +37,38 @@ pub fn game_window(props: &GameWindowProps) -> Html {
 
     html! {
         <div class="game-window-content">
-            <h2>{ &game.title }</h2>
-            if !game.contributors.is_empty() {
-                <p class="contributors">{ format!("By: {}", game.contributors.join(", ")) }</p>
-            }
-            <div class="tech-stack">
-                { for game.tech.iter().map(|t| {
-                    let tech_icon = if is_url(&t.icon) {
-                        html! { <img src={t.icon.clone()} alt={t.name.clone()} /> }
-                    } else if !t.icon.is_empty() {
-                        html! { <span class="tech-icon-emoji">{ &t.icon }</span> }
-                    } else {
-                        html! { <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><rect width='16' height='16' fill='%23808080'/></svg>" alt={t.name.clone()} /> }
-                    };
-                    let tech_name = match &t.url {
-                        Some(url) => html! { <a href={url.clone()} target="_blank">{ &t.name }</a> },
-                        None => html! { { &t.name } },
-                    };
-                    html! {
-                        <span class="tech-item" key={t.name.clone()}>
-                            { tech_icon }
-                            { tech_name }
-                        </span>
-                    }
-                })}
+            <div class="game-window-left">
+                <h2>{ &game.title }</h2>
+                if !game.contributors.is_empty() {
+                    <p class="contributors">{ format!("By: {}", game.contributors.join(", ")) }</p>
+                }
+                <div class="tech-stack">
+                    { for game.tech.iter().map(|t| {
+                        let tech_icon = if is_url(&t.icon) {
+                            html! { <img src={t.icon.clone()} alt={t.name.clone()} /> }
+                        } else if !t.icon.is_empty() {
+                            html! { <span class="tech-icon-emoji">{ &t.icon }</span> }
+                        } else {
+                            html! { <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><rect width='16' height='16' fill='%23808080'/></svg>" alt={t.name.clone()} /> }
+                        };
+                        let tech_name = match &t.url {
+                            Some(url) => html! { <a href={url.clone()} target="_blank">{ &t.name }</a> },
+                            None => html! { { &t.name } },
+                        };
+                        html! {
+                            <span class="tech-item" key={t.name.clone()}>
+                                { tech_icon }
+                                { tech_name }
+                            </span>
+                        }
+                    })}
+                </div>
+                <p class="description">{ Html::from_html_unchecked(AttrValue::from(game.description.clone())) }</p>
+                <div class="launch-row">
+                    <button class="button" onclick={on_launch}>{ &launch_label }</button>
+                </div>
             </div>
-            <p class="description">{ Html::from_html_unchecked(AttrValue::from(game.description.clone())) }</p>
             { demo_html }
-            <div class="launch-row">
-                <button class="button" onclick={on_launch}>{ &launch_label }</button>
-            </div>
         </div>
     }
 }
