@@ -1,0 +1,7 @@
+# Build the WASM bundle
+build:
+    trunk build
+
+# Build then deploy to Cloudflare Pages
+deploy: build
+    wrangler pages deploy
