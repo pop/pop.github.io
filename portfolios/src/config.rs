@@ -2,21 +2,12 @@ use serde::Deserialize;
 
 #[derive(Deserialize)]
 pub struct Config {
-    pub preview: PreviewConfig,
     pub projects: Vec<Game>,
     pub quotes: Vec<Quote>,
     pub desktop: DesktopConfig,
     pub taskbar: TaskbarConfig,
     pub start_menu: StartMenu,
     pub clippy: ClippyConfig,
-}
-
-#[derive(Deserialize, Clone, PartialEq)]
-pub struct PreviewConfig {
-    pub title: String,
-    pub description: String,
-    pub url: String,
-    pub image: String,
 }
 
 #[derive(Deserialize, Clone, PartialEq)]
