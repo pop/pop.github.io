@@ -82,6 +82,9 @@ text = "Hello fellow gamer."
 text = "Click me to learn about this page."
 
 [[quotes]]
+text = "It's interactive!"
+
+[[quotes]]
 text = "I'm legally distinct from Microsoft Clippy!"
 
 [[quotes]]
@@ -93,7 +96,7 @@ text = "So, how about those Epstein files?"
 ### Preview / Open Graph
 [preview]
 title = "PortfoliOS — Elijah Voigt's Games Portfolio"
-description = "A Win95-themed games portfolio showcasing Rust + WebAssembly game projects."
+description = "Booting up PortfoliOS..."
 url = "https://games.elijah.run"
 image = ""
 
@@ -109,13 +112,13 @@ start_label = "Start"
 ### Start menu
 [[start_menu.items]]
 icon = "/hobbes.png"
-title = "Homepage"
+title = "Main Site"
 url = "https://elijah.run/about"
 
 [[start_menu.items]]
 icon = "/github.png"
-title = "GitHub"
-url = "https://github.com/pop"
+title = "Source Code"
+url = "https://github.com/pop/elijah.run/tree/source/portfolios"
 
 [[start_menu.items]]
 icon = "/itchio.png"
@@ -132,7 +135,8 @@ modal_ok_label = "OK"
 modal_paragraphs = [
     "<center>The games and creative work are by the portfolio author.</center>",
     "<center>This page styled with <a href=https://alexbsoft.github.io/win95.css>win95.css</a>.</center>",
-    "<center>Icons from <a href=https://win98icons.alexmeub.com/>win98icons</a>, with custom icons designed by Elijah Voigt</center>",
+    "<center>Icons from <a href=https://win98icons.alexmeub.com/>win98icons</a>, modifications of corporate logos (github, itch.io, rust, bevy, webassembly), with additional icons by Elijah Voigt</center>",
     "<center><b>AI Disclosure</b></center>",
     "<center>This page was largely programmed by Claude Code with Sonnet 4.6.</center>",
+    "<center><b>Email me</b>: <code>pop@elijah.run</code></center>"
 ]
