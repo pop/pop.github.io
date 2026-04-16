@@ -31,20 +31,28 @@ struct WebampOptions {
     initial_tracks: Vec<WebampInitialTrack>,
     #[serde(rename = "initialSkin", skip_serializing_if = "Option::is_none")]
     initial_skin: Option<WebampSkin>,
-    #[serde(rename = "initialWindowLayout", skip_serializing_if = "Option::is_none")]
-    initial_window_layout: Option<WebampWindowLayout>,
+    // The Webamp option key is `windowLayout` (NOT `initialWindowLayout`); the
+    // wrong name is silently ignored, leaving Webamp's defaults in place.
+    #[serde(rename = "windowLayout", skip_serializing_if = "Option::is_none")]
+    window_layout: Option<WebampWindowLayout>,
 }
 
 #[derive(Serialize)]
 struct WebampWindowLayout {
-    main: WebampWindowPosition,
-    equalizer: WebampWindowPosition,
-    playlist: WebampWindowPosition,
+    main: WebampWindowSlot,
+    equalizer: WebampWindowSlot,
+    playlist: WebampWindowSlot,
 }
 
 #[derive(Serialize)]
-struct WebampWindowPosition {
+struct WebampWindowSlot {
     position: WebampPoint,
+    #[serde(skip_serializing_if = "is_false")]
+    closed: bool,
+}
+
+fn is_false(b: &bool) -> bool {
+    !*b
 }
 
 // Webamp uses CSS-style `top`/`left` keys here, not `x`/`y`. Wrong keys are
@@ -117,21 +125,25 @@ pub fn webamp(props: &WebampProps) -> Html {
                         return;
                     };
 
-                    // Center horizontally and stack main / equalizer / playlist
-                    // from the configured top offset. Webamp windows are 275px
-                    // wide; main + equalizer are 116px tall each.
+                    // Center horizontally and stack main / playlist from the
+                    // configured top offset. Webamp windows are 275px wide;
+                    // main is 116px tall. Equalizer is hidden via `closed`,
+                    // so the playlist sits directly under main.
                     let layout = web_sys::window().and_then(|w| {
                         w.inner_width().ok().and_then(|v| v.as_f64()).map(|width| {
                             let left = ((width as i32 - 275) / 2).max(0);
                             WebampWindowLayout {
-                                main: WebampWindowPosition {
+                                main: WebampWindowSlot {
                                     position: WebampPoint { top, left },
+                                    closed: false,
                                 },
-                                equalizer: WebampWindowPosition {
+                                equalizer: WebampWindowSlot {
+                                    position: WebampPoint { top, left },
+                                    closed: true,
+                                },
+                                playlist: WebampWindowSlot {
                                     position: WebampPoint { top: top + 116, left },
-                                },
-                                playlist: WebampWindowPosition {
-                                    position: WebampPoint { top: top + 232, left },
+                                    closed: false,
                                 },
                             }
                         })
@@ -151,7 +163,7 @@ pub fn webamp(props: &WebampProps) -> Html {
                         initial_skin: skin_url
                             .clone()
                             .map(|url| WebampSkin { url }),
-                        initial_window_layout: layout,
+                        window_layout: layout,
                     };
 
                     let js_opts = match serde_wasm_bindgen::to_value(&opts) {
