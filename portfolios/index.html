@@ -19,9 +19,15 @@
     <link data-trunk rel="copy-dir" href="public" data-target-path="."/>
     <link data-trunk rel="rust" data-wasm-opt="z"/>
     <script type="module">
-      import Webamp from "https://unpkg.com/webamp@^2/built/webamp.bundle.min.js";
-      window.Webamp = Webamp;
-      window.dispatchEvent(new CustomEvent("webamp-ready"));
+      // unpkg auto-redirects bare `webamp@^2` to the `.mjs` ESM build.
+      // Do NOT pin to `/built/webamp.bundle.min.js` — that path is UMD and has no default export.
+      import Webamp from "https://unpkg.com/webamp@^2";
+      if (!Webamp) {
+        console.error("[webamp] import resolved to falsy value; player will not mount");
+      } else {
+        window.Webamp = Webamp;
+        window.dispatchEvent(new CustomEvent("webamp-ready"));
+      }
     </script>
   </head>
   <body>
