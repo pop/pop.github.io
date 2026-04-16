@@ -60,10 +60,16 @@ pub struct StartMenu {
     pub items: Vec<StartMenuItem>,
 }
 
+fn default_webamp_top() -> i32 { 20 }
+
 #[derive(Deserialize, Clone, PartialEq)]
 pub struct WebampConfig {
     #[serde(default)]
     pub tracks: Vec<WebampTrack>,
+    pub skin_url: Option<String>,
+    /// Pixels from the top of the viewport for the main player window.
+    #[serde(default = "default_webamp_top")]
+    pub top: i32,
 }
 
 #[derive(Deserialize, Clone, PartialEq)]

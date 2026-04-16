@@ -136,7 +136,7 @@ modal_paragraphs = [
     "<center>The games and creative work are by the portfolio author.</center>",
     "<center>This page styled with <a href=https://alexbsoft.github.io/win95.css>win95.css</a>.</center>",
     "<center>Icons from <a href=https://win98icons.alexmeub.com/>win98icons</a>, modifications of corporate logos (github, itch.io, rust, bevy, webassembly), with additional icons by Elijah Voigt</center>",
-    "<center>Music player powered by <a href=https://webamp.org/>Webamp</a> (MIT).</center>",
+    "<center>Music player powered by <a href=https://github.com/captbaritone/webamp>Webamp</a>, using the <a href=https://skins.webamp.org/skin/e224ed3511ee803107dcc41e6c1ad9ce/qsteamp.wsz/>qsteamp</a> skin.</center>",
     "<center><b>AI Disclosure</b></center>",
     "<center>This page was largely programmed by Claude Code with Sonnet 4.6.</center>",
     "<center><b>Email me</b>: <code>pop@elijah.run</code></center>"
@@ -145,8 +145,12 @@ modal_paragraphs = [
 ### Webamp music player
 # Placeholder track — replace `url` with a real MP3 (place file in `public/music/`).
 # Remove this entire `[webamp]` section (or leave `tracks` empty) to disable the player.
+# `skin_url` is optional; omit for the default Winamp skin. Files in `public/` are served from `/`.
 [webamp]
+skin_url = "/qsteamp.wsz"
+top = 20  # pixels from top of viewport for the main player window
+
 [[webamp.tracks]]
-url = "/music/placeholder.mp3"
-artist = "Placeholder Artist"
-title = "Placeholder Track"
+url = "/its-the-balatro-music.opus"
+artist = "Sam Hall"
+title = "It's The Balatro Music"

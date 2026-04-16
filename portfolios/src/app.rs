@@ -123,7 +123,7 @@ pub fn app() -> Html {
             {
                 match config.webamp.as_ref() {
                     Some(wa) if !wa.tracks.is_empty() => html! {
-                        <Webamp tracks={wa.tracks.clone()} />
+                        <Webamp tracks={wa.tracks.clone()} skin_url={wa.skin_url.clone()} top={wa.top} />
                     },
                     _ => html! {},
                 }

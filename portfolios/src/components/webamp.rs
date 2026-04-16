@@ -29,6 +29,30 @@ extern "C" {
 struct WebampOptions {
     #[serde(rename = "initialTracks")]
     initial_tracks: Vec<WebampInitialTrack>,
+    #[serde(rename = "initialSkin", skip_serializing_if = "Option::is_none")]
+    initial_skin: Option<WebampSkin>,
+    #[serde(rename = "initialWindowLayout", skip_serializing_if = "Option::is_none")]
+    initial_window_layout: Option<WebampWindowLayout>,
+}
+
+#[derive(Serialize)]
+struct WebampWindowLayout {
+    main: WebampWindowPosition,
+    equalizer: WebampWindowPosition,
+    playlist: WebampWindowPosition,
+}
+
+#[derive(Serialize)]
+struct WebampWindowPosition {
+    position: WebampPoint,
+}
+
+// Webamp uses CSS-style `top`/`left` keys here, not `x`/`y`. Wrong keys are
+// silently ignored.
+#[derive(Serialize)]
+struct WebampPoint {
+    top: i32,
+    left: i32,
 }
 
 #[derive(Serialize)]
@@ -44,9 +68,18 @@ struct WebampMeta {
     title: String,
 }
 
+#[derive(Serialize)]
+struct WebampSkin {
+    url: String,
+}
+
 #[derive(Properties, PartialEq)]
 pub struct WebampProps {
     pub tracks: Vec<WebampTrack>,
+    #[prop_or_default]
+    pub skin_url: Option<String>,
+    #[prop_or(20)]
+    pub top: i32,
 }
 
 #[function_component(Webamp)]
@@ -56,7 +89,9 @@ pub fn webamp(props: &WebampProps) -> Html {
     {
         let mount_ref = mount_ref.clone();
         let tracks = props.tracks.clone();
-        use_effect_with(tracks, move |tracks| {
+        let skin_url = props.skin_url.clone();
+        let top = props.top;
+        use_effect_with((tracks, skin_url, top), move |(tracks, skin_url, top)| {
             // Shared mutable handle so both the init path and the cleanup closure
             // can reach the constructed Webamp instance.
             let instance: std::rc::Rc<std::cell::RefCell<Option<JsWebamp>>> =
@@ -68,6 +103,8 @@ pub fn webamp(props: &WebampProps) -> Html {
                 std::rc::Rc::new(std::cell::RefCell::new(None));
 
             let tracks = tracks.clone();
+            let skin_url = skin_url.clone();
+            let top = *top;
             let mount_ref = mount_ref.clone();
 
             let init = {
@@ -80,6 +117,26 @@ pub fn webamp(props: &WebampProps) -> Html {
                         return;
                     };
 
+                    // Center horizontally and stack main / equalizer / playlist
+                    // from the configured top offset. Webamp windows are 275px
+                    // wide; main + equalizer are 116px tall each.
+                    let layout = web_sys::window().and_then(|w| {
+                        w.inner_width().ok().and_then(|v| v.as_f64()).map(|width| {
+                            let left = ((width as i32 - 275) / 2).max(0);
+                            WebampWindowLayout {
+                                main: WebampWindowPosition {
+                                    position: WebampPoint { top, left },
+                                },
+                                equalizer: WebampWindowPosition {
+                                    position: WebampPoint { top: top + 116, left },
+                                },
+                                playlist: WebampWindowPosition {
+                                    position: WebampPoint { top: top + 232, left },
+                                },
+                            }
+                        })
+                    });
+
                     let opts = WebampOptions {
                         initial_tracks: tracks
                             .iter()
@@ -91,6 +148,10 @@ pub fn webamp(props: &WebampProps) -> Html {
                                 },
                             })
                             .collect(),
+                        initial_skin: skin_url
+                            .clone()
+                            .map(|url| WebampSkin { url }),
+                        initial_window_layout: layout,
                     };
 
                     let js_opts = match serde_wasm_bindgen::to_value(&opts) {
