@@ -32,7 +32,7 @@ fn current_time() -> String {
 
 #[function_component(Taskbar)]
 pub fn taskbar(props: &TaskbarProps) -> Html {
-    let time = use_state(|| current_time());
+    let time = use_state(current_time);
 
     {
         let time = time.clone();

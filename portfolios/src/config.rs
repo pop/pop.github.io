@@ -8,6 +8,7 @@ pub struct Config {
     pub taskbar: TaskbarConfig,
     pub start_menu: StartMenu,
     pub clippy: ClippyConfig,
+    pub webamp: Option<WebampConfig>,
 }
 
 #[derive(Deserialize, Clone, PartialEq)]
@@ -57,6 +58,19 @@ pub struct StartMenuItem {
 #[derive(Deserialize, Clone, PartialEq)]
 pub struct StartMenu {
     pub items: Vec<StartMenuItem>,
+}
+
+#[derive(Deserialize, Clone, PartialEq)]
+pub struct WebampConfig {
+    #[serde(default)]
+    pub tracks: Vec<WebampTrack>,
+}
+
+#[derive(Deserialize, Clone, PartialEq)]
+pub struct WebampTrack {
+    pub url: String,
+    pub artist: String,
+    pub title: String,
 }
 
 #[derive(Deserialize, Clone, PartialEq)]

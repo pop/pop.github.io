@@ -5,6 +5,7 @@ use crate::components::clippy::Clippy;
 use crate::components::desktop::Desktop;
 use crate::components::start_menu::StartMenuComp;
 use crate::components::taskbar::Taskbar;
+use crate::components::webamp::Webamp;
 use crate::components::window::Window;
 use crate::components::game_window::GameWindow;
 
@@ -119,6 +120,14 @@ pub fn app() -> Html {
                 })}
             />
             <Clippy quotes={config.quotes.clone()} clippy_config={config.clippy.clone()} />
+            {
+                match config.webamp.as_ref() {
+                    Some(wa) if !wa.tracks.is_empty() => html! {
+                        <Webamp tracks={wa.tracks.clone()} />
+                    },
+                    _ => html! {},
+                }
+            }
             <Taskbar
                 windows={wm.windows.clone()}
                 projects={config.projects.clone()}

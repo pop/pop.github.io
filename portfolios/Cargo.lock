@@ -720,6 +720,7 @@ dependencies = [
  "js-sys",
  "log",
  "serde",
+ "serde-wasm-bindgen 0.6.5",
  "toml",
  "wasm-bindgen",
  "wasm-logger",
