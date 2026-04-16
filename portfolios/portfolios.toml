@@ -137,6 +137,7 @@ modal_paragraphs = [
     "<center>This page styled with <a href=https://alexbsoft.github.io/win95.css>win95.css</a>.</center>",
     "<center>Icons from <a href=https://win98icons.alexmeub.com/>win98icons</a>, modifications of corporate logos (github, itch.io, rust, bevy, webassembly), with additional icons by Elijah Voigt</center>",
     "<center>Music player powered by <a href=https://github.com/captbaritone/webamp>Webamp</a>, using the <a href=https://skins.webamp.org/skin/e224ed3511ee803107dcc41e6c1ad9ce/qsteamp.wsz/>qsteamp</a> skin.</center>",
+    "<center>Music provided by <a href=https://greatmist.bandcamp.com/music>Sam Hall</a>.</center>",
     "<center><b>AI Disclosure</b></center>",
     "<center>This page was largely programmed by Claude Code with Sonnet 4.6.</center>",
     "<center><b>Email me</b>: <code>pop@elijah.run</code></center>"
