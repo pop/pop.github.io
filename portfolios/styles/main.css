@@ -76,13 +76,38 @@ html, body {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+.taskbar-tray {
+    display: flex;
+    align-items: stretch;
+    gap: 2px;
+    border: 1px inset #808080;
+    padding: 0 2px;
+}
 .taskbar-clock {
     white-space: nowrap;
     padding: 2px 8px;
-    border: 1px inset #808080;
     font-size: 11px;
     display: flex;
     align-items: center;
+}
+.tray-icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    padding: 2px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.tray-icon-btn.active {
+    box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #ffffff;
+}
+.tray-icon-img {
+    width: 20px;
+    height: 20px;
+    image-rendering: pixelated;
+    display: block;
 }
 
 .game-icon {

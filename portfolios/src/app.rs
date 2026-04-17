@@ -14,6 +14,7 @@ pub fn app() -> Html {
     let config = load_config();
     let wm = use_state(|| WindowManager::new(config.projects.iter().map(|g| g.id.clone()).collect()));
     let start_menu_open = use_state(|| false);
+    let webamp_active = use_state(|| false);
 
     let on_open = {
         let wm = wm.clone();
@@ -32,6 +33,11 @@ pub fn app() -> Html {
     let on_start_click = {
         let smo = start_menu_open.clone();
         Callback::from(move |_| smo.set(!*smo))
+    };
+
+    let on_webamp_toggle = {
+        let wa = webamp_active.clone();
+        Callback::from(move |_: ()| wa.set(!*wa))
     };
 
     let on_taskbar_focus = {
@@ -122,7 +128,7 @@ pub fn app() -> Html {
             <Clippy quotes={config.quotes.clone()} clippy_config={config.clippy.clone()} />
             {
                 match config.webamp.as_ref() {
-                    Some(wa) if !wa.tracks.is_empty() => html! {
+                    Some(wa) if !wa.tracks.is_empty() && *webamp_active => html! {
                         <Webamp tracks={wa.tracks.clone()} skin_url={wa.skin_url.clone()} top={wa.top} />
                     },
                     _ => html! {},
@@ -136,6 +142,8 @@ pub fn app() -> Html {
                 start_menu_open={*start_menu_open}
                 start_icon={config.taskbar.start_icon.clone()}
                 start_label={config.taskbar.start_label.clone()}
+                webamp_tray={config.webamp.as_ref().filter(|wa| !wa.tracks.is_empty()).map(|_| *webamp_active)}
+                on_webamp_toggle={on_webamp_toggle}
             />
         </>
     }

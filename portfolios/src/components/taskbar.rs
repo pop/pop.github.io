@@ -12,6 +12,11 @@ pub struct TaskbarProps {
     pub start_menu_open: bool,
     pub start_icon: String,
     pub start_label: String,
+    /// If `Some`, show a Webamp tray icon; the bool is whether Webamp is active.
+    #[prop_or_default]
+    pub webamp_tray: Option<bool>,
+    #[prop_or_default]
+    pub on_webamp_toggle: Callback<()>,
 }
 
 fn is_url(s: &str) -> bool {
@@ -49,6 +54,11 @@ pub fn taskbar(props: &TaskbarProps) -> Html {
         Callback::from(move |_: MouseEvent| cb.emit(()))
     };
 
+    let on_webamp_toggle = {
+        let cb = props.on_webamp_toggle.clone();
+        Callback::from(move |_: MouseEvent| cb.emit(()))
+    };
+
     html! {
         <div class="taskbar win95-panel">
             <button class={classes!("start-button", props.start_menu_open.then_some("active"))} onclick={on_start}>
@@ -75,7 +85,18 @@ pub fn taskbar(props: &TaskbarProps) -> Html {
                     }
                 })}
             </div>
-            <div class="taskbar-clock">{ (*time).clone() }</div>
+            <div class="taskbar-tray">
+                if let Some(active) = props.webamp_tray {
+                    <button
+                        class={classes!("tray-icon-btn", active.then_some("active"))}
+                        onclick={on_webamp_toggle}
+                        title="Winamp"
+                    >
+                        <img src="wm-4.png" alt="Winamp" class="tray-icon-img" />
+                    </button>
+                }
+                <div class="taskbar-clock">{ (*time).clone() }</div>
+            </div>
         </div>
     }
 }
