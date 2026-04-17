@@ -1,4 +1,4 @@
-use gloo_events::EventListener;
+use gloo_events::{EventListener, EventListenerOptions};
 use gloo_timers::callback::Timeout;
 use serde::Serialize;
 use wasm_bindgen::prelude::*;
@@ -104,6 +104,11 @@ pub fn webamp(props: &WebampProps) -> Html {
             // can reach the constructed Webamp instance.
             let instance: std::rc::Rc<std::cell::RefCell<Option<JsWebamp>>> =
                 std::rc::Rc::new(std::cell::RefCell::new(None));
+            // Non-passive touchmove listener that prevents page-pan while
+            // dragging Webamp's title bar on mobile. Kept alive here so it is
+            // dropped (and therefore removed) when the component unmounts.
+            let touch_listener: std::rc::Rc<std::cell::RefCell<Option<EventListener>>> =
+                std::rc::Rc::new(std::cell::RefCell::new(None));
             // Keep any pending "waiting for Webamp" listener/timer alive.
             let pending_listener: std::rc::Rc<std::cell::RefCell<Option<EventListener>>> =
                 std::rc::Rc::new(std::cell::RefCell::new(None));
@@ -117,6 +122,7 @@ pub fn webamp(props: &WebampProps) -> Html {
 
             let init = {
                 let instance = instance.clone();
+                let touch_listener = touch_listener.clone();
                 let pending_listener = pending_listener.clone();
                 let pending_timeout = pending_timeout.clone();
                 move || {
@@ -177,6 +183,30 @@ pub fn webamp(props: &WebampProps) -> Html {
                     let wa = JsWebamp::new(&js_opts);
                     let _ = wa.render_when_ready(&target);
                     *instance.borrow_mut() = Some(wa);
+
+                    // Attach a non-passive touchmove listener on the Webamp
+                    // mount element. Webamp's own drag handler does not call
+                    // preventDefault(), so the browser treats the gesture as a
+                    // page pan. `touch-action: none` in CSS is the primary
+                    // guard; this listener is a belt-and-suspenders fallback
+                    // for browsers that don't honour touch-action on
+                    // dynamically-injected subtrees.
+                    //
+                    // Must use `new_with_options(...enable_prevent_default())`
+                    // because the default gloo EventListener is passive, and
+                    // passive listeners cannot call preventDefault().
+                    let target_et: &web_sys::EventTarget = target.as_ref();
+                    let touch_opts = EventListenerOptions::enable_prevent_default();
+                    let tl = EventListener::new_with_options(
+                        target_et,
+                        "touchmove",
+                        touch_opts,
+                        |event| {
+                            event.prevent_default();
+                        },
+                    );
+                    *touch_listener.borrow_mut() = Some(tl);
+
                     // Clear any pending retry/listener now that we're up.
                     *pending_listener.borrow_mut() = None;
                     *pending_timeout.borrow_mut() = None;
@@ -228,6 +258,8 @@ pub fn webamp(props: &WebampProps) -> Html {
                 // after the component is gone.
                 *pending_listener.borrow_mut() = None;
                 *pending_timeout.borrow_mut() = None;
+                // Drop the non-passive touchmove listener before closing Webamp.
+                *touch_listener.borrow_mut() = None;
                 if let Some(wa) = instance.borrow_mut().take() {
                     wa.close();
                 }

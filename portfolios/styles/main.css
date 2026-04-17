@@ -2,7 +2,20 @@ html, body {
     margin: 0;
     padding: 0;
     overflow: hidden;
+    /* Prevent horizontal page-pan on mobile (Webamp chrome can push body wider
+       than 100vw, which lets the browser pan leftward and clip the player). */
+    width: 100%;
+    max-width: 100vw;
+    overscroll-behavior: none;
     height: 100%;
+}
+
+/* Stop the browser from treating Webamp drags as page-pan gestures.
+   Webamp renders its own chrome (with class "window") inside #webamp-mount;
+   these selectors target both the mount point and every child window panel. */
+#webamp-mount,
+#webamp-mount * {
+    touch-action: none;
 }
 
 
