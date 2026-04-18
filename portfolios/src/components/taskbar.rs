@@ -85,18 +85,16 @@ pub fn taskbar(props: &TaskbarProps) -> Html {
                     }
                 })}
             </div>
-            <div class="taskbar-tray">
-                if let Some(active) = props.webamp_tray {
-                    <button
-                        class={classes!("tray-icon-btn", active.then_some("active"))}
-                        onclick={on_webamp_toggle}
-                        title="Winamp"
-                    >
-                        <img src="wm-4.png" alt="Winamp" class="tray-icon-img" />
-                    </button>
-                }
-                <div class="taskbar-clock">{ (*time).clone() }</div>
-            </div>
+            if let Some(active) = props.webamp_tray {
+                <button
+                    class={classes!("tray-icon-btn", active.then_some("active"))}
+                    onclick={on_webamp_toggle}
+                    title="Winamp"
+                >
+                    <img src="wm-4.png" alt="Winamp" class="tray-icon-img" />
+                </button>
+            }
+            <div class="taskbar-clock">{ (*time).clone() }</div>
         </div>
     }
 }
