@@ -1,7 +1,7 @@
 html, body {
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow: clip;
     /* Prevent horizontal page-pan on mobile (Webamp chrome can push body wider
        than 100vw, which lets the browser pan leftward and clip the player). */
     width: 100%;
