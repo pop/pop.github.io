@@ -1,11 +1,11 @@
 ---
 # project-os-er6d
 title: Add bun and Playwright browser deps to flake.nix
-status: in-progress
+status: completed
 type: task
 priority: high
 created_at: 2026-04-20T16:57:27Z
-updated_at: 2026-04-20T17:21:13Z
+updated_at: 2026-04-20T17:46:12Z
 parent: project-os-q8fy
 ---
 
