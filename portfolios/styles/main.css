@@ -10,10 +10,21 @@ html, body {
     height: 100%;
 }
 
-/* Stop the browser from treating Webamp drags as page-pan gestures.
-   Webamp renders its own chrome (with class "window") inside #webamp-mount;
-   these selectors target both the mount point and every child window panel. */
-#webamp-mount,
+/* Webamp mount acts as the drag-clamp container. Sized to the viewport so
+   Webamp's internal `getElementSize(target)` clamps windows to the visible
+   area instead of `body.scrollWidth` (which would grow as the user drags and
+   trigger mobile layout-viewport shifts). `position: relative` keeps the
+   offset chain intact so interactivity and coordinates still work. */
+#webamp-mount {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    touch-action: none;
+}
+
+/* Stop the browser from treating Webamp drags as page-pan gestures on every
+   child window panel Webamp injects. */
 #webamp-mount * {
     touch-action: none;
 }
@@ -54,6 +65,7 @@ html, body {
     background: #c0c0c0;
     border-top: 2px solid #ffffff;
     box-shadow: inset 0 1px 0 0 #dfdfdf;
+    transform: translate(var(--vv-offset-x, 0px), var(--vv-offset-y, 0px));
 }
 .start-button {
     display: flex;
@@ -156,6 +168,7 @@ html, body {
     bottom: 100px;
     right: 100px;
     z-index: 10;
+    transform: translate(var(--vv-offset-x, 0px), var(--vv-offset-y, 0px));
 }
 .clippy-bubble {
     background: white;

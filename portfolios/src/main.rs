@@ -2,6 +2,7 @@ mod app;
 mod components;
 mod config;
 mod state;
+pub mod visual_viewport;
 
 use app::App;
 

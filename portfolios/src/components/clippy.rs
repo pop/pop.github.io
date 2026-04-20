@@ -1,6 +1,7 @@
 use yew::prelude::*;
 use yew::virtual_dom::AttrValue;
 use gloo_events::EventListener;
+use crate::visual_viewport::use_visual_viewport_offset;
 
 fn is_url(s: &str) -> bool {
     s.starts_with("http") || s.starts_with("data:") || s.contains('/')
@@ -42,6 +43,9 @@ pub fn clippy(props: &ClippyProps) -> Html {
     let _up_listener: UseStateHandle<Option<EventListener>> = use_state(|| None);
     // Stable ref to the widget div — avoids currentTarget issues in Yew's event system
     let widget_ref = use_node_ref();
+    // Re-anchor to visual viewport so the widget stays pinned when the layout
+    // viewport grows (e.g. from Webamp drag on mobile).
+    use_visual_viewport_offset(widget_ref.clone());
     // Shared mutable flag: did the user drag since last mousedown?
     // use_mut_ref gives Rc<RefCell<T>> — all clones share the same cell, no stale-value issue
     let has_dragged = use_mut_ref(|| false);

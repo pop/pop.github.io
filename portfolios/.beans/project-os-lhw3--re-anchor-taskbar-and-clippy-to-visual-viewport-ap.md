@@ -1,7 +1,7 @@
 ---
 # project-os-lhw3
 title: Re-anchor taskbar and Clippy to Visual Viewport API
-status: todo
+status: completed
 type: bug
 priority: normal
 created_at: 2026-04-19T23:14:21Z
@@ -28,12 +28,21 @@ This is the MDN-documented pattern for simulating `position: device-fixed`.
 
 ## Todo
 
-- [ ] Add `VisualViewport` feature to `web-sys` in `Cargo.toml`
-- [ ] Implement Visual Viewport listener + CSS custom property writes in taskbar / Clippy components
-- [ ] Add `transform: translate(...)` to `.taskbar` and Clippy root in `styles/main.css`
-- [ ] Drop listeners on component unmount
-- [ ] `cargo check --target wasm32-unknown-unknown` passes
-- [ ] `cargo clippy --target wasm32-unknown-unknown` passes with no new warnings
+- [x] Add `VisualViewport` feature to `web-sys` in `Cargo.toml`
+- [x] Implement Visual Viewport listener + CSS custom property writes in taskbar / Clippy components
+- [x] Add `transform: translate(...)` to `.taskbar` and Clippy root in `styles/main.css`
+- [x] Drop listeners on component unmount
+- [x] `cargo check --target wasm32-unknown-unknown` passes
+- [x] `cargo clippy --target wasm32-unknown-unknown` passes with no new warnings
+
+## Summary of Changes
+
+- `Cargo.toml`: added `VisualViewport` and `CssStyleDeclaration` to web-sys features.
+- `src/visual_viewport.rs` (new): `use_visual_viewport_offset(node_ref)` hook that attaches `resize`/`scroll` listeners on `window.visualViewport`, writes `--vv-offset-x`/`--vv-offset-y` CSS custom properties to the referenced element on each event, fires once on mount, and drops listeners on cleanup. No-op if `visualViewport` is unavailable.
+- `src/main.rs`: declared `pub mod visual_viewport`.
+- `src/components/taskbar.rs`: added `use_node_ref` for the taskbar root `<div>`, called `use_visual_viewport_offset`, attached `ref={taskbar_ref}`.
+- `src/components/clippy.rs`: reused existing `widget_ref`, called `use_visual_viewport_offset(widget_ref.clone())`.
+- `styles/main.css`: added `transform: translate(var(--vv-offset-x, 0px), var(--vv-offset-y, 0px))` to `.taskbar` and `.clippy-widget` rules.
 
 ## Trade-offs
 

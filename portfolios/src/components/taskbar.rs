@@ -2,6 +2,7 @@ use yew::prelude::*;
 use gloo_timers::callback::Interval;
 use crate::config::Game;
 use crate::state::WindowState;
+use crate::visual_viewport::use_visual_viewport_offset;
 
 #[derive(Properties, PartialEq)]
 pub struct TaskbarProps {
@@ -38,6 +39,8 @@ fn current_time() -> String {
 #[function_component(Taskbar)]
 pub fn taskbar(props: &TaskbarProps) -> Html {
     let time = use_state(current_time);
+    let taskbar_ref = use_node_ref();
+    use_visual_viewport_offset(taskbar_ref.clone());
 
     {
         let time = time.clone();
@@ -60,7 +63,7 @@ pub fn taskbar(props: &TaskbarProps) -> Html {
     };
 
     html! {
-        <div class="taskbar win95-panel">
+        <div class="taskbar win95-panel" ref={taskbar_ref}>
             <button class={classes!("start-button", props.start_menu_open.then_some("active"))} onclick={on_start}>
                 if is_url(&props.start_icon) {
                     <img src={props.start_icon.clone()} alt="" class="start-button-icon" />
