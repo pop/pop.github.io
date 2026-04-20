@@ -1,7 +1,7 @@
 ---
 # project-os-ym2f
 title: Switch Webamp to renderInto() with relative overflow-hidden container
-status: todo
+status: completed
 type: bug
 priority: high
 created_at: 2026-04-19T23:14:06Z
@@ -40,15 +40,21 @@ Webamp exposes a `renderInto(target)` method (public method on the instance, enf
 
 ## Todo
 
-- [ ] Add `renderInto` binding in the `extern "C"` block
-- [ ] Swap `render_when_ready(&target)` → `render_into(&target)` at the call site
-- [ ] Update `#webamp-mount` CSS: `position: relative; width: 100vw; height: 100vh; overflow: hidden`
-- [ ] Keep `touch-action: none` on `#webamp-mount` from prior fix
-- [ ] `cargo check --target wasm32-unknown-unknown` passes
-- [ ] `cargo clippy --target wasm32-unknown-unknown` passes with no new warnings
+- [x] Add `renderInto` binding in the `extern "C"` block (replaced the unused `renderWhenReady` binding since it was only referenced at the call site we were swapping)
+- [x] Swap `render_when_ready(&target)` → `render_into(&target)` at the call site
+- [x] Update `#webamp-mount` CSS: `position: relative; width: 100vw; height: 100vh; overflow: hidden`
+- [x] Keep `touch-action: none` on `#webamp-mount` from prior fix
+- [x] `cargo check --target wasm32-unknown-unknown` passes
+- [x] `cargo clippy --target wasm32-unknown-unknown` passes with no new warnings
 - [ ] Verify no regression on desktop (windows draggable, not cut off)
 
 ## Trade-offs
 
 - Webamp windows will now clamp to the viewport edges on mobile AND desktop. On desktop, prior behavior allowed dragging windows anywhere in `document.body`; new behavior clamps to the viewport. This is arguably a UX improvement (windows can't get "lost"), but callers should be aware.
 - `renderInto` is not in the Webamp npm README but is exported as a public method on every Webamp instance (see `webampLazy.tsx` in the captbaritone/webamp repo).
+
+## Summary of Changes
+
+- `src/components/webamp.rs`: Replaced the `renderWhenReady` wasm-bindgen method binding with a `renderInto` binding (`#[wasm_bindgen(method, js_name = renderInto)] fn render_into(...)`) and updated the sole call site to use `wa.render_into(&target)`. Removed the old binding since it was unused after the swap.
+- `styles/main.css`: Split the combined `#webamp-mount, #webamp-mount *` rule. `#webamp-mount` is now explicitly `position: relative; width: 100vw; height: 100vh; overflow: hidden; touch-action: none`, giving Webamp a viewport-sized drag-clamp container. The child selector `#webamp-mount *` keeps `touch-action: none` as before for injected panels.
+- Validation: `cargo check --target wasm32-unknown-unknown` clean; `cargo clippy --target wasm32-unknown-unknown -- -D warnings` clean.
