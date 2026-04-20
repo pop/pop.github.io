@@ -12,6 +12,31 @@ export default defineConfig({
     {
       name: 'pixel-7',
       use: { ...devices['Pixel 7'] },
+      // Excludes the headed exploration tests from the default pixel-7 run
+      testIgnore: ['**/webamp-drag-headed.spec.ts'],
+    },
+    {
+      // Exploratory project for project-os-hh0j: CDP + viewport shrink repro
+      // attempts. Uses non-headless-shell Chromium (full Chrome devtools
+      // available) with Pixel 7 device emulation as base, then overlays CDP
+      // Emulation.setDeviceMetricsOverride with mobile:true during the test.
+      name: 'pixel-7-cdp',
+      use: {
+        ...devices['Pixel 7'],
+        // Use full Chromium (not headless-shell) so CDP devtools are available
+        channel: undefined,
+        headless: true,
+        launchOptions: {
+          // These flags help Chromium behave more like mobile Chrome:
+          // MobileLayoutViewport enables the layout/visual viewport split
+          args: [
+            '--enable-features=MobileLayoutViewport',
+            '--touch-events=enabled',
+            '--use-mobile-user-agent',
+          ],
+        },
+      },
+      testMatch: ['**/webamp-drag-headed.spec.ts'],
     },
   ],
   webServer: {
