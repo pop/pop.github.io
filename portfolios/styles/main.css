@@ -143,6 +143,7 @@ html, body {
     cursor: grab;
     user-select: none;
     -webkit-user-select: none;
+    touch-action: none;
 }
 
 .window .title-bar:active {
@@ -192,6 +193,7 @@ html, body {
     cursor: grab;
     user-select: none;
     -webkit-user-select: none;
+    touch-action: none;
 }
 .clippy-icon:active {
     cursor: grabbing;
