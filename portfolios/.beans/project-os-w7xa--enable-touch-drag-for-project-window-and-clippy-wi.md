@@ -1,18 +1,16 @@
 ---
-# project-os-rcgj
+# project-os-w7xa
 title: Enable touch drag for project Window and Clippy widget
-status: completed
+status: scrapped
 type: bug
 priority: high
-created_at: 2026-04-21T05:00:25Z
-updated_at: 2026-04-21T05:31:02Z
+created_at: 2026-04-21T05:00:21Z
+updated_at: 2026-04-23T20:37:33Z
 ---
-
-Mobile drag broken for project Windows and Clippy. Details in body.
 
 ## Problem
 
-On mobile, project Windows (spawned by clicking a desktop game icon) and the Clippy widget cannot be dragged. On desktop, mouse drag works fine. Different codepath from Webamp (which uses Webamp's own internal drag).
+On mobile, the project Windows (spawned by clicking a desktop game icon) and the Clippy widget cannot be dragged. On desktop, mouse drag works fine. This is a different codepath from Webamp, which uses Webamp's own internal drag.
 
 ## Current state
 
@@ -38,19 +36,18 @@ On mobile, project Windows (spawned by clicking a desktop game icon) and the Cli
 
 ## Todo
 
-- [x] Diagnose why `window.rs` touchstart does not currently drag on mobile (likely passive listener + missing touch-action)
-- [x] Fix `Window` component touch drag (project windows draggable on mobile)
-- [x] Add touch drag to Clippy icon (mirrors existing `onmousedown` logic, including `has_dragged` flag)
-- [x] Add touch drag to Clippy modal title bar
-- [x] Add `touch-action: none` CSS where required
-- [x] `cargo check --target wasm32-unknown-unknown` passes
-- [x] `cargo clippy --target wasm32-unknown-unknown` passes with no new warnings
+- [ ] Diagnose why `window.rs` touchstart does not currently drag on mobile (likely passive listener + missing touch-action)
+- [ ] Fix `Window` component touch drag (project windows draggable on mobile)
+- [ ] Add touch drag to Clippy icon (mirrors existing `onmousedown` logic, including `has_dragged` flag)
+- [ ] Add touch drag to Clippy modal title bar
+- [ ] Add `touch-action: none` CSS where required
+- [ ] `cargo check --target wasm32-unknown-unknown` passes
+- [ ] `cargo clippy --target wasm32-unknown-unknown` passes with no new warnings
 - [ ] Manual test on mobile emulation: drag a project window, drag Clippy, drag the Clippy modal
 - [ ] Verify desktop mouse drag still works for all three
 
 
-## Summary of Changes
 
-- **`src/components/window.rs`**: Removed Yew `ontouchstart` prop (passive); added `use_node_ref` on `.title-bar` and attached a non-passive `EventListener::new_with_options(..., EventListenerOptions::enable_prevent_default(), ...)` in `use_effect_with` so `preventDefault()` works and touchmove events are received during drag.
-- **`src/components/clippy.rs`**: Added non-passive touchstart listeners for both the Clippy icon (`icon_ref`) and the modal title bar (`modal_title_ref`), mirroring the existing mouse drag logic. Touch drag on the icon correctly sets `has_dragged = true` on touchmove, preserving the tap-vs-drag disambiguation for the modal.
-- **`styles/main.css`**: Added `touch-action: none` to `.window .title-bar` and `.clippy-icon` so the browser does not intercept gestures before the listeners run.
+## Reasons for Scrapping
+
+Duplicate of project-os-rcgj. Created by an accidental `beans create` call during initial ticket filing; the real ticket is rcgj, which was implemented and completed.
