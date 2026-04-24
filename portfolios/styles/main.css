@@ -346,12 +346,12 @@ html, body {
         max-height: calc(100vh - 100px);
     }
 
-    /* Clippy modal: restore centered positioning overridden by .window rule */
+    /* Clippy modal: use CSS vars so drag overrides centering when modal_pos is Some */
     .clippy-modal.window {
-        left: 50% !important;
-        top: 50% !important;
+        left: var(--modal-left, 50%) !important;
+        top: var(--modal-top, 50%) !important;
         width: 80vw !important;
-        transform: translate(-50%, -50%) !important;
+        transform: var(--modal-transform, translate(-50%, -50%)) !important;
     }
 
     /* Start menu overrides the general window rule above */

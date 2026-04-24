@@ -360,8 +360,13 @@ pub fn clippy(props: &ClippyProps) -> Html {
     };
 
     let modal_style = match *modal_pos {
-        Some((x, y)) => format!("position:fixed; left:{}px; top:{}px; z-index:100;", x, y),
-        None => "position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:100;".to_string(),
+        Some((x, y)) => format!(
+            "position:fixed; left:{x}px; top:{y}px; --modal-left:{x}px; --modal-top:{y}px; --modal-transform:none; z-index:100;"
+        ),
+        None => concat!(
+            "position:fixed; left:50%; top:50%; transform:translate(-50%,-50%);",
+            " --modal-left:50%; --modal-top:50%; --modal-transform:translate(-50%,-50%); z-index:100;"
+        ).to_string(),
     };
 
     html! {
