@@ -333,8 +333,6 @@ html, body {
 @media (max-width: 768px) {
     .window {
         position: fixed !important;
-        left: 18vw !important;
-        top: 8px !important;
         width: 80vw !important;
         min-width: unset !important;
         min-height: unset !important;
@@ -346,6 +344,14 @@ html, body {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         max-height: calc(100vh - 100px);
+    }
+
+    /* Clippy modal: restore centered positioning overridden by .window rule */
+    .clippy-modal.window {
+        left: 50% !important;
+        top: 50% !important;
+        width: 80vw !important;
+        transform: translate(-50%, -50%) !important;
     }
 
     /* Start menu overrides the general window rule above */

@@ -27,6 +27,11 @@ pub fn window(props: &WindowProps) -> Html {
     // Ref to the title-bar element so we can attach a non-passive touchstart
     let title_bar_ref = use_node_ref();
 
+    // Shared mutable ref so the touchstart closure always reads the latest pos without
+    // needing to be re-registered on every position update (no listener churn during drag).
+    let pos_ref = use_mut_ref(|| props.pos);
+    *pos_ref.borrow_mut() = props.pos;
+
     // Per-window jitter — initialized once on mount, used by mobile CSS transform
     let jitter_x = use_state(|| ((js_sys::Math::random() * 20.0) as i32) - 10);
     let jitter_y = use_state(|| (js_sys::Math::random() * 40.0) as i32);
@@ -83,16 +88,15 @@ pub fn window(props: &WindowProps) -> Html {
         let title_bar_ref = title_bar_ref.clone();
         let on_focus = props.on_focus.clone();
         let on_move = props.on_move.clone();
-        let pos = props.pos;
+        let pos_ref = pos_ref.clone();
         let drag_offset = drag_offset.clone();
         let move_listener_state = _move_listener.clone();
         let up_listener_state = _up_listener.clone();
         let touch_start_listener = _touch_start_listener.clone();
 
         use_effect_with(
-            (title_bar_ref.clone(), pos),
-            move |(title_bar_ref, pos)| {
-                let pos = *pos;
+            title_bar_ref.clone(),
+            move |title_bar_ref| {
                 let Some(el) = title_bar_ref.cast::<web_sys::HtmlElement>() else {
                     return;
                 };
@@ -105,6 +109,7 @@ pub fn window(props: &WindowProps) -> Html {
                     on_focus.emit(());
 
                     if let Some(touch) = e.touches().get(0) {
+                        let pos = *pos_ref.borrow();
                         let offset_x = touch.client_x() - pos.0;
                         let offset_y = touch.client_y() - pos.1;
                         drag_offset.set(Some((offset_x, offset_y)));
