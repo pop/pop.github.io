@@ -110,7 +110,6 @@ pub fn window(props: &WindowProps) -> Html {
                         drag_offset.set(Some((offset_x, offset_y)));
 
                         let on_move_mv = on_move.clone();
-                        let drag_offset_mv = drag_offset.clone();
                         let drag_offset_end = drag_offset.clone();
                         let move_listener_state_end = move_listener_state.clone();
                         let offset = (offset_x, offset_y);
@@ -118,7 +117,6 @@ pub fn window(props: &WindowProps) -> Html {
                         let document = web_sys::window().unwrap().document().unwrap();
 
                         let move_cb = EventListener::new(&document, "touchmove", move |e| {
-                            if (*drag_offset_mv).is_none() { return; }
                             let e = e.dyn_ref::<TouchEvent>().unwrap();
                             if let Some(t) = e.touches().get(0) {
                                 on_move_mv.emit((t.client_x() - offset.0, t.client_y() - offset.1));

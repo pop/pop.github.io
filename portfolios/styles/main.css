@@ -348,14 +348,6 @@ html, body {
         max-height: calc(100vh - 100px);
     }
 
-    /* Clippy modal: restore centered positioning overridden by .window rule */
-    .clippy-modal.window {
-        left: 50% !important;
-        top: 50% !important;
-        width: auto !important;
-        transform: translate(-50%, -50%) !important;
-    }
-
     /* Start menu overrides the general window rule above */
     .start-menu.window {
         width: auto !important;
