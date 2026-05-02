@@ -1,7 +1,7 @@
 +++
 title = "What's Good #19"
 date = "2026-05-02"
-description = "Disneyland, Still Lost, and Old Goriot"
+description = "Disneyland, Ghost Brigades, Still Lost, and Old Goriot"
 taxonomies.tags = ["whats-good"]
 +++
 
