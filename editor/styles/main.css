@@ -1620,6 +1620,8 @@ nav a:hover {
     padding: 1.5rem;
     min-width: 320px;
     max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 .modal h3 { margin: 0 0 0.75rem; }
@@ -1638,6 +1640,35 @@ nav a:hover {
     display: flex;
     gap: 0.75rem;
     justify-content: flex-end;
+}
+
+/* Compress image modal */
+.compress-preview {
+    display: block;
+    max-width: 100%;
+    max-height: 260px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    margin: 0.75rem auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+}
+.compress-stats {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.5rem 0 0.75rem;
+    font-size: 0.9rem;
+}
+.compress-stats th {
+    text-align: left;
+    padding: 0.2rem 0.75rem 0.2rem 0;
+    color: #555;
+    font-weight: normal;
+    white-space: nowrap;
+}
+.compress-stats td {
+    font-family: monospace;
 }
 
 /* Branch bar — global publish/discard bar shown when a branch is active */
