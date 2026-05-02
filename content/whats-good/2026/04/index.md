@@ -27,6 +27,10 @@ I am always impressed with how well the cast members play the characters and com
 My wife regailed us with stories of riding Teacups dozens of times in a single rainy day when she was ~6, subjecting her dad to a day of torture.
 My kids loved it, great first ride.
 
+## Toon Town
+
+![6144.jpg](6144.jpg)
+
 ## Mickey & Minnie's Runaway Railway
 
 Holy crap this was a great ride.
@@ -68,6 +72,14 @@ He left the ride singing "Yo ho ho..." and saying Arrrr like a pirate.
 
 For our second day we went to California adventure which is the much more pixar-themed Park which I appreciated cuz our toddler watches a lot of Pixar movies.
 
+We went on toy story Midway mania which in some ways is like The runaway railroad in that the ride kind of goes off the rails but is more like a arcade where you go from game to game and try to rack up a high score.
+Especially compared to Runaway Railroad it wasn't nearly as impressive but the game aspect was engaging.
+
 ## Norovirus
 
--- wait that's not a ride
+-- wait that's not a ride.
+
+Yeah for our second day we got norovirus and we're stuck in our hotel throwing up for most of the day. 
+
+> Fun fact that I learned: hand sanitizer does not kill norovirus; you have to wash your hands. 
+
