@@ -7,7 +7,7 @@ taxonomies.tags = ["whats-good"]
 
 # Disneyland, CA
 
-![6338.jpg](6338.jpg)
+![disneyland](6338.jpg)
 
 The highlight of this month was that the whole family went to Disneyland, and California Adventure, for the first time!
 
