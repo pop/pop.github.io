@@ -28,14 +28,14 @@ I am always impressed with how well the cast members play the characters and com
 
 ## Teacups
 
-![6101.jpg](6101.jpg)
+![teacups](6101.jpg)
 
 My wife regailed us with stories of riding Teacups dozens of times in a single rainy day when she was ~6, subjecting her dad to a day of torture.
 My kids loved it, great first ride.
 
 ## Toon Town
 
-![6144.jpg](6144.jpg)
+![toontown](6144.jpg)
 
 I've written before about my foray into Toontown Rewritten so visiting Toontown was a must.
 Obviously video game can look very whimsical and wacky so it's very impressive to see it in real life with the exact same vibes.
