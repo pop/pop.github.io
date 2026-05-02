@@ -106,7 +106,7 @@ Sam is a YouTuber I've followed for many years who does funny infotainment and i
 
 The stories take place in a near future sci-fi world in which aliens have invaded and essentially turned Earth into a galactic nature preserve. 
 That said the stories don't directly connect to that theme and range from allegories for drug use to making fun of academics.
-![6343.jpg](6343.jpg)
+
 Over all I like the quality of these stories I thought they were fun and pulpy and frankly I think they could have been published by one of the indie sci-fi publishers.
 
 # Old Goriot
