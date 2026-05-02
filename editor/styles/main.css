@@ -1670,6 +1670,48 @@ nav a:hover {
 .compress-stats td {
     font-family: monospace;
 }
+.compress-confirm-btn {
+    padding: 0.5rem 1.2rem;
+    border: none;
+    border-radius: 4px;
+    background: #0366d6;
+    color: white;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+.compress-confirm-btn:hover {
+    background: #005cc5;
+}
+.compress-confirm-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+.compress-cancel-btn {
+    padding: 0.5rem 1.2rem;
+    border: 1px solid #d73a49;
+    border-radius: 4px;
+    background: white;
+    color: #d73a49;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+.compress-cancel-btn:hover {
+    background: #d73a49;
+    color: white;
+}
+.compress-modal-actions {
+    justify-content: center;
+    gap: 1.25rem;
+}
+.compress-size-warning {
+    font-size: 0.85rem;
+    color: #856404;
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 4px;
+    padding: 0.4rem 0.75rem;
+    margin: 0 0 0.75rem;
+}
 
 /* Branch bar — global publish/discard bar shown when a branch is active */
 .branch-bar-wrap {

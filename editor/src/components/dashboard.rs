@@ -1323,7 +1323,7 @@ pub fn dashboard() -> Html {
                         compress_workflow.set(Some(CompressWorkflow {
                             entry: entry.clone(),
                             phase: CompressPhase::Preview {
-                                original_size: entry.size,
+                                original_size: bytes.len() as u64,
                                 original_width: result.original_width,
                                 original_height: result.original_height,
                                 compressed_bytes: std::rc::Rc::new(result.compressed_bytes),
@@ -1828,13 +1828,13 @@ pub fn dashboard() -> Html {
                                             </tbody>
                                         </table>
                                         if larger {
-                                            <p class="modal-warning">
-                                                {"Warning: the compressed file is larger than the original. Consider cancelling."}
+                                            <p class="compress-size-warning">
+                                                {"Compressed file is larger than the original \u{2014} consider cancelling."}
                                             </p>
                                         }
                                         <img src={preview_data_url.clone()} class="compress-preview" />
-                                        <div class="modal-actions">
-                                            <button onclick={on_compress_cancel.clone()}>{"Cancel"}</button>
+                                        <div class="modal-actions compress-modal-actions">
+                                            <button class="compress-cancel-btn" onclick={on_compress_cancel.clone()}>{"Cancel"}</button>
                                             <button class="compress-confirm-btn"
                                                     onclick={on_compress_confirm.clone()}>
                                                 {"Confirm \u{0026} Upload"}
