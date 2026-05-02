@@ -97,6 +97,15 @@ Yeah for our second day we got norovirus and we're stuck in our hotel throwing u
 I was a little worried that Disney would not be very fun with a almost three and almost 1 year old but there are a lot of accommodations. 
 There is copious stroller parking, every restaurant accommodates kids, and the lack of cars makes it a very safe place to let your kid wander around even if you do need to maintain eyes on them because oh my God they could easily get lost in this crowd -- there's so many people where did my kid go ahhhh.
 
+# Ghost Brigades
+
+![ghost_brigades.jpg](ghost_brigades.jpg)
+
+I am not shy about being a fan of John Scalzi but I haven't read _most_ of his biggest series: Old Man's War.
+I've read the first in the series, but not the other like... 6 that came after it, so here I am reading the sequel to Old Man's War: Ghost Brigades.
+
+As usual, Scalzi does a great job of building an interesting world with interesting tech and fun well considered, if not scientifically concerned, details.
+
 # Still Lost
 
 ![still lost](6343.jpg)
