@@ -99,15 +99,19 @@ There is copious stroller parking, every restaurant accommodates kids, and the l
 
 # Still Lost
 
+![still lost](6343.jpg)
+
 Still Lost is a collection of short stories written by Sam O' Nella.
 Sam is a YouTuber I've followed for many years who does funny infotainment and isn't very active recently but randomly came out with a self punished book on Amazon and my current policy is that if a creator I like does an interesting thing that's outside their wheelhouse, give it a shot.
 
 The stories take place in a near future sci-fi world in which aliens have invaded and essentially turned Earth into a galactic nature preserve. 
 That said the stories don't directly connect to that theme and range from allegories for drug use to making fun of academics.
-
+![6343.jpg](6343.jpg)
 Over all I like the quality of these stories I thought they were fun and pulpy and frankly I think they could have been published by one of the indie sci-fi publishers.
 
 # Old Goriot
+
+![6344.jpg](6344.jpg)
 
 old goriot was a recommendation by man carrying thing. 
 I listen to the audiobook which I borrowed from my library and really enjoyed listening to an older story which both felt like a modern novel but also a period piece -- let me explain. 
