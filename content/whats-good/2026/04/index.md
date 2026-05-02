@@ -15,9 +15,15 @@ I've watched dozens of hours of Defunctland, so I felt more or less qualified to
 
 We went on a few rides, despite being height challenged with two < 3 year old boys.
 
+## Pixar Hotel
+
+We splurged and stayed in the Pixar hotel which relative to some of the other options was cheap but objectively speaking was kind of spendy. 
+It was fun to stay at a themed hotel and to look for all of the little Easter eggs around and of course it was fun for my kid who loves toy story and Pixar to hunt for said Easter eggs.
+
 ## Goofy's Kitchen
 
-This was the "Meet and Greet" restaurant experience. You start by getting photos with goofy, then when you sit at your seat you're visited by Minnie Mouse, [Clarabelle Cow](https://en.wikipedia.org/wiki/Clarabelle_Cow), and some chipmunk characters.
+This was the "Meet and Greet" restaurant experience in the main Disneyland Resort.
+You start by getting photos with goofy, then when you sit at your seat you're visited by Minnie Mouse, [Clarabelle Cow](https://en.wikipedia.org/wiki/Clarabelle_Cow), and some chipmunk characters.
 I am always impressed with how well the cast members play the characters and communicate without (being able to) say a word!
 
 ## Teacups
@@ -30,6 +36,9 @@ My kids loved it, great first ride.
 ## Toon Town
 
 ![6144.jpg](6144.jpg)
+
+I've written before about my foray into Toontown Rewritten so visiting Toontown was a must.
+Obviously video game can look very whimsical and wacky so it's very impressive to see it in real life with the exact same vibes.
 
 ## Mickey & Minnie's Runaway Railway
 
@@ -83,3 +92,7 @@ Yeah for our second day we got norovirus and we're stuck in our hotel throwing u
 
 > Fun fact that I learned: hand sanitizer does not kill norovirus; you have to wash your hands. 
 
+---
+
+I was a little worried that Disney would not be very fun with a almost three and almost 1 year old but there are a lot of accommodations. 
+There is copious stroller parking, every restaurant accommodates kids, and the lack of cars makes it a very safe place to let your kid wander around even if you do need to maintain eyes on them because oh my God they could easily get lost in this crowd -- there's so many people where did my kid go ahhhh.
