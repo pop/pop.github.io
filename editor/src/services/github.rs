@@ -256,8 +256,8 @@ impl GitHubClient {
 
     /// Read a single file from the repo and return its raw bytes.
     ///
-    /// Uses the REST Contents API. The base64 content from the response is
-    /// stripped of whitespace before decoding, matching GitHub's encoding.
+    /// Uses the REST Contents API for files ≤1 MB; falls back to the Git Blob
+    /// API (raw media type) for larger files so content is never silently empty.
     pub async fn get_file_bytes(&self, path: &str, branch: &str) -> Result<Vec<u8>, String> {
         let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/contents/{path}?ref={branch}");
         let resp = self.get(&url).await?;
@@ -267,12 +267,39 @@ impl GitHubClient {
                 let fc: FileContent = resp.json().await.map_err(|e| e.to_string())?;
                 let encoded = fc.content.unwrap_or_default();
                 let cleaned: String = encoded.chars().filter(|c| !c.is_whitespace()).collect();
+                if cleaned.is_empty() {
+                    // GitHub omits inline content for files >1 MB; use the Blob API instead.
+                    return self.get_blob_raw_bytes(&fc.sha).await;
+                }
                 BASE64_STANDARD
                     .decode(cleaned.as_bytes())
                     .map_err(|e| e.to_string())
             }
             401 => Err("Unauthorized \u{2014} check your token".into()),
             404 => Err(format!("File not found: {path}")),
+            status => Err(format!("GitHub API error: {status}")),
+        }
+    }
+
+    /// Fetch a git blob by SHA and return its raw bytes.
+    ///
+    /// Uses `Accept: application/vnd.github.v3.raw` to bypass base64 encoding.
+    /// Supports files up to 100 MB, unlike the Contents API (1 MB limit).
+    async fn get_blob_raw_bytes(&self, sha: &str) -> Result<Vec<u8>, String> {
+        let token = self.require_token()?;
+        let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/git/blobs/{sha}");
+        let resp = Request::get(&url)
+            .header("Authorization", &format!("Bearer {token}"))
+            .header("Accept", "application/vnd.github.v3.raw")
+            .header("User-Agent", "elijah-run-editor")
+            .send()
+            .await
+            .map_err(|e| e.to_string())?;
+
+        match resp.status() {
+            200 => resp.binary().await.map_err(|e| e.to_string()),
+            401 => Err("Unauthorized \u{2014} check your token".into()),
+            404 => Err(format!("Blob not found: {sha}")),
             status => Err(format!("GitHub API error: {status}")),
         }
     }
