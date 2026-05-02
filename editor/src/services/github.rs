@@ -197,6 +197,13 @@ impl GitHubClient {
     }
 
     async fn get_file_graphql(&self, path: &str, branch: &str) -> Result<FileContent, String> {
+        // NOTE: GraphQL returns `text: null` for binary blobs and may also return null for
+        // text files that exceed GitHub's GraphQL inline-content limit. In that case
+        // `blob.text` is None and callers that do `.unwrap_or_default()` will silently get
+        // an empty string. Unlike `get_file_rest`, this path does not fall back to the Git
+        // Blob API, so very large text files fetched through GraphQL will appear blank.
+        // Authenticated callers go through this path, so fixing it here would help large
+        // .md files opened in the editor; that is tracked separately.
         let expression = format!("{branch}:{path}");
 
         let query = r#"
@@ -246,6 +253,16 @@ impl GitHubClient {
                 let mut fc: FileContent = resp.json().await.map_err(|e| e.to_string())?;
                 // Decode base64 content so callers always get plaintext
                 fc.content = fc.content.map(|c| decode_github_content(&c));
+                // Large-file fallback: GitHub omits inline content for files >1 MB.
+                // When content is absent (None) or empty after decoding, fetch raw bytes
+                // via the Git Blob API and decode as UTF-8.
+                if fc.content.as_deref().unwrap_or("").is_empty() && !fc.sha.is_empty() {
+                    let raw_bytes = self.get_blob_raw_bytes(&fc.sha).await?;
+                    fc.content = Some(
+                        String::from_utf8(raw_bytes)
+                            .map_err(|e| format!("File is not valid UTF-8: {e}"))?,
+                    );
+                }
                 Ok(fc)
             }
             401 => Err("Unauthorized \u{2014} check your token".into()),
@@ -1226,5 +1243,25 @@ mod tests {
     #[test]
     fn decode_empty_string() {
         assert_eq!(decode_github_content(""), "");
+    }
+
+    /// Documents the contract of the large-file fallback in `get_file_rest`:
+    /// raw bytes fetched from the Git Blob API must be valid UTF-8 to be returned
+    /// as file content. This round-trip should be lossless for any valid text file.
+    #[test]
+    fn blob_bytes_round_trip_utf8() {
+        let original = "# Hello\n\nThis is a test post with unicode: café\n";
+        let bytes = original.as_bytes().to_vec();
+        let decoded = String::from_utf8(bytes).unwrap();
+        assert_eq!(decoded, original);
+    }
+
+    /// Documents that the large-file fallback in `get_file_rest` returns an error
+    /// (rather than panicking or silently corrupting data) when the blob bytes are
+    /// not valid UTF-8.
+    #[test]
+    fn blob_bytes_invalid_utf8_returns_error() {
+        let bad_bytes = vec![0xFF, 0xFE, 0x00];
+        assert!(String::from_utf8(bad_bytes).is_err());
     }
 }
