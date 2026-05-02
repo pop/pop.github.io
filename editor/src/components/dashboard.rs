@@ -216,6 +216,31 @@ fn is_media_file(name: &str) -> bool {
     )
 }
 
+// ── Compress workflow types ─────────────────────────────────────
+
+#[derive(Clone, PartialEq)]
+enum CompressPhase {
+    Downloading,
+    Compressing,
+    Preview {
+        original_size: u64,
+        original_width: u32,
+        original_height: u32,
+        compressed_bytes: std::rc::Rc<Vec<u8>>,
+        compressed_width: u32,
+        compressed_height: u32,
+        preview_data_url: String,
+    },
+    Uploading,
+    Error(String),
+}
+
+#[derive(Clone, PartialEq)]
+struct CompressWorkflow {
+    entry: ContentEntry,
+    phase: CompressPhase,
+}
+
 // ── Dashboard component ─────────────────────────────────────────
 
 #[function_component(Dashboard)]
@@ -275,6 +300,9 @@ pub fn dashboard() -> Html {
     let delete_confirm = use_state(|| Option::<ContentEntry>::None);
     let delete_error = use_state(|| Option::<String>::None);
     let deleting = use_state(|| false);
+
+    // Compress workflow state
+    let compress_workflow = use_state(|| Option::<CompressWorkflow>::None);
 
     // Branch publish/discard/CI state
     let show_diff = use_state(|| false);
@@ -1251,6 +1279,129 @@ pub fn dashboard() -> Html {
         })
     };
 
+    let on_compress_request = {
+        let compress_workflow = compress_workflow.clone();
+        let token = auth.token.clone();
+        let active_branch_opt = active_branch_opt.clone();
+        Callback::from(move |entry: ContentEntry| {
+            let branch = active_branch_opt
+                .clone()
+                .unwrap_or_else(|| DEFAULT_BRANCH.to_string());
+            compress_workflow.set(Some(CompressWorkflow {
+                entry: entry.clone(),
+                phase: CompressPhase::Downloading,
+            }));
+            let compress_workflow = compress_workflow.clone();
+            let token = token.clone();
+            wasm_bindgen_futures::spawn_local(async move {
+                let client = match token {
+                    Some(t) => GitHubClient::new(t),
+                    None => {
+                        compress_workflow.set(Some(CompressWorkflow {
+                            entry: entry.clone(),
+                            phase: CompressPhase::Error("Not authenticated".into()),
+                        }));
+                        return;
+                    }
+                };
+                let bytes = match client.get_file_bytes(&entry.path, &branch).await {
+                    Ok(b) => b,
+                    Err(e) => {
+                        compress_workflow.set(Some(CompressWorkflow {
+                            entry: entry.clone(),
+                            phase: CompressPhase::Error(e),
+                        }));
+                        return;
+                    }
+                };
+                compress_workflow.set(Some(CompressWorkflow {
+                    entry: entry.clone(),
+                    phase: CompressPhase::Compressing,
+                }));
+                match crate::compress::compress_image(&bytes, &entry.name).await {
+                    Ok(result) => {
+                        compress_workflow.set(Some(CompressWorkflow {
+                            entry: entry.clone(),
+                            phase: CompressPhase::Preview {
+                                original_size: bytes.len() as u64,
+                                original_width: result.original_width,
+                                original_height: result.original_height,
+                                compressed_bytes: std::rc::Rc::new(result.compressed_bytes),
+                                compressed_width: result.new_width,
+                                compressed_height: result.new_height,
+                                preview_data_url: result.preview_data_url,
+                            },
+                        }));
+                    }
+                    Err(e) => {
+                        compress_workflow.set(Some(CompressWorkflow {
+                            entry: entry.clone(),
+                            phase: CompressPhase::Error(e),
+                        }));
+                    }
+                }
+            });
+        })
+    };
+
+    let on_compress_cancel = {
+        let compress_workflow = compress_workflow.clone();
+        Callback::from(move |_: MouseEvent| {
+            compress_workflow.set(None);
+        })
+    };
+
+    let on_compress_confirm = {
+        let compress_workflow = compress_workflow.clone();
+        let token = auth.token.clone();
+        let active_branch_opt = active_branch_opt.clone();
+        let force_refresh = force_refresh.clone();
+        Callback::from(move |_: MouseEvent| {
+            let Some(ref wf) = *compress_workflow else {
+                return;
+            };
+            let CompressPhase::Preview {
+                ref compressed_bytes,
+                ..
+            } = wf.phase
+            else {
+                return;
+            };
+            let entry = wf.entry.clone();
+            let bytes = compressed_bytes.as_ref().clone();
+            let branch = active_branch_opt
+                .clone()
+                .unwrap_or_else(|| DEFAULT_BRANCH.to_string());
+            let Some(token) = token.clone() else { return };
+            let compress_workflow = compress_workflow.clone();
+            let force_refresh = force_refresh.clone();
+            compress_workflow.set(Some(CompressWorkflow {
+                entry: entry.clone(),
+                phase: CompressPhase::Uploading,
+            }));
+            wasm_bindgen_futures::spawn_local(async move {
+                let client = GitHubClient::new(token);
+                let message = format!("Compress {}", entry.name);
+                match client
+                    .upload_binary_file(&entry.path, &bytes, &message, Some(&entry.sha), &branch)
+                    .await
+                {
+                    Ok(_) => {
+                        invalidate_all_caches();
+                        force_refresh.set(*force_refresh + 1);
+                        compress_workflow.set(None);
+                    }
+                    Err(e) => {
+                        compress_workflow.set(Some(CompressWorkflow {
+                            entry: entry.clone(),
+                            phase: CompressPhase::Error(e),
+                        }));
+                    }
+                }
+            });
+        })
+    };
+
     let breadcrumbs = render_breadcrumbs(&current_path, {
         let current_path = current_path.clone();
         let filter_text = filter_text.clone();
@@ -1533,6 +1684,20 @@ pub fn dashboard() -> Html {
                                         on_click.emit(path.clone());
                                     })
                                 };
+                                let compress_btn = if crate::compress::is_compressible_image(&entry.name) && is_authenticated {
+                                    let entry_for_compress = entry.clone();
+                                    let on_compress = on_compress_request.clone();
+                                    let compress_onclick = Callback::from(move |e: MouseEvent| {
+                                        e.stop_propagation();
+                                        on_compress.emit(entry_for_compress.clone());
+                                    });
+                                    html! {
+                                        <button class="entry-compress-btn"
+                                                onclick={compress_onclick}>{"Compress"}</button>
+                                    }
+                                } else {
+                                    html! {}
+                                };
                                 let delete_btn = if is_media && is_authenticated {
                                     let entry_for_delete = entry.clone();
                                     let on_delete = on_delete_request.clone();
@@ -1556,6 +1721,7 @@ pub fn dashboard() -> Html {
                                             <span class="entry-icon">{"\u{00B7}"}</span>
                                         }
                                         <span class="entry-name">{&entry.path}</span>
+                                        {compress_btn}
                                         {delete_btn}
                                     </div>
                                 }
@@ -1574,7 +1740,7 @@ pub fn dashboard() -> Html {
             } else {
                 <div class="content-list">
                     { for display_entries.iter().map(|entry| {
-                        render_entry(entry, on_navigate.clone(), &cur_sort, &cur_dates, &cur_post_statuses, &cur_folder_md_statuses, on_delete_request.clone(), is_authenticated)
+                        render_entry(entry, on_navigate.clone(), &cur_sort, &cur_dates, &cur_post_statuses, &cur_folder_md_statuses, on_delete_request.clone(), on_compress_request.clone(), is_authenticated)
                     }) }
                 </div>
             }
@@ -1600,6 +1766,84 @@ pub fn dashboard() -> Html {
                                 { if *deleting { "Deleting\u{2026}" } else { "Delete" } }
                             </button>
                         </div>
+                    </div>
+                </div>
+            }
+
+            if let Some(ref wf) = *compress_workflow {
+                <div class="modal-overlay" onclick={on_compress_cancel.clone()}>
+                    <div class="modal"
+                         onclick={Callback::from(|e: MouseEvent| e.stop_propagation())}>
+                        {match &wf.phase {
+                            CompressPhase::Downloading => html! {
+                                <p>{"Downloading\u{2026}"}</p>
+                            },
+                            CompressPhase::Compressing => html! {
+                                <p>{"Compressing\u{2026}"}</p>
+                            },
+                            CompressPhase::Uploading => html! {
+                                <p>{"Uploading\u{2026}"}</p>
+                            },
+                            CompressPhase::Error(msg) => html! {
+                                <>
+                                    <p class="error">{msg}</p>
+                                    <div class="modal-actions">
+                                        <button onclick={on_compress_cancel.clone()}>{"Close"}</button>
+                                    </div>
+                                </>
+                            },
+                            CompressPhase::Preview {
+                                original_size,
+                                original_width,
+                                original_height,
+                                compressed_bytes,
+                                compressed_width,
+                                compressed_height,
+                                preview_data_url,
+                            } => {
+                                let compressed_size = compressed_bytes.len() as u64;
+                                let larger = compressed_size >= *original_size;
+                                html! {
+                                    <>
+                                        <h3>{"Compress image"}</h3>
+                                        <p class="modal-filename">{&wf.entry.name}</p>
+                                        <table class="compress-stats">
+                                            <tbody>
+                                                <tr>
+                                                    <th>{"Original size"}</th>
+                                                    <td>{crate::utils::format_size(*original_size)}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>{"New size"}</th>
+                                                    <td>{crate::utils::format_size(compressed_size)}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>{"Original dimensions"}</th>
+                                                    <td>{format!("{} \u{00D7} {}", original_width, original_height)}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>{"New dimensions"}</th>
+                                                    <td>{format!("{} \u{00D7} {}", compressed_width, compressed_height)}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        if larger {
+                                            <p class="compress-size-warning">
+                                                {"Compressed file is larger than the original \u{2014} consider cancelling."}
+                                            </p>
+                                        }
+                                        <img src={preview_data_url.clone()} class="compress-preview" />
+                                        <div class="modal-actions compress-modal-actions">
+                                            <button class="compress-cancel-btn" onclick={on_compress_cancel.clone()}>{"Cancel"}</button>
+                                            <button class="compress-confirm-btn"
+                                                    onclick={on_compress_confirm.clone()}>
+                                                {"Confirm \u{0026} Upload"}
+                                            </button>
+                                        </div>
+                                    </>
+                                }
+                            },
+                        }}
                     </div>
                 </div>
             }
@@ -1686,6 +1930,7 @@ fn render_entry(
     post_statuses: &HashMap<String, PostStatus>,
     folder_md_statuses: &HashMap<String, PostStatus>,
     on_delete: Callback<ContentEntry>,
+    on_compress: Callback<ContentEntry>,
     is_authenticated: bool,
 ) -> Html {
     let is_dir = entry.entry_type == "dir";
@@ -1718,6 +1963,19 @@ fn render_entry(
         }
     } else if is_media {
         html! { <span class="entry-icon">{ "\u{1F5BC}\u{FE0F}" }</span> }
+    } else {
+        html! {}
+    };
+
+    let compress_btn = if crate::compress::is_compressible_image(&entry.name) && is_authenticated {
+        let entry_clone = entry.clone();
+        let compress_onclick = Callback::from(move |e: MouseEvent| {
+            e.stop_propagation();
+            on_compress.emit(entry_clone.clone());
+        });
+        html! {
+            <button class="entry-compress-btn" onclick={compress_onclick}>{"Compress"}</button>
+        }
     } else {
         html! {}
     };
@@ -1759,6 +2017,7 @@ fn render_entry(
             if !is_dir {
                 <span class="entry-size">{crate::utils::format_size(entry.size)}</span>
             }
+            {compress_btn}
             {delete_btn}
         </div>
     }
