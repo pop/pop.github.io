@@ -105,6 +105,7 @@ I am not shy about being a fan of John Scalzi but I haven't read _most_ of his b
 I've read the first in the series, but not the other like... 6 that came after it, so here I am reading the sequel to Old Man's War: Ghost Brigades.
 
 As usual, Scalzi does a great job of building an interesting world with interesting tech and fun well considered, if not scientifically concerned, details.
+The characters are trope-tastic, the story is by the book, but it's a fun page turner and I love it.
 
 # Still Lost
 
