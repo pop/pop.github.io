@@ -96,3 +96,24 @@ Yeah for our second day we got norovirus and we're stuck in our hotel throwing u
 
 I was a little worried that Disney would not be very fun with a almost three and almost 1 year old but there are a lot of accommodations. 
 There is copious stroller parking, every restaurant accommodates kids, and the lack of cars makes it a very safe place to let your kid wander around even if you do need to maintain eyes on them because oh my God they could easily get lost in this crowd -- there's so many people where did my kid go ahhhh.
+
+# Still Lost
+
+Still Lost is a collection of short stories written by Sam O' Nella.
+Sam is a YouTuber I've followed for many years who does funny infotainment and isn't very active recently but randomly came out with a self punished book on Amazon and my current policy is that if a creator I like does an interesting thing that's outside their wheelhouse, give it a shot.
+
+The stories take place in a near future sci-fi world in which aliens have invaded and essentially turned Earth into a galactic nature preserve. 
+That said the stories don't directly connect to that theme and range from allegories for drug use to making fun of academics.
+
+Over all I like the quality of these stories I thought they were fun and pulpy and frankly I think they could have been published by one of the indie sci-fi publishers.
+
+# Old Goriot
+
+old goriot was a recommendation by man carrying thing. 
+I listen to the audiobook which I borrowed from my library and really enjoyed listening to an older story which both felt like a modern novel but also a period piece -- let me explain. 
+the book felt like a period piece because it was written in the early 1800s and references many events that took place at that time and parts of culture that are just different from today. 
+but it also felt modern because it was written in the current ERA of the time and so people are cracking jokes and much looser than they are in our modern period piece vernacular.
+does that make sense? 
+like the way we write. pieces today is different from how people in those periods wrote about the common the current ERA.
+I think the way we write period pieces today is much more flat than how authors of the time wrote about their current ERA similar to how when we write about our current ERA we talk about tiny details like your Starbucks order that would probably be lost if an author 200 years in the future is writing about the early 2000s. 
+for example there's a scene in which one of the characters talks about dioramas and then all the characters start to add Rama to the end of words like dinner Rama and going to bed rama. it's a good bit and they refer back to it often and it's just hilarious.
