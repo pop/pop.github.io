@@ -1,7 +1,7 @@
 +++
 title = "What's Good #19"
 date = "2026-05-02"
-description = "Disneyland, Ghost Brigades, Still Lost, and Old Goriot"
+description = "Disneyland, Ghost Brigades, and Old Goriot"
 taxonomies.tags = ["whats-good"]
 +++
 
@@ -118,20 +118,6 @@ I am not shy about being a fan of John Scalzi but I have , ashamedly, only read 
 
 As usual, Scalzi does a great job of building an interesting world with interesting tech with fun and well considered (if not scientifically concerned) details.
 The characters are trope-tastic, the story is by the book, but it's a fun page turner and I love it.
-
-# Still Lost
-
-![still lost](6343.jpg)
-
-Still Lost is a collection of short stories written by Sam A' Miller, better known as Sam O' Nella on YouTube.
-I've followed Sam for many years and enjoyed his funny infotainment.
-He hasn't been very active recently but randomly came out with a self punished book on Amazon and my current policy is that if a creator I like does a new and interesting thing that's outside their wheelhouse, I should give it a shot.
-
-The stories take place in a near future sci-fi world in which aliens have invaded Earth and essentially turned it into a galactic nature preserve. 
-That said the stories don't all directly connect to that theme and range from sci-fi allegories for drug use to making fun of academics.
-
-Over all I like the quality of these stories.
-I thought they were fun and pulpy and frankly I think they could have been published by one of the indie sci-fi publishers -- I'm not sure why this was self published but I hope Miller keeps writing.
 
 # Old Goriot
 
