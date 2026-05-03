@@ -9,6 +9,7 @@ use yew_router::prelude::*;
 
 use crate::app::AuthContext;
 use crate::components::dashboard::invalidate_cache;
+use crate::models::github::CommitSummary;
 use crate::models::post::{parse_frontmatter, post_dir, render_markdown};
 use crate::routes::Route;
 use crate::services::github::GitHubClient;
@@ -50,6 +51,13 @@ pub fn editor_page(props: &Props) -> Html {
     let rendered_html = use_state(String::new);
     let frontmatter_fields = use_state(Vec::<(String, String)>::new);
     let render_gen = use_mut_ref(|| 0u32);
+    let show_history = use_state(|| false);
+    let history_commits = use_state(|| Vec::<CommitSummary>::new());
+    let history_loading = use_state(|| false);
+    let history_error = use_state(|| Option::<String>::None);
+    let reverting = use_state(|| false);
+    let history_preview_pre_sha = use_state(|| Option::<String>::None);
+    let pending_revert_sha = use_state(|| Option::<String>::None);
 
     // Auth-aware error setter: clears token on 401
     let set_error: Rc<dyn Fn(String)> = {
@@ -690,6 +698,259 @@ pub fn editor_page(props: &Props) -> Html {
         Callback::from(move |_: MouseEvent| view_mode.set(ViewMode::Split))
     };
 
+    let toggle_history = {
+        let show_history = show_history.clone();
+        Callback::from(move |_: MouseEvent| {
+            show_history.set(!*show_history);
+        })
+    };
+
+    let on_history_select = {
+        let pending_revert_sha = pending_revert_sha.clone();
+        Callback::from(move |sha: String| {
+            pending_revert_sha.set(Some(sha));
+        })
+    };
+
+    let on_cancel_pending_revert = {
+        let pending_revert_sha = pending_revert_sha.clone();
+        Callback::from(move |_: MouseEvent| {
+            pending_revert_sha.set(None);
+        })
+    };
+
+    let on_discard_then_revert = {
+        let content = content.clone();
+        let original_content = original_content.clone();
+        let file_sha = file_sha.clone();
+        let is_new = is_new.clone();
+        let token = auth.token.clone();
+        let path = props.path.clone();
+        let active_branch = auth.active_branch.clone();
+        let set_error = set_error.clone();
+        Callback::from(move |_: MouseEvent| {
+            if let (Some(token), Some(branch)) = (token.clone(), active_branch.clone()) {
+                let content = content.clone();
+                let original_content = original_content.clone();
+                let file_sha = file_sha.clone();
+                let is_new = is_new.clone();
+                let set_error = set_error.clone();
+                let path = path.clone();
+                wasm_bindgen_futures::spawn_local(async move {
+                    let client = GitHubClient::new(token);
+                    match client.get_file(&path, &branch).await {
+                        Ok(f) => {
+                            let text = f.content.unwrap_or_default();
+                            content.set(text.clone());
+                            original_content.set(text);
+                            file_sha.set(Some(f.sha));
+                            is_new.set(false);
+                        }
+                        Err(e) => set_error(e),
+                    }
+                });
+            }
+        })
+    };
+
+    let on_save_then_revert = {
+        let save_btn_ref = save_btn_ref.clone();
+        Callback::from(move |_: MouseEvent| {
+            if let Some(btn) = save_btn_ref.cast::<HtmlElement>() {
+                btn.click();
+            }
+        })
+    };
+
+    let on_confirm_revert = {
+        let history_preview_pre_sha = history_preview_pre_sha.clone();
+        let save_msg = save_msg.clone();
+        Callback::from(move |_: MouseEvent| {
+            history_preview_pre_sha.set(None);
+            save_msg.set(Some("Version restored".into()));
+        })
+    };
+
+    let on_cancel_revert = {
+        let history_preview_pre_sha = history_preview_pre_sha.clone();
+        let reverting = reverting.clone();
+        let content = content.clone();
+        let original_content = original_content.clone();
+        let file_sha = file_sha.clone();
+        let set_error = set_error.clone();
+        let token = auth.token.clone();
+        let path = props.path.clone();
+        let active_branch = auth.active_branch.clone();
+        Callback::from(move |_: MouseEvent| {
+            let Some(pre_sha) = (*history_preview_pre_sha).clone() else {
+                return;
+            };
+            if let (Some(token), Some(branch)) = (token.clone(), active_branch.clone()) {
+                let reverting = reverting.clone();
+                let content = content.clone();
+                let original_content = original_content.clone();
+                let file_sha = file_sha.clone();
+                let set_error = set_error.clone();
+                let history_preview_pre_sha = history_preview_pre_sha.clone();
+                let path = path.clone();
+                reverting.set(true);
+                wasm_bindgen_futures::spawn_local(async move {
+                    let client = GitHubClient::new(token);
+                    match client
+                        .revert_directory_to_commit(&path, &pre_sha, &branch)
+                        .await
+                    {
+                        Ok(new_file_sha) => {
+                            if let Ok(f) = client.get_file(&path, &branch).await {
+                                let text = f.content.unwrap_or_default();
+                                content.set(text.clone());
+                                original_content.set(text);
+                                file_sha.set(Some(new_file_sha));
+                            }
+                            history_preview_pre_sha.set(None);
+                            reverting.set(false);
+                        }
+                        Err(e) => {
+                            set_error(e);
+                            reverting.set(false);
+                        }
+                    }
+                });
+            }
+        })
+    };
+
+    // Revert effect: fires when pending_revert_sha is Some and content is clean
+    {
+        let pending_revert_sha_state = pending_revert_sha.clone();
+        let content = content.clone();
+        let original_content = original_content.clone();
+        let is_new = is_new.clone();
+        let reverting = reverting.clone();
+        let history_preview_pre_sha = history_preview_pre_sha.clone();
+        let history_commits = history_commits.clone();
+        let file_sha = file_sha.clone();
+        let view_mode = view_mode.clone();
+        let set_error = set_error.clone();
+        let token = auth.token.clone();
+        let path = props.path.clone();
+        let active_branch = auth.active_branch.clone();
+
+        use_effect_with(
+            ((*pending_revert_sha).clone(), (*original_content).clone()),
+            move |(pending_sha, _)| {
+                let ready = pending_sha.is_some()
+                    && !(*content != *original_content || *is_new)
+                    && token.is_some()
+                    && active_branch.is_some();
+
+                if ready {
+                    let sha = pending_sha.clone().unwrap();
+                    let token = token.unwrap();
+                    let branch = active_branch.unwrap();
+                    let pending_revert_sha = pending_revert_sha_state.clone();
+                    let content = content.clone();
+                    let original_content = original_content.clone();
+                    let file_sha = file_sha.clone();
+                    let reverting = reverting.clone();
+                    let history_preview_pre_sha = history_preview_pre_sha.clone();
+                    let history_commits = history_commits.clone();
+                    let view_mode = view_mode.clone();
+                    let set_error = set_error.clone();
+                    let path = path.clone();
+
+                    wasm_bindgen_futures::spawn_local(async move {
+                        let client = GitHubClient::new(token);
+
+                        let pre_sha = match client.get_branch_sha(&branch).await {
+                            Ok(s) => s,
+                            Err(e) => {
+                                set_error(e);
+                                return;
+                            }
+                        };
+
+                        reverting.set(true);
+
+                        match client
+                            .revert_directory_to_commit(&path, &sha, &branch)
+                            .await
+                        {
+                            Ok(new_file_sha) => {
+                                match client.get_file(&path, &branch).await {
+                                    Ok(f) => {
+                                        let text = f.content.unwrap_or_default();
+                                        content.set(text.clone());
+                                        original_content.set(text);
+                                        file_sha.set(Some(new_file_sha));
+                                    }
+                                    Err(e) => {
+                                        set_error(e);
+                                        reverting.set(false);
+                                        return;
+                                    }
+                                }
+                                history_preview_pre_sha.set(Some(pre_sha));
+                                pending_revert_sha.set(None);
+                                view_mode.set(ViewMode::Split);
+                                history_commits.set(vec![]);
+                                reverting.set(false);
+                            }
+                            Err(e) => {
+                                set_error(e);
+                                pending_revert_sha.set(None);
+                                reverting.set(false);
+                            }
+                        }
+                    });
+                }
+
+                || ()
+            },
+        );
+    }
+
+    // Fetch history when panel is opened for the first time
+    {
+        let history_commits = history_commits.clone();
+        let history_loading = history_loading.clone();
+        let history_error = history_error.clone();
+        let token = auth.token.clone();
+        let path = props.path.clone();
+        let active_branch = auth.active_branch.clone();
+        let show_history_val = *show_history;
+
+        use_effect_with((show_history_val, auth.active_branch.clone()), move |_| {
+            if show_history_val && history_commits.is_empty() {
+                if let (Some(token), Some(branch)) = (token, active_branch) {
+                    history_loading.set(true);
+                    history_error.set(None);
+                    wasm_bindgen_futures::spawn_local(async move {
+                        let client = GitHubClient::new(token);
+                        match client.list_commits_for_path(&path, &branch).await {
+                            Ok(commits) => {
+                                history_commits.set(commits);
+                                history_loading.set(false);
+                            }
+                            Err(e) => {
+                                history_error.set(Some(e));
+                                history_loading.set(false);
+                            }
+                        }
+                    });
+                }
+            }
+            || ()
+        });
+    }
+
+    let on_dismiss_save_msg = {
+        let save_msg = save_msg.clone();
+        Callback::from(move |_: MouseEvent| {
+            save_msg.set(None);
+        })
+    };
+
     let has_changes = *content != *original_content || *is_new;
     let show_editor = *view_mode != ViewMode::Preview;
     let show_preview = *view_mode != ViewMode::Edit;
@@ -719,7 +980,10 @@ pub fn editor_page(props: &Props) -> Html {
             }
 
             if let Some(ref msg) = *save_msg {
-                <p class="save-msg">{msg}</p>
+                <div class="save-msg">
+                    <span>{msg}</span>
+                    <button class="save-msg-dismiss" onclick={on_dismiss_save_msg.clone()}>{"×"}</button>
+                </div>
             }
 
             if *loading {
@@ -731,10 +995,29 @@ pub fn editor_page(props: &Props) -> Html {
                             ref={save_btn_ref.clone()}
                             class="save-btn"
                             onclick={on_save}
-                            disabled={*saving || !has_changes}
+                            disabled={*saving || !has_changes || history_preview_pre_sha.is_some()}
                         >
                             { if *saving { "Saving\u{2026}" } else { "Save" } }
                         </button>
+                        if auth.active_branch.is_some() {
+                            if file_sha.is_some() {
+                                <button
+                                    class="history-toggle-btn"
+                                    onclick={toggle_history.clone()}
+                                    disabled={*saving || *history_loading || history_preview_pre_sha.is_some()}
+                                >
+                                    { if *show_history { "Hide history" } else { "History" } }
+                                </button>
+                            } else {
+                                <button
+                                    class="history-toggle-btn"
+                                    disabled=true
+                                    title="Save the post at least once to view history"
+                                >
+                                    {"History"}
+                                </button>
+                            }
+                        }
                         if file_sha.is_some() {
                             <button
                                 class="delete-btn"
@@ -785,6 +1068,59 @@ pub fn editor_page(props: &Props) -> Html {
                         >{"Split"}</button>
                     </div>
                 </div>
+                if *show_history {
+                    {render_history_panel(
+                        &history_commits,
+                        *history_loading,
+                        &history_error,
+                        on_history_select.clone(),
+                    )}
+                    if pending_revert_sha.is_some() && has_changes {
+                        <div class="revert-gate-banner">
+                            <p>{"You have unsaved changes. Save or discard them before reverting."}</p>
+                            <div class="revert-gate-actions">
+                                <button
+                                    class="save-btn"
+                                    onclick={on_save_then_revert.clone()}
+                                    disabled={*saving || *reverting}
+                                >
+                                    { if *saving { "Saving\u{2026}" } else { "Save and revert" } }
+                                </button>
+                                <button
+                                    class="discard-btn"
+                                    onclick={on_discard_then_revert.clone()}
+                                    disabled={*saving || *reverting}
+                                >
+                                    {"Discard and revert"}
+                                </button>
+                                <button onclick={on_cancel_pending_revert.clone()}>{"Cancel"}</button>
+                            </div>
+                        </div>
+                    }
+                }
+                if history_preview_pre_sha.is_some() {
+                    <div class="revert-preview-banner">
+                        <span class="revert-preview-msg">
+                            {"Previewing restored version \u{2014} confirm or cancel."}
+                        </span>
+                        <div class="revert-preview-actions">
+                            <button
+                                class="confirm-revert-btn"
+                                onclick={on_confirm_revert.clone()}
+                                disabled={*reverting}
+                            >
+                                {"Confirm restore"}
+                            </button>
+                            <button
+                                class="cancel-revert-btn"
+                                onclick={on_cancel_revert.clone()}
+                                disabled={*reverting}
+                            >
+                                { if *reverting { "Reverting\u{2026}" } else { "Cancel restore" } }
+                            </button>
+                        </div>
+                    </div>
+                }
                 <div
                     class={classes!(
                         "editor-container",
@@ -993,4 +1329,76 @@ fn highlight_code_blocks() {
     let _ = js_sys::eval(
         "if(typeof hljs!=='undefined'){document.querySelectorAll('pre code:not(.hljs)').forEach(el=>hljs.highlightElement(el));}",
     );
+}
+
+// ── History panel ────────────────────────────────────────────────
+
+fn render_history_panel(
+    commits: &[CommitSummary],
+    loading: bool,
+    error: &Option<String>,
+    on_select: Callback<String>,
+) -> Html {
+    html! {
+        <div class="history-panel">
+            <div class="history-panel-header">
+                <span class="history-panel-title">{"Post history"}</span>
+            </div>
+            if loading {
+                <p class="history-loading">{"Loading history\u{2026}"}</p>
+            } else if let Some(ref err) = error {
+                <p class="error">{err}</p>
+            } else if commits.is_empty() {
+                <p class="history-empty">{"No commits found."}</p>
+            } else {
+                <div class="history-list">
+                    { for commits.iter().map(|c| {
+                        let sha = c.sha.clone();
+                        let on_select = on_select.clone();
+                        let onclick = Callback::from(move |_: MouseEvent| {
+                            on_select.emit(sha.clone());
+                        });
+                        let short_sha = &c.sha[..7.min(c.sha.len())];
+                        let short_msg = if c.message.len() > 60 {
+                            format!("{}\u{2026}", &c.message[..60])
+                        } else {
+                            c.message.clone()
+                        };
+                        html! {
+                            <div class="history-item" onclick={onclick}>
+                                <div class="history-item-top">
+                                    <span class="history-sha">{short_sha}</span>
+                                    <span class="history-date">{format_history_date(&c.date)}</span>
+                                </div>
+                                <div class="history-item-bottom">
+                                    <span class="history-msg">{short_msg}</span>
+                                    <span class="history-stats">
+                                        <span class="history-add">{format!("+{}", c.additions)}</span>
+                                        {" "}
+                                        <span class="history-del">{format!("-{}", c.deletions)}</span>
+                                    </span>
+                                </div>
+                            </div>
+                        }
+                    }) }
+                </div>
+            }
+        </div>
+    }
+}
+
+/// Format an ISO 8601 date string for display in the history panel.
+fn format_history_date(iso: &str) -> String {
+    let d = js_sys::Date::new(&wasm_bindgen::JsValue::from_str(iso));
+    if d.get_time().is_nan() {
+        return iso.to_string();
+    }
+    format!(
+        "{:04}-{:02}-{:02} {:02}:{:02}",
+        d.get_utc_full_year(),
+        d.get_utc_month() + 1,
+        d.get_utc_date(),
+        d.get_utc_hours(),
+        d.get_utc_minutes()
+    )
 }

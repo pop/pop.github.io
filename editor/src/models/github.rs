@@ -229,3 +229,51 @@ pub struct GqlRefNode {
     pub prefix: String,
     pub target: GqlRefTarget,
 }
+
+// ── History query types ──────────────────────────────────────────
+
+/// A commit entry returned by the history query for a specific file path.
+#[derive(Clone, Debug, PartialEq)]
+pub struct CommitSummary {
+    pub sha: String,
+    pub message: String,
+    pub date: String,
+    pub additions: u32,
+    pub deletions: u32,
+}
+
+#[derive(Deserialize)]
+pub struct GqlHistoryData {
+    pub repository: GqlRepoHistory,
+}
+
+#[derive(Deserialize)]
+pub struct GqlRepoHistory {
+    #[serde(rename = "ref")]
+    pub git_ref: Option<GqlHistoryRef>,
+}
+
+#[derive(Deserialize)]
+pub struct GqlHistoryRef {
+    pub target: GqlHistoryTarget,
+}
+
+#[derive(Deserialize)]
+pub struct GqlHistoryTarget {
+    pub history: Option<GqlHistoryConnection>,
+}
+
+#[derive(Deserialize)]
+pub struct GqlHistoryConnection {
+    pub nodes: Vec<GqlHistoryNode>,
+}
+
+#[derive(Deserialize)]
+pub struct GqlHistoryNode {
+    pub oid: String,
+    pub message: String,
+    #[serde(rename = "committedDate")]
+    pub committed_date: String,
+    pub additions: u32,
+    pub deletions: u32,
+}

@@ -1,0 +1,10 @@
+# Build the WASM bundle
+build:
+    trunk build --release
+
+clean:
+    rm -rf ./dist/
+
+# Build then deploy to Cloudflare Pages
+deploy: clean build
+    wrangler pages deploy --branch main

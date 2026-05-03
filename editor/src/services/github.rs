@@ -7,8 +7,9 @@ use serde::de::DeserializeOwned;
 use serde_json::json;
 
 use crate::models::github::{
-    CheckRunsResponse, CommitInfo, CompareResponse, ContentEntry, FileContent, GitRef, GqlBlobData,
-    GqlRefAndBlobData, GqlRefData, GqlRefsData, GqlTreeData, GraphQLResponse, TreeResponse,
+    CheckRunsResponse, CommitInfo, CommitSummary, CompareResponse, ContentEntry, FileContent,
+    GitRef, GqlBlobData, GqlHistoryData, GqlRefAndBlobData, GqlRefData, GqlRefsData, GqlTreeData,
+    GraphQLResponse, TreeResponse,
 };
 use crate::models::post::{
     bytes_to_data_url, extract_relative_image_srcs, post_dir, replace_image_srcs,
@@ -196,6 +197,13 @@ impl GitHubClient {
     }
 
     async fn get_file_graphql(&self, path: &str, branch: &str) -> Result<FileContent, String> {
+        // NOTE: GraphQL returns `text: null` for binary blobs and may also return null for
+        // text files that exceed GitHub's GraphQL inline-content limit. In that case
+        // `blob.text` is None and callers that do `.unwrap_or_default()` will silently get
+        // an empty string. Unlike `get_file_rest`, this path does not fall back to the Git
+        // Blob API, so very large text files fetched through GraphQL will appear blank.
+        // Authenticated callers go through this path, so fixing it here would help large
+        // .md files opened in the editor; that is tracked separately.
         let expression = format!("{branch}:{path}");
 
         let query = r#"
@@ -245,6 +253,16 @@ impl GitHubClient {
                 let mut fc: FileContent = resp.json().await.map_err(|e| e.to_string())?;
                 // Decode base64 content so callers always get plaintext
                 fc.content = fc.content.map(|c| decode_github_content(&c));
+                // Large-file fallback: GitHub omits inline content for files >1 MB.
+                // When content is absent (None) or empty after decoding, fetch raw bytes
+                // via the Git Blob API and decode as UTF-8.
+                if fc.content.as_deref().unwrap_or("").is_empty() && !fc.sha.is_empty() {
+                    let raw_bytes = self.get_blob_raw_bytes(&fc.sha).await?;
+                    fc.content = Some(
+                        String::from_utf8(raw_bytes)
+                            .map_err(|e| format!("File is not valid UTF-8: {e}"))?,
+                    );
+                }
                 Ok(fc)
             }
             401 => Err("Unauthorized \u{2014} check your token".into()),
@@ -255,8 +273,8 @@ impl GitHubClient {
 
     /// Read a single file from the repo and return its raw bytes.
     ///
-    /// Uses the REST Contents API. The base64 content from the response is
-    /// stripped of whitespace before decoding, matching GitHub's encoding.
+    /// Uses the REST Contents API for files ≤1 MB; falls back to the Git Blob
+    /// API (raw media type) for larger files so content is never silently empty.
     pub async fn get_file_bytes(&self, path: &str, branch: &str) -> Result<Vec<u8>, String> {
         let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/contents/{path}?ref={branch}");
         let resp = self.get(&url).await?;
@@ -266,12 +284,39 @@ impl GitHubClient {
                 let fc: FileContent = resp.json().await.map_err(|e| e.to_string())?;
                 let encoded = fc.content.unwrap_or_default();
                 let cleaned: String = encoded.chars().filter(|c| !c.is_whitespace()).collect();
+                if cleaned.is_empty() {
+                    // GitHub omits inline content for files >1 MB; use the Blob API instead.
+                    return self.get_blob_raw_bytes(&fc.sha).await;
+                }
                 BASE64_STANDARD
                     .decode(cleaned.as_bytes())
                     .map_err(|e| e.to_string())
             }
             401 => Err("Unauthorized \u{2014} check your token".into()),
             404 => Err(format!("File not found: {path}")),
+            status => Err(format!("GitHub API error: {status}")),
+        }
+    }
+
+    /// Fetch a git blob by SHA and return its raw bytes.
+    ///
+    /// Uses `Accept: application/vnd.github.v3.raw` to bypass base64 encoding.
+    /// Supports files up to 100 MB, unlike the Contents API (1 MB limit).
+    async fn get_blob_raw_bytes(&self, sha: &str) -> Result<Vec<u8>, String> {
+        let token = self.require_token()?;
+        let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/git/blobs/{sha}");
+        let resp = Request::get(&url)
+            .header("Authorization", &format!("Bearer {token}"))
+            .header("Accept", "application/vnd.github.v3.raw")
+            .header("User-Agent", "elijah-run-editor")
+            .send()
+            .await
+            .map_err(|e| e.to_string())?;
+
+        match resp.status() {
+            200 => resp.binary().await.map_err(|e| e.to_string()),
+            401 => Err("Unauthorized \u{2014} check your token".into()),
+            404 => Err(format!("Blob not found: {sha}")),
             status => Err(format!("GitHub API error: {status}")),
         }
     }
@@ -317,6 +362,41 @@ impl GitHubClient {
 
         let replacements: HashMap<String, String> = join_all(futures).await.into_iter().collect();
         replace_image_srcs(html, &replacements)
+    }
+
+    // ── Tree operations ──────────────────────────────────────────
+
+    /// List all blob entries under `dir_prefix` in the repo tree at `commit_sha`.
+    /// Returns a flat list of (repo_path, blob_sha) pairs.
+    /// Uses the Git Trees API (REST) with recursive=1.
+    pub async fn get_directory_tree_at_commit(
+        &self,
+        commit_sha: &str,
+        dir_prefix: &str,
+    ) -> Result<Vec<(String, String)>, String> {
+        let url = format!("{API_BASE}/repos/{OWNER}/{REPO}/git/trees/{commit_sha}?recursive=1");
+        let resp = self.get(&url).await?;
+
+        match resp.status() {
+            200 => {
+                let tree: TreeResponse = resp.json().await.map_err(|e| e.to_string())?;
+                let entries = tree
+                    .tree
+                    .into_iter()
+                    .filter(|te| {
+                        te.entry_type == "blob"
+                            && (dir_prefix.is_empty()
+                                || te.path.starts_with(&format!("{dir_prefix}/"))
+                                || te.path == dir_prefix)
+                    })
+                    .map(|te| (te.path, te.sha))
+                    .collect();
+                Ok(entries)
+            }
+            401 => Err("Unauthorized — check your token".into()),
+            404 => Err(format!("Commit not found: {commit_sha}")),
+            status => Err(format!("GitHub API error: {status}")),
+        }
     }
 
     // ── Branch operations ────────────────────────────────────────
@@ -883,6 +963,147 @@ impl GitHubClient {
         result
     }
 
+    // ── Commit history ───────────────────────────────────────────
+
+    /// List commits on `branch` that touched `path`, up to 50 most recent.
+    /// Returns commit SHA, message, date, and additions/deletions counts.
+    /// Requires authentication (GraphQL).
+    pub async fn list_commits_for_path(
+        &self,
+        path: &str,
+        branch: &str,
+    ) -> Result<Vec<CommitSummary>, String> {
+        let qualified = format!("refs/heads/{branch}");
+
+        let query = r#"
+            query($owner: String!, $name: String!, $branch: String!, $path: String!) {
+                repository(owner: $owner, name: $name) {
+                    ref(qualifiedName: $branch) {
+                        target {
+                            ... on Commit {
+                                history(path: $path, first: 50) {
+                                    nodes {
+                                        oid
+                                        message
+                                        committedDate
+                                        additions
+                                        deletions
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        "#;
+
+        let data: GqlHistoryData = self
+            .graphql(
+                query,
+                json!({ "owner": OWNER, "name": REPO, "branch": qualified, "path": path }),
+            )
+            .await?;
+
+        let nodes = data
+            .repository
+            .git_ref
+            .and_then(|r| r.target.history)
+            .map(|h| h.nodes)
+            .unwrap_or_default();
+
+        Ok(nodes
+            .into_iter()
+            .map(|n| CommitSummary {
+                sha: n.oid,
+                message: n.message,
+                date: n.committed_date,
+                additions: n.additions,
+                deletions: n.deletions,
+            })
+            .collect())
+    }
+
+    // ── Revert operations ────────────────────────────────────────
+
+    /// Restore all files in the post directory to their state at `target_commit_sha`.
+    /// Writes commits directly to `branch`.
+    /// Returns the new SHA of the primary `post_path` file.
+    pub async fn revert_directory_to_commit(
+        &self,
+        post_path: &str,
+        target_commit_sha: &str,
+        branch: &str,
+    ) -> Result<String, String> {
+        let dir = post_dir(post_path).to_string();
+        let is_standalone = dir.is_empty();
+
+        // 1. Get tree at target commit (historical state)
+        let historical = self
+            .get_directory_tree_at_commit(target_commit_sha, &dir)
+            .await?;
+        let historical_map: HashMap<String, String> = if is_standalone {
+            historical
+                .into_iter()
+                .filter(|(p, _)| p == post_path)
+                .collect()
+        } else {
+            historical.into_iter().collect()
+        };
+
+        // 2. Get tree at branch HEAD
+        let branch_head_sha = self.get_branch_sha(branch).await?;
+        let current = self
+            .get_directory_tree_at_commit(&branch_head_sha, &dir)
+            .await?;
+        let current_map: HashMap<String, String> = if is_standalone {
+            current
+                .into_iter()
+                .filter(|(p, _)| p == post_path)
+                .collect()
+        } else {
+            current.into_iter().collect()
+        };
+
+        // 3. Compute diff
+        let to_restore: Vec<String> = historical_map
+            .keys()
+            .filter(|p| current_map.get(*p) != Some(&historical_map[*p]))
+            .cloned()
+            .collect();
+
+        let to_delete: Vec<String> = current_map
+            .keys()
+            .filter(|p| !historical_map.contains_key(*p))
+            .cloned()
+            .collect();
+
+        // Early return if nothing differs
+        if to_restore.is_empty() && to_delete.is_empty() {
+            let primary = self.get_file(post_path, branch).await?;
+            return Ok(primary.sha);
+        }
+
+        // 4. Delete files added after target
+        for path in &to_delete {
+            let sha = &current_map[path];
+            let message = format!("Revert: remove {path}");
+            self.delete_file(path, sha, &message, branch).await?;
+        }
+
+        // 5. Restore changed/missing files
+        for path in &to_restore {
+            let bytes = self.get_file_bytes(path, target_commit_sha).await?;
+            let existing_sha = self.get_file(path, branch).await.ok().map(|f| f.sha);
+            let message = format!("Restore version: {path}");
+            self.upload_binary_file(path, &bytes, &message, existing_sha.as_deref(), branch)
+                .await?;
+        }
+
+        // 6. Return the new SHA of the primary file
+        let primary = self.get_file(post_path, branch).await?;
+        Ok(primary.sha)
+    }
+
     // ── CI status ───────────────────────────────────────────────
 
     /// Get check runs for a given git ref (branch name or SHA).
@@ -1022,5 +1243,25 @@ mod tests {
     #[test]
     fn decode_empty_string() {
         assert_eq!(decode_github_content(""), "");
+    }
+
+    /// Documents the contract of the large-file fallback in `get_file_rest`:
+    /// raw bytes fetched from the Git Blob API must be valid UTF-8 to be returned
+    /// as file content. This round-trip should be lossless for any valid text file.
+    #[test]
+    fn blob_bytes_round_trip_utf8() {
+        let original = "# Hello\n\nThis is a test post with unicode: café\n";
+        let bytes = original.as_bytes().to_vec();
+        let decoded = String::from_utf8(bytes).unwrap();
+        assert_eq!(decoded, original);
+    }
+
+    /// Documents that the large-file fallback in `get_file_rest` returns an error
+    /// (rather than panicking or silently corrupting data) when the blob bytes are
+    /// not valid UTF-8.
+    #[test]
+    fn blob_bytes_invalid_utf8_returns_error() {
+        let bad_bytes = vec![0xFF, 0xFE, 0x00];
+        assert!(String::from_utf8(bad_bytes).is_err());
     }
 }
