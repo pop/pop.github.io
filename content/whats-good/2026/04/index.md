@@ -36,7 +36,7 @@ My kids loved it, great first ride.
 
 ## Toon Town
 
-![6144.jpg](6144.jpg)
+![img_20260428_094328758.jpg](img_20260428_094328758.jpg)
 
 I've written before about my foray into the Toontown Rewritten MMO so visiting Toontown IRL was a must.
 Obviously video games can look very whimsical and wacky so it was very impressive how it achieved the exact same vibes in real life.
