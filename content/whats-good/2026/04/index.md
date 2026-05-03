@@ -123,23 +123,23 @@ The characters are trope-tastic, the story is by the book, but it's a fun page t
 
 ![still lost](6343.jpg)
 
-Still Lost is a collection of short stories written by Sam O' Nella.
-Sam is a YouTuber I've followed for many years who does funny infotainment and isn't very active recently but randomly came out with a self punished book on Amazon and my current policy is that if a creator I like does an interesting thing that's outside their wheelhouse, give it a shot.
+Still Lost is a collection of short stories written by Sam A' Miller, better known as Sam O' Nella on YouTube.
+I've followed Sam for many years and enjoyed his funny infotainment.
+He hasn't been very active recently but randomly came out with a self punished book on Amazon and my current policy is that if a creator I like does a new and interesting thing that's outside their wheelhouse, I should give it a shot.
 
-The stories take place in a near future sci-fi world in which aliens have invaded and essentially turned Earth into a galactic nature preserve. 
-That said the stories don't directly connect to that theme and range from allegories for drug use to making fun of academics.
+The stories take place in a near future sci-fi world in which aliens have invaded Earth and essentially turned it into a galactic nature preserve. 
+That said the stories don't all directly connect to that theme and range from sci-fi allegories for drug use to making fun of academics.
 
-Over all I like the quality of these stories I thought they were fun and pulpy and frankly I think they could have been published by one of the indie sci-fi publishers.
+Over all I like the quality of these stories.
+I thought they were fun and pulpy and frankly I think they could have been published by one of the indie sci-fi publishers -- I'm not sure why this was self published but I hope Miller keeps writing.
 
 # Old Goriot
 
 ![6344.jpg](6344.jpg)
 
-old goriot was a recommendation by man carrying thing. 
-I listen to the audiobook which I borrowed from my library and really enjoyed listening to an older story which both felt like a modern novel but also a period piece -- let me explain. 
-the book felt like a period piece because it was written in the early 1800s and references many events that took place at that time and parts of culture that are just different from today. 
-but it also felt modern because it was written in the current ERA of the time and so people are cracking jokes and much looser than they are in our modern period piece vernacular.
-does that make sense? 
-like the way we write. pieces today is different from how people in those periods wrote about the common the current ERA.
-I think the way we write period pieces today is much more flat than how authors of the time wrote about their current ERA similar to how when we write about our current ERA we talk about tiny details like your Starbucks order that would probably be lost if an author 200 years in the future is writing about the early 2000s. 
-for example there's a scene in which one of the characters talks about dioramas and then all the characters start to add Rama to the end of words like dinner Rama and going to bed rama. it's a good bit and they refer back to it often and it's just hilarious.
+Old Goriot was a recommendation by the YouTuber Man Carrying Thing. 
+I listen to the audiobook which I borrowed from my library and really enjoyed listening to.
+It's an older story which felt like a modern novel placed in a period piece -- let me explain. 
+Period pieces written in the modern day tend to flatten the characters and sets to a simplistic, almost cartoonish version of what life must have actually been like; we use short hand to communicate "this is an old thing" that somebody in the time might agree with as being accurate, but would point out that it misses all of the nuance of actually being there.
+Modern stories taking place in the present day for example might mention somebody's cafe order in excruciating detail, or the dilemma to use or not use a paper straw and the baggage in that choice -- none of which a writer 200 years from now would think to include.
+For example there's a scene in which one of the characters talks about dioramas and then all the characters start to add -rama to the end of words like dinner-rama and going to bed--orama; it's a good bit that gets called back to throughout the book and that shit just doesn't happen in modern period pieces.
