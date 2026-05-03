@@ -1,11 +1,11 @@
 ---
 # project-os-4umw
 title: Clamp Webamp window positions to viewport via MutationObserver
-status: todo
+status: scrapped
 type: bug
 priority: high
 created_at: 2026-04-18T04:57:02Z
-updated_at: 2026-04-18T04:57:02Z
+updated_at: 2026-04-23T20:35:26Z
 ---
 
 ## Problem
@@ -72,10 +72,27 @@ Store both `observer` and `callback` in RefCell handles; on cleanup call `observ
 
 ## Todo
 
-- [ ] Add `MutationObserver` that clamps `style.left`/`style.top` on descendants
-- [ ] Avoid reentrance loops (tolerance check before write-back)
-- [ ] Disconnect observer on component unmount
-- [ ] `cargo check --target wasm32-unknown-unknown` passes
-- [ ] `cargo clippy --target wasm32-unknown-unknown` passes with no new warnings
+- [x] Add `MutationObserver` that clamps `style.left`/`style.top` on descendants
+- [x] Avoid reentrance loops (tolerance check before write-back)
+- [x] Disconnect observer on component unmount
+- [x] `cargo check --target wasm32-unknown-unknown` passes
+- [x] `cargo clippy --target wasm32-unknown-unknown` passes with no new warnings
 - [ ] Manual test: drag Webamp to viewport edges on mobile emulation — player stops at edge, taskbar/Clippy stay put
 - [ ] Verify no desktop regression, no drag stutter
+
+## Update 2026-04-20
+
+Firefox RDM repro confirmed the root cause empirically: during Webamp drag, `window.innerWidth` grows while `window.visualViewport.width` stays stable. That's Firefox's layout viewport auto-expanding to contain Webamp's overflowing chrome — the exact mechanism this clamp prevents. Taskbar/Clippy are anchored to the layout viewport, which is why they visually drift.
+
+Implementing this ticket should resolve the Firefox RDM symptom documented in project-os-s0wm.
+
+## Summary of Changes
+
+Added a `MutationObserver` inside the `init` closure in `src/components/webamp.rs` that watches `style` attribute mutations on all descendants of `#webamp-mount`. On each mutation the callback reads the mutated element's inline `left`/`top`, clamps them to `[0, innerWidth - offsetWidth]` / `[0, innerHeight - offsetHeight]`, and writes back only when the delta exceeds 0.5 px (reentrance guard). The observer and its backing `Closure` are stored in `Rc<RefCell<Option<_>>>` handles and disconnected/dropped in the effect cleanup. Required adding `MutationObserver`, `MutationObserverInit`, `MutationRecord`, `Node`, and `CssStyleDeclaration` to the web-sys feature list in `Cargo.toml`. Introduced a `MutationClosureHandle` type alias to satisfy clippy's `type_complexity` lint. Committed as f5147d8 on branch `worktree-agent-af8921dc`.
+
+
+## Reasons for Scrapping
+
+Abandoned on 2026-04-23. The MutationObserver clamp on `#webamp-mount` subtree was shipped (commit `f5147d8` on branch `worktree-agent-af8921dc`) and deployed to Cloudflare Pages — the user verified the Firefox RDM taskbar/Clippy drift persisted. Root cause hypothesis: the clamp observes `#webamp-mount` but Webamp injects `#main-window` directly into `<body>`, so the observer never fires on the elements that actually overflow. Even if retargeted to `<body>`, the scrapped follow-up ticket project-os-l810 showed that neither clamp nor explicit position writes affect Webamp's rendered position.
+
+This approach is scrapped. The Firefox RDM symptom in project-os-s0wm remains unresolved.

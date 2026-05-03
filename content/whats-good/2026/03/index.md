@@ -1,5 +1,5 @@
 +++
-title = "03"
+title = "What's Good #18"
 date = "2026-03-29"
 description = "Still Lost, Hail Mary, The Boys and Gen V"
 draft = false

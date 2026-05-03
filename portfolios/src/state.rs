@@ -13,14 +13,18 @@ pub struct WindowManager {
 }
 
 impl WindowManager {
-    pub fn new(game_ids: Vec<String>) -> Self {
+    pub fn new(game_ids: Vec<String>, is_mobile: bool) -> Self {
         let windows = game_ids
             .into_iter()
             .enumerate()
             .map(|(i, id)| WindowState {
                 game_id: id,
                 open: false,
-                pos: (50 + (i as i32 * 30), 50 + (i as i32 * 30)),
+                pos: if is_mobile {
+                    (40, 8)
+                } else {
+                    (50 + (i as i32 * 30), 50 + (i as i32 * 30))
+                },
                 z_index: 100,
             })
             .collect();

@@ -16,6 +16,18 @@ export default defineConfig({
       testIgnore: ['**/webamp-drag-headed.spec.ts'],
     },
     {
+      name: 'firefox-mobile-headed',
+      use: {
+        browserName: 'firefox',
+        headless: false,
+        viewport: { width: 412, height: 915 },
+        userAgent:
+          'Mozilla/5.0 (Android 13; Mobile; rv:109.0) Gecko/116.0 Firefox/116.0',
+        hasTouch: true,
+      },
+      testIgnore: ['**/webamp-drag-headed.spec.ts'],
+    },
+    {
       // Exploratory project for project-os-hh0j: CDP + viewport shrink repro
       // attempts. Uses non-headless-shell Chromium (full Chrome devtools
       // available) with Pixel 7 device emulation as base, then overlays CDP

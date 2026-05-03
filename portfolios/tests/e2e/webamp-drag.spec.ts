@@ -50,7 +50,10 @@ test.describe('Webamp drag does not move fixed UI (Pixel 7)', () => {
     // ── 2. Spawn Webamp via the tray icon ─────────────────────────────────
     const trayBtn = page.locator('.taskbar .tray-icon-btn');
     await expect(trayBtn).toBeVisible({ timeout: 5_000 });
-    await trayBtn.tap();
+    await page.evaluate(() => {
+      const btn = document.querySelector('.taskbar .tray-icon-btn') as HTMLElement | null;
+      btn?.click();
+    });
 
     // Webamp injects asynchronously (CDN module + renderWhenReady promise).
     await page.waitForFunction(
@@ -106,53 +109,15 @@ test.describe('Webamp drag does not move fixed UI (Pixel 7)', () => {
     const endX = startX + 300;
     const endY = startY;
 
-    await page.touchscreen.tap(startX, startY);
-    await page.waitForTimeout(50);
-
-    // Simulate a slow drag so Webamp's touchmove handler fires repeatedly
-    await page.evaluate(
-      ({ fromX, fromY, toX, toY }) => {
-        const titleBar = document.querySelector('#main-window #title-bar') as Element;
-        if (!titleBar) throw new Error('#main-window #title-bar not found');
-        const mainWin = document.querySelector('#main-window') as Element;
-        if (!mainWin) throw new Error('#main-window not found');
-
-        // Use the main window as target since Webamp attaches drag to it
-        const target = titleBar;
-
-        const touch = (el: Element, type: string, x: number, y: number) => {
-          const t = new Touch({
-            identifier: 1,
-            target: el,
-            clientX: x,
-            clientY: y,
-            pageX: x + window.scrollX,
-            pageY: y + window.scrollY,
-            screenX: x,
-            screenY: y,
-          });
-          el.dispatchEvent(
-            new TouchEvent(type, {
-              touches: type === 'touchend' ? [] : [t],
-              targetTouches: type === 'touchend' ? [] : [t],
-              changedTouches: [t],
-              bubbles: true,
-              cancelable: true,
-            }),
-          );
-        };
-
-        touch(target, 'touchstart', fromX, fromY);
-        const steps = 20;
-        for (let i = 1; i <= steps; i++) {
-          const x = fromX + ((toX - fromX) * i) / steps;
-          const y = fromY + ((toY - fromY) * i) / steps;
-          touch(target, 'touchmove', x, y);
-        }
-        touch(target, 'touchend', toX, toY);
-      },
-      { fromX: startX, fromY: startY, toX: endX, toY: endY },
-    );
+    await page.mouse.move(startX, startY);
+    await page.mouse.down();
+    const steps = 20;
+    for (let i = 1; i <= steps; i++) {
+      const x = startX + ((endX - startX) * i) / steps;
+      const y = startY + ((endY - startY) * i) / steps;
+      await page.mouse.move(x, y);
+    }
+    await page.mouse.up();
 
     // Give browser time to process layout reflow
     await page.waitForTimeout(600);
@@ -161,6 +126,7 @@ test.describe('Webamp drag does not move fixed UI (Pixel 7)', () => {
     const after = await page.evaluate((): {
       taskbar: BBox | null;
       clippy: BBox | null;
+      mainWindow: BBox | null;
       bodyScrollWidth: number;
       innerWidth: number;
       scrollX: number;
@@ -174,11 +140,18 @@ test.describe('Webamp drag does not move fixed UI (Pixel 7)', () => {
       return {
         taskbar: bb('.taskbar'),
         clippy: bb('.clippy-widget'),
+        mainWindow: bb('#main-window'),
         bodyScrollWidth: document.body.scrollWidth,
         innerWidth: window.innerWidth,
         scrollX: window.scrollX,
       };
     });
+    const webampDx = Math.abs((after.mainWindow?.x ?? 0) - (before.mainWindow!.x));
+    expect(
+      webampDx,
+      `Drag did not actually move Webamp (Δx=${webampDx.toFixed(1)}px). ` +
+        `If this assertion fails the rest of the test is moot.`,
+    ).toBeGreaterThan(10);
 
     // ── 6. Assert: body did not grow beyond viewport width ────────────────
     // The root cause of the bug: Webamp drag grows body.scrollWidth > innerWidth,

@@ -1,5 +1,5 @@
 use yew::prelude::*;
-use gloo_events::EventListener;
+use gloo_events::{EventListener, EventListenerOptions};
 use wasm_bindgen::JsCast;
 use web_sys::{MouseEvent, TouchEvent};
 
@@ -21,6 +21,16 @@ pub fn window(props: &WindowProps) -> Html {
     // Keep listeners alive for the duration of the drag
     let _move_listener: UseStateHandle<Option<EventListener>> = use_state(|| None);
     let _up_listener: UseStateHandle<Option<EventListener>> = use_state(|| None);
+    // Non-passive touchstart listener on the title bar (kept alive between renders)
+    let _touch_start_listener: UseStateHandle<Option<EventListener>> = use_state(|| None);
+
+    // Ref to the title-bar element so we can attach a non-passive touchstart
+    let title_bar_ref = use_node_ref();
+
+    // Shared mutable ref so the touchstart closure always reads the latest pos without
+    // needing to be re-registered on every position update (no listener churn during drag).
+    let pos_ref = use_mut_ref(|| props.pos);
+    *pos_ref.borrow_mut() = props.pos;
 
     // Per-window jitter — initialized once on mount, used by mobile CSS transform
     let jitter_x = use_state(|| ((js_sys::Math::random() * 20.0) as i32) - 10);
@@ -69,49 +79,68 @@ pub fn window(props: &WindowProps) -> Html {
         })
     };
 
-    // --- touch drag on title bar ---
-    let ontouchstart = {
+    // --- non-passive touch drag on title bar ---
+    // Attach via gloo_events::EventListener::new_with_options so we can call
+    // preventDefault() — Yew's ontouchstart prop registers a passive listener
+    // which prevents preventDefault(), causing the browser to treat the gesture
+    // as a page-pan and swallow subsequent touchmove events.
+    {
+        let title_bar_ref = title_bar_ref.clone();
         let on_focus = props.on_focus.clone();
         let on_move = props.on_move.clone();
-        let pos = props.pos;
+        let pos_ref = pos_ref.clone();
         let drag_offset = drag_offset.clone();
         let move_listener_state = _move_listener.clone();
         let up_listener_state = _up_listener.clone();
+        let touch_start_listener = _touch_start_listener.clone();
 
-        Callback::from(move |e: TouchEvent| {
-            e.prevent_default();
-            on_focus.emit(());
+        use_effect_with(
+            title_bar_ref.clone(),
+            move |title_bar_ref| {
+                let Some(el) = title_bar_ref.cast::<web_sys::HtmlElement>() else {
+                    return;
+                };
+                let el_et: &web_sys::EventTarget = el.as_ref();
 
-            if let Some(touch) = e.touches().get(0) {
-                let offset_x = touch.client_x() - pos.0;
-                let offset_y = touch.client_y() - pos.1;
-                drag_offset.set(Some((offset_x, offset_y)));
+                let opts = EventListenerOptions::enable_prevent_default();
+                let listener = EventListener::new_with_options(el_et, "touchstart", opts, move |event| {
+                    let e = event.dyn_ref::<TouchEvent>().unwrap();
+                    e.prevent_default();
+                    on_focus.emit(());
 
-                let on_move_mv = on_move.clone();
-                let drag_offset_mv = drag_offset.clone();
-                let drag_offset_end = drag_offset.clone();
-                let move_listener_state_end = move_listener_state.clone();
-                let offset = (offset_x, offset_y);
+                    if let Some(touch) = e.touches().get(0) {
+                        let pos = *pos_ref.borrow();
+                        let offset_x = touch.client_x() - pos.0;
+                        let offset_y = touch.client_y() - pos.1;
+                        drag_offset.set(Some((offset_x, offset_y)));
 
-                let document = web_sys::window().unwrap().document().unwrap();
+                        let on_move_mv = on_move.clone();
+                        let drag_offset_end = drag_offset.clone();
+                        let move_listener_state_end = move_listener_state.clone();
+                        let offset = (offset_x, offset_y);
 
-                let move_cb = EventListener::new(&document, "touchmove", move |e| {
-                    if (*drag_offset_mv).is_none() { return; }
-                    let e = e.dyn_ref::<TouchEvent>().unwrap();
-                    if let Some(t) = e.touches().get(0) {
-                        on_move_mv.emit((t.client_x() - offset.0, t.client_y() - offset.1));
+                        let document = web_sys::window().unwrap().document().unwrap();
+
+                        let move_cb = EventListener::new(&document, "touchmove", move |e| {
+                            let e = e.dyn_ref::<TouchEvent>().unwrap();
+                            if let Some(t) = e.touches().get(0) {
+                                on_move_mv.emit((t.client_x() - offset.0, t.client_y() - offset.1));
+                            }
+                        });
+                        let up_cb = EventListener::new(&document, "touchend", move |_| {
+                            drag_offset_end.set(None);
+                            move_listener_state_end.set(None);
+                        });
+
+                        move_listener_state.set(Some(move_cb));
+                        up_listener_state.set(Some(up_cb));
                     }
                 });
-                let up_cb = EventListener::new(&document, "touchend", move |_| {
-                    drag_offset_end.set(None);
-                    move_listener_state_end.set(None);
-                });
 
-                move_listener_state.set(Some(move_cb));
-                up_listener_state.set(Some(up_cb));
-            }
-        })
-    };
+                touch_start_listener.set(Some(listener));
+            },
+        );
+    }
 
     // clicking anywhere on the window brings it to focus
     let onclick_window = {
@@ -131,7 +160,7 @@ pub fn window(props: &WindowProps) -> Html {
 
     html! {
         <div class="window" style={style} onclick={onclick_window}>
-            <div class="title-bar" onmousedown={onmousedown} ontouchstart={ontouchstart}>
+            <div class="title-bar" ref={title_bar_ref} onmousedown={onmousedown}>
                 <div class="title-bar-text">{ &props.title }</div>
                 <div class="title-bar-controls">
                     <button aria-label="Close" onclick={on_close_click}></button>

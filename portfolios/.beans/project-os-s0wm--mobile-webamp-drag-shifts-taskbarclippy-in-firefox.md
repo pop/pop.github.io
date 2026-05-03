@@ -1,11 +1,11 @@
 ---
 # project-os-s0wm
 title: Mobile Webamp drag shifts taskbar/Clippy in Firefox (mobile preview)
-status: todo
+status: scrapped
 type: bug
 priority: critical
 created_at: 2026-04-21T04:33:23Z
-updated_at: 2026-04-21T04:33:23Z
+updated_at: 2026-04-23T20:40:39Z
 ---
 
 When the Webamp player is dragged on a mobile viewport in **Firefox** (including Desktop Firefox's Responsive Design Mode), the taskbar and/or Clippy widget visually shift relative to the viewport instead of staying anchored as `position: fixed` elements. Dragging should move only the Webamp window.
@@ -91,3 +91,16 @@ Either of these, if implemented, may coincidentally mitigate the Firefox symptom
 Start by filing the upstream Webamp issue — it provides leverage even if we ship a local workaround. Then pick one of the containment strategies above (transform-scope or MutationObserver via `project-os-4umw`) and verify manually in Firefox RDM.
 
 The e2e harness (`bun run test:e2e` from `portfolios/`) can be used to verify we don't regress the Chrome-observable guards, but manual Firefox RDM verification is the acceptance test.
+
+
+## Reasons for Scrapping
+
+Abandoned on 2026-04-23 after three unsuccessful workaround attempts:
+
+- **project-os-4umw** (MutationObserver clamp on `#webamp-mount`) — shipped and deployed; user verified Firefox RDM drift still occurred. Likely wrong subtree: Webamp injects `#main-window` into `<body>` directly, so the observer never fired on the overflowing elements.
+- **project-os-l810** (disable Webamp drag by stripping `draggable` class) — drag disable itself worked ("almost perfect" per user), but Webamp ignored `windowLayout` constructor positions, inline-style writes, and MutationObserver force-writes; player kept rendering in the bottom-right of mobile viewports regardless.
+- Related: project-os-00bs (fixed-viewport wrapper) — never attempted because the above approaches failed first.
+
+Webamp 2.2.0's render path appears to restore position from a source we did not identify (likely localStorage or an internal code path that bypasses the constructor option). The Firefox RDM bug itself is Firefox-only and does not affect real-device browsers (Chrome Android, mobile Safari, etc.) per the original investigation.
+
+If revisiting, start by instrumenting the browser to find *what actually writes* `#main-window`'s inline styles during Webamp's render, rather than guessing at which API Webamp honors. Also worth re-reading Webamp's own code on GitHub to confirm the localStorage-override theory.

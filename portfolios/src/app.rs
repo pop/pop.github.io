@@ -12,7 +12,14 @@ use crate::components::game_window::GameWindow;
 #[function_component(App)]
 pub fn app() -> Html {
     let config = load_config();
-    let wm = use_state(|| WindowManager::new(config.projects.iter().map(|g| g.id.clone()).collect()));
+    let viewport_w = web_sys::window()
+        .and_then(|w| w.inner_width().ok())
+        .and_then(|v| v.as_f64())
+        .unwrap_or(1200.0);
+    let wm = use_state(|| WindowManager::new(
+        config.projects.iter().map(|g| g.id.clone()).collect(),
+        viewport_w <= 768.0,
+    ));
     let start_menu_open = use_state(|| false);
     let webamp_active = use_state(|| false);
 

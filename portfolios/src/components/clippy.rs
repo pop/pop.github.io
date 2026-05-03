@@ -1,6 +1,6 @@
 use yew::prelude::*;
 use yew::virtual_dom::AttrValue;
-use gloo_events::EventListener;
+use gloo_events::{EventListener, EventListenerOptions};
 
 fn is_url(s: &str) -> bool {
     s.starts_with("http") || s.starts_with("data:") || s.contains('/')
@@ -20,7 +20,7 @@ fn set_dismissed_about() {
 }
 use gloo_timers::callback::Timeout;
 use wasm_bindgen::JsCast;
-use web_sys::MouseEvent;
+use web_sys::{MouseEvent, TouchEvent};
 use crate::config::{ClippyConfig, Quote};
 
 #[derive(Properties, PartialEq)]
@@ -40,8 +40,13 @@ pub fn clippy(props: &ClippyProps) -> Html {
     let pos: UseStateHandle<Option<(i32, i32)>> = use_state(|| None);
     let _move_listener: UseStateHandle<Option<EventListener>> = use_state(|| None);
     let _up_listener: UseStateHandle<Option<EventListener>> = use_state(|| None);
+    // Non-passive touch listeners kept alive between renders
+    let _icon_touch_listener: UseStateHandle<Option<EventListener>> = use_state(|| None);
+    let _modal_touch_listener: UseStateHandle<Option<EventListener>> = use_state(|| None);
     // Stable ref to the widget div — avoids currentTarget issues in Yew's event system
     let widget_ref = use_node_ref();
+    // Ref to the clippy icon element — needed for non-passive touchstart
+    let icon_ref = use_node_ref();
     // Shared mutable flag: did the user drag since last mousedown?
     // use_mut_ref gives Rc<RefCell<T>> — all clones share the same cell, no stale-value issue
     let has_dragged = use_mut_ref(|| false);
@@ -53,6 +58,8 @@ pub fn clippy(props: &ClippyProps) -> Html {
     let _modal_move_listener: UseStateHandle<Option<EventListener>> = use_state(|| None);
     let _modal_up_listener: UseStateHandle<Option<EventListener>> = use_state(|| None);
     let modal_ref = use_node_ref();
+    // Ref to the modal title bar element — needed for non-passive touchstart
+    let modal_title_ref = use_node_ref();
 
     let current_quote = props.quotes.get(*quote_idx)
         .map(|q| q.text.clone())
@@ -94,6 +101,133 @@ pub fn clippy(props: &ClippyProps) -> Html {
             move || { *cl.borrow_mut() = None; } // cleanup when deps change
         }
     });
+
+    // --- non-passive touchstart on Clippy icon ---
+    // Yew's ontouchstart is passive; we need a non-passive listener to call
+    // preventDefault() and prevent the browser from treating the gesture as a
+    // page-pan (which would swallow subsequent touchmove events).
+    {
+        let icon_ref = icon_ref.clone();
+        let pos = pos.clone();
+        let move_listener = _move_listener.clone();
+        let up_listener = _up_listener.clone();
+        let icon_touch_listener = _icon_touch_listener.clone();
+        let has_dragged = has_dragged.clone();
+        let widget_ref = widget_ref.clone();
+
+        use_effect_with(icon_ref.clone(), move |icon_ref| {
+            let Some(el) = icon_ref.cast::<web_sys::HtmlElement>() else {
+                return;
+            };
+            let el_et: &web_sys::EventTarget = el.as_ref();
+
+            let opts = EventListenerOptions::enable_prevent_default();
+            let listener = EventListener::new_with_options(el_et, "touchstart", opts, move |event| {
+                let e = event.dyn_ref::<TouchEvent>().unwrap();
+                e.prevent_default();
+                // Reset drag flag on every new press
+                *has_dragged.borrow_mut() = false;
+
+                if let Some(touch) = e.touches().get(0) {
+                    // Get the widget's current screen position
+                    let start_pos = match *pos {
+                        Some(p) => p,
+                        None => widget_ref
+                            .cast::<web_sys::Element>()
+                            .map(|el| {
+                                let r = el.get_bounding_client_rect();
+                                (r.left() as i32, r.top() as i32)
+                            })
+                            .unwrap_or((900, 450)),
+                    };
+
+                    let offset_x = touch.client_x() - start_pos.0;
+                    let offset_y = touch.client_y() - start_pos.1;
+
+                    let pos_mv = pos.clone();
+                    let move_ls_up = move_listener.clone();
+                    let has_dragged_mv = has_dragged.clone();
+
+                    let document = web_sys::window().unwrap().document().unwrap();
+
+                    let move_cb = EventListener::new(&document, "touchmove", move |e| {
+                        *has_dragged_mv.borrow_mut() = true;
+                        let e = e.dyn_ref::<TouchEvent>().unwrap();
+                        if let Some(t) = e.touches().get(0) {
+                            pos_mv.set(Some((t.client_x() - offset_x, t.client_y() - offset_y)));
+                        }
+                    });
+                    let up_cb = EventListener::new(&document, "touchend", move |_| {
+                        move_ls_up.set(None);
+                    });
+
+                    move_listener.set(Some(move_cb));
+                    up_listener.set(Some(up_cb));
+                }
+            });
+
+            icon_touch_listener.set(Some(listener));
+        });
+    }
+
+    // --- non-passive touchstart on Clippy modal title bar ---
+    {
+        let modal_title_ref = modal_title_ref.clone();
+        let modal_pos = modal_pos.clone();
+        let move_listener = _modal_move_listener.clone();
+        let up_listener = _modal_up_listener.clone();
+        let modal_touch_listener = _modal_touch_listener.clone();
+        let modal_ref = modal_ref.clone();
+
+        use_effect_with((modal_title_ref.clone(), *modal_open), move |(modal_title_ref, _)| {
+            let Some(el) = modal_title_ref.cast::<web_sys::HtmlElement>() else {
+                return;
+            };
+            let el_et: &web_sys::EventTarget = el.as_ref();
+
+            let opts = EventListenerOptions::enable_prevent_default();
+            let listener = EventListener::new_with_options(el_et, "touchstart", opts, move |event| {
+                let e = event.dyn_ref::<TouchEvent>().unwrap();
+                e.prevent_default();
+
+                if let Some(touch) = e.touches().get(0) {
+                    let start_pos = match *modal_pos {
+                        Some(p) => p,
+                        None => modal_ref
+                            .cast::<web_sys::Element>()
+                            .map(|el| {
+                                let r = el.get_bounding_client_rect();
+                                (r.left() as i32, r.top() as i32)
+                            })
+                            .unwrap_or((0, 0)),
+                    };
+
+                    let offset_x = touch.client_x() - start_pos.0;
+                    let offset_y = touch.client_y() - start_pos.1;
+
+                    let modal_pos_mv = modal_pos.clone();
+                    let move_ls_up = move_listener.clone();
+
+                    let document = web_sys::window().unwrap().document().unwrap();
+
+                    let move_cb = EventListener::new(&document, "touchmove", move |e| {
+                        let e = e.dyn_ref::<TouchEvent>().unwrap();
+                        if let Some(t) = e.touches().get(0) {
+                            modal_pos_mv.set(Some((t.client_x() - offset_x, t.client_y() - offset_y)));
+                        }
+                    });
+                    let up_cb = EventListener::new(&document, "touchend", move |_| {
+                        move_ls_up.set(None);
+                    });
+
+                    move_listener.set(Some(move_cb));
+                    up_listener.set(Some(up_cb));
+                }
+            });
+
+            modal_touch_listener.set(Some(listener));
+        });
+    }
 
     let onmousedown = {
         let pos = pos.clone();
@@ -226,8 +360,13 @@ pub fn clippy(props: &ClippyProps) -> Html {
     };
 
     let modal_style = match *modal_pos {
-        Some((x, y)) => format!("position:fixed; left:{}px; top:{}px; z-index:100;", x, y),
-        None => "position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:100;".to_string(),
+        Some((x, y)) => format!(
+            "position:fixed; left:{x}px; top:{y}px; --modal-left:{x}px; --modal-top:{y}px; --modal-transform:none; z-index:100;"
+        ),
+        None => concat!(
+            "position:fixed; left:50%; top:50%; transform:translate(-50%,-50%);",
+            " --modal-left:50%; --modal-top:50%; --modal-transform:translate(-50%,-50%); z-index:100;"
+        ).to_string(),
     };
 
     html! {
@@ -238,7 +377,7 @@ pub fn clippy(props: &ClippyProps) -> Html {
                         <p>{ &current_quote }</p>
                     </div>
                 }
-                <div class="clippy-icon" onmousedown={onmousedown} onclick={open_modal} title="Drag to move · click for info">
+                <div class="clippy-icon" ref={icon_ref} onmousedown={onmousedown} onclick={open_modal} title="Drag to move · click for info">
                     if is_url(&props.clippy_config.icon) {
                         <img src={props.clippy_config.icon.clone()} alt="Clippy" />
                     } else {
@@ -248,7 +387,7 @@ pub fn clippy(props: &ClippyProps) -> Html {
             </div>
             if *modal_open {
                 <div class="window clippy-modal" ref={modal_ref} style={modal_style}>
-                    <div class="title-bar" onmousedown={onmousedown_modal} style="cursor:move;">
+                    <div class="title-bar" ref={modal_title_ref} onmousedown={onmousedown_modal} style="cursor:move;">
                         <div class="title-bar-text">{ &props.clippy_config.modal_title }</div>
                     </div>
                     <div class="window-body" style="padding: 16px;">

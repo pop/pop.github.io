@@ -17,6 +17,14 @@ cargo clippy --target wasm32-unknown-unknown # lint
 
 Trunk automatically handles WASM compilation and asset bundling. Output goes to `dist/`.
 
+## Working directory
+
+Stay in the directory Claude Code started in. Do NOT `cd` into other paths.
+
+`/home/pop/Projects/...` and `/run/media/pop/.../Projects/...` resolve to the **same files** (the former is a symlink to the latter) — jumping between them is pointless churn and shows up in tool calls as wasted context.
+
+For operations on a git worktree under `.claude/worktrees/`, use `git -C <worktree-path>` (and `cargo --manifest-path`, etc.) from the starting cwd instead of `cd`-ing into the worktree.
+
 ## Architecture
 
 **Framework**: [Yew](https://yew.rs/) — React-like component tree compiled to WASM.
