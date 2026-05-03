@@ -23,6 +23,28 @@ enum ViewMode {
     Split,
 }
 
+#[derive(Clone, PartialEq)]
+enum UploadPending {
+    AwaitingChoice {
+        raw_bytes: std::rc::Rc<Vec<u8>>,
+        file_name: String,
+        upload_path: String,
+    },
+    Compressing,
+    CompressPreview {
+        raw_bytes: std::rc::Rc<Vec<u8>>,
+        file_name: String,
+        upload_path: String,
+        original_size: u64,
+        original_width: u32,
+        original_height: u32,
+        compressed_bytes: std::rc::Rc<Vec<u8>>,
+        compressed_width: u32,
+        compressed_height: u32,
+        preview_data_url: String,
+    },
+}
+
 #[derive(Properties, PartialEq)]
 pub struct Props {
     pub path: String,
@@ -58,6 +80,7 @@ pub fn editor_page(props: &Props) -> Html {
     let reverting = use_state(|| false);
     let history_preview_pre_sha = use_state(|| Option::<String>::None);
     let pending_revert_sha = use_state(|| Option::<String>::None);
+    let upload_pending = use_state(|| Option::<UploadPending>::None);
 
     // Auth-aware error setter: clears token on 401
     let set_error: Rc<dyn Fn(String)> = {
@@ -498,6 +521,7 @@ pub fn editor_page(props: &Props) -> Html {
         let path = props.path.clone();
         let token = auth.token.clone();
         let textarea_ref = textarea_ref.clone();
+        let upload_pending = upload_pending.clone();
 
         Callback::from(move |file: web_sys::File| {
             let mime = file.type_();
@@ -536,9 +560,9 @@ pub fn editor_page(props: &Props) -> Html {
             let save_msg = save_msg.clone();
             let path = path.clone();
             let textarea_ref = textarea_ref.clone();
+            let upload_pending = upload_pending.clone();
 
             if let Some(token) = token.clone() {
-                uploading.set(true);
                 error.set(None);
                 save_msg.set(None);
 
@@ -547,11 +571,310 @@ pub fn editor_page(props: &Props) -> Html {
                         Ok(b) => b,
                         Err(e) => {
                             set_error(e);
-                            uploading.set(false);
                             return;
                         }
                     };
 
+                    if crate::compress::is_compressible_image(&file_name) {
+                        upload_pending.set(Some(UploadPending::AwaitingChoice {
+                            raw_bytes: Rc::new(bytes),
+                            file_name,
+                            upload_path,
+                        }));
+                        return;
+                    }
+
+                    // Non-compressible (gif, svg): upload immediately
+                    uploading.set(true);
+                    let client = GitHubClient::new(token);
+
+                    let branch_name = match branch_opt {
+                        Some(b) => b,
+                        None => match create_editor_branch(&client, &path).await {
+                            Ok(name) => {
+                                set_active_branch.emit(Some(name.clone()));
+                                name
+                            }
+                            Err(e) => {
+                                set_error(e);
+                                uploading.set(false);
+                                return;
+                            }
+                        },
+                    };
+
+                    let existing_sha = match client.get_file(&upload_path, &branch_name).await {
+                        Ok(existing) => Some(existing.sha),
+                        Err(_) => None,
+                    };
+
+                    let message = format!("Upload image {file_name}");
+                    match client
+                        .upload_binary_file(
+                            &upload_path,
+                            &bytes,
+                            &message,
+                            existing_sha.as_deref(),
+                            &branch_name,
+                        )
+                        .await
+                    {
+                        Ok(_sha) => {
+                            let md_ref = format!("![{file_name}]({file_name})");
+                            let current = (*content).clone();
+
+                            let new_content = if let Some(textarea) =
+                                textarea_ref.cast::<HtmlTextAreaElement>()
+                            {
+                                if let Ok(Some(pos)) = textarea.selection_start() {
+                                    let insert_at = crate::utils::char_pos_to_byte_offset(
+                                        &current,
+                                        pos as usize,
+                                    );
+                                    let (before, after) = current.split_at(insert_at);
+                                    format!("{before}{md_ref}{after}")
+                                } else {
+                                    format!("{current}\n{md_ref}")
+                                }
+                            } else {
+                                format!("{current}\n{md_ref}")
+                            };
+
+                            content.set(new_content);
+                            save_msg.set(Some(format!("Uploaded {file_name}")));
+                            uploading.set(false);
+                        }
+                        Err(e) => {
+                            set_error(e);
+                            uploading.set(false);
+                        }
+                    }
+                });
+            }
+        })
+    };
+
+    // Cancel the upload pending modal
+    let on_upload_cancel = {
+        let upload_pending = upload_pending.clone();
+        let error = error.clone();
+        Callback::from(move |_: MouseEvent| {
+            upload_pending.set(None);
+            error.set(None);
+        })
+    };
+
+    // User chose to upload raw (no compression)
+    let on_upload_choose_raw = {
+        let upload_pending = upload_pending.clone();
+        let uploading = uploading.clone();
+        let error = error.clone();
+        let set_error = set_error.clone();
+        let save_msg = save_msg.clone();
+        let content = content.clone();
+        let textarea_ref = textarea_ref.clone();
+        let branch_opt = auth.active_branch.clone();
+        let set_active_branch = auth.set_active_branch.clone();
+        let path = props.path.clone();
+        let token = auth.token.clone();
+
+        Callback::from(move |_: MouseEvent| {
+            let Some(ref pending) = *upload_pending else {
+                return;
+            };
+            let UploadPending::AwaitingChoice {
+                raw_bytes,
+                file_name,
+                upload_path,
+            } = pending.clone()
+            else {
+                return;
+            };
+
+            upload_pending.set(None);
+
+            let uploading = uploading.clone();
+            let error = error.clone();
+            let set_error = set_error.clone();
+            let save_msg = save_msg.clone();
+            let content = content.clone();
+            let textarea_ref = textarea_ref.clone();
+            let branch_opt = branch_opt.clone();
+            let set_active_branch = set_active_branch.clone();
+            let path = path.clone();
+
+            if let Some(token) = token.clone() {
+                uploading.set(true);
+                error.set(None);
+
+                wasm_bindgen_futures::spawn_local(async move {
+                    let bytes = (*raw_bytes).clone();
+                    let client = GitHubClient::new(token);
+
+                    let branch_name = match branch_opt {
+                        Some(b) => b,
+                        None => match create_editor_branch(&client, &path).await {
+                            Ok(name) => {
+                                set_active_branch.emit(Some(name.clone()));
+                                name
+                            }
+                            Err(e) => {
+                                set_error(e);
+                                uploading.set(false);
+                                return;
+                            }
+                        },
+                    };
+
+                    let existing_sha = match client.get_file(&upload_path, &branch_name).await {
+                        Ok(existing) => Some(existing.sha),
+                        Err(_) => None,
+                    };
+
+                    let message = format!("Upload image {file_name}");
+                    match client
+                        .upload_binary_file(
+                            &upload_path,
+                            &bytes,
+                            &message,
+                            existing_sha.as_deref(),
+                            &branch_name,
+                        )
+                        .await
+                    {
+                        Ok(_sha) => {
+                            let md_ref = format!("![{file_name}]({file_name})");
+                            let current = (*content).clone();
+
+                            let new_content = if let Some(textarea) =
+                                textarea_ref.cast::<HtmlTextAreaElement>()
+                            {
+                                if let Ok(Some(pos)) = textarea.selection_start() {
+                                    let insert_at = crate::utils::char_pos_to_byte_offset(
+                                        &current,
+                                        pos as usize,
+                                    );
+                                    let (before, after) = current.split_at(insert_at);
+                                    format!("{before}{md_ref}{after}")
+                                } else {
+                                    format!("{current}\n{md_ref}")
+                                }
+                            } else {
+                                format!("{current}\n{md_ref}")
+                            };
+
+                            content.set(new_content);
+                            save_msg.set(Some(format!("Uploaded {file_name}")));
+                            uploading.set(false);
+                        }
+                        Err(e) => {
+                            set_error(e);
+                            uploading.set(false);
+                        }
+                    }
+                });
+            }
+        })
+    };
+
+    // User chose to compress & preview before uploading
+    let on_upload_choose_compress = {
+        let upload_pending = upload_pending.clone();
+        let error = error.clone();
+        let set_error = set_error.clone();
+
+        Callback::from(move |_: MouseEvent| {
+            let Some(ref pending) = *upload_pending else {
+                return;
+            };
+            let UploadPending::AwaitingChoice {
+                raw_bytes,
+                file_name,
+                upload_path,
+            } = pending.clone()
+            else {
+                return;
+            };
+
+            upload_pending.set(Some(UploadPending::Compressing));
+
+            let upload_pending = upload_pending.clone();
+            let error = error.clone();
+            let set_error = set_error.clone();
+
+            wasm_bindgen_futures::spawn_local(async move {
+                match crate::compress::compress_image(&raw_bytes, &file_name).await {
+                    Ok(result) => {
+                        let original_size = raw_bytes.len() as u64;
+                        upload_pending.set(Some(UploadPending::CompressPreview {
+                            raw_bytes,
+                            file_name,
+                            upload_path,
+                            original_size,
+                            original_width: result.original_width,
+                            original_height: result.original_height,
+                            compressed_bytes: Rc::new(result.compressed_bytes),
+                            compressed_width: result.new_width,
+                            compressed_height: result.new_height,
+                            preview_data_url: result.preview_data_url,
+                        }));
+                    }
+                    Err(e) => {
+                        upload_pending.set(None);
+                        error.set(None);
+                        set_error(e);
+                    }
+                }
+            });
+        })
+    };
+
+    // User confirmed compressed upload
+    let on_upload_compress_confirm = {
+        let upload_pending = upload_pending.clone();
+        let uploading = uploading.clone();
+        let error = error.clone();
+        let set_error = set_error.clone();
+        let save_msg = save_msg.clone();
+        let content = content.clone();
+        let textarea_ref = textarea_ref.clone();
+        let branch_opt = auth.active_branch.clone();
+        let set_active_branch = auth.set_active_branch.clone();
+        let path = props.path.clone();
+        let token = auth.token.clone();
+
+        Callback::from(move |_: MouseEvent| {
+            let Some(ref pending) = *upload_pending else {
+                return;
+            };
+            let UploadPending::CompressPreview {
+                compressed_bytes,
+                file_name,
+                upload_path,
+                ..
+            } = pending.clone()
+            else {
+                return;
+            };
+
+            upload_pending.set(None);
+
+            let uploading = uploading.clone();
+            let error = error.clone();
+            let set_error = set_error.clone();
+            let save_msg = save_msg.clone();
+            let content = content.clone();
+            let textarea_ref = textarea_ref.clone();
+            let branch_opt = branch_opt.clone();
+            let set_active_branch = set_active_branch.clone();
+            let path = path.clone();
+
+            if let Some(token) = token.clone() {
+                uploading.set(true);
+                error.set(None);
+
+                wasm_bindgen_futures::spawn_local(async move {
+                    let bytes = (*compressed_bytes).clone();
                     let client = GitHubClient::new(token);
 
                     let branch_name = match branch_opt {
@@ -1161,6 +1484,63 @@ pub fn editor_page(props: &Props) -> Html {
                     }
                 </div>
             }
+
+            if let Some(ref pending) = *upload_pending {
+                <div class="modal-overlay" onclick={on_upload_cancel.clone()}>
+                    <div class="modal" onclick={Callback::from(|e: MouseEvent| e.stop_propagation())}>
+                        { match pending {
+                            UploadPending::AwaitingChoice { raw_bytes, file_name, .. } => html! {
+                                <>
+                                    <h3>{"Upload image"}</h3>
+                                    <p class="modal-filename">{file_name}</p>
+                                    <p>{format!("{} \u{2014} compress first?", crate::utils::format_size(raw_bytes.len() as u64))}</p>
+                                    <p style="font-size: 0.85rem; color: #555;">
+                                        {"Images over 1000 px will be resized and re-encoded at 85% quality."}
+                                    </p>
+                                    <div class="modal-actions compress-modal-actions">
+                                        <button onclick={on_upload_cancel.clone()}>{"Cancel"}</button>
+                                        <button onclick={on_upload_choose_raw.clone()}>{"Upload Raw"}</button>
+                                        <button class="compress-confirm-btn" onclick={on_upload_choose_compress.clone()}>
+                                            {"Compress \u{0026} Preview"}
+                                        </button>
+                                    </div>
+                                </>
+                            },
+                            UploadPending::Compressing => html! { <p>{"Compressing\u{2026}"}</p> },
+                            UploadPending::CompressPreview { file_name, original_size, original_width, original_height,
+                                                              compressed_bytes, compressed_width, compressed_height,
+                                                              preview_data_url, .. } => {
+                                let compressed_size = compressed_bytes.len() as u64;
+                                let larger = compressed_size >= *original_size;
+                                html! {
+                                    <>
+                                        <h3>{"Compress image"}</h3>
+                                        <p class="modal-filename">{file_name}</p>
+                                        <table class="compress-stats">
+                                            <tbody>
+                                                <tr><th>{"Original size"}</th><td>{crate::utils::format_size(*original_size)}</td></tr>
+                                                <tr><th>{"New size"}</th><td>{crate::utils::format_size(compressed_size)}</td></tr>
+                                                <tr><th>{"Original dimensions"}</th><td>{format!("{} \u{00D7} {}", original_width, original_height)}</td></tr>
+                                                <tr><th>{"New dimensions"}</th><td>{format!("{} \u{00D7} {}", compressed_width, compressed_height)}</td></tr>
+                                            </tbody>
+                                        </table>
+                                        if larger {
+                                            <p class="compress-size-warning">{"Compressed file is larger than the original \u{2014} consider cancelling."}</p>
+                                        }
+                                        <img src={preview_data_url.clone()} class="compress-preview" />
+                                        <div class="modal-actions compress-modal-actions">
+                                            <button class="compress-cancel-btn" onclick={on_upload_cancel.clone()}>{"Cancel"}</button>
+                                            <button class="compress-confirm-btn" onclick={on_upload_compress_confirm.clone()}>
+                                                {"Confirm \u{0026} Upload"}
+                                            </button>
+                                        </div>
+                                    </>
+                                }
+                            },
+                        }}
+                    </div>
+                </div>
+            }
         </div>
     }
 }
@@ -1401,4 +1781,21 @@ fn format_history_date(iso: &str) -> String {
         d.get_utc_hours(),
         d.get_utc_minutes()
     )
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn compressible_images_trigger_choice() {
+        assert!(crate::compress::is_compressible_image("photo.jpg"));
+        assert!(crate::compress::is_compressible_image("photo.jpeg"));
+        assert!(crate::compress::is_compressible_image("image.png"));
+        assert!(crate::compress::is_compressible_image("image.webp"));
+    }
+
+    #[test]
+    fn non_compressible_images_skip_choice() {
+        assert!(!crate::compress::is_compressible_image("anim.gif"));
+        assert!(!crate::compress::is_compressible_image("icon.svg"));
+    }
 }
