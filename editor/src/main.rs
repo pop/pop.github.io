@@ -1,5 +1,6 @@
 mod app;
 mod components;
+pub mod compress;
 mod models;
 mod routes;
 mod services;

@@ -1,0 +1,157 @@
+### Martian Chess
+[[projects]]
+id = "martian-chess"
+title = "Martian Chess"
+description = "The classic <a href=https://en.wikipedia.org/wiki/Martian_Chess>Martian Chess</a> imagined in 3d with stunning visuals and music by Sam Hall and programming by Elijah Voigt."
+contributors = ["Elijah Voigt", "Sam Hall"]
+icon = "/martian-chess.png"
+demo = "/martian-chess.mp4"
+launch_url = "https://liquidmirror.itch.io/martian-chess"
+launch_type = "native"
+launch_label = "Download Now"
+
+[[projects.tech]]
+name = "Rust"
+icon = "/rust-icon.png"
+url = "https://www.rust-lang.org/"
+
+[[projects.tech]]
+name = "Bevy"
+icon = "/bevy-icon.png"
+url = "https://bevyengine.org/"
+
+### Set
+[[projects]]
+id = "set"
+title = "Set"
+description = "A simple single-player variant of Set created for a house art show with Balatro-inspired music by Sam Hall."
+contributors = ["Elijah Voigt", "Sam Hall"]
+icon = "/set.png"
+demo = "/blank.png"
+launch_url = "https://games.elijah.run/set/"
+launch_type = "wasm"
+launch_label = "Play Now"
+
+[[projects.tech]]
+name = "Rust"
+icon = "/rust-icon.png"
+url = "https://www.rust-lang.org/"
+
+[[projects.tech]]
+name = "Bevy"
+icon = "/bevy-icon.png"
+url = "https://bevyengine.org/"
+
+[[projects.tech]]
+name = "WebAssembly"
+icon = "/wasm-icon.png"
+url = "https://webassembly.org/"
+
+### Flappy Bird (With Rewind)
+[[projects]]
+id = "flappy"
+title = "Flappy Bird (with rewind)"
+description = "The classic Flapp Bird with a Braid-inspired time twist."
+contributors = ["Elijah Voigt"]
+icon = "/flappy.png"
+demo = "/flappy.mp4"
+launch_url = "https://popgame.itch.io/flappy"
+launch_type = "wasm"
+launch_label = "Play Now"
+
+[[projects.tech]]
+name = "Rust"
+icon = "/rust-icon.png"
+url = "https://www.rust-lang.org/"
+
+[[projects.tech]]
+name = "Bevy"
+icon = "/bevy-icon.png"
+url = "https://bevyengine.org/"
+
+[[projects.tech]]
+name = "WebAssembly"
+icon = "/wasm-icon.png"
+url = "https://webassembly.org/"
+
+### Clippy Quotes
+[[quotes]]
+text = "Hello fellow gamer."
+
+[[quotes]]
+text = "Click me to learn about this page."
+
+[[quotes]]
+text = "It's interactive!"
+
+[[quotes]]
+text = "I'm legally distinct from Microsoft Clippy!"
+
+[[quotes]]
+text = "Help I'm stuck in a 90's tech nostalgia factory!"
+
+[[quotes]]
+text = "So, how about those Epstein files?"
+
+### Preview / Open Graph
+[preview]
+title = "PortfoliOS — Elijah Voigt's Games Portfolio"
+description = "Booting up PortfoliOS..."
+url = "https://games.elijah.run"
+image = ""
+
+### Desktop
+[desktop]
+background_color = "#008080"
+
+### Taskbar
+[taskbar]
+start_icon = "/netshow_notransm-sm.png"
+start_label = "Start"
+
+### Start menu
+[[start_menu.items]]
+icon = "/hobbes.png"
+title = "Main Site"
+url = "https://elijah.run/about"
+
+[[start_menu.items]]
+icon = "/github.png"
+title = "Source Code"
+url = "https://github.com/pop/elijah.run/tree/source/portfolios"
+
+[[start_menu.items]]
+icon = "/itchio.png"
+title = "itch.io"
+url = "https://pop.itch.io"
+
+### Clippy widget
+[clippy]
+icon = "/memory.png"
+brand_title = "PortfoliOS"
+logo = "/netshow_notransm.png"
+modal_title = "About this Portfolio"
+modal_ok_label = "OK"
+modal_paragraphs = [
+    "<center>The games and creative work are by the portfolio author.</center>",
+    "<center>This page styled with <a href=https://alexbsoft.github.io/win95.css>win95.css</a>.</center>",
+    "<center>Icons from <a href=https://win98icons.alexmeub.com/>win98icons</a>, modifications of corporate logos (github, itch.io, rust, bevy, webassembly), with additional icons by Elijah Voigt</center>",
+    "<center>Music player powered by <a href=https://github.com/captbaritone/webamp>Webamp</a>, using the <a href=https://skins.webamp.org/skin/e224ed3511ee803107dcc41e6c1ad9ce/qsteamp.wsz/>qsteamp</a> skin.</center>",
+    "<center>Music provided by <a href=https://greatmist.bandcamp.com/music>Sam Hall</a>.</center>",
+    "<center><b>AI Disclosure</b></center>",
+    "<center>This page was largely programmed by Claude Code with Sonnet 4.6.</center>",
+    "<center><b>Email me</b>: <code>pop@elijah.run</code></center>"
+]
+
+### Webamp music player
+# Placeholder track — replace `url` with a real MP3 (place file in `public/music/`).
+# Remove this entire `[webamp]` section (or leave `tracks` empty) to disable the player.
+# `skin_url` is optional; omit for the default Winamp skin. Files in `public/` are served from `/`.
+[webamp]
+skin_url = "/qsteamp.wsz"
+top = 20  # pixels from top of viewport for the main player window
+
+[[webamp.tracks]]
+url = "/its-the-balatro-music.opus"
+artist = "Sam Hall"
+title = "It's The Balatro Music"

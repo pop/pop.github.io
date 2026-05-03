@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>PortfoliOS — Elijah Voigt's Games Portfolio</title>
+    <meta name="description" content="Booting up PortfoliOS..."/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="PortfoliOS — Elijah Voigt's Games Portfolio"/>
+    <meta property="og:description" content="Booting up PortfoliOS..."/>
+    <meta property="og:url" content="https://games.elijah.run"/>
+    <meta property="og:image" content=""/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="PortfoliOS — Elijah Voigt's Games Portfolio"/>
+    <meta name="twitter:description" content="Booting up PortfoliOS..."/>
+    <meta name="twitter:image" content=""/>
+    <link rel="stylesheet" href="https://unpkg.com/98.css"/>
+    <link data-trunk rel="css" href="styles/main.css"/>
+    <link data-trunk rel="copy-dir" href="public" data-target-path="."/>
+    <link data-trunk rel="rust" data-wasm-opt="z"/>
+    <script type="module">
+      // unpkg auto-redirects bare `webamp@^2` to the `.mjs` ESM build.
+      // Do NOT pin to `/built/webamp.bundle.min.js` — that path is UMD and has no default export.
+      import Webamp from "https://unpkg.com/webamp@^2";
+      if (!Webamp) {
+        console.error("[webamp] import resolved to falsy value; player will not mount");
+      } else {
+        window.Webamp = Webamp;
+        window.dispatchEvent(new CustomEvent("webamp-ready"));
+      }
+    </script>
+  </head>
+  <body>
+    <noscript>
+      <!-- TODO: Keep this in sync with portfolios.toml manually -->
+      <style>
+        .ns-container { max-width: 800px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif; }
+        .ns-game { border: 1px solid #ccc; padding: 16px; margin: 16px 0; }
+        .ns-game h2 { margin: 0 0 8px 0; }
+        .ns-tech { list-style: none; padding: 0; display: flex; gap: 8px; flex-wrap: wrap; }
+        .ns-tech li { background: #eee; padding: 2px 8px; font-size: 12px; }
+        .ns-launch { display: inline-block; margin-top: 8px; padding: 4px 16px; background: #000080; color: white; text-decoration: none; }
+      </style>
+      <div class="ns-container">
+        <h1>Games Portfolio</h1>
+        <p>JavaScript is required for the full Win95 experience. Here is a plain HTML version:</p>
+
+        <div class="ns-game">
+          <h2>🐍 Snake</h2>
+          <p>Classic snake game written in Rust and compiled to WebAssembly. Eat the apples, grow your snake, don't hit the walls!</p>
+          <ul class="ns-tech">
+            <li>🦀 Rust</li>
+            <li>🕸️ WebAssembly</li>
+          </ul>
+          <a class="ns-launch" href="https://elijah.run/games/snake">Launch</a>
+        </div>
+
+        <div class="ns-game">
+          <h2>🧱 Tetris</h2>
+          <p>A faithful recreation of the classic block-stacking puzzle game. Clear lines, level up, and beat your high score!</p>
+          <ul class="ns-tech">
+            <li>🦀 Rust</li>
+            <li>🕸️ WebAssembly</li>
+            <li>🎨 Canvas</li>
+          </ul>
+          <a class="ns-launch" href="https://elijah.run/games/tetris">Launch</a>
+        </div>
+      </div>
+    </noscript>
+  </body>
+</html>
