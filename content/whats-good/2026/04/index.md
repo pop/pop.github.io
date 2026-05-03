@@ -116,7 +116,7 @@ Now onto the books I read this month.
 
 I am not shy about being a fan of John Scalzi but I have , ashamedly, only read the start of his biggest series: Old Man's War and not the other like... 6 that came after it, so here I am reading the sequel to Old Man's War: Ghost Brigades.
 
-As usual, Scalzi does a great job of building an interesting world with interesting tech and fun well considered, if not scientifically concerned, details.
+As usual, Scalzi does a great job of building an interesting world with interesting tech with fun and well considered (if not scientifically concerned) details.
 The characters are trope-tastic, the story is by the book, but it's a fun page turner and I love it.
 
 # Still Lost
