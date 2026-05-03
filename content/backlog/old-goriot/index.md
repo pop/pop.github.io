@@ -1,8 +1,7 @@
 +++
 title = "Old goriot"
 date = "2026-04-07"
-description = ""
-taxonomies.tags = ["books", "backlog"]
+description = "A very old book that feels weirdly modern"
+taxonomies.tags = ["books", "backlog", "april", "2026"]
 +++
 
-suggestion by man carrying thing
