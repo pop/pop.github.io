@@ -39,7 +39,7 @@ The story is great, and if you like the original Star Wars trilogy, which I do, 
 
 # Home Gym
 
-Picture Here
+![6844.jpg](6844.jpg)
 
 My job provides a "health stipend" which I spent this month splurging on _way nicer exercise equipment_ than I otherwise would.
 
