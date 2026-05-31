@@ -19,6 +19,20 @@ Goriot lives for his daughters, giving everything he has to them to ensure their
 What I enjoy most about the book is just like Man Carrying Thing said, it feels modern, but in a unique way: it feels like a period piece, but more authenticity because it is written in the period it's set it.
 I'll try to explain...
 
-Period pieces written today have an inherent distance between the characters and the author/reader; we weren't there so some details are either skipped over or fabricated entirely.
-
 Some details of daily life are never written down, at least not in a way a reader in the future would be able to make use of.
+For example we might know the big important things like royal family structure, but we don't know what peasants ate breakfast, when they ate breakfast, or even _if_ they ate breakfast.
+I think about bi-phasic sleep, which was apparently the norm until artificial light became the norm.
+People slept for two 4 hour blocks and this was so common nobody thought to spell it out, at least not enough for it to be common knowledge today even though we do know many things about time periods where that was the norm -- like royal family structures.
+
+Period pieces written today have an inherent distance between the characters and the author/reader; we weren't there so some details are either skipped over or fabricated entirely.
+We don't exactly know, or the author doesn't know, how much a coffee cost in 1810 Paris so they just kinda make up a believable number and everybody doesn't really care because it doesn't really matter.
+But it kinda does matter, even if we don't _know_ what it cost, enough of those made up facts add up to a _vibe_ that this world is fake and made up even if it was _trying_ to be a real, grounded, period piece.
+
+Old Goriot is not made up.
+People talk about money and social class expectations and random details about the world and I can only believe it is real because if I wrote a story about dating in 2025 and the characters were eating a meal in a McMinimins I would 100% go to a McMinimins and read the menu and name drop the exact order and price so everybody venmo's the main characters because that's authentic and easy goddammit.
+
+So that's my main takeaway: reading Old Goriot feels more grounded than any period piece I've ever read (all 5 of them) because it's about [fairly] normal people talking about [fairly] normal things and it all feels real.
+
+It is the most anthropologically interesting piece of fiction I have ever read.
+
+Also the voice actor is great, he goes hard.
