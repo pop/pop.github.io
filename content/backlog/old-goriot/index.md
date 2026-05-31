@@ -16,5 +16,9 @@ Goriot lives for his daughters, giving everything he has to them to ensure their
 > One of my favorite parts of the book is when a character is describing building a diorama for school and everybody starts adding "-rama" to everything; think "This is a wonderful dinner-rama", "I'm enjoying this conversation-o-rama", "I'm going to sleep-o-rama".
 > It's done to death when it's initially brought up and then there are callbacks throughout the rest of the book, the joke looping around from funny to too much back to funny by the end.
 
-What I enjoy most about the book is just like Man Carrying Thing said, it feels modern, but in a unique way.
+What I enjoy most about the book is just like Man Carrying Thing said, it feels modern, but in a unique way: it feels like a period piece, but more authenticity because it is written in the period it's set it.
+I'll try to explain...
+
 Period pieces written today have an inherent distance between the characters and the author/reader; we weren't there so some details are either skipped over or fabricated entirely.
+
+Some details of daily life are never written down, at least not in a way a reader in the future would be able to make use of.
