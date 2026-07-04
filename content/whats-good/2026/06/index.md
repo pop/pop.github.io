@@ -46,6 +46,8 @@ I'm able to bin-pack reading into my day in a way that I just couldn't with a Ki
 
 # Order of the Sinking Star (Demo)
 
+![oss.jpg](oss.jpg)
+
 Jonathan Blow is one of my favorite video game creators out there.
 He is thoughtful, interested in pushing the art form forward, and makes awesome games.
 
