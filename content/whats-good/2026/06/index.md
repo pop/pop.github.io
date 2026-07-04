@@ -6,3 +6,5 @@ taxonomies.tags = ["whats-good"]
 +++
 
 This post is coming out a few days because I had to finish building a shed!
+
+![7737.jpg](7737.jpg)
