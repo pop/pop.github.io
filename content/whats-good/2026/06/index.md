@@ -44,6 +44,17 @@ The key I'm realizing is that especially with little kids, convenience is king f
 I'm able to turn it on, read the equivalent of one or two pages, and when I get interrupted -- because the kids decided they want to hang out now -- I can put it away.
 I'm able to bin-pack reading into my day in a way that I just couldn't with a Kindle or even an app on my phone -- because my kids flock to the phone in a way they don't for a "boring" screen like this.
 
+# Order of the Sinking Star (Demo)
+
+Jonathan Blow is one of my favorite video game creators out there.
+He is thoughtful, interested in pushing the art form forward, and makes awesome games.
+
+> Note: he has some politics I don't agree with. Don't @ me about liking his work please.
+
+[Order of the Sinking Star](https://store.steampowered.com/app/499170/Order_of_the_Sinking_Star/) is his next game, about 10 years after The Witness came out, and the demo dropped this month in Steam Next Fest and I _really_ enjoyed it.
+I still haven't _finished_ it, because on puzzle is kicking my ass, but it's a really interesting puzzle game.
+If you're interested in puzzles you should _definitely_ play the game, and I think everybody should try the demo.
+
 ---
 
 Pretty sparse this month, unfortunately I _started_ a few things but didn't _finish_ them; hopefully next month will be a bit more stacked as a result though.
