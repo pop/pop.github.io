@@ -21,3 +21,5 @@ I'll also need to figure out a better wifi situation because my router is in the
 # ext
 
 Besides the shedapalooza 
+
+![7355.jpg](7355.jpg)
