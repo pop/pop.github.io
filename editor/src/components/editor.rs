@@ -10,7 +10,7 @@ use yew_router::prelude::*;
 use crate::app::AuthContext;
 use crate::components::dashboard::invalidate_cache;
 use crate::models::github::CommitSummary;
-use crate::models::post::{parse_frontmatter, post_dir, render_markdown};
+use crate::models::post::{count_prose, parse_frontmatter, post_dir, render_markdown};
 use crate::routes::Route;
 use crate::services::github::GitHubClient;
 
@@ -972,6 +972,7 @@ pub fn editor_page(props: &Props) -> Html {
                     if *is_new {
                         <span class="editor-badge new-badge">{"New file"}</span>
                     }
+                    { render_prose_count(&content) }
                 </div>
             </div>
 
@@ -1162,6 +1163,15 @@ pub fn editor_page(props: &Props) -> Html {
                 </div>
             }
         </div>
+    }
+}
+
+fn render_prose_count(content: &str) -> Html {
+    let (words, chars) = count_prose(content);
+    html! {
+        <span class="prose-count">
+            {format!("{words} words \u{00b7} {chars} characters")}
+        </span>
     }
 }
 

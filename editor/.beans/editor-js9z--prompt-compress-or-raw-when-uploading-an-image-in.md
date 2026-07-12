@@ -1,11 +1,11 @@
 ---
 # editor-js9z
 title: Prompt compress-or-raw when uploading an image in the editor
-status: todo
+status: completed
 type: feature
 priority: normal
 created_at: 2026-05-02T23:35:46Z
-updated_at: 2026-05-02T23:35:46Z
+updated_at: 2026-05-03T00:07:32Z
 ---
 
 When the user uploads an image in the post editor (via the "Upload Image" button or drag-and-drop), intercept the upload if the file is a compressible raster image and ask whether to compress first or upload raw.

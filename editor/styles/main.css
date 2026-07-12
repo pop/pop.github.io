@@ -765,6 +765,16 @@ nav a:hover {
     word-break: break-all;
 }
 
+.prose-count {
+    color: #6a737d;
+    font-size: 0.85rem;
+    margin: 0 0 0.75rem;
+}
+
+.editor-meta .prose-count {
+    margin: 0;
+}
+
 .edit-link {
     color: #0366d6;
     text-decoration: none;
