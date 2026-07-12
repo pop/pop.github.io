@@ -1,6 +1,6 @@
 +++
 title = "Order of the Sinking Star (demo)"
-date = "2026-06-22"
+date = "2026-07-11"
 # updated = "2026-12-31" ??
 description = "I spent 16 hours playing this DEMO so you gotta trust me it's good"
 taxonomies.tags = ["games", "backlog"]
