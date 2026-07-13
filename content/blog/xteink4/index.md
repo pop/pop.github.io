@@ -1,5 +1,5 @@
 +++
-title = "I got an adorable little ereader and now I can't stop reading."
+title = "the xteink4 got me to read again"
 date = "2026-06-26"
 description = ""
 draft = true
