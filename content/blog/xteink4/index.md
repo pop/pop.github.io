@@ -9,6 +9,8 @@ taxonomies.tags = ["reading", "gadgets"]
 A few weeks ago I bought the xteink4 on a whim based on a co-worker's suggestion.
 Best $60 I've spent in a looong time.
 
+![7355.jpg](7355.jpg)
+
 # What makes it awesome
 
 I carry this thing around with me all day every day and I have been reading waaay more than before.
