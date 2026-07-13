@@ -5,7 +5,7 @@ description = "A cute lil' e-reader that can fit on the back of your phone was e
 taxonomies.tags = ["reading", "gadgets"]
 +++
 
-A few weeks ago I bought the xteink4 on a whim based on a co-worker's suggestion.
+A few weeks ago I bought the [xteink4](https://www.readme.club/guide/x4) on a whim based on a co-worker's suggestion.
 Best $60 I've spent in a looong time.
 
 ![7355.jpg](7355.jpg)
