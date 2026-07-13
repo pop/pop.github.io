@@ -29,6 +29,8 @@ Sure I can carry some small books around with me all day, just in case I get a f
 
 ## Thriving open source community
 
+The surprise upside
+
 # Downsides
 
 ## DRM Free epubs are hard to find [legally]
