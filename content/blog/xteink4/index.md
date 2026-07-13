@@ -53,7 +53,8 @@ I tried purchasing and downloading a book from ~3 online ebook retailers and _ea
 
 There are of course tons of sites you can use to download epubs if you just search "X book epub", so there are ways to get what you want to read on this thing, but it's sad that there's no legal way to get many books onto the device.
 
-Before this I was an avid Libby user, getting almost all of my reading from the library as a result.
+Before this I was an avid Libby user, getting almost all of my reading from the library.
+Sure you have to wait a few weeks for the popular stuff, but I'm a slow ready so that wasn't an issue.
 I wish there was some way to load Libby books onto this, and maybe with custom firmware there is a way, but not that I could find in 2026.
 
 There are some custom firmware that support alternative formats, like markdown, so you could in theory use this to read blogs, emails, whatever!
