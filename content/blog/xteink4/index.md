@@ -37,7 +37,7 @@ Sure I can carry some small books around with me all day, just in case I get a f
 One surprise upside to this device was finding that it had a _huge_ and _thriving_ ecosystem of firmware hackers -- mainly [readme.club](https://www.readme.club/).
 Custom firmware, sharing background images, and just a vibrant community of excited users was a real happy accident on my part -- I just got it because it was cheap(ish) and I don't _love_ my Kindle.
 
-I'm currently using the biggest non-standard firmware: [crosspoint](https://crosspointreader.com/) which I still can't get over that you can just... load firmware onto this thing using a webpage... we really do live in the future huh.
+I'm currently using the most common (non-stock) firmware: [crosspoint](https://crosspointreader.com/) which I still can't get over that you can just... load firmware onto this thing using a webpage... we really do live in the future huh.
 
 It's shockingly easy to flash new and even custom firmware on the xteink, which is exciting!
 I might even vibe-code my own with Rust -- I've been wanting a good flashcard app and this seems like a good device for that...
