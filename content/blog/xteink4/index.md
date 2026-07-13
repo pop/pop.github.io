@@ -17,7 +17,7 @@ Let's get into why.
 
 ## I am busy so convenience is king
 
-Between family, friends, and exercising I have maaaaybe 2 hours a day to myself if I'm lucky.
+Between family, friends, job, exercising, and sleeping I have maaaaybe 2 hours a day to myself if I'm lucky.
 That time though is usually spent playing games, writing this blog, or hacking on a game -- things that require sitting down at a desk and working.
 
 I've found that when I lower the barrier to entry for a task, I usually start doing it more.
