@@ -55,7 +55,7 @@ There are of course tons of sites you can use to download epubs if you just sear
 
 Before this I was an avid Libby user, getting almost all of my reading from the library.
 Sure you have to wait a few weeks for the popular stuff, but I'm a slow ready so that wasn't an issue.
-I wish there was some way to load Libby books onto this, and maybe with custom firmware there is a way, but not that I could find in 2026.
+I wish there was some way to load Libby books onto this, and maybe with custom firmware there is, but not that I could find in 2026.
 
 There are some custom firmware that support alternative formats, like markdown, so you could in theory use this to read blogs, emails, whatever!
 It's just a small e-ink screen with a wireless connection running a binary blob!
