@@ -49,7 +49,7 @@ It's not all perfect, but the downsides are [for me] easy enough to overlook.
 ## DRM Free epubs are hard to find [legally]
 
 I am really sad at how difficult it is to get an epub for a device like this.
-I tried purchasing and downloading a book from ~3 online ebook retailers and _each_ of them had some DRM scheme that was above my pay grade.
+I tried purchasing and downloading a book from ~3 online ebook retailers and _each_ of them had some DRM scheme that was way above my pay grade.
 
 There are of course tons of sites you can use to download epubs if you just search "X book epub", so there are ways to get what you want to read on this thing, but it's sad that there's no legal way to get many books onto the device.
 
