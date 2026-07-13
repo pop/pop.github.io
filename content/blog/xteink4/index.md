@@ -18,7 +18,7 @@ Let's get into why.
 ## I am busy so convenience is king
 
 Between family, friends, job, exercising, and sleeping I have maaaaybe 2 hours a day to myself if I'm lucky.
-That time though is usually spent playing games, writing this blog, or hacking on a game -- things that require sitting down at a desk and working.
+That time though is usually spent playing games, writing this blog, or hacking on a game -- things that require sitting down at a desk and focusing for a block of time.
 
 I've found that when I lower the barrier to entry for a task, I usually start doing it more.
 * Not blogging enough? I built [editor.elijah.run](https://editor.elijah.run) so I can blog from my phone.
