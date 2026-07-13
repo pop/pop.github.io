@@ -54,9 +54,15 @@ There are of course tons of sites you can use to download epubs if you just sear
 Before this I was an avid Libby user, getting almost all of my reading from the library as a result.
 I wish there was some way to load Libby books onto this, and maybe with custom firmware there is a way, but not that I could find in 2026.
 
+There are some custom firmware that support alternative formats, like markdown, so you could in theory use this to read blogs, emails, whatever!
+It's just a small e-ink screen with a wireless connection running a binary blob!
+
 ## [Debatable] missing features
 
-There are also some hardware
+Software fixes most issues, but there are also some hardware features of the _hardware_ I should mention.
+
+1. There is no backlight. This isn't a deal breaker for me, but I do enjoy the backlight on my Kindle Paperwhite. It's difficult not being able to read in bed without waking up my partner.
+2. No touchscreen. This is a _feature_ for me, but everything is controlled by one of the 7 buttons (1 power, 3 rockers). It's a little clunky at first, but it's nice not accidentally turning the page as much as I do on the touchscreen Kindles.
 
 ---
 
