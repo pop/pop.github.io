@@ -10,6 +10,9 @@ A few weeks ago I bought the xteink4 on a whim based on a co-worker's suggestion
 
 # What makes it awesome
 
+I carry this thing around with me all day every day and I have been reading waaay more than before.
+Let's get into why.
+
 ## I am busy so convenience is king
 
 Between family, friends, and exercising I have maaaaybe 2 hours a day to myself if I'm lucky.
@@ -29,11 +32,31 @@ Sure I can carry some small books around with me all day, just in case I get a f
 
 ## Thriving open source community
 
-The surprise upside
+One surprise upside to this device was finding that it had a _huge_ and _thriving_ ecosystem of firmware hackers -- mainly [readme.club](https://www.readme.club/).
+Custom firmware, sharing background images, and just a vibrant community of excited users was a real happy accident on my part -- I just got it because it was cheap(ish) and I don't _love_ my Kindle.
+
+I'm currently using the biggest non-standard firmware: [crosspoint](https://crosspointreader.com/) which I still can't get over that you can just... load firmware onto this thing using a webpage... we really do live in the future huh.
+
+It's shockingly easy to flash new and even custom firmware on the xteink, which is exciting!
+I might even vibe-code my own with Rust -- I've been wanting a good flashcard app and this seems like a good device for that...
 
 # Downsides
 
+It's not all perfect, but the downsides are [for me] easy enough to overlook.
+
 ## DRM Free epubs are hard to find [legally]
+
+I am really sad at how difficult it is to get an epub for a device like this.
+I tried purchasing an downloading a book from ~3 online ebook retailers and _each_ of them had some DRM scheme that was above my pay grade.
+
+There are of course tons of sites you can use to download epubs if you just search "X book epub", so there are ways to get what you want to read on this thing, but it's sad that there's no legal way to get many books onto the device.
+
+Before this I was an avid Libby user, getting almost all of my reading from the library as a result.
+I wish there was some way to load Libby books onto this, and maybe with custom firmware there is a way, but not that I could find in 2026.
+
+## [Debatable] missing features
+
+There are also some hardware
 
 ---
 
