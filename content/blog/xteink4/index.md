@@ -8,9 +8,15 @@ taxonomies.tags = ["reading", "gadgets"]
 
 A few weeks ago I bought the xteink4 on a whim based on a co-worker's suggestion.
 
-# What makes it awesome.
+# What makes it awesome
+
+## I am busy, convenience is king
+
+## Thriving open source community
 
 # Downsides
+
+## DRM Free epubs are hard to find [legally]
 
 ---
 
