@@ -23,3 +23,6 @@ Moutainhead has one more garnish in that I actually kind of know tech bros so th
 
 It's like Silicon Valley (the TV show) + Succession, in a movie.
 
+Where it differs from Succession is that while Succession benefits from the TV format, half the bit is the cycles the characters go through over and over and over, this is a snapshot of these character's lives.
+Thankfully, they are characatures (sp?) of tech archetypes so you can really easily extrapolate how their stories will progress.
+They'll come up with big, but bad, ideas, run with them for a while, get bored immediately, and then de-stress on the yacht.
