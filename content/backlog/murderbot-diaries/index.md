@@ -9,8 +9,7 @@ taxonomies.tags = ["books", "backlog"]
 # All Systems Red (2017)
 
 
-<!--
-# Artificial Condition (2018)
+[//]: # Artificial Condition (2018)
 
 
 # Rogue Protocol (2018)
