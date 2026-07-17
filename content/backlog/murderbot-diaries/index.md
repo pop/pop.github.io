@@ -8,6 +8,8 @@ taxonomies.tags = ["books", "backlog"]
 
 # All Systems Red (2017)
 
+I had a thoroughly good time reading All Systems Red.
+
 
 # Artificial Condition (2018)
 
