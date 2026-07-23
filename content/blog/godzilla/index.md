@@ -39,7 +39,7 @@ It wasn't very well received at the time, and it's certainly not _better_ than t
 
 Final Wars is one of the most fun, basically live-action anime, films ever.
 
-I would consider it the "Last Formulaic Godzilla Film".
+I would consider it the "Last Formulaic Godzilla Film", which is the end of an era.
 Of course every Godzilla has to motivate this big Kaiju's existence but the modern movies do cringe things like developing characters and motivating decisions, but up through Final War the series was all gas, no ass, just balls to the wall crazy bullshit with basically no rhyme or reason.
 
 * Oh my god Godzilla destroyed that building full of people -- who cares! Moving on!
