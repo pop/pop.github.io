@@ -1,6 +1,6 @@
 +++
 title = "There Is No Antimemetics Division"
-date = "2026-07-31" # TBD
+date = "2026-07-20"
 description = "SCP continues to be a fun playground for writers to play in"
 taxonomies.tags = ["backlog", "books"]
 +++
