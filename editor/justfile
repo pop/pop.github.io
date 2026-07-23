@@ -1,0 +1,24 @@
+# Build and deploy the blog editor
+
+# Dev server with hot reload
+dev:
+    trunk serve
+
+# Release build (frontend)
+build:
+    trunk build --release
+
+# Deploy frontend to production (Cloudflare Pages, branch=source)
+deploy: build
+    wrangler pages deploy dist --branch=source
+
+# Deploy frontend to preview
+deploy-preview: build
+    wrangler pages deploy dist
+
+# Deploy OAuth worker
+deploy-worker:
+    cd worker && wrangler deploy
+
+# Deploy everything to production
+deploy-all: deploy deploy-worker

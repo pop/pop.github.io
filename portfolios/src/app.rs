@@ -1,0 +1,157 @@
+use yew::prelude::*;
+use crate::config::load_config;
+use crate::state::WindowManager;
+use crate::components::clippy::Clippy;
+use crate::components::desktop::Desktop;
+use crate::components::start_menu::StartMenuComp;
+use crate::components::taskbar::Taskbar;
+use crate::components::webamp::Webamp;
+use crate::components::window::Window;
+use crate::components::game_window::GameWindow;
+
+#[function_component(App)]
+pub fn app() -> Html {
+    let config = load_config();
+    let viewport_w = web_sys::window()
+        .and_then(|w| w.inner_width().ok())
+        .and_then(|v| v.as_f64())
+        .unwrap_or(1200.0);
+    let wm = use_state(|| WindowManager::new(
+        config.projects.iter().map(|g| g.id.clone()).collect(),
+        viewport_w <= 768.0,
+    ));
+    let start_menu_open = use_state(|| false);
+    let webamp_active = use_state(|| false);
+
+    let on_open = {
+        let wm = wm.clone();
+        Callback::from(move |game_id: String| {
+            let mut new_wm = (*wm).clone();
+            new_wm.z_counter += 1;
+            let z = new_wm.z_counter;
+            if let Some(w) = new_wm.windows.iter_mut().find(|w| w.game_id == game_id) {
+                w.open = true;
+                w.z_index = z;
+            }
+            wm.set(new_wm);
+        })
+    };
+
+    let on_start_click = {
+        let smo = start_menu_open.clone();
+        Callback::from(move |_| smo.set(!*smo))
+    };
+
+    let on_webamp_toggle = {
+        let wa = webamp_active.clone();
+        Callback::from(move |_: ()| wa.set(!*wa))
+    };
+
+    let on_taskbar_focus = {
+        let wm = wm.clone();
+        Callback::from(move |game_id: String| {
+            let mut new_wm = (*wm).clone();
+            new_wm.z_counter += 1;
+            let z = new_wm.z_counter;
+            if let Some(w) = new_wm.windows.iter_mut().find(|w| w.game_id == game_id) {
+                w.z_index = z;
+            }
+            wm.set(new_wm);
+        })
+    };
+
+    let open_windows: Vec<_> = wm.windows.iter().filter(|w| w.open).cloned().collect();
+
+    html! {
+        <>
+            <Desktop projects={config.projects.clone()} on_open={on_open} background_color={config.desktop.background_color.clone()} />
+            { for open_windows.iter().map(|w| {
+                let wm_close = wm.clone();
+                let game_id_close = w.game_id.clone();
+                let wm_focus = wm.clone();
+                let game_id_focus = w.game_id.clone();
+                let wm_move = wm.clone();
+                let game_id_move = w.game_id.clone();
+
+                let on_close = Callback::from(move |_: ()| {
+                    let mut new_wm = (*wm_close).clone();
+                    if let Some(win) = new_wm.windows.iter_mut().find(|x| x.game_id == game_id_close) {
+                        win.open = false;
+                    }
+                    wm_close.set(new_wm);
+                });
+
+                let on_focus = {
+                    let wm = wm_focus.clone();
+                    let gid = game_id_focus.clone();
+                    Callback::from(move |_: ()| {
+                        let mut new_wm = (*wm).clone();
+                        new_wm.z_counter += 1;
+                        let z = new_wm.z_counter;
+                        if let Some(win) = new_wm.windows.iter_mut().find(|x| x.game_id == gid) {
+                            win.z_index = z;
+                        }
+                        wm.set(new_wm);
+                    })
+                };
+
+                let on_move = {
+                    let wm = wm_move.clone();
+                    let gid = game_id_move.clone();
+                    Callback::from(move |pos: (i32, i32)| {
+                        let mut new_wm = (*wm).clone();
+                        if let Some(win) = new_wm.windows.iter_mut().find(|x| x.game_id == gid) {
+                            win.pos = pos;
+                        }
+                        wm.set(new_wm);
+                    })
+                };
+
+                let game = config.projects.iter().find(|g| g.id == w.game_id).cloned();
+                if let Some(game) = game {
+                    html! {
+                        <Window
+                            key={w.game_id.clone()}
+                            title={game.title.clone()}
+                            z_index={w.z_index}
+                            pos={w.pos}
+                            on_close={on_close}
+                            on_focus={on_focus}
+                            on_move={on_move}
+                        >
+                            <GameWindow game={game} />
+                        </Window>
+                    }
+                } else { html! {} }
+            })}
+            <StartMenuComp
+                config={config.start_menu.clone()}
+                visible={*start_menu_open}
+                on_close={Callback::from({
+                    let smo = start_menu_open.clone();
+                    move |_| smo.set(false)
+                })}
+            />
+            <Clippy quotes={config.quotes.clone()} clippy_config={config.clippy.clone()} />
+            {
+                match config.webamp.as_ref() {
+                    Some(wa) if !wa.tracks.is_empty() && *webamp_active => html! {
+                        <Webamp tracks={wa.tracks.clone()} skin_url={wa.skin_url.clone()} top={wa.top} />
+                    },
+                    _ => html! {},
+                }
+            }
+            <Taskbar
+                windows={wm.windows.clone()}
+                projects={config.projects.clone()}
+                on_focus={on_taskbar_focus}
+                on_start_click={on_start_click}
+                start_menu_open={*start_menu_open}
+                start_icon={config.taskbar.start_icon.clone()}
+                start_label={config.taskbar.start_label.clone()}
+                webamp_tray={config.webamp.as_ref().filter(|wa| !wa.tracks.is_empty()).map(|_| *webamp_active)}
+                on_webamp_toggle={on_webamp_toggle}
+            />
+        </>
+    }
+}

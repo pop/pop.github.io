@@ -2,7 +2,7 @@ use yew::prelude::*;
 use yew_router::prelude::*;
 
 use crate::app::AuthContext;
-use crate::models::post::{parse_frontmatter, render_markdown};
+use crate::models::post::{count_prose, parse_frontmatter, render_markdown};
 use crate::routes::Route;
 use crate::services::github::GitHubClient;
 
@@ -96,6 +96,7 @@ pub fn preview(props: &Props) -> Html {
             } else if let Some(ref err) = *error {
                 <p class="error">{err}</p>
             } else {
+                { render_prose_count(&content) }
                 <div class="preview-pane markdown-body">
                     if !frontmatter_fields.is_empty() {
                         <table class="frontmatter-table">
@@ -111,5 +112,14 @@ pub fn preview(props: &Props) -> Html {
                 </div>
             }
         </div>
+    }
+}
+
+fn render_prose_count(content: &str) -> Html {
+    let (words, chars) = count_prose(content);
+    html! {
+        <p class="prose-count">
+            {format!("{words} words \u{00b7} {chars} characters")}
+        </p>
     }
 }

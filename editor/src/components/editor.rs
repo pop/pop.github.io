@@ -1,15 +1,45 @@
+use std::cell::RefCell;
 use std::rc::Rc;
 
 use wasm_bindgen::closure::Closure;
+
+type CmClosureCell = Rc<RefCell<Option<Closure<dyn Fn(String)>>>>;
 use wasm_bindgen::JsCast;
 use wasm_bindgen::JsValue;
-use web_sys::{HtmlElement, HtmlInputElement, HtmlTextAreaElement};
+use web_sys::{HtmlElement, HtmlInputElement};
 use yew::prelude::*;
 use yew_router::prelude::*;
 
+#[wasm_bindgen::prelude::wasm_bindgen]
+extern "C" {
+    #[wasm_bindgen::prelude::wasm_bindgen(js_namespace = window, js_name = cmCreateEditor)]
+    fn cm_create_editor(
+        mount: &HtmlElement,
+        initial_doc: &str,
+        on_change: &js_sys::Function,
+        vim_mode: bool,
+    ) -> String;
+
+    #[wasm_bindgen::prelude::wasm_bindgen(js_namespace = window, js_name = cmSetValue)]
+    fn cm_set_value(id: &str, value: &str);
+
+    #[wasm_bindgen::prelude::wasm_bindgen(js_namespace = window, js_name = cmInsertAtCursor)]
+    fn cm_insert_at_cursor(id: &str, text: &str);
+
+    #[wasm_bindgen::prelude::wasm_bindgen(js_namespace = window, js_name = cmWrapSelection)]
+    fn cm_wrap_selection(id: &str, prefix: &str, suffix: &str, placeholder: &str);
+
+    #[wasm_bindgen::prelude::wasm_bindgen(js_namespace = window, js_name = cmDestroy)]
+    fn cm_destroy(id: &str);
+
+    #[wasm_bindgen::prelude::wasm_bindgen(js_namespace = window, js_name = cmFocus)]
+    fn cm_focus(id: &str);
+}
+
 use crate::app::AuthContext;
 use crate::components::dashboard::invalidate_cache;
-use crate::models::post::{parse_frontmatter, post_dir, render_markdown};
+use crate::models::github::CommitSummary;
+use crate::models::post::{count_prose, parse_frontmatter, post_dir, render_markdown};
 use crate::routes::Route;
 use crate::services::github::GitHubClient;
 
@@ -43,13 +73,24 @@ pub fn editor_page(props: &Props) -> Html {
     let is_new = use_state(|| false);
     let view_mode = use_state(|| ViewMode::Edit);
     let dragging = use_state(|| false);
+    let vim_mode = use_state(|| false);
     let file_input_ref = use_node_ref();
-    let textarea_ref = use_node_ref();
+    let cm_mount_ref = use_node_ref();
     let save_btn_ref = use_node_ref();
+    let cm_handle: Rc<std::cell::RefCell<Option<String>>> = use_mut_ref(|| None);
+    let cm_closure: CmClosureCell = use_mut_ref(|| None);
+    let externally_setting: Rc<std::cell::RefCell<bool>> = use_mut_ref(|| false);
     let has_unsaved = use_mut_ref(|| false);
     let rendered_html = use_state(String::new);
     let frontmatter_fields = use_state(Vec::<(String, String)>::new);
     let render_gen = use_mut_ref(|| 0u32);
+    let show_history = use_state(|| false);
+    let history_commits = use_state(|| Vec::<CommitSummary>::new());
+    let history_loading = use_state(|| false);
+    let history_error = use_state(|| Option::<String>::None);
+    let reverting = use_state(|| false);
+    let history_preview_pre_sha = use_state(|| Option::<String>::None);
+    let pending_revert_sha = use_state(|| Option::<String>::None);
 
     // Auth-aware error setter: clears token on 401
     let set_error: Rc<dyn Fn(String)> = {
@@ -284,30 +325,73 @@ pub fn editor_page(props: &Props) -> Html {
         });
     }
 
-    let on_input = {
+    // Mount / recreate CodeMirror when loading completes or vim mode toggles.
+    {
+        let cm_mount_ref = cm_mount_ref.clone();
+        let cm_handle = cm_handle.clone();
+        let cm_closure = cm_closure.clone();
+        let externally_setting = externally_setting.clone();
         let content = content.clone();
         let save_msg = save_msg.clone();
-        Callback::from(move |e: InputEvent| {
-            let target: HtmlTextAreaElement = e.target_unchecked_into();
-            content.set(target.value());
-            save_msg.set(None);
-        })
-    };
+        let loading_val = *loading;
+        let vim_mode_val = *vim_mode;
 
-    // Phase 20: formatting toolbar callbacks
+        use_effect_with((loading_val, vim_mode_val), move |(is_loading, vm)| {
+            if !*is_loading {
+                // Guard: if the ES module hasn't finished loading yet (slow CDN
+                // first load), skip mounting — log a warning so it's diagnosable.
+                let cm_ready = js_sys::Reflect::get(
+                    &gloo_utils::window().into(),
+                    &JsValue::from_str("cmIsReady"),
+                )
+                .map(|v| v.as_bool().unwrap_or(false))
+                .unwrap_or(false);
+
+                if cm_ready {
+                    if let Some(el) = cm_mount_ref.cast::<HtmlElement>() {
+                        let initial = (*content).clone();
+
+                        let content_cb = content.clone();
+                        let save_msg_cb = save_msg.clone();
+                        let ext_flag = externally_setting.clone();
+                        let on_change = Closure::wrap(Box::new(move |val: String| {
+                            if !*ext_flag.borrow() {
+                                content_cb.set(val);
+                                save_msg_cb.set(None);
+                            }
+                        }) as Box<dyn Fn(String)>);
+
+                        let fn_ref = on_change.as_ref().unchecked_ref::<js_sys::Function>();
+                        let id = cm_create_editor(&el, &initial, fn_ref, *vm);
+                        *cm_handle.borrow_mut() = Some(id);
+                        *cm_closure.borrow_mut() = Some(on_change);
+                    }
+                } else {
+                    log::warn!("CodeMirror not yet ready — editor will be plain text until reload");
+                }
+            }
+
+            let cm_handle_cleanup = cm_handle.clone();
+            let cm_closure_cleanup = cm_closure.clone();
+            move || {
+                let mut h = cm_handle_cleanup.borrow_mut();
+                if let Some(ref id) = *h {
+                    cm_destroy(id);
+                    *h = None;
+                }
+                *cm_closure_cleanup.borrow_mut() = None;
+            }
+        });
+    }
+
+    // Format toolbar callbacks — delegate to CM6 selection wrapping.
     macro_rules! make_format_cb {
         ($prefix:expr, $suffix:expr, $placeholder:expr) => {{
-            let content = content.clone();
-            let textarea_ref = textarea_ref.clone();
+            let cm_handle = cm_handle.clone();
             Callback::from(move |_: MouseEvent| {
-                let Some(textarea) = textarea_ref.cast::<HtmlTextAreaElement>() else {
-                    return;
-                };
-                let current = (*content).clone();
-                let new_content =
-                    apply_format_to_content(&textarea, &current, $prefix, $suffix, $placeholder);
-                content.set(new_content);
-                let _ = textarea.focus();
+                if let Some(ref id) = *cm_handle.borrow() {
+                    cm_wrap_selection(id, $prefix, $suffix, $placeholder);
+                }
             })
         }};
     }
@@ -489,7 +573,7 @@ pub fn editor_page(props: &Props) -> Html {
         let save_msg = save_msg.clone();
         let path = props.path.clone();
         let token = auth.token.clone();
-        let textarea_ref = textarea_ref.clone();
+        let cm_handle = cm_handle.clone();
 
         Callback::from(move |file: web_sys::File| {
             let mime = file.type_();
@@ -527,7 +611,7 @@ pub fn editor_page(props: &Props) -> Html {
             let set_error = set_error.clone();
             let save_msg = save_msg.clone();
             let path = path.clone();
-            let textarea_ref = textarea_ref.clone();
+            let cm_handle = cm_handle.clone();
 
             if let Some(token) = token.clone() {
                 uploading.set(true);
@@ -579,26 +663,12 @@ pub fn editor_page(props: &Props) -> Html {
                     {
                         Ok(_sha) => {
                             let md_ref = format!("![{file_name}]({file_name})");
-                            let current = (*content).clone();
-
-                            let new_content = if let Some(textarea) =
-                                textarea_ref.cast::<HtmlTextAreaElement>()
-                            {
-                                if let Ok(Some(pos)) = textarea.selection_start() {
-                                    let insert_at = crate::utils::char_pos_to_byte_offset(
-                                        &current,
-                                        pos as usize,
-                                    );
-                                    let (before, after) = current.split_at(insert_at);
-                                    format!("{before}{md_ref}{after}")
-                                } else {
-                                    format!("{current}\n{md_ref}")
-                                }
+                            if let Some(ref id) = *cm_handle.borrow() {
+                                cm_insert_at_cursor(id, &md_ref);
                             } else {
-                                format!("{current}\n{md_ref}")
-                            };
-
-                            content.set(new_content);
+                                let current = (*content).clone();
+                                content.set(format!("{current}\n{md_ref}"));
+                            }
                             save_msg.set(Some(format!("Uploaded {file_name}")));
                             uploading.set(false);
                         }
@@ -690,6 +760,279 @@ pub fn editor_page(props: &Props) -> Html {
         Callback::from(move |_: MouseEvent| view_mode.set(ViewMode::Split))
     };
 
+    let toggle_history = {
+        let show_history = show_history.clone();
+        Callback::from(move |_: MouseEvent| {
+            show_history.set(!*show_history);
+        })
+    };
+
+    let on_history_select = {
+        let pending_revert_sha = pending_revert_sha.clone();
+        Callback::from(move |sha: String| {
+            pending_revert_sha.set(Some(sha));
+        })
+    };
+
+    let on_cancel_pending_revert = {
+        let pending_revert_sha = pending_revert_sha.clone();
+        Callback::from(move |_: MouseEvent| {
+            pending_revert_sha.set(None);
+        })
+    };
+
+    let on_toggle_vim = {
+        let vim_mode = vim_mode.clone();
+        Callback::from(move |_: MouseEvent| vim_mode.set(!*vim_mode))
+    };
+
+    let on_discard_then_revert = {
+        let content = content.clone();
+        let original_content = original_content.clone();
+        let file_sha = file_sha.clone();
+        let is_new = is_new.clone();
+        let token = auth.token.clone();
+        let path = props.path.clone();
+        let active_branch = auth.active_branch.clone();
+        let set_error = set_error.clone();
+        let cm_handle = cm_handle.clone();
+        let externally_setting = externally_setting.clone();
+        Callback::from(move |_: MouseEvent| {
+            if let (Some(token), Some(branch)) = (token.clone(), active_branch.clone()) {
+                let content = content.clone();
+                let original_content = original_content.clone();
+                let file_sha = file_sha.clone();
+                let is_new = is_new.clone();
+                let set_error = set_error.clone();
+                let path = path.clone();
+                let cm_handle = cm_handle.clone();
+                let externally_setting = externally_setting.clone();
+                wasm_bindgen_futures::spawn_local(async move {
+                    let client = GitHubClient::new(token);
+                    match client.get_file(&path, &branch).await {
+                        Ok(f) => {
+                            let text = f.content.unwrap_or_default();
+                            sync_to_cm(&cm_handle, &externally_setting, &text);
+                            content.set(text.clone());
+                            original_content.set(text);
+                            file_sha.set(Some(f.sha));
+                            is_new.set(false);
+                        }
+                        Err(e) => set_error(e),
+                    }
+                });
+            }
+        })
+    };
+
+    let on_save_then_revert = {
+        let save_btn_ref = save_btn_ref.clone();
+        Callback::from(move |_: MouseEvent| {
+            if let Some(btn) = save_btn_ref.cast::<HtmlElement>() {
+                btn.click();
+            }
+        })
+    };
+
+    let on_confirm_revert = {
+        let history_preview_pre_sha = history_preview_pre_sha.clone();
+        let save_msg = save_msg.clone();
+        Callback::from(move |_: MouseEvent| {
+            history_preview_pre_sha.set(None);
+            save_msg.set(Some("Version restored".into()));
+        })
+    };
+
+    let on_cancel_revert = {
+        let history_preview_pre_sha = history_preview_pre_sha.clone();
+        let reverting = reverting.clone();
+        let content = content.clone();
+        let original_content = original_content.clone();
+        let file_sha = file_sha.clone();
+        let set_error = set_error.clone();
+        let token = auth.token.clone();
+        let path = props.path.clone();
+        let active_branch = auth.active_branch.clone();
+        let cm_handle = cm_handle.clone();
+        let externally_setting = externally_setting.clone();
+        Callback::from(move |_: MouseEvent| {
+            let Some(pre_sha) = (*history_preview_pre_sha).clone() else {
+                return;
+            };
+            if let (Some(token), Some(branch)) = (token.clone(), active_branch.clone()) {
+                let reverting = reverting.clone();
+                let content = content.clone();
+                let original_content = original_content.clone();
+                let file_sha = file_sha.clone();
+                let set_error = set_error.clone();
+                let history_preview_pre_sha = history_preview_pre_sha.clone();
+                let path = path.clone();
+                let cm_handle = cm_handle.clone();
+                let externally_setting = externally_setting.clone();
+                reverting.set(true);
+                wasm_bindgen_futures::spawn_local(async move {
+                    let client = GitHubClient::new(token);
+                    match client
+                        .revert_directory_to_commit(&path, &pre_sha, &branch)
+                        .await
+                    {
+                        Ok(new_file_sha) => {
+                            if let Ok(f) = client.get_file(&path, &branch).await {
+                                let text = f.content.unwrap_or_default();
+                                sync_to_cm(&cm_handle, &externally_setting, &text);
+                                content.set(text.clone());
+                                original_content.set(text);
+                                file_sha.set(Some(new_file_sha));
+                            }
+                            history_preview_pre_sha.set(None);
+                            reverting.set(false);
+                        }
+                        Err(e) => {
+                            set_error(e);
+                            reverting.set(false);
+                        }
+                    }
+                });
+            }
+        })
+    };
+
+    // Revert effect: fires when pending_revert_sha is Some and content is clean
+    {
+        let pending_revert_sha_state = pending_revert_sha.clone();
+        let content = content.clone();
+        let original_content = original_content.clone();
+        let is_new = is_new.clone();
+        let reverting = reverting.clone();
+        let history_preview_pre_sha = history_preview_pre_sha.clone();
+        let history_commits = history_commits.clone();
+        let file_sha = file_sha.clone();
+        let view_mode = view_mode.clone();
+        let set_error = set_error.clone();
+        let token = auth.token.clone();
+        let path = props.path.clone();
+        let active_branch = auth.active_branch.clone();
+        let cm_handle = cm_handle.clone();
+        let externally_setting = externally_setting.clone();
+
+        use_effect_with(
+            ((*pending_revert_sha).clone(), (*original_content).clone()),
+            move |(pending_sha, _)| {
+                let ready = pending_sha.is_some()
+                    && !(*content != *original_content || *is_new)
+                    && token.is_some()
+                    && active_branch.is_some();
+
+                if ready {
+                    let sha = pending_sha.clone().unwrap();
+                    let token = token.unwrap();
+                    let branch = active_branch.unwrap();
+                    let pending_revert_sha = pending_revert_sha_state.clone();
+                    let content = content.clone();
+                    let original_content = original_content.clone();
+                    let file_sha = file_sha.clone();
+                    let reverting = reverting.clone();
+                    let history_preview_pre_sha = history_preview_pre_sha.clone();
+                    let history_commits = history_commits.clone();
+                    let view_mode = view_mode.clone();
+                    let set_error = set_error.clone();
+                    let path = path.clone();
+                    let cm_handle = cm_handle.clone();
+                    let externally_setting = externally_setting.clone();
+
+                    wasm_bindgen_futures::spawn_local(async move {
+                        let client = GitHubClient::new(token);
+
+                        let pre_sha = match client.get_branch_sha(&branch).await {
+                            Ok(s) => s,
+                            Err(e) => {
+                                set_error(e);
+                                return;
+                            }
+                        };
+
+                        reverting.set(true);
+
+                        match client
+                            .revert_directory_to_commit(&path, &sha, &branch)
+                            .await
+                        {
+                            Ok(new_file_sha) => {
+                                match client.get_file(&path, &branch).await {
+                                    Ok(f) => {
+                                        let text = f.content.unwrap_or_default();
+                                        sync_to_cm(&cm_handle, &externally_setting, &text);
+                                        content.set(text.clone());
+                                        original_content.set(text);
+                                        file_sha.set(Some(new_file_sha));
+                                    }
+                                    Err(e) => {
+                                        set_error(e);
+                                        reverting.set(false);
+                                        return;
+                                    }
+                                }
+                                history_preview_pre_sha.set(Some(pre_sha));
+                                pending_revert_sha.set(None);
+                                view_mode.set(ViewMode::Split);
+                                history_commits.set(vec![]);
+                                reverting.set(false);
+                            }
+                            Err(e) => {
+                                set_error(e);
+                                pending_revert_sha.set(None);
+                                reverting.set(false);
+                            }
+                        }
+                    });
+                }
+
+                || ()
+            },
+        );
+    }
+
+    // Fetch history when panel is opened for the first time
+    {
+        let history_commits = history_commits.clone();
+        let history_loading = history_loading.clone();
+        let history_error = history_error.clone();
+        let token = auth.token.clone();
+        let path = props.path.clone();
+        let active_branch = auth.active_branch.clone();
+        let show_history_val = *show_history;
+
+        use_effect_with((show_history_val, auth.active_branch.clone()), move |_| {
+            if show_history_val && history_commits.is_empty() {
+                if let (Some(token), Some(branch)) = (token, active_branch) {
+                    history_loading.set(true);
+                    history_error.set(None);
+                    wasm_bindgen_futures::spawn_local(async move {
+                        let client = GitHubClient::new(token);
+                        match client.list_commits_for_path(&path, &branch).await {
+                            Ok(commits) => {
+                                history_commits.set(commits);
+                                history_loading.set(false);
+                            }
+                            Err(e) => {
+                                history_error.set(Some(e));
+                                history_loading.set(false);
+                            }
+                        }
+                    });
+                }
+            }
+            || ()
+        });
+    }
+
+    let on_dismiss_save_msg = {
+        let save_msg = save_msg.clone();
+        Callback::from(move |_: MouseEvent| {
+            save_msg.set(None);
+        })
+    };
+
     let has_changes = *content != *original_content || *is_new;
     let show_editor = *view_mode != ViewMode::Preview;
     let show_preview = *view_mode != ViewMode::Edit;
@@ -711,6 +1054,7 @@ pub fn editor_page(props: &Props) -> Html {
                     if *is_new {
                         <span class="editor-badge new-badge">{"New file"}</span>
                     }
+                    { render_prose_count(&content) }
                 </div>
             </div>
 
@@ -719,7 +1063,10 @@ pub fn editor_page(props: &Props) -> Html {
             }
 
             if let Some(ref msg) = *save_msg {
-                <p class="save-msg">{msg}</p>
+                <div class="save-msg">
+                    <span>{msg}</span>
+                    <button class="save-msg-dismiss" onclick={on_dismiss_save_msg.clone()}>{"×"}</button>
+                </div>
             }
 
             if *loading {
@@ -731,10 +1078,29 @@ pub fn editor_page(props: &Props) -> Html {
                             ref={save_btn_ref.clone()}
                             class="save-btn"
                             onclick={on_save}
-                            disabled={*saving || !has_changes}
+                            disabled={*saving || !has_changes || history_preview_pre_sha.is_some()}
                         >
                             { if *saving { "Saving\u{2026}" } else { "Save" } }
                         </button>
+                        if auth.active_branch.is_some() {
+                            if file_sha.is_some() {
+                                <button
+                                    class="history-toggle-btn"
+                                    onclick={toggle_history.clone()}
+                                    disabled={*saving || *history_loading || history_preview_pre_sha.is_some()}
+                                >
+                                    { if *show_history { "Hide history" } else { "History" } }
+                                </button>
+                            } else {
+                                <button
+                                    class="history-toggle-btn"
+                                    disabled=true
+                                    title="Save the post at least once to view history"
+                                >
+                                    {"History"}
+                                </button>
+                            }
+                        }
                         if file_sha.is_some() {
                             <button
                                 class="delete-btn"
@@ -784,7 +1150,65 @@ pub fn editor_page(props: &Props) -> Html {
                             onclick={set_split}
                         >{"Split"}</button>
                     </div>
+                    <button
+                        class={classes!("vim-toggle-btn", (*vim_mode).then_some("active"))}
+                        onclick={on_toggle_vim}
+                        title={if *vim_mode { "Vim mode on — click to disable" } else { "Enable vim mode" }}
+                    >{"Vim"}</button>
                 </div>
+                if *show_history {
+                    {render_history_panel(
+                        &history_commits,
+                        *history_loading,
+                        &history_error,
+                        on_history_select.clone(),
+                    )}
+                    if pending_revert_sha.is_some() && has_changes {
+                        <div class="revert-gate-banner">
+                            <p>{"You have unsaved changes. Save or discard them before reverting."}</p>
+                            <div class="revert-gate-actions">
+                                <button
+                                    class="save-btn"
+                                    onclick={on_save_then_revert.clone()}
+                                    disabled={*saving || *reverting}
+                                >
+                                    { if *saving { "Saving\u{2026}" } else { "Save and revert" } }
+                                </button>
+                                <button
+                                    class="discard-btn"
+                                    onclick={on_discard_then_revert.clone()}
+                                    disabled={*saving || *reverting}
+                                >
+                                    {"Discard and revert"}
+                                </button>
+                                <button onclick={on_cancel_pending_revert.clone()}>{"Cancel"}</button>
+                            </div>
+                        </div>
+                    }
+                }
+                if history_preview_pre_sha.is_some() {
+                    <div class="revert-preview-banner">
+                        <span class="revert-preview-msg">
+                            {"Previewing restored version \u{2014} confirm or cancel."}
+                        </span>
+                        <div class="revert-preview-actions">
+                            <button
+                                class="confirm-revert-btn"
+                                onclick={on_confirm_revert.clone()}
+                                disabled={*reverting}
+                            >
+                                {"Confirm restore"}
+                            </button>
+                            <button
+                                class="cancel-revert-btn"
+                                onclick={on_cancel_revert.clone()}
+                                disabled={*reverting}
+                            >
+                                { if *reverting { "Reverting\u{2026}" } else { "Cancel restore" } }
+                            </button>
+                        </div>
+                    </div>
+                }
                 <div
                     class={classes!(
                         "editor-container",
@@ -795,15 +1219,10 @@ pub fn editor_page(props: &Props) -> Html {
                     ondragleave={on_dragleave}
                     ondrop={on_drop}
                 >
-                    if show_editor {
-                        <textarea
-                            ref={textarea_ref.clone()}
-                            class="editor-textarea"
-                            value={(*content).clone()}
-                            oninput={on_input}
-                            spellcheck="true"
-                        />
-                    }
+                    <div
+                        ref={cm_mount_ref.clone()}
+                        class={classes!("cm-editor-mount", (!show_editor).then_some("cm-editor-hidden"))}
+                    />
                     if show_preview {
                         <div class="preview-pane markdown-body">
                             if rendered_html.is_empty() {
@@ -826,6 +1245,15 @@ pub fn editor_page(props: &Props) -> Html {
                 </div>
             }
         </div>
+    }
+}
+
+fn render_prose_count(content: &str) -> Html {
+    let (words, chars) = count_prose(content);
+    html! {
+        <span class="prose-count">
+            {format!("{words} words \u{00b7} {chars} characters")}
+        </span>
     }
 }
 
@@ -946,37 +1374,18 @@ async fn read_file_as_bytes(file: web_sys::File) -> Result<Vec<u8>, String> {
     Ok(array.to_vec())
 }
 
-/// Wrap selected text (or insert placeholder) with prefix/suffix markers.
-/// Returns the new full content string.
-fn apply_format_to_content(
-    textarea: &HtmlTextAreaElement,
-    current: &str,
-    prefix: &str,
-    suffix: &str,
-    placeholder: &str,
-) -> String {
-    let start = textarea.selection_start().ok().flatten().unwrap_or(0) as usize;
-    let end = textarea
-        .selection_end()
-        .ok()
-        .flatten()
-        .unwrap_or(start as u32) as usize;
-    let byte_start = crate::utils::char_pos_to_byte_offset(current, start);
-    let byte_end = crate::utils::char_pos_to_byte_offset(current, end);
-    let selected = &current[byte_start..byte_end];
-    let inner = if selected.is_empty() {
-        placeholder
-    } else {
-        selected
-    };
-    format!(
-        "{}{}{}{}{}",
-        &current[..byte_start],
-        prefix,
-        inner,
-        suffix,
-        &current[byte_end..]
-    )
+// ── CodeMirror sync helper ───────────────────────────────────────
+
+fn sync_to_cm(
+    cm_handle: &Rc<RefCell<Option<String>>>,
+    externally_setting: &Rc<RefCell<bool>>,
+    text: &str,
+) {
+    if let Some(ref id) = *cm_handle.borrow() {
+        *externally_setting.borrow_mut() = true;
+        cm_set_value(id, text);
+        *externally_setting.borrow_mut() = false;
+    }
 }
 
 // ── Debounce / highlighting helpers ─────────────────────────────
@@ -993,4 +1402,76 @@ fn highlight_code_blocks() {
     let _ = js_sys::eval(
         "if(typeof hljs!=='undefined'){document.querySelectorAll('pre code:not(.hljs)').forEach(el=>hljs.highlightElement(el));}",
     );
+}
+
+// ── History panel ────────────────────────────────────────────────
+
+fn render_history_panel(
+    commits: &[CommitSummary],
+    loading: bool,
+    error: &Option<String>,
+    on_select: Callback<String>,
+) -> Html {
+    html! {
+        <div class="history-panel">
+            <div class="history-panel-header">
+                <span class="history-panel-title">{"Post history"}</span>
+            </div>
+            if loading {
+                <p class="history-loading">{"Loading history\u{2026}"}</p>
+            } else if let Some(ref err) = error {
+                <p class="error">{err}</p>
+            } else if commits.is_empty() {
+                <p class="history-empty">{"No commits found."}</p>
+            } else {
+                <div class="history-list">
+                    { for commits.iter().map(|c| {
+                        let sha = c.sha.clone();
+                        let on_select = on_select.clone();
+                        let onclick = Callback::from(move |_: MouseEvent| {
+                            on_select.emit(sha.clone());
+                        });
+                        let short_sha = &c.sha[..7.min(c.sha.len())];
+                        let short_msg = if c.message.len() > 60 {
+                            format!("{}\u{2026}", &c.message[..60])
+                        } else {
+                            c.message.clone()
+                        };
+                        html! {
+                            <div class="history-item" onclick={onclick}>
+                                <div class="history-item-top">
+                                    <span class="history-sha">{short_sha}</span>
+                                    <span class="history-date">{format_history_date(&c.date)}</span>
+                                </div>
+                                <div class="history-item-bottom">
+                                    <span class="history-msg">{short_msg}</span>
+                                    <span class="history-stats">
+                                        <span class="history-add">{format!("+{}", c.additions)}</span>
+                                        {" "}
+                                        <span class="history-del">{format!("-{}", c.deletions)}</span>
+                                    </span>
+                                </div>
+                            </div>
+                        }
+                    }) }
+                </div>
+            }
+        </div>
+    }
+}
+
+/// Format an ISO 8601 date string for display in the history panel.
+fn format_history_date(iso: &str) -> String {
+    let d = js_sys::Date::new(&wasm_bindgen::JsValue::from_str(iso));
+    if d.get_time().is_nan() {
+        return iso.to_string();
+    }
+    format!(
+        "{:04}-{:02}-{:02} {:02}:{:02}",
+        d.get_utc_full_year(),
+        d.get_utc_month() + 1,
+        d.get_utc_date(),
+        d.get_utc_hours(),
+        d.get_utc_minutes()
+    )
 }

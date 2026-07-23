@@ -12,6 +12,10 @@
     height: 100vh;
   }
 
+  body {
+    max-width: max-content;
+  }
+
   .container {
     background-color: #ffffffcc;
   }
@@ -32,7 +36,18 @@
         <!-- if has subsections... -->
         {%- for s in section.subsections -%}
           {% set it = get_section(path=s) %}
-          <li class=post>🗄️ /<a href={{it.path}}>{{ it.title }}</a>/ <span class=description>{{ it.description  }}</span></li>
+          <li class=post>🗄️ /<a href={{it.path}}>{{ it.title }}</a>/ <span class=description>{{ it.description }}</span>
+            {%- if it.pages -%}
+              {%- set latest = it.pages | first -%}
+              &nbsp;[latest: <a href="{{ latest.permalink }}">{{ latest.title }}</a>]
+            {%- elif it.subsections -%}
+              {%- set first_sub = get_section(path=it.subsections | first) -%}
+              {%- if first_sub.pages -%}
+                {%- set latest = first_sub.pages | first -%}
+                &nbsp;[latest: <a href="{{ latest.permalink }}">{{ latest.title }}</a>]
+              {%- endif -%}
+            {%- endif -%}
+          </li>
         {%- endfor -%}
         <!-- does not have subsections... -->
         {%- for page in section.pages -%}

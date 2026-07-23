@@ -6,7 +6,15 @@ weight = 8
 generate_feeds = true
 +++
 
-<style> p>img { width: 100%; } </style>
+Check out my Windows 95 inspired PortfoliOS:
+
+<a href="https://games.elijah.run">
+<center>
+<img src=/images/portfolios.png alt=PortfoliOS />
+</center>
+</a>
+
+---
 
 In my copious free time I like to program videogames with [Rust] using the [bevy] engine.
 
