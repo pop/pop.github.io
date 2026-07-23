@@ -10,7 +10,7 @@ Each week we would watch the next one, in release order.
 Every time I bring this up I stumble through recommending my favorites, so I'm writing it down.
 
 This isn't a ranking of the top 5 Godzilla movies, but rather a curated viewing experience; if you watch these movies in this order you'll get the jist of what Godzilla was, has been, and is today.
-Like a cliffs notes for the Godzilla universe. 
+Like a Cliff's Notes for the Godzilla universe. 
 
 # 1. Godzilla (1954)
 
