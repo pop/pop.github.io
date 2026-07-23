@@ -47,7 +47,10 @@ Of course every Godzilla has to motivate this big Kaiju's existence but the mode
 * Who are our enemies? Aliens, again.
 
 I said multiple times on this blog:
+
 > It's like The Matrix + Power Rangers + Godzilla in one whacky package!
+
+If that's not going to get you to watch it I don't know what will.
 
 # 4. Shin Godzilla
 
