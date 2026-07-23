@@ -52,9 +52,14 @@ I said multiple times on this blog:
 
 If that's not going to get you to watch it I don't know what will.
 
-# 4. Shin Godzilla
+# 4. Shin Godzilla (2016)
+
+Ok now we're getting into the "Objectively Good Movies".
 
 # 5. Godzilla Minus One
+
+Remember Godzilla (1954)?
+It's like that but new and better.
 
 # Honorable Mentions
 
