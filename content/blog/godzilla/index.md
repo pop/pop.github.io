@@ -6,6 +6,7 @@ taxonomies.tags = ["movies", "whats-good"]
 +++
 
 In 2025 I watched all 38 Godzilla movies with a group of friends. 
+Each week we would watch the next one, in release order.
 Every time I bring this up I stumble through recommending my favorites, so I'm writing it down.
 
 This isn't necessarily the *best* Godzilla movies, think of it more as a curated list that get across the highlights of the Godzilla cannon.
