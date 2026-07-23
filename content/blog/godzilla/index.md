@@ -19,7 +19,17 @@ Humans do some dumb shit, some monster attacks (or Godzilla himself) and humans 
 
 It's a historically important film and honestly holds up well considering it's over 70 years old!
 
-# 2. Godzilla: All Monsters Attack
+# 2. Godzilla: All Monsters Attack (1969)
+
+![godzillas_revenge_1969.jpg](godzillas_revenge_1969.jpg)
+
+After Godzilla there were a few more films that more or less solidified the formula.
+They're fun but get repetitive after the 5th, 6th, 7th... you get it.
+
+All Monsters Attack was unique in that it did play with the formula.
+Unlike the previous entries which focus on big figures in Japan like governmental officials and mad scientists, this focuses on a little boy getting bullied and learning to stand up for himself.
+
+It wasn't very well received at the time, and it's certainly not _better_ than the other entries at the time, but it is at least _different_ which I have to commend it for.
 
 # 3. Godzilla Final War
 
