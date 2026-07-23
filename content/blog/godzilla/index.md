@@ -46,6 +46,8 @@ Of course every Godzilla has to motivate this big Kaiju's existence but the mode
 * How are we gonna kill Godzilla this time? Black hole gun.
 * Who are our enemies? Aliens, again.
 
+I said multiple times on this blog:
+> It's like The Matrix + Power Rangers + Godzilla in one whacky package!
 
 # 4. Shin Godzilla
 
