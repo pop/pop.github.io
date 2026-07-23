@@ -14,6 +14,8 @@ Like a Cliff's Notes for the Godzilla universe.
 
 # 1. Godzilla (1954)
 
+![gojira_1954_japanese_poster.jpg](gojira_1954_japanese_poster.jpg)
+
 The first Godzilla isn't the best one by today's standards, but it does a great job of setting up the format and the production that most if the series has stuck with.
 Humans do some dumb shit, some monster attacks (or Godzilla himself) and humans (or Godzilla) need to fight back.
 
