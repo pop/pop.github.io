@@ -14,6 +14,11 @@ Like a Cliff's Notes for the Godzilla universe.
 
 # 1. Godzilla (1954)
 
+The first Godzilla isn't the best one by today's standards, but it does a great job of setting up the format and the production that most if the series has stuck with.
+Humans do some dumb shit, some monster attacks (or Godzilla himself) and humans (or Godzilla) need to fight back.
+
+It's a historically important film and honestly holds up well considering it's over 70 years old!
+
 # 2. Godzilla: All Monsters Attack
 
 # 3. Godzilla Final War
