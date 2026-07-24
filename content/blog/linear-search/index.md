@@ -53,7 +53,7 @@ My implementation also went the route of storing `Option<T>` and `Option<(K,V)>`
 
 # jUsT uSe RaYoN
 
-After the initial results I thought "surely we can parallelize the linear search right? SIMD something something" did a side-quest adding a `par_*` version of the `VecSet`/`VecMap` types using rayon as the underlying engine.
+After the initial results I thought "surely we can parallelize the linear search right? SIMD something something" and did a side-quest adding a `par_*` version of the `VecSet`/`VecMap` types using rayon as the underlying engine.
 Here are those results:
 
 | Operation | Impl | 64 | 1024 | 16384 | 262144 | 1048576 |
@@ -65,9 +65,8 @@ Here are those results:
 | | VecSet par | 12485 | 18052 | 32334 | 244978 | — |
 | | HashSet | 34 | 49 | 112 | 928 | — |
 
+Rayon took _at least_ 11-12 µs which makes it _much_ slower at these small sizes.
 As it turns out, Rayon has _hella_ overhead so for small sets like this the startup cost _way_ overshadows the compute time.
-
-Rayon took _at least_ 11-12 µs which is _much_ slower at these small sizes.
 
 > Takeway: Rayon is great for processing _lots_ of data, like in batches.
 
