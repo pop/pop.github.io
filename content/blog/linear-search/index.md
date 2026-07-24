@@ -53,7 +53,7 @@ My implementation also went the route of storing `Option<T>` and `Option<(K,V)>`
 
 # jUsT uSe RaYoN
 
-After the initial results I thought "surely we can parallelize the linear search right? SIMD something something" and did a side-quest adding a `par_*` version of the `VecSet`/`VecMap` types using rayon as the underlying engine.
+After the initial results I thought "surely we can parallelize the linear search right? SIMD something something" and did a side-quest adding a `par_*` version of the `VecSet`/`VecMap` types using Rayon as the underlying engine.
 Here are those results:
 
 | Operation | Impl | 64 | 1024 | 16384 | 262144 | 1048576 |
