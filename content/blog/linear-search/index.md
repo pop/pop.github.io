@@ -152,5 +152,3 @@ This `VecMap` and `VecSet` are still useful when I both want to build and iterat
 
 [FixedHasher]: https://docs.rs/bevy/0.19.0/bevy/platform/hash/struct.FixedHasher.html
 [micropool]: https://github.com/DouglasDwyer/micropool
-
-
