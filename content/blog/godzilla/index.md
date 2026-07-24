@@ -54,15 +54,16 @@ If that's not going to get you to watch it I don't know what will.
 
 # 4. Shin Godzilla (2016)
 
+![shin_godzilla.png](shin_godzilla.png)
+
 Ok now we're getting into the "Objectively Good Movies".
 
 # 5. Godzilla Minus One
 
-Remember Godzilla (1954)?
-It's like that but new and better.
+![godzilla_minus_one_poster.jpeg](godzilla_minus_one_poster.jpeg)
+
 
 # Honorable Mentions
 
-* Godzilla 1998
-* Godzilla Anime Trilogy
-* 
+* Godzilla 1998: The American 1998 Godzilla with Matthew Broderick is actually really good! Just think of it as a Jurassic Park knock-off and you'll have way more fun.
+* Godzilla Anime Trilogy: The Anime Trilogy is _insane_ but seeing the characters fully animated is really fun and allows Godzilla to have some pretty awesome visual effects.
