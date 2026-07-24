@@ -8,6 +8,12 @@ main {
 </style>
 <main>
   {% include "header.html" -%}
+  {%- if page.extra.contains_ai -%}
+  <div class="ai-disclosure">
+    <span class="ai-disclosure-title">AI Disclosure</span>
+    <span class="ai-disclosure-body">{{ page.extra.contains_ai | markdown(inline=true) | safe }}</span>
+  </div>
+  {%- endif %}
   <h1>{{ page.title }}</h1>
   <p class="console" class="side">
     published {{ page.date }}
