@@ -15,6 +15,55 @@ So is it?
 To test this out I made simple `VecSet` and `VecMap` implementations that implement a limited subset of the `HashSet` and `HashMap` API, namely `insert`, `remove`, `get`, and `iter`.
 My implementation also went the route of storing `Option<T>` and `Option<(K,V)>` for `Set` and `Map` respectively, so I also added a `compact()` method to remove the `None` values from the storage.
 
+# Aside: Why are we using Maps and Sets in a game?
+
+Both Hash and Vec Map/Sets tend to allocate memory on the _heap_ which I _also_ hear is bad for games.
+Especially if you are allocating new memory every frame, the time to allocate memory (it is said) can dominate your compute time, drastically lowering your FPS.
+
+In Bevy it's _much_ more idiomatic to just make everything a Query, and do a `for (a, b, c) in query.iter()` or `for (mut a, b, c) in query.iter_mut()`.
+
+So why do we need a Map or a Set?
+Basically: memoization.
+
+I often want to ask questions like "What entities are _near_ this entity?" which falls into the category of "You can derive this from existing components, but there isn't a component to make this a `Query`'able.
+
+```rust
+fn my_system(
+  query: Query<Entity, With<???>>,
+  // ...
+) {
+  // ...
+}
+```
+
+so instead we build a little cache:
+
+```rust
+fn my_system(
+  foos: Query<(Entity, &Coordinates), With<Foo>>,
+  bars: Query<(Entity, &Coordinates), With<Foo>>,
+  mut near_map: Local<HashMap<Entity, usize>>,
+) {
+  // Yes I prefer `query.iter().chain().things(|foo| ...)` over `for thing in query`
+  near_map = foos.iter().map(|(e_foo, c_foo)| {
+    // Filter to just bar coordinates near foo's coordinates
+    // Sum the resulting set of 1s
+    let near_foo = bars
+      .iter()
+      .filter_map(|(e_bar, c_bar)| do_check(c_foo, c_bar).then_some(0))
+      .sum();
+    // Return a tuple of (Entity, usize)
+    ( e_foo, near_foo )
+  });
+
+  // ... use near_map ...
+}
+```
+
+This both gives me a nice computed lookup table, and using Bevy's `Local<T>` ensures I don't re-allocate memory every frame.
+
+# Benchmarking
+
 * I got Claude to write some benchmarks comparing VecSet vs HashSet and VecMap vs HashMap at different data volumes, 4, 8, etc up to 1024 elements
 * Data was always u64s for keys and values
 * Comparing against Bevy's collections library which uses the non-standard [FixedHasher]
@@ -70,9 +119,38 @@ Rayon took _at least_ 11-12 µs which makes it _much_ slower at these small size
 
 > Takeway: Rayon is great for processing _lots_ of data, like in batches.
 
+## wHaT aBoUt MiCroPoOl
+
+I heard about a cool library that's basically "Rayon for Games" called [micropool].
+The main selling point is that it avoids some of the pitfalls of Rayon.
+
+The results were interesting!
+
+**contains — miss** (ns):
+
+| Impl | 64 | 1024 | 16384 | 262144 | 1048576 |
+|---|--:|--:|--:|--:|--:|
+| VecSet seq | 57 | 932 | 14834 | 306833 | 1320048 |
+| VecSet par (rayon) | 11330 | 17063 | 41296 | 308584 | 1169997 |
+| VecSet par (micropool) | 519 | 1028 | 8141 | 173009 | 1131319 |
+| HashSet | 2.7 | 2.8 | 2.8 | 3.0 | 2.8 |
+
+**remove one** (ns):
+
+| Impl | 64 | 1024 | 16384 | 262144 |
+|---|--:|--:|--:|--:|
+| VecSet seq | 78 | 802 | 12041 | 283219 |
+| VecSet par (rayon) | 12485 | 18052 | 32334 | 244978 |
+| VecSet par (micropool) | 608 | 1455 | 12005 | 248263 |
+| HashSet | 34 | 57 | 98 | 948 |
+
+Micropool was _better_ than Rayon but still not _nearly_ good enough to beat an optimized build for either Hash nor Vec implementation.s
+
 # Takeaways
 
-TODO
-
+This `VecMap` and `VecSet` are still useful when I both want to build and iterate over a set, so in the case where I'm building a set or map just to iterate over all of it's elements it is still faster.
 
 [FixedHasher]: https://docs.rs/bevy/0.19.0/bevy/platform/hash/struct.FixedHasher.html
+[micropool]: https://github.com/DouglasDwyer/micropool
+
+
