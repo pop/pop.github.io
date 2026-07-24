@@ -164,9 +164,13 @@ A few admissions:
 
 3. It's tempting to turn `VecSet` and `VecMap` into a library, if it isn't already, but I promise it was a _very_ quick type to implement, and even after building it out I'm _not_ using it in my game because the use-case for it is niche enough that I haven't actually _needed_ it.
 
-So in conclusion... if you need this optimizaiton you probably already know about it and have implement it.
+# Conclusion
 
-Happy hacking!
+So in conclusion... wait -- now that I think about it... a set that you always want to iterate over is... a Vec.
+So this is basically nothing!
+This is just Vec with more steps!
+
+Happy hacking~
 
 [FixedHasher]: https://docs.rs/bevy/0.19.0/bevy/platform/hash/struct.FixedHasher.html
 [micropool]: https://github.com/DouglasDwyer/micropool
