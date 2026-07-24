@@ -145,11 +145,23 @@ The results were interesting!
 | VecSet par (micropool) | 608 | 1455 | 12005 | 248263 |
 | HashSet | 34 | 57 | 98 | 948 |
 
-Micropool was _better_ than Rayon but still not _nearly_ good enough to beat an optimized build for either Hash nor Vec implementation.s
+Micropool was _better_ than Rayon but still not _nearly_ good enough to beat an optimized build for either Hash nor Vec implementation.
 
 # Takeaways
 
-This `VecMap` and `VecSet` are still useful when I both want to build and iterate over a set, so in the case where I'm building a set or map just to iterate over all of it's elements it is still faster.
+* Use `VecMap` and `VecSet` when I want to memoize a set and iterate over every element sequentally.
+
+* Use `HashMap` and `HashSet` if you intend to search for specific elements in the set.
+
+# Notes
+
+A few admissions:
+
+1. I didn't test this against Bevy's `Query` nor did I test it against Rust's stdlib `DefaultHasher`, which I expect to perform worse but that would just move the line not change the story.
+2. 
+3. We could probably improve search performance in the `Vec*` implementations to get better performance, like sorting elements or... something. That wasn't the point of this exploration though. The bit is to see if we are leaving an obvoius naive optimization on the table.
+
+So in conclusion... if you need this optimizaiton you probably already know it.
 
 [FixedHasher]: https://docs.rs/bevy/0.19.0/bevy/platform/hash/struct.FixedHasher.html
 [micropool]: https://github.com/DouglasDwyer/micropool
