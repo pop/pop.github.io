@@ -44,7 +44,8 @@ fn my_system(
   bars: Query<(Entity, &Coordinates), With<Foo>>,
   mut near_map: Local<HashMap<Entity, usize>>,
 ) {
-  // Yes I prefer `query.iter().chain().things(|foo| ...)` over `for thing in query`
+  // Build the HashMap of Entity -> Number of neighbors
+  // (Yes I prefer `query.iter().chain().things(|foo| ...)` over `for thing in query`)
   near_map = foos.iter().map(|(e_foo, c_foo)| {
     // Filter to just bar coordinates near foo's coordinates
     // Sum the resulting set of 1s
@@ -54,13 +55,13 @@ fn my_system(
       .sum();
     // Return a tuple of (Entity, usize)
     ( e_foo, near_foo )
-  });
+  }).collect();
 
   // ... use near_map ...
 }
 ```
 
-This both gives me a nice computed lookup table, and using Bevy's `Local<T>` ensures I don't re-allocate memory every frame.
+This both gives me a nice computed lookup table, and using Bevy's `Local<T>` ensures I don't re-allocate memory every frame, assuming I don't you know... overlook something.
 
 # Benchmarking
 
