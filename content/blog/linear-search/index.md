@@ -6,37 +6,38 @@ extra.contains_ai = "LLMs were used to generate benchmark test suites for this p
 taxonomies.tags = ["gamedev", "bevy", "rust"]
 +++
 
-I've heard from multiple source that when performance matters in small sets, like the hot-path in a game that runs every frame, it is often better to use a `Vec` or some sort of array to linearly search through a set instead of using a `HashSet` or `HashMap`.
-The rationale is that while hash-based fetch and insert are constant time, they may be a _high_ constant time.
-At some [small] size it must be faster to just iterate through the array instead of hashing a value.
+I've heard from multiple sources that when you are operating on small sets, performance matters, like in the hot-path in a game that runs every frame, it is often better to use a `Vec` or some sort of array and to linearly search through the data through the data instead of using a `HashSet` or `HashMap`.
+The rationale is that while hash-based fetches and inserts are constant time, that may be a _high enough_ constant time that just ripping through the array is faster.
+At some [small] size it must be faster to just iterate through the array instead of hashing a value...
 
 So is it?
 
-To test this out I made simple `VecSet` and `VecMap` implementations that implement a limited subset of the `HashSet` and `HashMap` API, namely `insert`, `remove`, `get`, and `iter`.
-My implementation also went the route of storing `Option<T>` and `Option<(K,V)>` for `Set` and `Map` respectively, so I also added a `compact()` method to remove the `None` values from the storage.
+To test this out I made simple `VecSet` and `VecMap` that implement a limited subset of the `HashSet` and `HashMap` API, namely `insert`, `remove`, `get`, and `iter`.
+My implementation also went the route of storing `Option<T>` and `Option<(K,V)>` for `Set` and `Map` respectively, so I added a `compact()` method to remove `None` values from the storage; I could have done a `swap_remove` instead of Option<T>, since order doesn't matter, but I don't think it will really matter; our tests don't do much get _and_ set so we don't generate many empty holes.
 
 # Aside: Why are we using Maps and Sets in a game?
 
 Both Hash and Vec Map/Sets tend to allocate memory on the _heap_ which I _also_ hear is bad for games.
-Especially if you are allocating new memory every frame, the time to allocate memory (it is said) can dominate your compute time, drastically lowering your FPS.
+Especially if you are allocating new memory every frame, the time to allocate memory (it is said) can dominate your frame time, drastically lowering your FPS.
 
 In Bevy it's _much_ more idiomatic to just make everything a Query, and do a `for (a, b, c) in query.iter()` or `for (mut a, b, c) in query.iter_mut()`.
 
 So why do we need a Map or a Set?
 Basically: memoization.
 
-I often want to ask questions like "What entities are _near_ this entity?" which falls into the category of "You can derive this from existing components, but there isn't a component to make this a `Query`'able.
+I often want to ask questions like "What entities are _near_ this entity?" which falls into the category of "You can derive this from existing components, but there isn't a component to make this a `Query`'able directly."
 
 ```rust
 fn my_system(
   query: Query<Entity, With<???>>,
   // ...
 ) {
+  // What would this look like??
   // ...
 }
 ```
 
-so instead we build a little cache:
+so instead we build a little cache every time the system executes:
 
 ```rust
 fn my_system(
@@ -103,7 +104,7 @@ This both gives me a nice computed lookup table, and using Bevy's `Local<T>` ens
 
 # jUsT uSe RaYoN
 
-After the initial results I thought "surely we can parallelize the linear search right? SIMD something something" and did a side-quest adding a `par_*` version of the `VecSet`/`VecMap` types using Rayon as the underlying engine.
+After the initial results I thought "surely we can parallelize the linear search right? Rayon makes things fast right?!" and did a side-quest adding a `par_*` version of the `VecSet`/`VecMap` types using Rayon as the underlying engine.
 Here are those results:
 
 | Operation | Impl | 64 | 1024 | 16384 | 262144 | 1048576 |
@@ -118,7 +119,7 @@ Here are those results:
 As it turns out, Rayon has _hella_ overhead so for small sets like this the startup cost _way_ overshadows the compute time.
 Rayon took _at least_ 11-12 µs which makes it _much_ slower at these small sizes.
 
-> Takeway: Rayon is great for processing _lots_ of data, like in batches.
+> Takeway: Rayon is great for processing _lots_ of data, like in batch jobs.
 
 ## wHaT aBoUt MiCroPoOl
 
