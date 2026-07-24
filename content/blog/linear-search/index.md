@@ -159,10 +159,14 @@ Micropool was _better_ than Rayon but still not _nearly_ good enough to beat an 
 A few admissions:
 
 1. I didn't test this against Bevy's `Query` nor did I test it against Rust's stdlib `DefaultHasher`, which I expect to perform worse but that would just move the line not change the story.
-2. 
-3. We could probably improve search performance in the `Vec*` implementations to get better performance, like sorting elements or... something. That wasn't the point of this exploration though. The bit is to see if we are leaving an obvoius naive optimization on the table.
 
-So in conclusion... if you need this optimizaiton you probably already know it.
+2. We could probably improve search performance in the `Vec*` implementations to get better performance, like sorting elements or... something. That wasn't the point of this exploration though. The bit is to see if we are leaving an obvoius naive optimization on the table.
+
+3. It's tempting to turn `VecSet` and `VecMap` into a library, if it isn't already, but I promise it was a _very_ quick type to implement, and even after building it out I'm _not_ using it in my game because the use-case for it is niche enough that I haven't actually _needed_ it.
+
+So in conclusion... if you need this optimizaiton you probably already know about it and have implement it.
+
+Happy hacking!
 
 [FixedHasher]: https://docs.rs/bevy/0.19.0/bevy/platform/hash/struct.FixedHasher.html
 [micropool]: https://github.com/DouglasDwyer/micropool
