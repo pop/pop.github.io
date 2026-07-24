@@ -1,7 +1,7 @@
 +++
 title = "is linear search faster than HashMap/HashSet for small sets?"
 date = "2026-07-24"
-description = ""
+description = "Is 'just use an array' actually good advice? It depends!"
 extra.contains_ai = "LLMs were used to generate benchmark test suites for this project."
 taxonomies.tags = ["gamedev", "bevy", "rust"]
 +++
