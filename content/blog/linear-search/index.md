@@ -65,8 +65,8 @@ Here are those results:
 | | VecSet par | 12485 | 18052 | 32334 | 244978 | — |
 | | HashSet | 34 | 49 | 112 | 928 | — |
 
-Rayon took _at least_ 11-12 µs which makes it _much_ slower at these small sizes.
 As it turns out, Rayon has _hella_ overhead so for small sets like this the startup cost _way_ overshadows the compute time.
+Rayon took _at least_ 11-12 µs which makes it _much_ slower at these small sizes.
 
 > Takeway: Rayon is great for processing _lots_ of data, like in batches.
 
