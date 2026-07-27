@@ -17,6 +17,7 @@ pub struct Game {
     pub title: String,
     pub description: String,
     pub contributors: Vec<String>,
+    #[serde(default)]
     pub tech: Vec<Tech>,
     pub icon: String,
     pub demo: Option<String>,
