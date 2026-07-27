@@ -1,3 +1,6 @@
+# Load PAGES_ELIJAH_RUN_API_TOKEN (the pages.elijah.run deploy token) from .env.
+set dotenv-load := true
+
 # Build the WASM bundle
 build:
     trunk build --release
@@ -14,12 +17,31 @@ package: clean build
 deploy-worker:
     wrangler deploy -c deploy/wrangler.toml
 
-# Full release: build the tar.zst + deploy the Worker (archive upload to pages is manual).
-release: package deploy-worker
+# Upload portfolios.tar.zst to pages.elijah.run (served at /portfolios/) via the
+# Bearer API token. Uses the existing bundle — run `just package` first (or use
+# `just release`, which packages then uploads). Needs PAGES_ELIJAH_RUN_API_TOKEN in .env.
+upload:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    test -f portfolios.tar.zst || { echo "portfolios.tar.zst not found — run 'just package' first" >&2; exit 1; }
+    : "${PAGES_ELIJAH_RUN_API_TOKEN:?not set — add it to .env}"
+    echo "Uploading portfolios.tar.zst ($(du -h portfolios.tar.zst | cut -f1)) → pages.elijah.run/portfolios/ …"
+    resp=$(curl -sS -X PUT https://pages.elijah.run/api/pages/portfolios \
+      -H "Authorization: Bearer $PAGES_ELIJAH_RUN_API_TOKEN" \
+      -H "Content-Type: application/octet-stream" \
+      --data-binary @portfolios.tar.zst \
+      -w $'\n%{http_code}')
+    code=${resp##*$'\n'}
+    body=${resp%$'\n'*}
+    echo "  HTTP $code  $body"
+    [[ $code == 200 ]] || { echo "❌ Upload failed." >&2; exit 1; }
+    echo "✅ Uploaded — pages.elijah.run caches ~5 min, then it's live."
+
+# Full release: build the tar.zst, deploy the Worker, and upload to pages.elijah.run.
+release: package deploy-worker upload
     @echo ""
-    @echo "✅ Built portfolios.tar.zst and deployed the games-legacy-host Worker."
-    @echo "➡  Manual step: upload portfolios.tar.zst to pages.elijah.run so it serves at /portfolios/."
-    @echo "   Then run:  just verify"
+    @echo "✅ Built portfolios.tar.zst, deployed the games-legacy-host Worker, and uploaded to pages.elijah.run."
+    @echo "   Verify with:  just verify"
 
 # Sanity-check the live site on games.elijah.run (transparent 200, no 301).
 verify:

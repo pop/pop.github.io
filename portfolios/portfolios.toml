@@ -59,6 +59,17 @@ launch_url = "https://popgame.itch.io/flappy"
 launch_type = "wasm"
 launch_label = "Play Now"
 
+[[projects]]
+id = "life-with-sound"
+title = "Conway's Game of Life with Sound"
+description = "The zero-player classic, now with sound!."
+contributors = ["Elijah Voigt", "Sam Hall"]
+icon = "life.png"
+demo = "life.mp4"
+launch_url = "https://popgame.itch.io/life-with-sound"
+launch_type = "wasm"
+launch_label = "Play Now"
+
 [[projects.tech]]
 name = "Rust"
 icon = "rust-icon.png"

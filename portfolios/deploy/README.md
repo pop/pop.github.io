@@ -1,7 +1,10 @@
 # Legacy-host rewrite: `games.elijah.run` → `pages.elijah.run/portfolios`
 
-The site is uploaded (as `portfolios.tar.zst`, via `just package`) to
-**pages.elijah.run**, which serves it at **`/portfolios/`**. The legacy domain
+The site is built into `portfolios.tar.zst` (`just package`) and uploaded to
+**pages.elijah.run** (`just upload` — `PUT /api/pages/portfolios` with the
+`PAGES_ELIJAH_RUN_API_TOKEN` Bearer token from `.env`), which serves it at
+**`/portfolios/`**. `just release` does both, then deploys the Worker below.
+The legacy domain
 **games.elijah.run** must keep working and *serve* that content transparently —
 no `301` redirect, the visible URL stays `games.elijah.run`.
 
