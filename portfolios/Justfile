@@ -5,6 +5,8 @@ build:
 clean:
     rm -rf ./dist/
 
-# Build then deploy to Cloudflare Pages
-deploy: clean build
-    wrangler pages deploy --branch main
+# Build then package a tar.zst of the site for upload to pages.elijah.run
+# (served at /portfolios). zstd level 19 for smallest archive; well under 10MB.
+package: clean build
+    ZSTD_CLEVEL=19 tar --zstd -C dist -cf portfolios.tar.zst .
+    @ls -lh portfolios.tar.zst

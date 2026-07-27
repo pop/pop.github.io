@@ -20,7 +20,7 @@ pub struct TaskbarProps {
 }
 
 fn is_url(s: &str) -> bool {
-    s.starts_with("http") || s.starts_with("data:") || s.contains('/')
+    s.starts_with("http") || s.starts_with("data:") || s.contains('/') || s.contains('.')
 }
 
 fn current_time() -> String {

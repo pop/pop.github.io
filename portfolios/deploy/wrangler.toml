@@ -1,0 +1,19 @@
+# Deploys the legacy-host rewrite Worker (games.elijah.run -> pages.elijah.run/portfolios).
+# Ship with the flake's dev shell:
+#   nix develop -c wrangler deploy -c deploy/wrangler.toml
+name = "games-legacy-host"
+main = "games-legacy-host.worker.js"
+compatibility_date = "2026-07-26"
+
+# Binds the Worker to the legacy hostname. `games` must be a proxied (orange-cloud)
+# DNS record in the elijah.run zone for the route to receive traffic.
+routes = [
+  { pattern = "games.elijah.run/*", zone_name = "elijah.run" },
+]
+
+# pages.elijah.run is itself a Worker ("pages") on this zone. A plain same-zone
+# fetch() would bypass it and hit a dead origin (522), so the proxy dispatches
+# through this Service Binding instead. Referenced as env.PAGES in the Worker.
+[[services]]
+binding = "PAGES"
+service  = "pages"

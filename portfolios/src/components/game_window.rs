@@ -2,7 +2,7 @@ use yew::prelude::*;
 use crate::config::Game;
 
 fn is_url(s: &str) -> bool {
-    s.starts_with("http") || s.starts_with("data:") || s.contains('/')
+    s.starts_with("http") || s.starts_with("data:") || s.contains('/') || s.contains('.')
 }
 
 #[derive(Properties, PartialEq)]

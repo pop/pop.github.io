@@ -4,20 +4,20 @@ id = "martian-chess"
 title = "Martian Chess"
 description = "The classic <a href=https://en.wikipedia.org/wiki/Martian_Chess>Martian Chess</a> imagined in 3d with stunning visuals and music by Sam Hall and programming by Elijah Voigt."
 contributors = ["Elijah Voigt", "Sam Hall"]
-icon = "/martian-chess.png"
-demo = "/martian-chess.mp4"
+icon = "martian-chess.png"
+demo = "martian-chess.mp4"
 launch_url = "https://liquidmirror.itch.io/martian-chess"
 launch_type = "native"
 launch_label = "Download Now"
 
 [[projects.tech]]
 name = "Rust"
-icon = "/rust-icon.png"
+icon = "rust-icon.png"
 url = "https://www.rust-lang.org/"
 
 [[projects.tech]]
 name = "Bevy"
-icon = "/bevy-icon.png"
+icon = "bevy-icon.png"
 url = "https://bevyengine.org/"
 
 ### Set
@@ -26,25 +26,25 @@ id = "set"
 title = "Set"
 description = "A simple single-player variant of Set created for a house art show with Balatro-inspired music by Sam Hall."
 contributors = ["Elijah Voigt", "Sam Hall"]
-icon = "/set.png"
-demo = "/blank.png"
-launch_url = "https://games.elijah.run/set/"
+icon = "set.png"
+demo = "blank.png"
+launch_url = "https://pages.elijah.run/set/"
 launch_type = "wasm"
 launch_label = "Play Now"
 
 [[projects.tech]]
 name = "Rust"
-icon = "/rust-icon.png"
+icon = "rust-icon.png"
 url = "https://www.rust-lang.org/"
 
 [[projects.tech]]
 name = "Bevy"
-icon = "/bevy-icon.png"
+icon = "bevy-icon.png"
 url = "https://bevyengine.org/"
 
 [[projects.tech]]
 name = "WebAssembly"
-icon = "/wasm-icon.png"
+icon = "wasm-icon.png"
 url = "https://webassembly.org/"
 
 ### Flappy Bird (With Rewind)
@@ -53,25 +53,25 @@ id = "flappy"
 title = "Flappy Bird (with rewind)"
 description = "The classic Flapp Bird with a Braid-inspired time twist."
 contributors = ["Elijah Voigt"]
-icon = "/flappy.png"
-demo = "/flappy.mp4"
+icon = "flappy.png"
+demo = "flappy.mp4"
 launch_url = "https://popgame.itch.io/flappy"
 launch_type = "wasm"
 launch_label = "Play Now"
 
 [[projects.tech]]
 name = "Rust"
-icon = "/rust-icon.png"
+icon = "rust-icon.png"
 url = "https://www.rust-lang.org/"
 
 [[projects.tech]]
 name = "Bevy"
-icon = "/bevy-icon.png"
+icon = "bevy-icon.png"
 url = "https://bevyengine.org/"
 
 [[projects.tech]]
 name = "WebAssembly"
-icon = "/wasm-icon.png"
+icon = "wasm-icon.png"
 url = "https://webassembly.org/"
 
 ### Clippy Quotes
@@ -106,30 +106,30 @@ background_color = "#008080"
 
 ### Taskbar
 [taskbar]
-start_icon = "/netshow_notransm-sm.png"
+start_icon = "netshow_notransm-sm.png"
 start_label = "Start"
 
 ### Start menu
 [[start_menu.items]]
-icon = "/hobbes.png"
+icon = "hobbes.png"
 title = "Main Site"
 url = "https://elijah.run/about"
 
 [[start_menu.items]]
-icon = "/github.png"
+icon = "github.png"
 title = "Source Code"
 url = "https://github.com/pop/elijah.run/tree/source/portfolios"
 
 [[start_menu.items]]
-icon = "/itchio.png"
+icon = "itchio.png"
 title = "itch.io"
 url = "https://pop.itch.io"
 
 ### Clippy widget
 [clippy]
-icon = "/memory.png"
+icon = "memory.png"
 brand_title = "PortfoliOS"
-logo = "/netshow_notransm.png"
+logo = "netshow_notransm.png"
 modal_title = "About this Portfolio"
 modal_ok_label = "OK"
 modal_paragraphs = [
@@ -148,10 +148,10 @@ modal_paragraphs = [
 # Remove this entire `[webamp]` section (or leave `tracks` empty) to disable the player.
 # `skin_url` is optional; omit for the default Winamp skin. Files in `public/` are served from `/`.
 [webamp]
-skin_url = "/qsteamp.wsz"
+skin_url = "qsteamp.wsz"
 top = 20  # pixels from top of viewport for the main player window
 
 [[webamp.tracks]]
-url = "/its-the-balatro-music.opus"
+url = "its-the-balatro-music.opus"
 artist = "Sam Hall"
 title = "It's The Balatro Music"

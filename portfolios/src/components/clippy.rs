@@ -3,7 +3,7 @@ use yew::virtual_dom::AttrValue;
 use gloo_events::{EventListener, EventListenerOptions};
 
 fn is_url(s: &str) -> bool {
-    s.starts_with("http") || s.starts_with("data:") || s.contains('/')
+    s.starts_with("http") || s.starts_with("data:") || s.contains('/') || s.contains('.')
 }
 
 fn has_dismissed_about() -> bool {
