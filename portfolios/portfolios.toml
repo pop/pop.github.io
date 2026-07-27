@@ -27,8 +27,8 @@ title = "Set"
 description = "A simple single-player variant of Set created for a house art show with Balatro-inspired music by Sam Hall."
 contributors = ["Elijah Voigt", "Sam Hall"]
 icon = "set.png"
-demo = "blank.png"
-launch_url = "https://pages.elijah.run/set/"
+demo = "set.mp4"
+launch_url = "https://pages.elijah.run/set"
 launch_type = "wasm"
 launch_label = "Play Now"
 
