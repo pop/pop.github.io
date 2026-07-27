@@ -28,7 +28,7 @@ description = "A simple single-player variant of Set created for a house art sho
 contributors = ["Elijah Voigt", "Sam Hall"]
 icon = "set.png"
 demo = "set.mp4"
-launch_url = "https://pages.elijah.run/set"
+launch_url = "https://popgame.itch.io/set"
 launch_type = "wasm"
 launch_label = "Play Now"
 
