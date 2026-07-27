@@ -5,8 +5,23 @@ build:
 clean:
     rm -rf ./dist/
 
-# Build then package a tar.zst of the site for upload to pages.elijah.run
-# (served at /portfolios). zstd level 19 for smallest archive; well under 10MB.
+# Build a tar.zst bundle of the site for upload to pages.elijah.run (zstd -19, <10MB).
 package: clean build
     ZSTD_CLEVEL=19 tar --zstd -C dist -cf portfolios.tar.zst .
     @ls -lh portfolios.tar.zst
+
+# Deploy the games.elijah.run -> pages.elijah.run/portfolios rewrite Worker to Cloudflare.
+deploy-worker:
+    wrangler deploy -c deploy/wrangler.toml
+
+# Full release: build the tar.zst + deploy the Worker (archive upload to pages is manual).
+release: package deploy-worker
+    @echo ""
+    @echo "✅ Built portfolios.tar.zst and deployed the games-legacy-host Worker."
+    @echo "➡  Manual step: upload portfolios.tar.zst to pages.elijah.run so it serves at /portfolios/."
+    @echo "   Then run:  just verify"
+
+# Sanity-check the live site on games.elijah.run (transparent 200, no 301).
+verify:
+    @curl -sSI https://games.elijah.run/ | grep -iE '^HTTP|^location' || true
+    @curl -sS -o /dev/null -w "  GET / -> http=%{http_code}  redirects=%{num_redirects}\n" https://games.elijah.run/
