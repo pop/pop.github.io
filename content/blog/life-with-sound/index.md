@@ -12,6 +12,7 @@ taxonomies.tags = ["gamedev", "prototype", "bevy", "rust", "game-of-life"]
 This was a side-quest.
 
 I was hitting a wall on another project and thought "I should try coding up Conway's Game of Life".
+It's a pretty simple game, but there's some fun challenges like infinite grids and such, let's give it a go!
 
 As I was playing an early build I thought "This is so epic, I wonder if I can sync up some orchestral music to this!"
 
