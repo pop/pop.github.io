@@ -7,6 +7,8 @@ taxonomies.tags = ["gamedev", "prototype", "bevy", "rust", "game-of-life"]
 
 > Play it on itch.io right now! [popgame.itch.io/life-with-sound](https://popgame.itch.io/life-with-sound)
 
+![life.png](life.png)
+
 This was a side-quest.
 
 I was hitting a wall on another project and thought "I should try coding up Conway's Game of Life".
