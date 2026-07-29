@@ -5,7 +5,7 @@ description = "The classic zero-player game, now with color and sound!"
 taxonomies.tags = ["gamedev", "prototype", "bevy", "rust", "game-of-life"]
 +++
 
-> Play it on itch.io right now! https://popgame.itch.io/life-with-sound
+> Play it on itch.io right now! [popgame.itch.io/life-with-sound](https://popgame.itch.io/life-with-sound)
 
 This was a side-quest
 
