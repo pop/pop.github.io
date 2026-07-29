@@ -19,4 +19,4 @@ a tiling grid would work though!
 added colors to visualize the tones, then customizing the layout, which tones and octaves, speed, added a camera follow feature, all good stuff.
 
 first game written in bevy 0.19 (started in 0.18) and there are some features I like:
-* bsn syntax is nice and concise. implicit ..default() is really cool in that syntax, but macro-heavy workflows tend to cause headaches because of magic
+* `bsn! { ... }` syntax is nice and concise. implicit `..default()` is a really nice quality of life improvement, but macro-heavy workflows tend to cause headaches because of magic
