@@ -22,7 +22,7 @@ During our weekly co-op gaming session we brainstormed some ideas and landed on 
 2. When a cell is Alive at that coordinate, play the sound.
 3. When no cell is Alive at that coordinate, do not play the sound.
 
-Now the grid is infinite in Game of Life, so this had to be a repeating grid, but you get the idea.
+Now the grid is infinite in Game of Life, so this had to be a repeating grid, similar to tiling a picture over and over and over on an infinite plane.
 
 I was able to whip that addition up pretty quick and it was good enough to show promise, so I added a few more fun features
 * Visualizing each pitch with a different color (note) + brightness (octave)
