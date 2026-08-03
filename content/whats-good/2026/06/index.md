@@ -1,5 +1,5 @@
 +++
-title = "What's Good #20"
+title = "What's Good #21"
 date = "2026-07-03"
 description = "A Shed, an E-Reader, and Order of the Sinking Star"
 taxonomies.tags = ["whats-good"]
