@@ -552,23 +552,89 @@ nav a:hover {
     margin-left: 0.5rem;
 }
 
-.editor-textarea {
-    width: 100%;
+/* CodeMirror 6 editor mount */
+
+.cm-editor-mount {
+    flex: 1;
+    min-width: 0;
     min-height: 60vh;
-    padding: 1rem;
     border: 1px solid #e1e4e8;
     border-radius: 6px;
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    resize: vertical;
-    tab-size: 4;
+    overflow: hidden;
 }
 
-.editor-textarea:focus {
+.cm-editor-hidden {
+    display: none;
+}
+
+.cm-editor-mount .cm-editor {
+    height: 100%;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.9rem;
+}
+
+.cm-editor-mount .cm-editor.cm-focused {
     outline: none;
     border-color: #0366d6;
     box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.15);
+}
+
+.cm-editor-mount .cm-scroller {
+    min-height: 60vh;
+    padding: 0.5rem 0;
+    overflow: auto;
+}
+
+.cm-editor-mount .cm-content {
+    padding: 0.5rem 1rem;
+}
+
+.cm-editor-mount .cm-activeLine {
+    background: rgba(3, 102, 214, 0.04);
+}
+
+/* Vim mode status bar */
+.cm-editor-mount .cm-vim-panel {
+    padding: 0.2rem 0.75rem;
+    background: #f6f8fa;
+    border-top: 1px solid #e1e4e8;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.8rem;
+    color: #333;
+}
+
+/* Split mode */
+.editor-container.split .cm-editor-mount {
+    height: 100%;
+    min-height: unset;
+}
+
+.editor-container.split .cm-editor-mount .cm-scroller {
+    min-height: unset;
+    height: 100%;
+}
+
+/* Vim toggle button */
+.vim-toggle-btn {
+    padding: 0.35rem 0.6rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    color: #555;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-family: monospace;
+}
+
+.vim-toggle-btn:hover {
+    border-color: #999;
+    color: #333;
+}
+
+.vim-toggle-btn.active {
+    background: #2d333b;
+    border-color: #2d333b;
+    color: #e6edf3;
 }
 
 .save-msg {
@@ -686,11 +752,6 @@ nav a:hover {
     background: rgba(111, 66, 193, 0.05);
 }
 
-.editor-container .editor-textarea {
-    flex: 1;
-    min-width: 0;
-}
-
 .editor-container .preview-pane {
     flex: 1;
     min-width: 0;
@@ -700,13 +761,6 @@ nav a:hover {
 .editor-container.split {
     height: 80vh;
     align-items: stretch;
-}
-
-.editor-container.split .editor-textarea {
-    height: 100%;
-    min-height: unset;
-    resize: none;
-    box-sizing: border-box;
 }
 
 .editor-container.split .preview-pane {
@@ -722,7 +776,7 @@ nav a:hover {
         height: auto;
     }
 
-    .editor-container.split .editor-textarea,
+    .editor-container.split .cm-editor-mount,
     .editor-container.split .preview-pane {
         height: 60vh;
         min-height: unset;
@@ -763,6 +817,16 @@ nav a:hover {
 .preview-header h2 {
     font-size: 1.1rem;
     word-break: break-all;
+}
+
+.prose-count {
+    color: #6a737d;
+    font-size: 0.85rem;
+    margin: 0 0 0.75rem;
+}
+
+.editor-meta .prose-count {
+    margin: 0;
 }
 
 .edit-link {

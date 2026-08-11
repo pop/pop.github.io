@@ -90,6 +90,42 @@ pub fn render_markdown(content: &str) -> String {
     }
 }
 
+/// Extract plain text from rendered HTML by stripping tags and decoding a
+/// small set of common entities. Whitespace runs collapse to a single space.
+fn html_to_plain_text(html: &str) -> String {
+    let mut out = String::with_capacity(html.len());
+    let mut in_tag = false;
+    for c in html.chars() {
+        match c {
+            '<' => in_tag = true,
+            '>' => in_tag = false,
+            _ if !in_tag => out.push(c),
+            _ => {}
+        }
+    }
+    let decoded = out
+        .replace("&nbsp;", " ")
+        .replace("&amp;", "&")
+        .replace("&lt;", "<")
+        .replace("&gt;", ">")
+        .replace("&quot;", "\"")
+        .replace("&#39;", "'");
+    decoded.split_whitespace().collect::<Vec<_>>().join(" ")
+}
+
+/// Count words and characters in the *rendered prose* of a post — frontmatter
+/// and markdown syntax are excluded. Characters include spaces between words.
+pub fn count_prose(content: &str) -> (usize, usize) {
+    let plain = html_to_plain_text(&render_markdown(content));
+    let words = if plain.is_empty() {
+        0
+    } else {
+        plain.split_whitespace().count()
+    };
+    let chars = plain.chars().count();
+    (words, chars)
+}
+
 /// Return the parent directory of a repo file path (everything before the last `/`).
 /// Returns `""` for top-level files with no directory component.
 pub fn post_dir(path: &str) -> &str {
@@ -247,6 +283,33 @@ mod tests {
     fn render_markdown_gfm_strikethrough() {
         let html = render_markdown("~~struck~~");
         assert!(html.contains("<del>struck</del>"), "got: {html}");
+    }
+
+    // ── count_prose ────────────────────────────────────────────────────────
+
+    #[test]
+    fn count_prose_empty() {
+        assert_eq!(count_prose(""), (0, 0));
+    }
+
+    #[test]
+    fn count_prose_ignores_frontmatter() {
+        let content = "+++\ntitle = \"Hello there world\"\n+++\nhi";
+        assert_eq!(count_prose(content), (1, 2));
+    }
+
+    #[test]
+    fn count_prose_strips_markdown_syntax() {
+        // "one two three" — headings, bold, links contribute their visible
+        // text only, not the syntax characters.
+        let content = "# one\n\n**two** [three](https://example.com)";
+        assert_eq!(count_prose(content), (3, 13));
+    }
+
+    #[test]
+    fn count_prose_collapses_whitespace_between_blocks() {
+        let content = "one two\n\nthree four";
+        assert_eq!(count_prose(content), (4, 18));
     }
 
     // ── post_dir ───────────────────────────────────────────────────────────

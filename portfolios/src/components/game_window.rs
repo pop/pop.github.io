@@ -2,7 +2,7 @@ use yew::prelude::*;
 use crate::config::Game;
 
 fn is_url(s: &str) -> bool {
-    s.starts_with("http") || s.starts_with("data:") || s.contains('/')
+    s.starts_with("http") || s.starts_with("data:") || s.contains('/') || s.contains('.')
 }
 
 #[derive(Properties, PartialEq)]
@@ -23,9 +23,26 @@ pub fn game_window(props: &GameWindowProps) -> Html {
         }
     });
 
+    // Yew sets attributes via setAttribute, but the `muted` IDL property does not
+    // reflect from the `muted` content attribute — so the video isn't actually muted,
+    // and Firefox refuses to autoplay/loop an unmuted video. Set the properties
+    // directly on the element once it's mounted.
+    let video_ref = use_node_ref();
+    {
+        let video_ref = video_ref.clone();
+        use_effect_with(game.demo.clone(), move |_| {
+            if let Some(video) = video_ref.cast::<web_sys::HtmlMediaElement>() {
+                video.set_muted(true);
+                video.set_loop(true);
+                let _ = video.play();
+            }
+            || ()
+        });
+    }
+
     let demo_html = match &game.demo {
         Some(url) if url.ends_with(".mp4") || url.ends_with(".webm") => html! {
-            <video class="game-demo" src={url.clone()} autoplay=true loop=true muted=true />
+            <video ref={video_ref} class="game-demo" src={url.clone()} autoplay=true loop=true muted=true playsinline=true />
         },
         Some(url) => html! {
             <img class="game-demo" src={url.clone()} alt="demo" />
