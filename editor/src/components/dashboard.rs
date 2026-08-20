@@ -216,6 +216,89 @@ fn is_media_file(name: &str) -> bool {
     )
 }
 
+// ── Branch change tracking ──────────────────────────────────────
+
+#[derive(Clone, Copy, PartialEq)]
+enum ChangeKind {
+    Added,
+    Modified,
+    Removed,
+    Renamed,
+}
+
+impl ChangeKind {
+    fn from_api(status: &str) -> Self {
+        match status {
+            "added" => ChangeKind::Added,
+            "removed" => ChangeKind::Removed,
+            "renamed" => ChangeKind::Renamed,
+            _ => ChangeKind::Modified,
+        }
+    }
+
+    /// Single-letter badge, matching the diff panel's vocabulary.
+    fn letter(self) -> &'static str {
+        match self {
+            ChangeKind::Added => "A",
+            ChangeKind::Modified => "M",
+            ChangeKind::Removed => "D",
+            ChangeKind::Renamed => "R",
+        }
+    }
+
+    fn css_class(self) -> &'static str {
+        match self {
+            ChangeKind::Added => "added",
+            ChangeKind::Modified => "modified",
+            ChangeKind::Removed => "removed",
+            ChangeKind::Renamed => "renamed",
+        }
+    }
+
+    fn label(self) -> &'static str {
+        match self {
+            ChangeKind::Added => "Added on this branch",
+            ChangeKind::Modified => "Edited on this branch",
+            ChangeKind::Removed => "Deleted on this branch",
+            ChangeKind::Renamed => "Renamed on this branch",
+        }
+    }
+}
+
+/// A file touched by the active editor branch, relative to `DEFAULT_BRANCH`.
+#[derive(Clone, PartialEq)]
+struct BranchChange {
+    path: String,
+    kind: ChangeKind,
+    additions: u32,
+    deletions: u32,
+}
+
+impl BranchChange {
+    fn from_diff(file: &DiffFile) -> Self {
+        BranchChange {
+            path: file.filename.clone(),
+            kind: ChangeKind::from_api(&file.status),
+            additions: file.additions,
+            deletions: file.deletions,
+        }
+    }
+}
+
+/// The change entry for an exact file path, if the branch touched it.
+fn change_for_path<'a>(changes: &'a [BranchChange], path: &str) -> Option<&'a BranchChange> {
+    changes.iter().find(|c| c.path == path)
+}
+
+/// How many changed files live under a directory (at any depth).
+fn changes_under_dir(changes: &[BranchChange], dir_path: &str) -> usize {
+    let prefix = format!("{dir_path}/");
+    changes
+        .iter()
+        .filter(|c| c.path.starts_with(&prefix))
+        .count()
+}
+
 // ── Compress workflow types ─────────────────────────────────────
 
 #[derive(Clone, PartialEq)]
@@ -303,6 +386,11 @@ pub fn dashboard() -> Html {
 
     // Compress workflow state
     let compress_workflow = use_state(|| Option::<CompressWorkflow>::None);
+
+    // Files changed on the active branch relative to DEFAULT_BRANCH
+    let branch_changes = use_state(Vec::<BranchChange>::new);
+    let branch_changes_loading = use_state(|| false);
+    let show_branch_changes = use_state(|| true);
 
     // Branch publish/discard/CI state
     let show_diff = use_state(|| false);
@@ -438,6 +526,36 @@ pub fn dashboard() -> Html {
                     all_files_loading.set(false);
                 });
             }
+            || ()
+        });
+    }
+
+    // Load the set of files the active branch touches, so the listing can flag them
+    {
+        let branch_changes = branch_changes.clone();
+        let branch_changes_loading = branch_changes_loading.clone();
+        let token = auth.token.clone();
+        let active_branch_opt = active_branch_opt.clone();
+        let refresh = *force_refresh;
+
+        use_effect_with((active_branch_opt.clone(), refresh), move |_| {
+            branch_changes.set(vec![]);
+
+            if let Some(branch) = active_branch_opt.clone() {
+                branch_changes_loading.set(true);
+                let client = match token {
+                    Some(t) => GitHubClient::new(t),
+                    None => GitHubClient::anonymous(),
+                };
+                wasm_bindgen_futures::spawn_local(async move {
+                    if let Ok(data) = client.compare_branches(DEFAULT_BRANCH, &branch).await {
+                        branch_changes
+                            .set(data.files.iter().map(BranchChange::from_diff).collect());
+                    }
+                    branch_changes_loading.set(false);
+                });
+            }
+
             || ()
         });
     }
@@ -1098,6 +1216,13 @@ pub fn dashboard() -> Html {
         })
     };
 
+    let toggle_branch_changes = {
+        let show_branch_changes = show_branch_changes.clone();
+        Callback::from(move |_: MouseEvent| {
+            show_branch_changes.set(!*show_branch_changes);
+        })
+    };
+
     let on_select_branch = {
         let set_active_branch = set_active_branch.clone();
         let force_refresh = force_refresh.clone();
@@ -1485,6 +1610,7 @@ pub fn dashboard() -> Html {
     let cur_dates = (*commit_dates).clone();
     let cur_post_statuses = (*post_statuses).clone();
     let cur_folder_md_statuses = (*folder_md_statuses).clone();
+    let cur_branch_changes = (*branch_changes).clone();
 
     // Global search results (used when filter_text is non-empty)
     let filter_active = !filter_text.is_empty();
@@ -1557,6 +1683,13 @@ pub fn dashboard() -> Html {
                             </button>
                         </div>
                     </div>
+                    {render_branch_changes(
+                        &branch_changes,
+                        *branch_changes_loading,
+                        *show_branch_changes,
+                        toggle_branch_changes,
+                        on_navigate_to_file.clone(),
+                    )}
                     if *show_diff {
                         if let Some(ref data) = *diff_data {
                             {render_diff_panel(data, on_confirm_publish, on_cancel_diff)}
@@ -1712,8 +1845,18 @@ pub fn dashboard() -> Html {
                                 } else {
                                     html! {}
                                 };
+                                let change = change_for_path(&cur_branch_changes, &entry.path);
+                                let change_badge = match change {
+                                    Some(change) => html! {
+                                        <span class={classes!("entry-change-badge", change.kind.css_class())}
+                                              title={change.kind.label()}>
+                                            {change.kind.letter()}
+                                        </span>
+                                    },
+                                    None => html! {},
+                                };
                                 html! {
-                                    <div class={classes!("content-entry", is_media.then_some("is-media"))}
+                                    <div class={classes!("content-entry", is_media.then_some("is-media"), change.is_some().then_some("is-changed"))}
                                          onclick={onclick}>
                                         if is_media {
                                             <span class="entry-icon">{"\u{1F5BC}\u{FE0F}"}</span>
@@ -1721,6 +1864,7 @@ pub fn dashboard() -> Html {
                                             <span class="entry-icon">{"\u{00B7}"}</span>
                                         }
                                         <span class="entry-name">{&entry.path}</span>
+                                        {change_badge}
                                         {compress_btn}
                                         {delete_btn}
                                     </div>
@@ -1740,7 +1884,7 @@ pub fn dashboard() -> Html {
             } else {
                 <div class="content-list">
                     { for display_entries.iter().map(|entry| {
-                        render_entry(entry, on_navigate.clone(), &cur_sort, &cur_dates, &cur_post_statuses, &cur_folder_md_statuses, on_delete_request.clone(), on_compress_request.clone(), is_authenticated)
+                        render_entry(entry, on_navigate.clone(), &cur_sort, &cur_dates, &cur_post_statuses, &cur_folder_md_statuses, &cur_branch_changes, on_delete_request.clone(), on_compress_request.clone(), is_authenticated)
                     }) }
                 </div>
             }
@@ -1920,6 +2064,88 @@ fn render_branch_list(
     }
 }
 
+/// Panel listing every file the active branch adds or edits, so the work in
+/// progress is visible without hunting through the tree.
+fn render_branch_changes(
+    changes: &[BranchChange],
+    loading: bool,
+    expanded: bool,
+    on_toggle: Callback<MouseEvent>,
+    on_open: Callback<String>,
+) -> Html {
+    if loading && changes.is_empty() {
+        return html! {
+            <div class="branch-changes">
+                <p class="branch-changes-empty">{"Loading branch changes\u{2026}"}</p>
+            </div>
+        };
+    }
+
+    if changes.is_empty() {
+        return html! {
+            <div class="branch-changes">
+                <p class="branch-changes-empty">
+                    {format!("No changes yet on this branch \u{2014} it matches {DEFAULT_BRANCH}.")}
+                </p>
+            </div>
+        };
+    }
+
+    let additions: u32 = changes.iter().map(|c| c.additions).sum();
+    let deletions: u32 = changes.iter().map(|c| c.deletions).sum();
+
+    html! {
+        <div class="branch-changes">
+            <div class="branch-changes-header" onclick={on_toggle}>
+                <span class="branch-changes-title">
+                    {format!("{} file{} changed on this branch",
+                        changes.len(),
+                        if changes.len() == 1 { "" } else { "s" }
+                    )}
+                </span>
+                <span class="branch-changes-summary">
+                    <span class="diff-additions">{format!("+{additions}")}</span>
+                    {" "}
+                    <span class="diff-deletions">{format!("-{deletions}")}</span>
+                </span>
+                <span class="branch-changes-toggle">
+                    { if expanded { "\u{25BE}" } else { "\u{25B8}" } }
+                </span>
+            </div>
+            if expanded {
+                <div class="branch-changes-list">
+                    { for changes.iter().map(|change| {
+                        let openable = change.kind != ChangeKind::Removed
+                            && !is_media_file(&change.path);
+                        let onclick = if openable {
+                            let path = change.path.clone();
+                            let on_open = on_open.clone();
+                            Callback::from(move |_: MouseEvent| on_open.emit(path.clone()))
+                        } else {
+                            Callback::from(|_: MouseEvent| {})
+                        };
+                        html! {
+                            <div class={classes!("branch-change", (!openable).then_some("not-openable"))}
+                                 onclick={onclick}>
+                                <span class={classes!("diff-file-status", change.kind.css_class())}
+                                      title={change.kind.label()}>
+                                    {change.kind.letter()}
+                                </span>
+                                <span class="branch-change-path">{&change.path}</span>
+                                <span class="branch-change-stats">
+                                    <span class="diff-additions">{format!("+{}", change.additions)}</span>
+                                    {" "}
+                                    <span class="diff-deletions">{format!("-{}", change.deletions)}</span>
+                                </span>
+                            </div>
+                        }
+                    }) }
+                </div>
+            }
+        </div>
+    }
+}
+
 // ── Entry rendering ─────────────────────────────────────────────
 
 fn render_entry(
@@ -1929,6 +2155,7 @@ fn render_entry(
     commit_dates: &HashMap<String, f64>,
     post_statuses: &HashMap<String, PostStatus>,
     folder_md_statuses: &HashMap<String, PostStatus>,
+    branch_changes: &[BranchChange],
     on_delete: Callback<ContentEntry>,
     on_compress: Callback<ContentEntry>,
     is_authenticated: bool,
@@ -1967,6 +2194,35 @@ fn render_entry(
         html! {}
     };
 
+    // Flag entries the active branch touches: an A/M/D/R badge on files, a
+    // count on directories that contain changed files.
+    let (change_badge, is_changed) = if is_dir {
+        match changes_under_dir(branch_changes, &entry.path) {
+            0 => (html! {}, false),
+            n => (
+                html! {
+                    <span class="entry-change-count" title="Changed on this branch">
+                        {format!("{n} changed")}
+                    </span>
+                },
+                true,
+            ),
+        }
+    } else {
+        match change_for_path(branch_changes, &entry.path) {
+            Some(change) => (
+                html! {
+                    <span class={classes!("entry-change-badge", change.kind.css_class())}
+                          title={change.kind.label()}>
+                        {change.kind.letter()}
+                    </span>
+                },
+                true,
+            ),
+            None => (html! {}, false),
+        }
+    };
+
     let compress_btn = if crate::compress::is_compressible_image(&entry.name) && is_authenticated {
         let entry_clone = entry.clone();
         let compress_onclick = Callback::from(move |e: MouseEvent| {
@@ -1994,7 +2250,7 @@ fn render_entry(
     };
 
     html! {
-        <div class={classes!("content-entry", is_dir.then_some("is-dir"), is_media.then_some("is-media"))}
+        <div class={classes!("content-entry", is_dir.then_some("is-dir"), is_media.then_some("is-media"), is_changed.then_some("is-changed"))}
              onclick={onclick}>
             if is_dir {
                 {
@@ -2011,6 +2267,7 @@ fn render_entry(
                 {status_icon}
             }
             <span class="entry-name">{ format!("{}{}", &entry.name, if is_dir { "/" } else { "" }) }</span>
+            {change_badge}
             if let Some(ref date) = date_display {
                 <span class="entry-date">{date}</span>
             }
@@ -2212,5 +2469,55 @@ fn render_diff_file(file: &DiffFile) -> Html {
                 </pre>
             }
         </div>
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn change(path: &str, kind: ChangeKind) -> BranchChange {
+        BranchChange {
+            path: path.to_string(),
+            kind,
+            additions: 1,
+            deletions: 0,
+        }
+    }
+
+    #[test]
+    fn change_for_path_matches_exact_path_only() {
+        let changes = vec![change("content/blog/post/index.md", ChangeKind::Modified)];
+        assert!(change_for_path(&changes, "content/blog/post/index.md").is_some());
+        assert!(change_for_path(&changes, "content/blog/post").is_none());
+        assert!(change_for_path(&changes, "index.md").is_none());
+    }
+
+    #[test]
+    fn changes_under_dir_counts_nested_paths() {
+        let changes = vec![
+            change("content/blog/post/index.md", ChangeKind::Added),
+            change("content/blog/post/hero.png", ChangeKind::Added),
+            change("content/notes/other.md", ChangeKind::Modified),
+        ];
+        assert_eq!(changes_under_dir(&changes, "content/blog/post"), 2);
+        assert_eq!(changes_under_dir(&changes, "content/blog"), 2);
+        assert_eq!(changes_under_dir(&changes, "content"), 3);
+        assert_eq!(changes_under_dir(&changes, "content/archive"), 0);
+    }
+
+    #[test]
+    fn changes_under_dir_does_not_match_sibling_prefixes() {
+        let changes = vec![change("content/blog-drafts/x.md", ChangeKind::Added)];
+        assert_eq!(changes_under_dir(&changes, "content/blog"), 0);
+    }
+
+    #[test]
+    fn change_kind_maps_api_status_strings() {
+        assert_eq!(ChangeKind::from_api("added").letter(), "A");
+        assert_eq!(ChangeKind::from_api("removed").letter(), "D");
+        assert_eq!(ChangeKind::from_api("renamed").letter(), "R");
+        assert_eq!(ChangeKind::from_api("modified").letter(), "M");
+        assert_eq!(ChangeKind::from_api("changed").letter(), "M");
     }
 }

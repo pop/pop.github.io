@@ -1289,6 +1289,126 @@ nav a:hover {
     text-transform: uppercase;
 }
 
+/* Files changed on the active branch */
+
+.branch-changes {
+    margin-top: 0.5rem;
+    border: 1px solid #d1bcf9;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.branch-changes-empty {
+    padding: 0.5rem 0.75rem;
+    color: #666;
+    font-size: 0.8rem;
+}
+
+.branch-changes-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: #f5f0ff;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.branch-changes-title {
+    font-weight: 600;
+    color: #6f42c1;
+}
+
+.branch-changes-summary {
+    font-size: 0.8rem;
+    margin-left: auto;
+}
+
+.branch-changes-toggle {
+    color: #6f42c1;
+    font-size: 0.75rem;
+}
+
+.branch-changes-list {
+    border-top: 1px solid #d1bcf9;
+}
+
+.branch-change {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.75rem;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background-color 0.1s;
+}
+
+.branch-change:last-child {
+    border-bottom: none;
+}
+
+.branch-change:hover {
+    background: #f6f8fa;
+}
+
+.branch-change.not-openable {
+    cursor: default;
+    opacity: 0.6;
+}
+
+.branch-change.not-openable:hover {
+    background: transparent;
+}
+
+.branch-change-path {
+    flex: 1;
+    font-family: monospace;
+    color: #333;
+    word-break: break-all;
+}
+
+.branch-change-stats {
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+/* Change markers in the directory listing */
+
+.content-entry.is-changed {
+    background: #fbf7ff;
+}
+
+.entry-change-badge {
+    display: inline-block;
+    min-width: 1.1rem;
+    margin-left: 0.5rem;
+    padding: 0 0.25rem;
+    border-radius: 3px;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.entry-change-badge.added { background: #28a745; }
+.entry-change-badge.removed { background: #cb2431; }
+.entry-change-badge.modified { background: #dbab09; }
+.entry-change-badge.renamed { background: #0366d6; }
+
+.entry-change-count {
+    margin-left: 0.5rem;
+    padding: 0 0.4rem;
+    border: 1px solid #d1bcf9;
+    border-radius: 10px;
+    background: #f5f0ff;
+    color: #6f42c1;
+    font-size: 0.7rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
 /* Version history */
 
 .history-toggle-btn {
