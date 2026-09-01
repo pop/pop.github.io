@@ -1,9 +1,11 @@
 +++
-title = "08"
+title = "What's Good #23"
 date = "2026-08-31"
 description = "steam machine, pebble time 2, the odyssey, backrooms, obsession, the boys, fallout, children of the sun"
 taxonomies.tags = ["whats-good"]
 +++
+
+> Welcome to What's Good #23, for good stuff I got, watched, and played in August 2026.
 
 # [Steam Machine](https://en.wikipedia.org/wiki/Steam_Machine)
 
