@@ -1,6 +1,6 @@
 +++
 title = "Twisted Tower"
-date = "2026-08-22"
+date = "2026-09-02"
 description = "A short and sweet Bioshock-like shooter"
 taxonomies.tags = ["games", "backlog"]
 +++
