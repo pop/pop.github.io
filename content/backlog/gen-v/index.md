@@ -1,9 +1,11 @@
 +++
-title = "Gen v"
+title = "Gen V"
 date = "2026-05-16"
-description = ""
-draft = true
+updated = "2026-08-01
+description = "A strong first season with a muddled end"
 taxonomies.tags = ["backlog", "tv"]
 +++
 
-Gen V has a really strong first season...
+# Season 1
+
+# Season 2
