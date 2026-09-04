@@ -1,17 +1,9 @@
 +++
-title = "The Boys (2019-2016)"
-
+title = "The Boys (2019-2026)"
 date = "2026-01-01"
-updated = "2026-01-01"
-
+updated = "2026-08-30"
 description = "Prime sure loves gory superhero shows..."
-
-taxonomies.tags = [
-    "backlog",
-    "tv",
-]
-
-draft = false
+taxonomies.tags = ["backlog","tv",]
 +++
 
 > I started this backlog project mid-way into watching The Boys, so this will only go over seasons 3, 4, and 5.
@@ -27,6 +19,10 @@ Solder-boy the stand-in for "classic patriotism" in contrast with modern (Homela
 
 Homelander not only surviving but coming out somehow _better_ after all the heinous shit he does this season is a great Trump allegory and honestly I am really dreading (in a good way) the stuff he's going to get away with the next two seasons.
 
-<!-- # Season 4 (2024) -->
+# Season 4 (2024)
 
-<!-- # Season 5 (2026) -->
+> TODO
+
+# Season 5 (2026)
+
+> TODO
