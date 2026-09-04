@@ -1,6 +1,7 @@
 +++
 title = "Generative AI Policy"
 date = "2026-09-04"
-description = ""
-taxonomies.tags = ["llm"]
+# updated = ...
+description = "my personal AI usage policy"
+taxonomies.tags = ["llms"]
 +++
