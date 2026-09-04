@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>elijah.run</title>
+  <meta name="title" content="is linear search faster than HashMap&#x2F;HashSet for small sets?">
+<meta name="og:title" content="is linear search faster than HashMap&#x2F;HashSet for small sets?">
+
+<meta name="og:type" content="article">
+
+
+
+
+<meta name="description" content="Is &#x27;just use an array&#x27; actually good advice? It depends!">
+<meta name="og:description" content="Is &#x27;just use an array&#x27; actually good advice? It depends!">
+
+<meta name="referrer" content="strict-origin-when-cross-origin">
+  
+  <link rel="alternate" type="application/atom+xml" title="elijah.run" href="https://elijah.run/atom.xml">
+  <style>
+/* http://bettermotherfuckingwebsite.com/ */
+body {
+    margin: 40px auto;
+    max-width: 650px;
+    line-height: 1.6;
+    font-size: 18px;
+    color: #000;
+    padding: 0 10px
+}
+h1,h2,h3{
+    line-height:1.2
+}
+
+ul.stuff>li {
+    padding-left: 0;
+    list-style: none;
+}
+
+blockquote {
+    margin: 0;
+    border-left: 3px solid black;
+    padding-left: 16px;
+}
+
+div.note {
+    margin: 0;
+    border-left: 3px solid blue;
+    padding-left: 16px;
+}
+.note-title {
+    font-weight: bold;
+}
+
+div.warning {
+    margin: 0;
+    border-left: 3px solid orange;
+    padding-left: 16px;
+}
+.warning-title {
+    font-weight: bold;
+}
+
+div.ai-disclosure {
+    margin: 0 0 16px 0;
+    border-left: 3px solid magenta;
+    padding-left: 16px;
+}
+.ai-disclosure-title {
+    font-weight: bold;
+}
+
+ul {
+    padding-left: 1ch;
+    list-style: square;
+}
+
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+header {
+    /* todo */
+}
+
+nav {
+    /* todo */
+}
+
+main {
+    max-width: 100%;
+    padding: 1ch;
+}
+
+footer{
+    /* todo */
+}
+
+h1,h2,h3,h4,h5,.console,ul.stuff {
+    font-family:
+        /* Modern macOS & iOS system monospace */
+        "SFMono-Regular",
+        /* Windows system monospace (newer) */
+        "Consolas",
+        /* Windows legacy monospace fallback */
+        "Courier New",
+        /* Generic monospace fallback */
+        monospace;
+}
+
+li.post {
+    padding-top: 1ch;
+}
+p.description {
+    margin: 0px;
+}
+a.post {
+    font-weight: bold;
+}
+
+.side {
+    color: #333;
+}
+
+.description {
+    color: #333;
+}
+
+
+p>img {
+    max-width: 100%;
+    display: block;
+    margin: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+img.bg {
+    float: right;
+    width: 100%;
+}
+
+</style>
+
+</head>
+<body>
+<style>
+main {
+    width: 100ch;
+}
+</style>
+<main>
+  
+<header>
+  
+    <!-- this is a single page -->
+    
+  
+
+  <span class="console">
+  
+  <a href="/">elijah.run</a>/<a href="&#x2F;blog/">blog</a>/linear-search</span>
+</header>
+
+<div class="ai-disclosure">
+    <span class="ai-disclosure-title">AI Disclosure</span>
+    <span class="ai-disclosure-body">LLMs were used to generate benchmark test suites for this project.</span>
+  </div>
+  <h1>is linear search faster than HashMap&#x2F;HashSet for small sets?</h1>
+  <p class="console" class="side">
+    published 2026-07-24
+      | tags: 
+  <a href="/tags/gamedev">#gamedev</a>
+
+  <a href="/tags/bevy">#bevy</a>
+
+  <a href="/tags/rust">#rust</a>
+
+
+</p>
+  
+    <details>
+    <summary>Table of Contents</summary>
+    <ul>
+    
+        <li>
+            <a href="https://elijah.run/blog/linear-search/#aside-why-are-we-using-maps-and-sets-in-a-game">Aside: Why are we using Maps and Sets in a game?</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/linear-search/#benchmarking">Benchmarking</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/linear-search/#vecset-vs-hashset">VecSet vs HashSet</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/linear-search/#vecmap-vs-hashmap">VecMap vs HashMap</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/linear-search/#just-use-rayon">jUsT uSe RaYoN</a>
+            
+                <ul>
+                    
+                        <li>
+                            <a href="https://elijah.run/blog/linear-search/#what-about-micropool">wHaT aBoUt MiCroPoOl</a>
+                        </li>
+                    
+                </ul>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/linear-search/#takeaways">Takeaways</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/linear-search/#notes">Notes</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/linear-search/#conclusion">Conclusion</a>
+            
+        </li>
+    
+    </ul>
+  </details>
+  
+  <p>I've heard from multiple sources that when you are operating on small sets, performance matters, like in the hot-path in a game that runs every frame, it is often better to use a <code>Vec</code> or some sort of array and to linearly search through the data through the data instead of using a <code>HashSet</code> or <code>HashMap</code>.
+The rationale is that while hash-based fetches and inserts are constant time, that may be a <em>high enough</em> constant time that just ripping through the array is faster.
+At some [small] size it must be faster to just iterate through the array instead of hashing a value...</p>
+<p>So is it?</p>
+<p>To test this out I made simple <code>VecSet</code> and <code>VecMap</code> that implement a limited subset of the <code>HashSet</code> and <code>HashMap</code> API, namely <code>insert</code>, <code>remove</code>, <code>get</code>, and <code>iter</code>.
+My implementation also went the route of storing <code>Option&lt;T&gt;</code> and <code>Option&lt;(K,V)&gt;</code> for <code>Set</code> and <code>Map</code> respectively, so I added a <code>compact()</code> method to remove <code>None</code> values from the storage; I could have done a <code>swap_remove</code> instead of Option<T>, since order doesn't matter, but I don't think it will really matter; our tests don't do much get <em>and</em> set so we don't generate many empty holes.</p>
+<h1 id="aside-why-are-we-using-maps-and-sets-in-a-game">Aside: Why are we using Maps and Sets in a game?</h1>
+<p>Both Hash and Vec Map/Sets tend to allocate memory on the <em>heap</em> which I <em>also</em> hear is bad for games.
+Especially if you are allocating new memory every frame, the time to allocate memory (it is said) can dominate your frame time, drastically lowering your FPS.</p>
+<p>In Bevy it's <em>much</em> more idiomatic to just make everything a Query, and do a <code>for (a, b, c) in query.iter()</code> or <code>for (mut a, b, c) in query.iter_mut()</code>.</p>
+<p>So why do we need a Map or a Set?
+Basically: memoization.</p>
+<p>I often want to ask questions like "What entities are <em>near</em> this entity?" which falls into the category of "You can derive this from existing components, but there isn't a component to make this a <code>Query</code>'able directly."</p>
+<pre data-lang="rust" style="background-color:#191919;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="font-style:italic;color:#fbdfb5;">fn </span><span style="color:#8cdaff;">my_system</span><span>(
+</span><span>  </span><span style="font-style:italic;color:#fc9354;">query</span><span>: Query&lt;Entity, With&lt;</span><span style="background-color:#f92649;color:#f8f8f0;">??</span><span>?&gt;&gt;,
+</span><span>  </span><span style="color:#6d6d6d;">// ...
+</span><span>) {
+</span><span>  </span><span style="color:#6d6d6d;">// What would this look like??
+</span><span>  </span><span style="color:#6d6d6d;">// ...
+</span><span>}
+</span></code></pre>
+<p>so instead we build a little cache every time the system executes:</p>
+<pre data-lang="rust" style="background-color:#191919;color:#f8f8f2;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="font-style:italic;color:#fbdfb5;">fn </span><span style="color:#8cdaff;">my_system</span><span>(
+</span><span>  </span><span style="font-style:italic;color:#fc9354;">foos</span><span>: Query&lt;(Entity, </span><span style="color:#ff5e5e;">&amp;</span><span>Coordinates), With&lt;Foo&gt;&gt;,
+</span><span>  </span><span style="font-style:italic;color:#fc9354;">bars</span><span>: Query&lt;(Entity, </span><span style="color:#ff5e5e;">&amp;</span><span>Coordinates), With&lt;Foo&gt;&gt;,
+</span><span>  </span><span style="color:#ff5e5e;">mut </span><span style="font-style:italic;color:#fc9354;">near_map</span><span>: Local&lt;HashMap&lt;Entity, </span><span style="font-style:italic;color:#fbdfb5;">usize</span><span>&gt;&gt;,
+</span><span>) {
+</span><span>  </span><span style="color:#6d6d6d;">// Build the HashMap of Entity -&gt; Number of neighbors
+</span><span>  </span><span style="color:#6d6d6d;">// (Yes I prefer `query.iter().chain().things(|foo| ...)` over `for thing in query`)
+</span><span>  near_map </span><span style="color:#ff5e5e;">=</span><span> foos.</span><span style="color:#6699cc;">iter</span><span>().</span><span style="color:#6699cc;">map</span><span>(|(</span><span style="font-style:italic;color:#fc9354;">e_foo</span><span>, </span><span style="font-style:italic;color:#fc9354;">c_foo</span><span>)| {
+</span><span>    </span><span style="color:#6d6d6d;">// Filter to just bar coordinates near foo&#39;s coordinates
+</span><span>    </span><span style="color:#6d6d6d;">// Sum the resulting set of 1s
+</span><span>    </span><span style="font-style:italic;color:#fbdfb5;">let</span><span> near_foo </span><span style="color:#ff5e5e;">=</span><span> bars
+</span><span>      .</span><span style="color:#6699cc;">iter</span><span>()
+</span><span>      .</span><span style="color:#6699cc;">filter_map</span><span>(|(</span><span style="font-style:italic;color:#fc9354;">e_bar</span><span>, </span><span style="font-style:italic;color:#fc9354;">c_bar</span><span>)| </span><span style="color:#6699cc;">do_check</span><span>(</span><span style="font-style:italic;color:#fbdfb5;">c_foo</span><span>, </span><span style="font-style:italic;color:#fbdfb5;">c_bar</span><span>).</span><span style="color:#6699cc;">then_some</span><span>(</span><span style="color:#fdb082;">0</span><span>))
+</span><span>      .</span><span style="color:#6699cc;">sum</span><span>();
+</span><span>    </span><span style="color:#6d6d6d;">// Return a tuple of (Entity, usize)
+</span><span>    ( e_foo, near_foo )
+</span><span>  }).</span><span style="color:#6699cc;">collect</span><span>();
+</span><span>
+</span><span>  </span><span style="color:#6d6d6d;">// ... use near_map ...
+</span><span>}
+</span></code></pre>
+<p>This both gives me a nice computed lookup table, and using Bevy's <code>Local&lt;T&gt;</code> ensures I don't re-allocate memory every frame, assuming I don't you know... overlook something.</p>
+<h1 id="benchmarking">Benchmarking</h1>
+<ul>
+<li>I got Claude to write some benchmarks comparing VecSet vs HashSet and VecMap vs HashMap at different data volumes, 4, 8, etc up to 1024 elements</li>
+<li>Data was always u64s for keys and values</li>
+<li>Comparing against Bevy's collections library which uses the non-standard <a href="https://docs.rs/bevy/0.19.0/bevy/platform/hash/struct.FixedHasher.html">FixedHasher</a></li>
+<li>Optimizations turned <em>on</em></li>
+<li>All value are in nanoseconds.</li>
+</ul>
+<h1 id="vecset-vs-hashset"><code>VecSet</code> vs <code>HashSet</code></h1>
+<blockquote>
+<p>Winner is the fast implementation.</p>
+</blockquote>
+<table><thead><tr><th>Operation</th><th>Impl</th><th style="text-align: right">4</th><th style="text-align: right">8</th><th style="text-align: right">16</th><th style="text-align: right">32</th><th style="text-align: right">64</th><th style="text-align: right">128</th><th style="text-align: right">256</th><th style="text-align: right">512</th><th style="text-align: right">1024</th><th>Winner</th></tr></thead><tbody>
+<tr><td><strong>iterate</strong></td><td>VecSet</td><td style="text-align: right">3.5</td><td style="text-align: right">6.1</td><td style="text-align: right">11.2</td><td style="text-align: right">21.6</td><td style="text-align: right">42.3</td><td style="text-align: right">89.3</td><td style="text-align: right">172.2</td><td style="text-align: right">337.9</td><td style="text-align: right">670.2</td><td><strong>Vec, every N (~2×)</strong></td></tr>
+<tr><td></td><td>HashSet</td><td style="text-align: right">6.0</td><td style="text-align: right">10.6</td><td style="text-align: right">20.7</td><td style="text-align: right">40.9</td><td style="text-align: right">81.2</td><td style="text-align: right">161.5</td><td style="text-align: right">322.8</td><td style="text-align: right">652.3</td><td style="text-align: right">1289.3</td><td></td></tr>
+<tr><td><strong>build (<code>collect</code>)</strong></td><td>VecSet</td><td style="text-align: right">13.9</td><td style="text-align: right">18.1</td><td style="text-align: right">22.7</td><td style="text-align: right">33.5</td><td style="text-align: right">59.8</td><td style="text-align: right">157.6</td><td style="text-align: right">262.2</td><td style="text-align: right">467.7</td><td style="text-align: right">853.1</td><td><strong>Vec, every N (~4–6×)</strong></td></tr>
+<tr><td></td><td>HashSet</td><td style="text-align: right">55.3</td><td style="text-align: right">88.0</td><td style="text-align: right">139.7</td><td style="text-align: right">232.3</td><td style="text-align: right">454.1</td><td style="text-align: right">738.5</td><td style="text-align: right">1346.0</td><td style="text-align: right">2767.8</td><td style="text-align: right">5281.8</td><td></td></tr>
+<tr><td><strong>contains — hit</strong></td><td>VecSet</td><td style="text-align: right">2.6</td><td style="text-align: right">3.7</td><td style="text-align: right">6.0</td><td style="text-align: right">10.7</td><td style="text-align: right">19.9</td><td style="text-align: right">38.2</td><td style="text-align: right">81.5</td><td style="text-align: right">155.1</td><td style="text-align: right">302.3</td><td>Vec ≲8, else <strong>Hash</strong></td></tr>
+<tr><td></td><td>HashSet</td><td style="text-align: right">3.6</td><td style="text-align: right">3.5</td><td style="text-align: right">3.5</td><td style="text-align: right">3.9</td><td style="text-align: right">3.9</td><td style="text-align: right">3.5</td><td style="text-align: right">3.6</td><td style="text-align: right">3.6</td><td style="text-align: right">3.5</td><td></td></tr>
+<tr><td><strong>contains — miss</strong></td><td>VecSet</td><td style="text-align: right">3.2</td><td style="text-align: right">5.5</td><td style="text-align: right">10.1</td><td style="text-align: right">19.3</td><td style="text-align: right">37.7</td><td style="text-align: right">79.7</td><td style="text-align: right">153.4</td><td style="text-align: right">301.0</td><td style="text-align: right">595.0</td><td><strong>Hash, every N</strong></td></tr>
+<tr><td></td><td>HashSet</td><td style="text-align: right">2.7</td><td style="text-align: right">2.9</td><td style="text-align: right">2.9</td><td style="text-align: right">2.7</td><td style="text-align: right">2.9</td><td style="text-align: right">2.9</td><td style="text-align: right">2.7</td><td style="text-align: right">2.7</td><td style="text-align: right">2.7</td><td></td></tr>
+<tr><td><strong>remove one</strong></td><td>VecSet</td><td style="text-align: right">24.7</td><td style="text-align: right">38.7</td><td style="text-align: right">44.1</td><td style="text-align: right">60.8</td><td style="text-align: right">112.6</td><td style="text-align: right">219.6</td><td style="text-align: right">376.6</td><td style="text-align: right">685.5</td><td style="text-align: right">1273.5</td><td>Vec ≲8, else <strong>Hash</strong></td></tr>
+<tr><td></td><td>HashSet</td><td style="text-align: right">25.9</td><td style="text-align: right">35.6</td><td style="text-align: right">38.4</td><td style="text-align: right">45.8</td><td style="text-align: right">42.9</td><td style="text-align: right">45.4</td><td style="text-align: right">46.3</td><td style="text-align: right">45.8</td><td style="text-align: right">50.1</td><td></td></tr>
+<tr><td><strong>build (checked <code>insert</code>)</strong></td><td>VecSet</td><td style="text-align: right">26.0</td><td style="text-align: right">136.9</td><td style="text-align: right">244.4</td><td style="text-align: right">596.0</td><td style="text-align: right">1859.3</td><td style="text-align: right">5916.5</td><td style="text-align: right">21085</td><td style="text-align: right">79255</td><td style="text-align: right">308808</td><td>Vec ≲48, else <strong>Hash</strong> (O(n²))</td></tr>
+<tr><td></td><td>HashSet</td><td style="text-align: right">101.3</td><td style="text-align: right">212.4</td><td style="text-align: right">404.8</td><td style="text-align: right">694.0</td><td style="text-align: right">1305.3</td><td style="text-align: right">2418.7</td><td style="text-align: right">4608.5</td><td style="text-align: right">8849.0</td><td style="text-align: right">17437.6</td><td></td></tr>
+</tbody></table>
+<h1 id="vecmap-vs-hashmap"><code>VecMap</code> vs <code>HashMap</code></h1>
+<table><thead><tr><th>Operation</th><th>Impl</th><th style="text-align: right">4</th><th style="text-align: right">8</th><th style="text-align: right">16</th><th style="text-align: right">32</th><th style="text-align: right">64</th><th style="text-align: right">128</th><th style="text-align: right">256</th><th style="text-align: right">512</th><th style="text-align: right">1024</th><th>Winner</th></tr></thead><tbody>
+<tr><td><strong>build (<code>collect</code>)</strong></td><td>VecMap</td><td style="text-align: right">15.1</td><td style="text-align: right">17.6</td><td style="text-align: right">25.9</td><td style="text-align: right">42.8</td><td style="text-align: right">129.7</td><td style="text-align: right">201.8</td><td style="text-align: right">353.1</td><td style="text-align: right">651.1</td><td style="text-align: right">1240.7</td><td><strong>Vec, every N (~4×)</strong></td></tr>
+<tr><td></td><td>HashMap</td><td style="text-align: right">51.4</td><td style="text-align: right">88.1</td><td style="text-align: right">137.5</td><td style="text-align: right">298.1</td><td style="text-align: right">468.5</td><td style="text-align: right">794.6</td><td style="text-align: right">1428.0</td><td style="text-align: right">2874.3</td><td style="text-align: right">5613.2</td><td></td></tr>
+<tr><td><strong>get — hit</strong></td><td>VecMap</td><td style="text-align: right">2.6</td><td style="text-align: right">4.3</td><td style="text-align: right">6.2</td><td style="text-align: right">10.8</td><td style="text-align: right">26.8</td><td style="text-align: right">45.3</td><td style="text-align: right">81.8</td><td style="text-align: right">155.4</td><td style="text-align: right">302.7</td><td>Vec ≲8, else <strong>Hash</strong></td></tr>
+<tr><td></td><td>HashMap</td><td style="text-align: right">4.2</td><td style="text-align: right">4.5</td><td style="text-align: right">4.2</td><td style="text-align: right">4.2</td><td style="text-align: right">4.3</td><td style="text-align: right">4.2</td><td style="text-align: right">4.2</td><td style="text-align: right">4.2</td><td style="text-align: right">4.2</td><td></td></tr>
+<tr><td><strong>get — miss</strong></td><td>VecMap</td><td style="text-align: right">4.3</td><td style="text-align: right">5.7</td><td style="text-align: right">10.1</td><td style="text-align: right">25.2</td><td style="text-align: right">37.7</td><td style="text-align: right">80.7</td><td style="text-align: right">155.7</td><td style="text-align: right">301.5</td><td style="text-align: right">596.9</td><td><strong>Hash, every N</strong></td></tr>
+<tr><td></td><td>HashMap</td><td style="text-align: right">3.5</td><td style="text-align: right">3.5</td><td style="text-align: right">3.5</td><td style="text-align: right">3.5</td><td style="text-align: right">3.5</td><td style="text-align: right">3.5</td><td style="text-align: right">3.5</td><td style="text-align: right">3.5</td><td style="text-align: right">3.5</td><td></td></tr>
+</tbody></table>
+<h1 id="just-use-rayon">jUsT uSe RaYoN</h1>
+<p>After the initial results I thought "surely we can parallelize the linear search right? Rayon makes things fast right?!" and did a side-quest adding a <code>par_*</code> version of the <code>VecSet</code>/<code>VecMap</code> types using Rayon as the underlying engine.
+Here are those results:</p>
+<table><thead><tr><th>Operation</th><th>Impl</th><th style="text-align: right">64</th><th style="text-align: right">1024</th><th style="text-align: right">16384</th><th style="text-align: right">262144</th><th style="text-align: right">1048576</th></tr></thead><tbody>
+<tr><td><strong>contains — miss</strong></td><td>VecSet seq</td><td style="text-align: right">57</td><td style="text-align: right">892</td><td style="text-align: right">14152</td><td style="text-align: right">290913</td><td style="text-align: right">1281114</td></tr>
+<tr><td></td><td>VecSet par</td><td style="text-align: right">11330</td><td style="text-align: right">17063</td><td style="text-align: right">41296</td><td style="text-align: right">308584</td><td style="text-align: right">1169997</td></tr>
+<tr><td></td><td>HashSet</td><td style="text-align: right">2.7</td><td style="text-align: right">2.7</td><td style="text-align: right">2.7</td><td style="text-align: right">2.9</td><td style="text-align: right">2.7</td></tr>
+<tr><td><strong>remove one</strong></td><td>VecSet seq</td><td style="text-align: right">72</td><td style="text-align: right">787</td><td style="text-align: right">11928</td><td style="text-align: right">266622</td><td style="text-align: right">—</td></tr>
+<tr><td></td><td>VecSet par</td><td style="text-align: right">12485</td><td style="text-align: right">18052</td><td style="text-align: right">32334</td><td style="text-align: right">244978</td><td style="text-align: right">—</td></tr>
+<tr><td></td><td>HashSet</td><td style="text-align: right">34</td><td style="text-align: right">49</td><td style="text-align: right">112</td><td style="text-align: right">928</td><td style="text-align: right">—</td></tr>
+</tbody></table>
+<p>As it turns out, Rayon has <em>hella</em> overhead so for small sets like this the startup cost <em>way</em> overshadows the compute time.
+Rayon took <em>at least</em> 11-12 µs which makes it <em>much</em> slower at these small sizes.</p>
+<blockquote>
+<p>Takeway: Rayon is great for processing <em>lots</em> of data, like in batch jobs.</p>
+</blockquote>
+<h2 id="what-about-micropool">wHaT aBoUt MiCroPoOl</h2>
+<p>I heard about a cool library that's basically "Rayon for Games" called <a href="https://github.com/DouglasDwyer/micropool">micropool</a>.
+The main selling point is that it avoids some of the pitfalls of Rayon.</p>
+<p>The results were interesting!</p>
+<p><strong>contains — miss</strong> (ns):</p>
+<table><thead><tr><th>Impl</th><th style="text-align: right">64</th><th style="text-align: right">1024</th><th style="text-align: right">16384</th><th style="text-align: right">262144</th><th style="text-align: right">1048576</th></tr></thead><tbody>
+<tr><td>VecSet seq</td><td style="text-align: right">57</td><td style="text-align: right">932</td><td style="text-align: right">14834</td><td style="text-align: right">306833</td><td style="text-align: right">1320048</td></tr>
+<tr><td>VecSet par (rayon)</td><td style="text-align: right">11330</td><td style="text-align: right">17063</td><td style="text-align: right">41296</td><td style="text-align: right">308584</td><td style="text-align: right">1169997</td></tr>
+<tr><td>VecSet par (micropool)</td><td style="text-align: right">519</td><td style="text-align: right">1028</td><td style="text-align: right">8141</td><td style="text-align: right">173009</td><td style="text-align: right">1131319</td></tr>
+<tr><td>HashSet</td><td style="text-align: right">2.7</td><td style="text-align: right">2.8</td><td style="text-align: right">2.8</td><td style="text-align: right">3.0</td><td style="text-align: right">2.8</td></tr>
+</tbody></table>
+<p><strong>remove one</strong> (ns):</p>
+<table><thead><tr><th>Impl</th><th style="text-align: right">64</th><th style="text-align: right">1024</th><th style="text-align: right">16384</th><th style="text-align: right">262144</th></tr></thead><tbody>
+<tr><td>VecSet seq</td><td style="text-align: right">78</td><td style="text-align: right">802</td><td style="text-align: right">12041</td><td style="text-align: right">283219</td></tr>
+<tr><td>VecSet par (rayon)</td><td style="text-align: right">12485</td><td style="text-align: right">18052</td><td style="text-align: right">32334</td><td style="text-align: right">244978</td></tr>
+<tr><td>VecSet par (micropool)</td><td style="text-align: right">608</td><td style="text-align: right">1455</td><td style="text-align: right">12005</td><td style="text-align: right">248263</td></tr>
+<tr><td>HashSet</td><td style="text-align: right">34</td><td style="text-align: right">57</td><td style="text-align: right">98</td><td style="text-align: right">948</td></tr>
+</tbody></table>
+<p>Micropool was <em>better</em> than Rayon but still not <em>nearly</em> good enough to beat an optimized build for either Hash nor Vec implementation.</p>
+<h1 id="takeaways">Takeaways</h1>
+<ul>
+<li>
+<p>Use <code>VecMap</code> and <code>VecSet</code> when I want to memoize a set and iterate over every element sequentally.</p>
+</li>
+<li>
+<p>Use <code>HashMap</code> and <code>HashSet</code> if you intend to search for specific elements in the set.</p>
+</li>
+</ul>
+<h1 id="notes">Notes</h1>
+<p>A few admissions:</p>
+<ol>
+<li>
+<p>I didn't test this against Bevy's <code>Query</code> nor did I test it against Rust's stdlib <code>DefaultHasher</code>, which I expect to perform worse but that would just move the line not change the story.</p>
+</li>
+<li>
+<p>We could probably improve search performance in the <code>Vec*</code> implementations to get better performance, like sorting elements or... something. That wasn't the point of this exploration though. The bit is to see if we are leaving an obvoius naive optimization on the table.</p>
+</li>
+<li>
+<p>It's tempting to turn <code>VecSet</code> and <code>VecMap</code> into a library, if it isn't already, but I promise it was a <em>very</em> quick type to implement, and even after building it out I'm <em>not</em> using it in my game because the use-case for it is niche enough that I haven't actually <em>needed</em> it.</p>
+</li>
+</ol>
+<h1 id="conclusion">Conclusion</h1>
+<p>So in conclusion... wait -- now that I think about it... a set that you always want to iterate over is... a Vec.
+So this is basically nothing!
+This is just Vec with more steps!</p>
+<p>Happy hacking~</p>
+
+  <footer class=console>
+    <hr>
+    © 2026 by <a href="/about">Elijah Voigt</a> licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a><img src="/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+</footer>
+</main>
+</body>
+</html>

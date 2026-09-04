@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>elijah.run - typst</title>
+    <subtitle>A blog about tech, media, and art</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://elijah.run/tags/typst/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://elijah.run"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2025-07-17T00:00:00+00:00</updated>
+    <id>https://elijah.run/tags/typst/atom.xml</id>
+    <entry xml:lang="en">
+        <title>How I use typst</title>
+        <published>2025-07-17T00:00:00+00:00</published>
+        <updated>2025-07-17T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Elijah Voigt
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://elijah.run/blog/how-i-use-typst/"/>
+        <id>https://elijah.run/blog/how-i-use-typst/</id>
+        
+        <content type="html" xml:base="https://elijah.run/blog/how-i-use-typst/">&lt;p&gt;This week I re-wrote &lt;a href=&quot;&#x2F;Elijah%20Voigt.pdf&quot;&gt;my resume&lt;&#x2F;a&gt;  in &lt;a href=&quot;https:&#x2F;&#x2F;typst.app&#x2F;&quot;&gt;typst&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;elijah.run&#x2F;blog&#x2F;how-i-use-typst&#x2F;old.pdf&quot;&gt;Old&lt;&#x2F;a&gt;:
+&lt;img src=&quot;https:&#x2F;&#x2F;elijah.run&#x2F;blog&#x2F;how-i-use-typst&#x2F;old.png&quot; alt=&quot;old resume&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;elijah.run&#x2F;blog&#x2F;how-i-use-typst&#x2F;new.pdf&quot;&gt;New&lt;&#x2F;a&gt;:
+&lt;img src=&quot;https:&#x2F;&#x2F;elijah.run&#x2F;blog&#x2F;how-i-use-typst&#x2F;new.png&quot; alt=&quot;new resume&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Can you tell the difference? No? Excellent!&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Since graduating college I don&#x27;t write a lot of LaTeX, but so far I prefer typst!&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;anguished-typst-is-not-just-a-better-latex&quot;&gt;😧 typst is not (just) a better LaTeX&lt;&#x2F;h1&gt;
+&lt;p&gt;I posted some first impressions on &lt;a href=&quot;https:&#x2F;&#x2F;bsky.app&#x2F;profile&#x2F;elijah.run&quot;&gt;Bluesky&lt;&#x2F;a&gt;:&lt;&#x2F;p&gt;
+&lt;blockquote class=&quot;bluesky-embed&quot; data-bluesky-uri=&quot;at:&#x2F;&#x2F;did:plc:srziwhupeikb2bcnyndug2ga&#x2F;app.bsky.feed.post&#x2F;3ltx7vsqt3s2m&quot; data-bluesky-cid=&quot;bafyreid2ol6s3bji2jkyiaxnwdgylql7qja72wojpnno5y2eohxahggswu&quot; data-bluesky-embed-color-mode=&quot;system&quot;&gt;&lt;p lang=&quot;en&quot;&gt;LaTeX being compatible with TeX makes it feel like the C++ of typesetting; a rich ecosystem with lots of bloat.
+&lt;p&gt;typst not being constrained in that way makes it feel like the Zig of typesetting; smaller ecosystem but a much smoother writing experience.&lt;&#x2F;p&gt;— Elijah Voigt (&lt;a href=&quot;https:&#x2F;&#x2F;bsky.app&#x2F;profile&#x2F;did:plc:srziwhupeikb2bcnyndug2ga?ref_src=embed&quot;&gt;@elijah.run&lt;&#x2F;a&gt;) &lt;a href=&quot;https:&#x2F;&#x2F;bsky.app&#x2F;profile&#x2F;did:plc:srziwhupeikb2bcnyndug2ga&#x2F;post&#x2F;3ltx7vsqt3s2m?ref_src=embed&quot;&gt;July 14, 2025 at 1:25 PM&lt;&#x2F;a&gt;&lt;&#x2F;blockquote&gt;&lt;script async src=&quot;https:&#x2F;&#x2F;embed.bsky.app&#x2F;static&#x2F;embed.js&quot; charset=&quot;utf-8&quot;&gt;&lt;&#x2F;script&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;To elaborate: typst doesn&#x27;t feel like an &lt;em&gt;improvement&lt;&#x2F;em&gt; on LaTeX, it feels like a from-the-ground-up typsestter that learns from the past uhh -- wait &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;LaTeX&quot;&gt;LaTeX&lt;&#x2F;a&gt; came out in 1984? and &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;TeX&quot;&gt;TeX&lt;&#x2F;a&gt; came out in 1978?? So yeah it learns from the past 41+ years.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;adult-computer-typst-is-just-programming-for-me&quot;&gt;🧑‍💻 typst is just programming (for me)&lt;&#x2F;h1&gt;
+&lt;p&gt;To be fair, so is LaTeX.
+If you give me a programming language I&#x27;m gonna program.&lt;&#x2F;p&gt;
+&lt;p&gt;The typst docs make it seem like it&#x27;s &lt;code&gt;markdown&lt;&#x2F;code&gt; with functions, which is somewhat true:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;typ&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-typ &quot;&gt;&lt;code class=&quot;language-typ&quot; data-lang=&quot;typ&quot;&gt;&lt;span&gt;== this is a title
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;this is a paragraph.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;- this
+&lt;&#x2F;span&gt;&lt;span&gt;- is
+&lt;&#x2F;span&gt;&lt;span&gt;- a
+&lt;&#x2F;span&gt;&lt;span&gt;- list
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;But my resume is more... function heavy than advertised.
+For example, this:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;elijah.run&#x2F;blog&#x2F;how-i-use-typst&#x2F;example.png&quot; alt=&quot;example styled section&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Came from this function:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;typ&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-typ &quot;&gt;&lt;code class=&quot;language-typ&quot; data-lang=&quot;typ&quot;&gt;&lt;span&gt;&#x2F;&#x2F; Function for printing a role
+&lt;&#x2F;span&gt;&lt;span&gt;#let role(org: none, location: none, title: none, date: none, description: ntypone) = {
+&lt;&#x2F;span&gt;&lt;span&gt;[
+&lt;&#x2F;span&gt;&lt;span&gt;  #set text(weight: &amp;quot;bold&amp;quot;)
+&lt;&#x2F;span&gt;&lt;span&gt;  #org
+&lt;&#x2F;span&gt;&lt;span&gt;  #set text(weight: &amp;quot;regular&amp;quot;)
+&lt;&#x2F;span&gt;&lt;span&gt;  (
+&lt;&#x2F;span&gt;&lt;span&gt;    #text(13pt, location)
+&lt;&#x2F;span&gt;&lt;span&gt;  )
+&lt;&#x2F;span&gt;&lt;span&gt;  #h(1fr)
+&lt;&#x2F;span&gt;&lt;span&gt;  #set text(weight: &amp;quot;bold&amp;quot;)
+&lt;&#x2F;span&gt;&lt;span&gt;  #title
+&lt;&#x2F;span&gt;&lt;span&gt;  #set text(weight: &amp;quot;regular&amp;quot;)
+&lt;&#x2F;span&gt;&lt;span&gt;  #date
+&lt;&#x2F;span&gt;&lt;span&gt;];
+&lt;&#x2F;span&gt;&lt;span&gt;text(12pt, description);
+&lt;&#x2F;span&gt;&lt;span&gt;};
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Invoked like this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;typ&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-typ &quot;&gt;&lt;code class=&quot;language-typ&quot; data-lang=&quot;typ&quot;&gt;&lt;span&gt;#role(
+&lt;&#x2F;span&gt;&lt;span&gt;  org: [CoreOS],
+&lt;&#x2F;span&gt;&lt;span&gt;  location: [San Francisco, CA&#x2F;Remote],
+&lt;&#x2F;span&gt;&lt;span&gt;  title: [Documentarian],
+&lt;&#x2F;span&gt;&lt;span&gt;  date: [09&#x2F;2016 - 05&#x2F;2017],
+&lt;&#x2F;span&gt;&lt;span&gt;  description: [
+&lt;&#x2F;span&gt;&lt;span&gt;    - #xp([Migration Docs.], [Reviewed, tested, and contributed to public facing Kubernetes developer docs.])
+&lt;&#x2F;span&gt;&lt;span&gt;  ]
+&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The result looks good, but it certainly doesn&#x27;t &quot;feel like markdown&quot;... that&#x27;s OK!
+I know how to program and the functions are simple!&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;typ&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-typ &quot;&gt;&lt;code class=&quot;language-typ&quot; data-lang=&quot;typ&quot;&gt;&lt;span&gt;&#x2F;&#x2F; function definition:
+&lt;&#x2F;span&gt;&lt;span&gt;#myfn(a, b, c) = {
+&lt;&#x2F;span&gt;&lt;span&gt;  [
+&lt;&#x2F;span&gt;&lt;span&gt;    #set foo(bar=&amp;quot;thing&amp;quot;)
+&lt;&#x2F;span&gt;&lt;span&gt;    #a
+&lt;&#x2F;span&gt;&lt;span&gt;    #set foo(other=&amp;quot;stuff&amp;quot;)
+&lt;&#x2F;span&gt;&lt;span&gt;    #b -- #c
+&lt;&#x2F;span&gt;&lt;span&gt;  ]
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&#x2F;&#x2F; called like so:
+&lt;&#x2F;span&gt;&lt;span&gt;#myfn([asdf], [abcd123], [hello world])
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&#x2F;&#x2F; produces:
+&lt;&#x2F;span&gt;&lt;span&gt;&#x2F;&#x2F; asdf abcd123 -- hello world
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h1 id=&quot;rabbit2-typst-is-fast&quot;&gt;🐇 typst is fast&lt;&#x2F;h1&gt;
+&lt;p&gt;Which is... not surprising.
+Not just because it&#x27;s written in Rust and I&#x27;m a voluntary Rust shill -- any new typesetter would probably be an improvement!
+Any time you do a full rewrite, and ignore legacy usage, you&#x27;re gonna go sonic-levels of fast.
+And again... LaTeX is 41 years old; there&#x27;s a lot of cruft in that ecosystem.&lt;&#x2F;p&gt;
+&lt;p&gt;LaTeX&#x27;s output looks &lt;em&gt;gorgeous&lt;&#x2F;em&gt; but it is SLOW and BULKY.
+To build my old resume I needed:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;A 12GB+ docker container.&lt;&#x2F;li&gt;
+&lt;li&gt;Bunch of style files I copied from a friend 10 years ago.&lt;&#x2F;li&gt;
+&lt;li&gt;A bunch of build phases I frankly did not understand.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;This was my Makefile which was &lt;em&gt;as simple as I could get it&lt;&#x2F;em&gt;:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;make&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-make &quot;&gt;&lt;code class=&quot;language-make&quot; data-lang=&quot;make&quot;&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;TARGET&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;resume
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8cdaff;&quot;&gt;default&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;pdf
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8cdaff;&quot;&gt;dvi&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff5e5e;&quot;&gt;${&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;TARGET&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff5e5e;&quot;&gt;}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;.tex
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;latex &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff5e5e;&quot;&gt;${&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;TARGET&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff5e5e;&quot;&gt;}&lt;&#x2F;span&gt;&lt;span&gt;.tex
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8cdaff;&quot;&gt;ps&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;dvi
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff5e5e;&quot;&gt;${&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;DOCKER&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff5e5e;&quot;&gt;} &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;dvips&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt; -R -Poutline -t&lt;&#x2F;span&gt;&lt;span&gt; letter &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff5e5e;&quot;&gt;${&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;TARGET&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff5e5e;&quot;&gt;}&lt;&#x2F;span&gt;&lt;span&gt;.dvi&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt; -o &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff5e5e;&quot;&gt;${&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;TARGET&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff5e5e;&quot;&gt;}&lt;&#x2F;span&gt;&lt;span&gt;.ps
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8cdaff;&quot;&gt;pdf&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;ps
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;ps2pdf &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff5e5e;&quot;&gt;${&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;TARGET&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff5e5e;&quot;&gt;}&lt;&#x2F;span&gt;&lt;span&gt;.ps resume.pdf
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;ps2pdf &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff5e5e;&quot;&gt;${&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;TARGET&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff5e5e;&quot;&gt;}&lt;&#x2F;span&gt;&lt;span&gt;.ps &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;Elijah Caine McDade Voigt resume.pdf&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;ps2pdf &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff5e5e;&quot;&gt;${&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;TARGET&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff5e5e;&quot;&gt;}&lt;&#x2F;span&gt;&lt;span&gt;.ps &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;Elijah Caine M. Voigt resume.pdf&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8cdaff;&quot;&gt;clean&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;rm &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt;.aux
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;rm &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt;.log
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;rm &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt;.dvi
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;rm &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt;.ps
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8cdaff;&quot;&gt;veryclean&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;rm &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt;.aux
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;rm &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt;.log
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;rm &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt;.dvi
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;rm &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt;.ps
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;rm &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt;.pdf
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8cdaff;&quot;&gt;shell&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;:
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff5e5e;&quot;&gt;${&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;DOCKER&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#ff5e5e;&quot;&gt;} &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;&#x2F;bin&#x2F;sh
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;What is this &lt;code&gt;dvips&lt;&#x2F;code&gt; program?
+What&#x27;s a &lt;code&gt;dvi&lt;&#x2F;code&gt; file?
+And &lt;code&gt;.aux&lt;&#x2F;code&gt;??
+Why do I need to build a &lt;code&gt;.ps&lt;&#x2F;code&gt; and a &lt;code&gt;.pdf&lt;&#x2F;code&gt;??&lt;&#x2F;p&gt;
+&lt;p&gt;Anyway, LaTeX is heavy and (for obvious reasons) typst is relatively light weight.&lt;&#x2F;p&gt;
+&lt;p&gt;For comparison here&#x27;s how I build my current resume:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#191919;color:#f8f8f2;&quot;&gt;&lt;code&gt;&lt;span&gt;$ typst compile resume.typ
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;My dependencies are... &lt;code&gt;typst&lt;&#x2F;code&gt; and the &lt;code&gt;FreeMono&lt;&#x2F;code&gt; font.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;monocle-face-closing-thoughts&quot;&gt;🧐 Closing Thoughts&lt;&#x2F;h1&gt;
+&lt;p&gt;But like I said, I don&#x27;t write a lot of LaTeX so why re-write my resume -- my only actively maintained LaTeX doc -- in a new typesetter?&lt;&#x2F;p&gt;
+&lt;p&gt;Basically: I &lt;em&gt;dread&lt;&#x2F;em&gt; updating my resume &lt;em&gt;because&lt;&#x2F;em&gt; LaTeX is so heavy.
+Every time I think to add it or tweak it or god forsake make a style change I find about a dozen reasons &lt;em&gt;not&lt;&#x2F;em&gt; to sink &lt;em&gt;hours&lt;&#x2F;em&gt; into that task.&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;m still in the honeymoon phase, but I feel a lot more &lt;em&gt;excited&lt;&#x2F;em&gt; to write with typst.
+Maybe I&#x27;ll update my resume more than once a year!&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

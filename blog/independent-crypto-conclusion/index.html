@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>elijah.run</title>
+  <meta name="title" content="Independent Crypto Conclusion">
+<meta name="og:title" content="Independent Crypto Conclusion">
+
+<meta name="og:type" content="article">
+
+
+
+
+<meta name="description" content="Sit back and ponder how much we&#x27;ve learned these past few weeks.">
+<meta name="og:description" content="Sit back and ponder how much we&#x27;ve learned these past few weeks.">
+
+<meta name="referrer" content="strict-origin-when-cross-origin">
+  
+  <link rel="alternate" type="application/atom+xml" title="elijah.run" href="https://elijah.run/atom.xml">
+  <style>
+/* http://bettermotherfuckingwebsite.com/ */
+body {
+    margin: 40px auto;
+    max-width: 650px;
+    line-height: 1.6;
+    font-size: 18px;
+    color: #000;
+    padding: 0 10px
+}
+h1,h2,h3{
+    line-height:1.2
+}
+
+ul.stuff>li {
+    padding-left: 0;
+    list-style: none;
+}
+
+blockquote {
+    margin: 0;
+    border-left: 3px solid black;
+    padding-left: 16px;
+}
+
+div.note {
+    margin: 0;
+    border-left: 3px solid blue;
+    padding-left: 16px;
+}
+.note-title {
+    font-weight: bold;
+}
+
+div.warning {
+    margin: 0;
+    border-left: 3px solid orange;
+    padding-left: 16px;
+}
+.warning-title {
+    font-weight: bold;
+}
+
+div.ai-disclosure {
+    margin: 0 0 16px 0;
+    border-left: 3px solid magenta;
+    padding-left: 16px;
+}
+.ai-disclosure-title {
+    font-weight: bold;
+}
+
+ul {
+    padding-left: 1ch;
+    list-style: square;
+}
+
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+header {
+    /* todo */
+}
+
+nav {
+    /* todo */
+}
+
+main {
+    max-width: 100%;
+    padding: 1ch;
+}
+
+footer{
+    /* todo */
+}
+
+h1,h2,h3,h4,h5,.console,ul.stuff {
+    font-family:
+        /* Modern macOS & iOS system monospace */
+        "SFMono-Regular",
+        /* Windows system monospace (newer) */
+        "Consolas",
+        /* Windows legacy monospace fallback */
+        "Courier New",
+        /* Generic monospace fallback */
+        monospace;
+}
+
+li.post {
+    padding-top: 1ch;
+}
+p.description {
+    margin: 0px;
+}
+a.post {
+    font-weight: bold;
+}
+
+.side {
+    color: #333;
+}
+
+.description {
+    color: #333;
+}
+
+
+p>img {
+    max-width: 100%;
+    display: block;
+    margin: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+img.bg {
+    float: right;
+    width: 100%;
+}
+
+</style>
+
+</head>
+<body>
+<style>
+main {
+    width: 100ch;
+}
+</style>
+<main>
+  
+<header>
+  
+    <!-- this is a single page -->
+    
+  
+
+  <span class="console">
+  
+  <a href="/">elijah.run</a>/<a href="&#x2F;blog/">blog</a>/independent-crypto-conclusion</span>
+</header>
+
+
+  <h1>Independent Crypto Conclusion</h1>
+  <p class="console" class="side">
+    published 2017-11-27
+      | tags: 
+  <a href="/tags/cryptography">#cryptography</a>
+
+
+</p>
+  
+    <details>
+    <summary>Table of Contents</summary>
+    <ul>
+    
+        <li>
+            <a href="https://elijah.run/blog/independent-crypto-conclusion/#elliptic-curve-cryptography">Elliptic Curve Cryptography</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/independent-crypto-conclusion/#memory-hard-functions">Memory Hard Functions</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/independent-crypto-conclusion/#garbled-circuits">Garbled Circuits</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/independent-crypto-conclusion/#remote-timing-attacks">Remote Timing Attacks</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/independent-crypto-conclusion/#miscellaneous">Miscellaneous</a>
+            
+        </li>
+    
+    </ul>
+  </details>
+  
+  <div class="note">
+    <span class="note-title">
+        Note
+    </span>
+
+    <span class="note-body">
+        <p>This is a part of a series of blog posts I wrote for an Independent Study on cryptography at Oregon State University.
+To read all of the posts, check out the 'Independent Crypto' tag.</p>
+
+    </span>
+</span>
+<p>Wait, is it over already? It feels like we just started! Those 10 weeks always fly by, and this term was no exception.</p>
+<p>Independent Crypto has been a thrill, an honor, and of course immensely educational.
+It's been a blast to say the least.
+The weekly check-ins with my mentor <a href="http://web.engr.oregonstate.edu/~rosulekm/">Mike Rosulek</a>, forcing myself to engage with academic papers and online lectures, and finally having complex topics like Garbled Circuits and Elliptic Curves "make sense", it was all very enjoyable.
+I am very fortunate to have been given the opportunity to both create this course and take it.
+Excited as I was before it began, it turned out even better than I could have hoped.</p>
+<p>Let's reflect on the some of the things we learned...</p>
+<h2 id="elliptic-curve-cryptography">Elliptic Curve Cryptography</h2>
+<p>We learned that Elliptic Curves look like this:</p>
+<p><img src="/images/independent-crypto/ecc-1.png" alt="A straight forward ECC." /></p>
+<p>and this:</p>
+<p><img src="/images/independent-crypto/ecc-3.png" alt="ECC with the line L illustrated" /></p>
+<p>We also learned that you can implement a version of the Diffie-hellman key exchange protocol by "adding" points on an Elliptic Curve over a finite field.</p>
+<p>We also learned that despite how weird Elliptic Curve Cryptography sounds when you describe it, it can be used in very secure and efficient crypto.</p>
+<h2 id="memory-hard-functions">Memory Hard Functions</h2>
+<p>We learned that Memory Hard Functions (MHFs) are a solution to the arms race that is hash-cracking hardware.
+Importantly, it relies on the fact that while there are specialized hashing processors, there is no specialized RAM for the same task (or any task really).</p>
+<p>The goal of an MHF is to make it as hard (or harder) for an adversary to compute a given hash as it was for you, assuming you're running on non-specialized hardware and they have specialized hash-cracking hardware.</p>
+<p>We learned that there are two types of MHF's: data-dependent and data-independent.
+Data-dependent MFHs (dMHFs) have predictable memory usage patterns so they may be susceptible to cache-timing attacks.
+Data-independent MHFs (iMHFs) are not susceptible to this attack as their memory patterns are not predictable.
+While there are dMHFs in the wild, like scrypt which performs exceptionally well, there are not any any proven iMHFs in use.</p>
+<p>We also learned that this is what it looks like to "Pebble an iMHF Directed Acyclic Graph":</p>
+<p><img src="/images/independent-crypto/dag-animated.gif" alt="Animated DAG traversal." /></p>
+<p>We also learned that the way to attack an iMHF is by performing a breadth-first search on the graph, then once you hit a wall, fill in the
+necessary nodes (pebbles) until you can compute the next node.
+Much of the active research into iMHFs is in figuring out the best graphs, or types of graphs, to combat these kinds of feather/balloon attacks.</p>
+<h2 id="garbled-circuits">Garbled Circuits</h2>
+<p>We learned that Garbled Circuits are a way of achieved two-party secure function evaluation.</p>
+<p>Alice and Bob agree on a circuit (program) to garble.
+One party encrypts the circuit by encrypting each logic-gate.
+Both parties obfuscate their inputs and evaluate the garbled circuit.
+This gives both parties the result of the original program without either party knowing the exact inputs.</p>
+<p>This isn't a fool-proof security measure.
+Sometimes it is good to ask the party garbling said circuits to create a few extras.
+The evaluating party opens some of them to make sure they're on the up-and-up.
+The other party evaluates the remaining circuits and verifies that the outputs are consistent.</p>
+<p>We also learned that this game is surprisingly fun for only having <strong>four levels</strong>.</p>
+<iframe src="/garbled-circuits-game.html" height="400px" width="100%"></iframe>
+<p>Permalink: <a href="http://elijah.run/garbled-circuits-game.html">http://elijah.run/garbled-circuits-game.html</a></p>
+<h2 id="remote-timing-attacks">Remote Timing Attacks</h2>
+<p>And now for something completely different!
+We broke from the math and theory to focus on a problem involving real tangible bits!</p>
+<p>Based on response timing differences an adversary can sometimes determine private information <strong>like your OpenSSL Private Keys</strong>.
+This is scary, but the problem has mostly been fixed and now there are standards the crypto community follows to write code which is secure against these attacks.</p>
+<p>If you're writing crypto and you know what you're doing, make sure you're using the defacto constant-time libraries for bit-wise comparisons, mathematical operations, and pretty much anything involving secrets.</p>
+<h2 id="miscellaneous">Miscellaneous</h2>
+<p>I personally gained a lot from this course.
+I wrote annotated bibliographies, read academic papers, implemented a remote timing attack, and made a fun little game which was totally relevant and 100% not just an excuse to play around making games.</p>
+<p>Despite sinking hours into this course I barely scratched the surface of every topic.
+I've got <em>loads</em> more I could cover if I was inclined to do so.
+I'm not saying I'm <em>going</em> to get a graduate degree, but if it's anything like this I'd be up for it.</p>
+
+  <footer class=console>
+    <hr>
+    © 2026 by <a href="/about">Elijah Voigt</a> licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a><img src="/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+    <br>not written by ai
+</footer>
+</main>
+</body>
+</html>
