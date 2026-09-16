@@ -38,6 +38,9 @@
           # For wasm-pack test
           chromium
           chromedriver
+          # Bundling the vendored browser JS in js/
+          nodejs
+          esbuild
           # Like make
           just
         ];

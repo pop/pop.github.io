@@ -1,23 +1,22 @@
-// Use ?deps= on each import so esm.sh serves shared packages from the same
-// resolved URLs. Without this, @replit/codemirror-vim may receive different
-// copies of @codemirror/state / view and CM6 will silently break.
-import { EditorState } from 'https://esm.sh/@codemirror/state@6';
+// Dependencies are bundled from js/package.json by `just vendor` into
+// js/vendor/codemirror.js — nothing here is fetched from a CDN at runtime.
+import { EditorState } from '@codemirror/state';
 import {
   EditorView,
   keymap,
   drawSelection,
   dropCursor,
   highlightActiveLine,
-} from 'https://esm.sh/@codemirror/view@6?deps=@codemirror/state@6';
+} from '@codemirror/view';
 import {
   defaultKeymap,
   history,
   historyKeymap,
   indentWithTab,
   emacsStyleKeymap,
-} from 'https://esm.sh/@codemirror/commands@6?deps=@codemirror/state@6,@codemirror/view@6';
-import { markdown } from 'https://esm.sh/@codemirror/lang-markdown@6?deps=@codemirror/state@6,@codemirror/view@6';
-import { vim, Vim } from 'https://esm.sh/@replit/codemirror-vim@6?deps=@codemirror/state@6,@codemirror/view@6,@codemirror/commands@6';
+} from '@codemirror/commands';
+import { markdown } from '@codemirror/lang-markdown';
+import { vim, Vim } from '@replit/codemirror-vim';
 
 const instances = new Map();
 let nextId = 0;
@@ -142,8 +141,8 @@ window.cmFocus = function (id) {
   if (view) view.focus();
 };
 
-// Signal that all imports resolved and the API is ready. The WASM side
-// checks this before calling cmCreateEditor to guard against a race where
-// the file finishes loading before esm.sh module fetches complete.
+// Signal that the module evaluated and the API is ready. The WASM side
+// checks this before calling cmCreateEditor, since the module script loads
+// asynchronously and may not have run when the component mounts.
 window.cmIsReady = true;
 window.dispatchEvent(new Event('cm-ready'));

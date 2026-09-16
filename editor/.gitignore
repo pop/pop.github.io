@@ -6,3 +6,4 @@
 /infra/*.tfstate
 /infra/*.tfstate.backup
 /infra/terraform.tfvars
+/js/node_modules

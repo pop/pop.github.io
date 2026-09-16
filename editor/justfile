@@ -1,5 +1,10 @@
 # Build and deploy the blog editor
 
+# Rebuild the vendored browser JS in js/vendor from js/package.json
+vendor:
+    npm --prefix js ci
+    npm --prefix js run build
+
 # Dev server with hot reload
 dev:
     trunk serve

@@ -1,0 +1,16 @@
+{
+  "name": "editor-vendor",
+  "private": true,
+  "description": "Browser JS dependencies for the blog editor, bundled locally so the app never fetches from a CDN at runtime.",
+  "scripts": {
+    "build": "esbuild src/codemirror.js --bundle --format=esm --minify --target=es2020 --outfile=vendor/codemirror.js && cp node_modules/@highlightjs/cdn-assets/highlight.min.js vendor/highlight.min.js && cp node_modules/@highlightjs/cdn-assets/styles/github.min.css vendor/highlight-github.min.css"
+  },
+  "dependencies": {
+    "@codemirror/commands": "6.8.1",
+    "@codemirror/lang-markdown": "6.3.2",
+    "@codemirror/state": "6.5.2",
+    "@codemirror/view": "6.36.4",
+    "@highlightjs/cdn-assets": "11.9.0",
+    "@replit/codemirror-vim": "6.3.0"
+  }
+}
