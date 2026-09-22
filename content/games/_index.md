@@ -1,5 +1,6 @@
 +++
 title = "games"
+extra.emoji = "🕹️"
 sort_by = "date"
 description = "games i've worked on"
 weight = 8

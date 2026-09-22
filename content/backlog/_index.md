@@ -1,5 +1,6 @@
 +++
 title = "backlog"
+extra.emoji = "📋️"
 description = "follow along as i read/watch/play"
 sort_by = "date"
 weight = 20

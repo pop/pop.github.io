@@ -36,7 +36,7 @@
         <!-- if has subsections... -->
         {%- for s in section.subsections -%}
           {% set it = get_section(path=s) %}
-          <li class=post>🗄️ /<a href={{it.path}}>{{ it.title }}</a>/ <span class=description>{{ it.description }}</span>
+          <li class=post>{{ it.extra.emoji | default(value="🗄️") }} /<a href={{it.path}}>{{ it.title }}</a>/ <span class=description>{{ it.description }}</span>
             {%- if it.pages -%}
               {%- set latest = it.pages | first -%}
               &nbsp;[latest: <a href="{{ latest.permalink }}">{{ latest.title }}</a>]
@@ -51,7 +51,7 @@
         {%- endfor -%}
         <!-- does not have subsections... -->
         {%- for page in section.pages -%}
-          <li class=post>📃 /<a href="{{ page.path }}">{{ page.title }}</a> <span class=description>{{ page.description }}</span></li>
+        <li class=post>{{ page.extra.emoji | default(value="📃") }} /<a href="{{ page.path }}">{{ page.title }}</a> <span class=description>{{ page.description }}</span></li>
         {%- endfor -%}
         {%- block more -%}
         {%- endblock -%}

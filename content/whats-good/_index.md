@@ -1,5 +1,6 @@
 +++
 title = "whats-good"
+extra.emoji = "👍"
 description = "a monthly blog about good stuff"
 sort_by = "date"
 weight = 10
