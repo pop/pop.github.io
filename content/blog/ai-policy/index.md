@@ -1,7 +1,7 @@
 +++
 title = "Generative AI Policy"
 date = "2026-09-23"
-description = "Elijah Voigt's AI usage policy"
+description = "Elijah's Gen AI policy"
 taxonomies.tags = ["gen-ai"]
 path = "/gen-ai-policy"
 +++
@@ -20,6 +20,8 @@ Generative AI may be used in the following ways in the production of creative wo
 1. A tool for researching, reviewing, or architecting **code**.
 2. Generating or refactoring tedious, time consuming, or error prone **code**.
 3. **Editing** pros for written content like blog posts.
+
+This doesn't _guarantee_ Generative AI _will_ be used in these ways, just that it _may_ be used for these purposes.
 
 Guiding principles:
 * *I can do these things myself, this just gets me there faster*
@@ -49,3 +51,20 @@ Guiding principle: *The audience should not need to "guess" if something was mad
 
 Example: *Generative AI was used to edit the the opening of this book*
 
+---
+
+# Not the policy, just some more context
+
+I hate to say it, but LLMs are neat.
+They have strengths and weaknesses, but I have to admit on the whole they're pretty cool tech.
+
+Having used LLMs a lot for work and for [personal projects](https://pages.elijah.run), I feel well informed about the strengths and weaknesses of LLMs as they stand in late 2026.
+
+I also have eyes and ears and use the internet, so I know how Generative AI can be abused to produce spam, and how annoying it is as a viewer to realize you've been fed Gen AI Slop.
+
+For stuff I'm putting out into the world I think it's important to be up-front about how I may use these tools.
+
+This policy is meant to set some personal boundaries around where AI is allowed, where it's never allowed, and anything not covered by the policy _will_ be covered once I cross that bridge.
+
+That said, this policy has nothing to do with how I may use Gen AI tools for personal/private/unpublished projects.
+It's important to make space for experimentation, but not at the risk of alienating your audience and jeopardizing your reputation.
