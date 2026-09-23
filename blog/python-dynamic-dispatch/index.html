@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>elijah.run</title>
+  <meta name="title" content="Dynamic Dispatch in Python">
+<meta name="og:title" content="Dynamic Dispatch in Python">
+
+<meta name="og:type" content="article">
+
+
+
+
+<meta name="description" content="HeY wAnT tO SeE a NEat PYtHOn TriCK!?">
+<meta name="og:description" content="HeY wAnT tO SeE a NEat PYtHOn TriCK!?">
+
+<meta name="referrer" content="strict-origin-when-cross-origin">
+  
+  <link rel="alternate" type="application/atom+xml" title="elijah.run" href="https://elijah.run/atom.xml">
+  <style>
+/* http://bettermotherfuckingwebsite.com/ */
+body {
+    margin: 40px auto;
+    max-width: 650px;
+    line-height: 1.6;
+    font-size: 18px;
+    color: #000;
+    padding: 0 10px
+}
+h1,h2,h3{
+    line-height:1.2
+}
+
+ul.stuff>li {
+    padding-left: 0;
+    list-style: none;
+}
+
+blockquote {
+    margin: 0;
+    border-left: 3px solid black;
+    padding-left: 16px;
+}
+
+div.note {
+    margin: 0;
+    border-left: 3px solid blue;
+    padding-left: 16px;
+}
+.note-title {
+    font-weight: bold;
+}
+
+div.warning {
+    margin: 0;
+    border-left: 3px solid orange;
+    padding-left: 16px;
+}
+.warning-title {
+    font-weight: bold;
+}
+
+div.ai-disclosure {
+    margin: 0 0 16px 0;
+    border-left: 3px solid magenta;
+    padding-left: 16px;
+}
+.ai-disclosure-title {
+    font-weight: bold;
+}
+
+ul {
+    padding-left: 1ch;
+    list-style: square;
+}
+
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+header {
+    /* todo */
+}
+
+nav {
+    /* todo */
+}
+
+main {
+    max-width: 100%;
+    padding: 1ch;
+}
+
+footer{
+    /* todo */
+}
+
+h1,h2,h3,h4,h5,.console,ul.stuff {
+    font-family:
+        /* Modern macOS & iOS system monospace */
+        "SFMono-Regular",
+        /* Windows system monospace (newer) */
+        "Consolas",
+        /* Windows legacy monospace fallback */
+        "Courier New",
+        /* Generic monospace fallback */
+        monospace;
+}
+
+li.post {
+    padding-top: 1ch;
+}
+p.description {
+    margin: 0px;
+}
+a.post {
+    font-weight: bold;
+}
+
+.side {
+    color: #333;
+}
+
+.description {
+    color: #333;
+}
+
+
+p>img {
+    max-width: 100%;
+    display: block;
+    margin: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+img.bg {
+    float: right;
+    width: 100%;
+}
+
+</style>
+
+</head>
+<body>
+<style>
+main {
+    width: 100ch;
+}
+</style>
+<main>
+  
+<header>
+  
+    <!-- this is a single page -->
+    
+  
+
+  <span class="console">
+  
+  <a href="/">elijah.run</a>/<a href="&#x2F;blog/">blog</a>/python-dynamic-dispatch</span>
+</header>
+
+
+  <h1>Dynamic Dispatch in Python</h1>
+  <p class="console" class="side">
+    published 2021-09-02
+      | tags: 
+  <a href="/tags/python">#python</a>
+
+
+</p>
+  
+  <p>🦝 Hey want tO see a nEat PYtHoN triCK?</p>
+<pre data-lang="python" style="background-color:#191919;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><span style="font-style:italic;color:#ff5e5e;">def </span><span style="color:#8cdaff;">f</span><span>(</span><span style="font-style:italic;color:#fc9354;">name</span><span>: </span><span style="color:#fbe3bf;">str</span><span>):
+</span><span>    </span><span style="color:#6699cc;">print</span><span>(</span><span style="color:#ffffff;">&quot;</span><span style="color:#fbe3bf;">hiya </span><span style="color:#fdb082;">{}</span><span style="color:#ffffff;">&quot;</span><span>.</span><span style="color:#e9fdac;">format</span><span>(name))
+</span><span>
+</span><span style="color:#6699cc;">locals</span><span>()[</span><span style="color:#ffffff;">&quot;</span><span style="color:#fbe3bf;">f</span><span style="color:#ffffff;">&quot;</span><span>](</span><span style="color:#ffffff;">&quot;</span><span style="color:#fbe3bf;">Spongebob</span><span style="color:#ffffff;">&quot;</span><span>)
+</span></code></pre>
+<p>🐮 Oh cool, does that use the string <code>"f"</code> to find--</p>
+<p>🦝 DoEs It FiNd ThE fUnCtIoN <code>"f"</code> aNd CaLl iT?? yEaH It DoEs.</p>
+<pre data-lang="txt" style="background-color:#191919;color:#f8f8f2;" class="language-txt "><code class="language-txt" data-lang="txt"><span>$ python script.py
+</span><span>hiya Spongebob
+</span></code></pre>
+<p>🐮 Oh that's neat. I didn't know you could do that with Python--</p>
+<p>🦝 whaTEveR i dON't cArE wHaT YOU tHinK.</p>
+<p>🐮 You asked me --</p>
+<p>🦝 I sAiD sHuT uP. i'M dOiNg HoT gIrL sHiT.</p>
+<p>🐮 Are you ok? You're yelling a lot about Python again--</p>
+<pre data-lang="python" style="background-color:#191919;color:#f8f8f2;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#6d6d6d;"># shut up
+</span><span>
+</span><span style="font-style:italic;color:#ff5e5e;">def </span><span style="color:#8cdaff;">test_patrick</span><span>(</span><span style="font-style:italic;color:#fc9354;">context</span><span>: TestContext):
+</span><span>    </span><span style="color:#6d6d6d;"># do thing
+</span><span>
+</span><span style="font-style:italic;color:#ff5e5e;">def </span><span style="color:#8cdaff;">test_crabs</span><span>(</span><span style="font-style:italic;color:#fc9354;">context</span><span>: TestContext):
+</span><span>    </span><span style="color:#6d6d6d;"># do other thing
+</span><span>
+</span><span>context </span><span style="color:#ff5e5e;">= </span><span style="color:#e9fdac;">TestContext</span><span>()
+</span><span>tests </span><span style="color:#ff5e5e;">= </span><span>[]
+</span><span style="color:#ff5e5e;">for </span><span>t </span><span style="color:#ff5e5e;">in </span><span style="color:#6699cc;">locals</span><span>():
+</span><span>    </span><span style="color:#ff5e5e;">if </span><span>t.</span><span style="color:#e9fdac;">startswith</span><span>(</span><span style="color:#ffffff;">&quot;</span><span style="color:#fbe3bf;">test_</span><span style="color:#ffffff;">&quot;</span><span>):
+</span><span>        tests.</span><span style="color:#e9fdac;">append</span><span>(t)
+</span><span style="color:#ff5e5e;">for </span><span>test </span><span style="color:#ff5e5e;">in </span><span>tests:
+</span><span>    </span><span style="color:#e9fdac;">test</span><span>(context)
+</span></code></pre>
+<p>🐮 Oh so you could...</p>
+<p>🦝 ...</p>
+<p>🐮 Are you going to interrupt me?</p>
+<p>🦝 Not yet.</p>
+<p>🐮 Ok... you could search your scope and find a bunch of functions with a name and common interface--</p>
+<p>🦝 AND CALL THEM! DYNAMIC DISPATCH!!</p>
+<p>🐮 That's nice.</p>
+<p>🦝 YEAH IT IS COOL!</p>
+
+  <footer class=console>
+    <hr>
+    © 2026 by <a href="/about">Elijah Voigt</a> licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a><img src="/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+    <br>not written by ai
+</footer>
+</main>
+</body>
+</html>

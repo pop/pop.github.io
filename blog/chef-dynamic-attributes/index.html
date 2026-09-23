@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>elijah.run</title>
+  <meta name="title" content="Dynamic Attributes in Chef">
+<meta name="og:title" content="Dynamic Attributes in Chef">
+
+<meta name="og:type" content="article">
+
+
+
+
+<meta name="description" content="So you want to set a node attribute in a resource block? Good luck --oh wait you don&#x27;t need luck because you have this blogpost!">
+<meta name="og:description" content="So you want to set a node attribute in a resource block? Good luck --oh wait you don&#x27;t need luck because you have this blogpost!">
+
+<meta name="referrer" content="strict-origin-when-cross-origin">
+  
+  <link rel="alternate" type="application/atom+xml" title="elijah.run" href="https://elijah.run/atom.xml">
+  <style>
+/* http://bettermotherfuckingwebsite.com/ */
+body {
+    margin: 40px auto;
+    max-width: 650px;
+    line-height: 1.6;
+    font-size: 18px;
+    color: #000;
+    padding: 0 10px
+}
+h1,h2,h3{
+    line-height:1.2
+}
+
+ul.stuff>li {
+    padding-left: 0;
+    list-style: none;
+}
+
+blockquote {
+    margin: 0;
+    border-left: 3px solid black;
+    padding-left: 16px;
+}
+
+div.note {
+    margin: 0;
+    border-left: 3px solid blue;
+    padding-left: 16px;
+}
+.note-title {
+    font-weight: bold;
+}
+
+div.warning {
+    margin: 0;
+    border-left: 3px solid orange;
+    padding-left: 16px;
+}
+.warning-title {
+    font-weight: bold;
+}
+
+div.ai-disclosure {
+    margin: 0 0 16px 0;
+    border-left: 3px solid magenta;
+    padding-left: 16px;
+}
+.ai-disclosure-title {
+    font-weight: bold;
+}
+
+ul {
+    padding-left: 1ch;
+    list-style: square;
+}
+
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+header {
+    /* todo */
+}
+
+nav {
+    /* todo */
+}
+
+main {
+    max-width: 100%;
+    padding: 1ch;
+}
+
+footer{
+    /* todo */
+}
+
+h1,h2,h3,h4,h5,.console,ul.stuff {
+    font-family:
+        /* Modern macOS & iOS system monospace */
+        "SFMono-Regular",
+        /* Windows system monospace (newer) */
+        "Consolas",
+        /* Windows legacy monospace fallback */
+        "Courier New",
+        /* Generic monospace fallback */
+        monospace;
+}
+
+li.post {
+    padding-top: 1ch;
+}
+p.description {
+    margin: 0px;
+}
+a.post {
+    font-weight: bold;
+}
+
+.side {
+    color: #333;
+}
+
+.description {
+    color: #333;
+}
+
+
+p>img {
+    max-width: 100%;
+    display: block;
+    margin: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+img.bg {
+    float: right;
+    width: 100%;
+}
+
+</style>
+
+</head>
+<body>
+<style>
+main {
+    width: 100ch;
+}
+</style>
+<main>
+  
+<header>
+  
+    <!-- this is a single page -->
+    
+  
+
+  <span class="console">
+  
+  <a href="/">elijah.run</a>/<a href="&#x2F;blog/">blog</a>/chef-dynamic-attributes</span>
+</header>
+
+
+  <h1>Dynamic Attributes in Chef</h1>
+  <p class="console" class="side">
+    published 2018-06-23
+      | tags: 
+  <a href="/tags/chef">#chef</a>
+
+  <a href="/tags/archive">#archive</a>
+
+
+</p>
+  
+    <details>
+    <summary>Table of Contents</summary>
+    <ul>
+    
+        <li>
+            <a href="https://elijah.run/blog/chef-dynamic-attributes/#problem">Problem</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/chef-dynamic-attributes/#solution">Solution</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/chef-dynamic-attributes/#how-why-did-that-work">How&#x2F;why did that work?</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/chef-dynamic-attributes/#shit-i-tried-before-stumbling-upon-the-solution">Shit I tried before stumbling upon the solution</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/chef-dynamic-attributes/#why-the-solution-works-and-the-other-stuff-didn-t">Why the solution works (and the other stuff didn&#x27;t)</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/chef-dynamic-attributes/#errata">Errata</a>
+            
+        </li>
+    
+    </ul>
+  </details>
+  
+  <h2 id="problem">Problem</h2>
+<p>You are trying to set a node attribute in a resource block but it isn't working.</p>
+<p>For example you have the following code:</p>
+<pre data-lang="ruby" style="background-color:#191919;color:#f8f8f2;" class="language-ruby "><code class="language-ruby" data-lang="ruby"><span>ruby_block </span><span style="color:#ffffff;">&#39;</span><span style="color:#fbe3bf;">foo</span><span style="color:#ffffff;">&#39; </span><span style="color:#ff5e5e;">do
+</span><span>  block </span><span style="color:#ff5e5e;">do
+</span><span>    </span><span style="color:#6d6d6d;"># some ruby
+</span><span>    node.override[</span><span style="color:#ffffff;">&#39;</span><span style="color:#fbe3bf;">var</span><span style="color:#ffffff;">&#39;</span><span>] </span><span style="color:#ff5e5e;">= </span><span style="color:#ffffff;">&#39;</span><span style="color:#fbe3bf;">value</span><span style="color:#ffffff;">&#39;
+</span><span>  </span><span style="color:#ff5e5e;">end
+</span><span>  action </span><span style="color:#fdb082;">:run
+</span><span style="color:#ff5e5e;">end
+</span><span>
+</span><span style="color:#ff5e5e;">if</span><span> node[</span><span style="color:#ffffff;">&#39;</span><span style="color:#fbe3bf;">var</span><span style="color:#ffffff;">&#39;</span><span>] </span><span style="color:#ff5e5e;">== </span><span style="color:#ffffff;">&#39;</span><span style="color:#fbe3bf;">value</span><span style="color:#ffffff;">&#39;
+</span><span>  notifies </span><span style="color:#fdb082;">:run</span><span>, some_resource[</span><span style="color:#6699cc;">name</span><span>]
+</span><span style="color:#ff5e5e;">else
+</span><span>  notifies </span><span style="color:#fdb082;">:run</span><span>, other_resource[whatever]
+</span><span style="color:#ff5e5e;">end
+</span></code></pre>
+<p>Even though you're setting <code>node['var']</code>, <code>other_resource[whatever]</code> is getting notified to <code>:run</code>.
+What gives?</p>
+<h2 id="solution">Solution</h2>
+<p>To jump ahead, because you're skimming this post for the answer, you're going to want to do something like this:</p>
+<pre data-lang="diff" style="background-color:#191919;color:#f8f8f2;" class="language-diff "><code class="language-diff" data-lang="diff"><span># go-go-gadget diffs
+</span><span># Chef Version 13.5.8
+</span><span>
+</span><span>  ruby_block &#39;foo&#39; do
+</span><span>    block do
+</span><span>      # some ruby
+</span><span>      node.override[&#39;var&#39;] = &#39;value&#39;
+</span><span>    end
+</span><span style="color:#f92672;">-   action :run
+</span><span style="color:#a6e22e;">+   action :nothing
+</span><span style="color:#f92672;">- end
+</span><span style="color:#a6e22e;">+ end.run_action(:run)
+</span><span>
+</span><span>if node[&#39;var&#39;] == &#39;value&#39;
+</span><span>  notifies :run, some_resource[name]
+</span><span>else
+</span><span>  notifies :run, other_resource[whatever]
+</span><span>end
+</span></code></pre>
+<p>Basically you want to execute the <code>ruby_block</code> that sets your attribute <strong>now</strong> so the rest of your code can consume the value either later in the compilation phase or during the execution phase of the Chef run.</p>
+<h2 id="how-why-did-that-work">How/why did that work?</h2>
+<p>If you've read his far you're actually reading.
+Welcome to the post!
+Let's begin.</p>
+<p>Let's dig into <em>exactly</em> what my problem was, because sometimes examples aren't good enough.
+You know... for fun.</p>
+<p>I was trying to trigger an application upgrade based on the current installed version.
+I was <em>not</em> installing a package-manager-managed package<sup class="footnote-reference"><a href="#1">1</a></sup> so I couldn't just pin the version a <code>yum</code> resource, I had to do this kludge of a solution.</p>
+<p>So for me <code>some_resource[name]</code> was downloading the latest version of the app (a <code>.tar.gz2</code> file from GitHub) and <code>other_resource[whatever]</code> was a no-op. The as part of the package download I unconditionally trigger a <code>:delayed</code> service restart.
+Chef was 'upgrading' and restarting my app every thirty minutes which broke core functionality.<sup class="footnote-reference"><a href="#2">2</a></sup></p>
+<h2 id="shit-i-tried-before-stumbling-upon-the-solution">Shit I tried before stumbling upon the solution</h2>
+<p>I tried a bunch of things, but they can all kinda be summed up in this:</p>
+<pre data-lang="diff" style="background-color:#191919;color:#f8f8f2;" class="language-diff "><code class="language-diff" data-lang="diff"><span># yay more diffs
+</span><span>  ruby_block &#39;foo&#39; do
+</span><span>    block do
+</span><span>      # some ruby
+</span><span>      node.override[&#39;var&#39;] = &#39;value&#39;
+</span><span>    end
+</span><span>    notifies :create, &#39;tar[my-app]&#39;, :immediately # Triggers tar[my-app] to run now
+</span><span>  end
+</span><span>
+</span><span style="color:#f92672;">- if node[&#39;var&#39;] == &#39;value&#39;
+</span><span style="color:#f92672;">-   notify :run, some_resource[name]
+</span><span style="color:#f92672;">- else
+</span><span style="color:#f92672;">-   notify :run, other_resource[whatever]
+</span><span style="color:#f92672;">- end
+</span><span>
+</span><span>  tar &#39;my-app&#39; do
+</span><span>    action  :nothing # Unless triggered this does nothing
+</span><span style="color:#a6e22e;">+   only_if { node[&#39;var&#39;] == &#39;value&#39; } # This should also do nothing if this isn&#39;t true
+</span><span>    # The rest of the resource block
+</span><span>  end
+</span></code></pre>
+<p>Which ultimately didn't work either.</p>
+<p>I... I have no idea why this didn't work.</p>
+<p>Something something Chef is complicated.</p>
+<h2 id="why-the-solution-works-and-the-other-stuff-didn-t">Why the solution works (and the other stuff didn't)</h2>
+<p>The reason my ultimate solution <em>did</em> work is best summed up by this quote from the <a href="https://docs.chef.io/resource_common.html#run-action">Chef Docs</a>:</p>
+<blockquote>
+<p>Use <code>.run_action(:some_action)</code> at the end of a resource block to run
+the specified action during the compile phase.</p>
+</blockquote>
+<p>My original code (read: broken code) was running the <code>if</code> block during the compilation phase (happens earlier) and running the <code>ruby_block</code> in the execution phase (happens later).
+By telling it to run my <code>ruby_block</code> during the compilation phase we were ensuring it happened before the <code>if</code> block, and in a way running it like you would 'expect' a script to run.</p>
+<p>It ain't idiomatic but it gets the job done.</p>
+<h2 id="errata">Errata</h2>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Say that three times fast.</p>
+</div>
+<div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
+<p>The service was in question was Prometheus.
+When Chef ran every 30 minutes, it killed the Prometheus process and thus killed all of our pending alerts.
+TLDR we didn't get any alerts that took more than 30 minutes to trigger We also <em>kept</em> getting alerts that should taken a few hours to re-notify.</p>
+</div>
+
+  <footer class=console>
+    <hr>
+    © 2026 by <a href="/about">Elijah Voigt</a> licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a><img src="/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+    <br>not written by ai
+</footer>
+</main>
+</body>
+</html>

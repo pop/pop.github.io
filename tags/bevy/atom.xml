@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>elijah.run - bevy</title>
+    <subtitle>A blog about tech, media, and art</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://elijah.run/tags/bevy/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://elijah.run"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2026-07-29T00:00:00+00:00</updated>
+    <id>https://elijah.run/tags/bevy/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Conway&#x27;s Game of Life with sound</title>
+        <published>2026-07-29T00:00:00+00:00</published>
+        <updated>2026-07-29T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Elijah Voigt
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://elijah.run/blog/life-with-sound/"/>
+        <id>https://elijah.run/blog/life-with-sound/</id>
+        
+        <content type="html" xml:base="https://elijah.run/blog/life-with-sound/">&lt;blockquote&gt;
+&lt;p&gt;Play it on itch.io right now! &lt;a href=&quot;https:&#x2F;&#x2F;popgame.itch.io&#x2F;life-with-sound&quot;&gt;popgame.itch.io&#x2F;life-with-sound&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;elijah.run&#x2F;blog&#x2F;life-with-sound&#x2F;life.png&quot; alt=&quot;life.png&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;This was a side-quest.&lt;&#x2F;p&gt;
+&lt;p&gt;I was hitting a wall on another gamedev project and thought &quot;I should try coding up Conway&#x27;s Game of Life&quot;.
+It&#x27;s a pretty simple game, but there&#x27;s some fun challenges like infinite grids and such, let&#x27;s give it a go!&lt;&#x2F;p&gt;
+&lt;p&gt;As I was playing an early build I thought &quot;This is so epic, I wonder if I can sync up some orchestral music to this!&quot;&lt;&#x2F;p&gt;
+&lt;p&gt;I don&#x27;t know the first thing about music, but my friend Sam does!
+During our weekly co-op gaming session we brainstormed some ideas and landed on something that had promise:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Assign a pitch (Note + Octave) to each coordinate in the game.&lt;&#x2F;li&gt;
+&lt;li&gt;When a cell is Alive at that coordinate, play the sound.&lt;&#x2F;li&gt;
+&lt;li&gt;When no cell is Alive at that coordinate, do not play the sound.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;Now the grid is infinite in Game of Life, so this had to be a repeating grid, similar to tiling a picture over and over and over on an infinite plane.&lt;&#x2F;p&gt;
+&lt;p&gt;I was able to whip that addition up pretty quick and it was good enough to show promise, so I added a few more fun features&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Visualizing each pitch with a different color (note) + brightness (octave)&lt;&#x2F;li&gt;
+&lt;li&gt;Allow customization for:
+&lt;ul&gt;
+&lt;li&gt;Which notes are active.&lt;&#x2F;li&gt;
+&lt;li&gt;Which octaves are active.&lt;&#x2F;li&gt;
+&lt;li&gt;The speed of the simulation.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;A &quot;camera follow&quot; feature that pans and zooms so everything stays in view automatically&lt;&#x2F;li&gt;
+&lt;li&gt;Support touch controls so it actually works on mobile.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;This is my first game written in bevy 0.19 and I really like the new &lt;code&gt;bsn! { ... }&lt;&#x2F;code&gt; syntax.
+It is a pretty concise way to express the contents of a scene, and I really like the &lt;code&gt;system.spawn()&lt;&#x2F;code&gt; scheduler method which makes it easy at a glance to see what is spawning my initial world state.
+The implicit &lt;code&gt;..default()&lt;&#x2F;code&gt; is a really nice quality of life improvement, not needing to &lt;em&gt;specify&lt;&#x2F;em&gt; that I want it to fill in the rest because obviously I do.
+My only gripe is that macro-heavy workflows tend to cause headaches because of magic compilation hidden behind pretty syntax; I burned a few hours trying to &quot;fix&quot; a compiler error that was caused by me &lt;code&gt;derive&lt;&#x2F;code&gt;&#x27;ing something I didn&#x27;t need to -- rude!&lt;&#x2F;p&gt;
+&lt;p&gt;There are plenty more features and polish I &lt;em&gt;could&lt;&#x2F;em&gt; add but I&#x27;m calling it here.
+It provides an interesting, thought-provoking, experience (for me) and that was my goal.
+I could tweak the sound, sand UX rough edges, add &lt;del&gt;micro-transactions&lt;&#x2F;del&gt; make it prettier to look at, but it works and I feel thoroughly un-blocked on my initial project.&lt;&#x2F;p&gt;
+&lt;p&gt;This took longer than I wanted, but I&#x27;m happy with how this side quest turned out.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>is linear search faster than HashMap&#x2F;HashSet for small sets?</title>
+        <published>2026-07-24T00:00:00+00:00</published>
+        <updated>2026-07-24T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Elijah Voigt
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://elijah.run/blog/linear-search/"/>
+        <id>https://elijah.run/blog/linear-search/</id>
+        
+        <content type="html" xml:base="https://elijah.run/blog/linear-search/">&lt;p&gt;I&#x27;ve heard from multiple sources that when you are operating on small sets, performance matters, like in the hot-path in a game that runs every frame, it is often better to use a &lt;code&gt;Vec&lt;&#x2F;code&gt; or some sort of array and to linearly search through the data through the data instead of using a &lt;code&gt;HashSet&lt;&#x2F;code&gt; or &lt;code&gt;HashMap&lt;&#x2F;code&gt;.
+The rationale is that while hash-based fetches and inserts are constant time, that may be a &lt;em&gt;high enough&lt;&#x2F;em&gt; constant time that just ripping through the array is faster.
+At some [small] size it must be faster to just iterate through the array instead of hashing a value...&lt;&#x2F;p&gt;
+&lt;p&gt;So is it?&lt;&#x2F;p&gt;
+&lt;p&gt;To test this out I made simple &lt;code&gt;VecSet&lt;&#x2F;code&gt; and &lt;code&gt;VecMap&lt;&#x2F;code&gt; that implement a limited subset of the &lt;code&gt;HashSet&lt;&#x2F;code&gt; and &lt;code&gt;HashMap&lt;&#x2F;code&gt; API, namely &lt;code&gt;insert&lt;&#x2F;code&gt;, &lt;code&gt;remove&lt;&#x2F;code&gt;, &lt;code&gt;get&lt;&#x2F;code&gt;, and &lt;code&gt;iter&lt;&#x2F;code&gt;.
+My implementation also went the route of storing &lt;code&gt;Option&amp;lt;T&amp;gt;&lt;&#x2F;code&gt; and &lt;code&gt;Option&amp;lt;(K,V)&amp;gt;&lt;&#x2F;code&gt; for &lt;code&gt;Set&lt;&#x2F;code&gt; and &lt;code&gt;Map&lt;&#x2F;code&gt; respectively, so I added a &lt;code&gt;compact()&lt;&#x2F;code&gt; method to remove &lt;code&gt;None&lt;&#x2F;code&gt; values from the storage; I could have done a &lt;code&gt;swap_remove&lt;&#x2F;code&gt; instead of Option&lt;T&gt;, since order doesn&#x27;t matter, but I don&#x27;t think it will really matter; our tests don&#x27;t do much get &lt;em&gt;and&lt;&#x2F;em&gt; set so we don&#x27;t generate many empty holes.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;aside-why-are-we-using-maps-and-sets-in-a-game&quot;&gt;Aside: Why are we using Maps and Sets in a game?&lt;&#x2F;h1&gt;
+&lt;p&gt;Both Hash and Vec Map&#x2F;Sets tend to allocate memory on the &lt;em&gt;heap&lt;&#x2F;em&gt; which I &lt;em&gt;also&lt;&#x2F;em&gt; hear is bad for games.
+Especially if you are allocating new memory every frame, the time to allocate memory (it is said) can dominate your frame time, drastically lowering your FPS.&lt;&#x2F;p&gt;
+&lt;p&gt;In Bevy it&#x27;s &lt;em&gt;much&lt;&#x2F;em&gt; more idiomatic to just make everything a Query, and do a &lt;code&gt;for (a, b, c) in query.iter()&lt;&#x2F;code&gt; or &lt;code&gt;for (mut a, b, c) in query.iter_mut()&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;So why do we need a Map or a Set?
+Basically: memoization.&lt;&#x2F;p&gt;
+&lt;p&gt;I often want to ask questions like &quot;What entities are &lt;em&gt;near&lt;&#x2F;em&gt; this entity?&quot; which falls into the category of &quot;You can derive this from existing components, but there isn&#x27;t a component to make this a &lt;code&gt;Query&lt;&#x2F;code&gt;&#x27;able directly.&quot;&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8cdaff;&quot;&gt;my_system&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;query&lt;&#x2F;span&gt;&lt;span&gt;: Query&amp;lt;Entity, With&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#f92649;color:#f8f8f0;&quot;&gt;??&lt;&#x2F;span&gt;&lt;span&gt;?&amp;gt;&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; ...
+&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; What would this look like??
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; ...
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;so instead we build a little cache every time the system executes:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8cdaff;&quot;&gt;my_system&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;foos&lt;&#x2F;span&gt;&lt;span&gt;: Query&amp;lt;(Entity, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span&gt;Coordinates), With&amp;lt;Foo&amp;gt;&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;bars&lt;&#x2F;span&gt;&lt;span&gt;: Query&amp;lt;(Entity, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span&gt;Coordinates), With&amp;lt;Foo&amp;gt;&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;mut &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;near_map&lt;&#x2F;span&gt;&lt;span&gt;: Local&amp;lt;HashMap&amp;lt;Entity, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;usize&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; Build the HashMap of Entity -&amp;gt; Number of neighbors
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; (Yes I prefer `query.iter().chain().things(|foo| ...)` over `for thing in query`)
+&lt;&#x2F;span&gt;&lt;span&gt;  near_map &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; foos.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;iter&lt;&#x2F;span&gt;&lt;span&gt;().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(|(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;e_foo&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;c_foo&lt;&#x2F;span&gt;&lt;span&gt;)| {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; Filter to just bar coordinates near foo&amp;#39;s coordinates
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; Sum the resulting set of 1s
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; near_foo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; bars
+&lt;&#x2F;span&gt;&lt;span&gt;      .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;iter&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;      .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;filter_map&lt;&#x2F;span&gt;&lt;span&gt;(|(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;e_bar&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;c_bar&lt;&#x2F;span&gt;&lt;span&gt;)| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;do_check&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;c_foo&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;c_bar&lt;&#x2F;span&gt;&lt;span&gt;).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;then_some&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;))
+&lt;&#x2F;span&gt;&lt;span&gt;      .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;sum&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; Return a tuple of (Entity, usize)
+&lt;&#x2F;span&gt;&lt;span&gt;    ( e_foo, near_foo )
+&lt;&#x2F;span&gt;&lt;span&gt;  }).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;collect&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; ... use near_map ...
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This both gives me a nice computed lookup table, and using Bevy&#x27;s &lt;code&gt;Local&amp;lt;T&amp;gt;&lt;&#x2F;code&gt; ensures I don&#x27;t re-allocate memory every frame, assuming I don&#x27;t you know... overlook something.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;benchmarking&quot;&gt;Benchmarking&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;I got Claude to write some benchmarks comparing VecSet vs HashSet and VecMap vs HashMap at different data volumes, 4, 8, etc up to 1024 elements&lt;&#x2F;li&gt;
+&lt;li&gt;Data was always u64s for keys and values&lt;&#x2F;li&gt;
+&lt;li&gt;Comparing against Bevy&#x27;s collections library which uses the non-standard &lt;a href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;bevy&#x2F;0.19.0&#x2F;bevy&#x2F;platform&#x2F;hash&#x2F;struct.FixedHasher.html&quot;&gt;FixedHasher&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;Optimizations turned &lt;em&gt;on&lt;&#x2F;em&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;All value are in nanoseconds.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h1 id=&quot;vecset-vs-hashset&quot;&gt;&lt;code&gt;VecSet&lt;&#x2F;code&gt; vs &lt;code&gt;HashSet&lt;&#x2F;code&gt;&lt;&#x2F;h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Winner is the fast implementation.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Operation&lt;&#x2F;th&gt;&lt;th&gt;Impl&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;4&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;8&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;16&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;32&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;64&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;128&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;256&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;512&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;1024&lt;&#x2F;th&gt;&lt;th&gt;Winner&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;iterate&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;6.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;11.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;21.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;42.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;89.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;172.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;337.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;670.2&lt;&#x2F;td&gt;&lt;td&gt;&lt;strong&gt;Vec, every N (~2×)&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;6.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;10.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;20.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;40.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;81.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;161.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;322.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;652.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1289.3&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;build (&lt;code&gt;collect&lt;&#x2F;code&gt;)&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;13.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;18.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;22.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;33.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;59.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;157.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;262.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;467.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;853.1&lt;&#x2F;td&gt;&lt;td&gt;&lt;strong&gt;Vec, every N (~4–6×)&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;55.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;88.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;139.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;232.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;454.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;738.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1346.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2767.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;5281.8&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;contains — hit&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;6.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;10.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;19.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;38.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;81.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;155.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;302.3&lt;&#x2F;td&gt;&lt;td&gt;Vec ≲8, else &lt;strong&gt;Hash&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;contains — miss&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;5.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;10.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;19.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;37.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;79.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;153.4&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;301.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;595.0&lt;&#x2F;td&gt;&lt;td&gt;&lt;strong&gt;Hash, every N&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.7&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;remove one&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;24.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;38.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;44.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;60.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;112.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;219.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;376.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;685.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1273.5&lt;&#x2F;td&gt;&lt;td&gt;Vec ≲8, else &lt;strong&gt;Hash&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;25.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;35.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;38.4&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;45.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;42.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;45.4&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;46.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;45.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;50.1&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;build (checked &lt;code&gt;insert&lt;&#x2F;code&gt;)&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;26.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;136.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;244.4&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;596.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1859.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;5916.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;21085&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;79255&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;308808&lt;&#x2F;td&gt;&lt;td&gt;Vec ≲48, else &lt;strong&gt;Hash&lt;&#x2F;strong&gt; (O(n²))&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;101.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;212.4&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;404.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;694.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1305.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2418.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4608.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;8849.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;17437.6&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;h1 id=&quot;vecmap-vs-hashmap&quot;&gt;&lt;code&gt;VecMap&lt;&#x2F;code&gt; vs &lt;code&gt;HashMap&lt;&#x2F;code&gt;&lt;&#x2F;h1&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Operation&lt;&#x2F;th&gt;&lt;th&gt;Impl&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;4&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;8&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;16&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;32&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;64&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;128&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;256&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;512&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;1024&lt;&#x2F;th&gt;&lt;th&gt;Winner&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;build (&lt;code&gt;collect&lt;&#x2F;code&gt;)&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecMap&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;15.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;17.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;25.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;42.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;129.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;201.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;353.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;651.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1240.7&lt;&#x2F;td&gt;&lt;td&gt;&lt;strong&gt;Vec, every N (~4×)&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashMap&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;51.4&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;88.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;137.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;298.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;468.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;794.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1428.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2874.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;5613.2&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;get — hit&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecMap&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;6.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;10.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;26.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;45.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;81.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;155.4&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;302.7&lt;&#x2F;td&gt;&lt;td&gt;Vec ≲8, else &lt;strong&gt;Hash&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashMap&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.2&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;get — miss&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecMap&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;5.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;10.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;25.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;37.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;80.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;155.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;301.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;596.9&lt;&#x2F;td&gt;&lt;td&gt;&lt;strong&gt;Hash, every N&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashMap&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;h1 id=&quot;just-use-rayon&quot;&gt;jUsT uSe RaYoN&lt;&#x2F;h1&gt;
+&lt;p&gt;After the initial results I thought &quot;surely we can parallelize the linear search right? Rayon makes things fast right?!&quot; and did a side-quest adding a &lt;code&gt;par_*&lt;&#x2F;code&gt; version of the &lt;code&gt;VecSet&lt;&#x2F;code&gt;&#x2F;&lt;code&gt;VecMap&lt;&#x2F;code&gt; types using Rayon as the underlying engine.
+Here are those results:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Operation&lt;&#x2F;th&gt;&lt;th&gt;Impl&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;64&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;1024&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;16384&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;262144&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;1048576&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;contains — miss&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecSet seq&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;57&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;892&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;14152&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;290913&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1281114&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecSet par&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;11330&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;17063&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;41296&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;308584&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1169997&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.7&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;remove one&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecSet seq&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;72&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;787&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;11928&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;266622&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;—&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecSet par&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;12485&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;18052&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;32334&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;244978&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;—&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;34&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;49&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;112&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;928&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;—&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;As it turns out, Rayon has &lt;em&gt;hella&lt;&#x2F;em&gt; overhead so for small sets like this the startup cost &lt;em&gt;way&lt;&#x2F;em&gt; overshadows the compute time.
+Rayon took &lt;em&gt;at least&lt;&#x2F;em&gt; 11-12 µs which makes it &lt;em&gt;much&lt;&#x2F;em&gt; slower at these small sizes.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Takeway: Rayon is great for processing &lt;em&gt;lots&lt;&#x2F;em&gt; of data, like in batch jobs.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;h2 id=&quot;what-about-micropool&quot;&gt;wHaT aBoUt MiCroPoOl&lt;&#x2F;h2&gt;
+&lt;p&gt;I heard about a cool library that&#x27;s basically &quot;Rayon for Games&quot; called &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;DouglasDwyer&#x2F;micropool&quot;&gt;micropool&lt;&#x2F;a&gt;.
+The main selling point is that it avoids some of the pitfalls of Rayon.&lt;&#x2F;p&gt;
+&lt;p&gt;The results were interesting!&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;contains — miss&lt;&#x2F;strong&gt; (ns):&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Impl&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;64&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;1024&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;16384&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;262144&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;1048576&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;VecSet seq&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;57&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;932&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;14834&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;306833&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1320048&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;VecSet par (rayon)&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;11330&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;17063&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;41296&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;308584&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1169997&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;VecSet par (micropool)&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;519&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1028&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;8141&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;173009&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1131319&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;HashSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.8&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;&lt;strong&gt;remove one&lt;&#x2F;strong&gt; (ns):&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Impl&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;64&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;1024&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;16384&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;262144&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;VecSet seq&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;78&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;802&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;12041&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;283219&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;VecSet par (rayon)&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;12485&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;18052&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;32334&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;244978&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;VecSet par (micropool)&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;608&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1455&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;12005&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;248263&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;HashSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;34&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;57&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;98&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;948&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;Micropool was &lt;em&gt;better&lt;&#x2F;em&gt; than Rayon but still not &lt;em&gt;nearly&lt;&#x2F;em&gt; good enough to beat an optimized build for either Hash nor Vec implementation.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;takeaways&quot;&gt;Takeaways&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Use &lt;code&gt;VecMap&lt;&#x2F;code&gt; and &lt;code&gt;VecSet&lt;&#x2F;code&gt; when I want to memoize a set and iterate over every element sequentally.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Use &lt;code&gt;HashMap&lt;&#x2F;code&gt; and &lt;code&gt;HashSet&lt;&#x2F;code&gt; if you intend to search for specific elements in the set.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h1 id=&quot;notes&quot;&gt;Notes&lt;&#x2F;h1&gt;
+&lt;p&gt;A few admissions:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;I didn&#x27;t test this against Bevy&#x27;s &lt;code&gt;Query&lt;&#x2F;code&gt; nor did I test it against Rust&#x27;s stdlib &lt;code&gt;DefaultHasher&lt;&#x2F;code&gt;, which I expect to perform worse but that would just move the line not change the story.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;We could probably improve search performance in the &lt;code&gt;Vec*&lt;&#x2F;code&gt; implementations to get better performance, like sorting elements or... something. That wasn&#x27;t the point of this exploration though. The bit is to see if we are leaving an obvoius naive optimization on the table.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;It&#x27;s tempting to turn &lt;code&gt;VecSet&lt;&#x2F;code&gt; and &lt;code&gt;VecMap&lt;&#x2F;code&gt; into a library, if it isn&#x27;t already, but I promise it was a &lt;em&gt;very&lt;&#x2F;em&gt; quick type to implement, and even after building it out I&#x27;m &lt;em&gt;not&lt;&#x2F;em&gt; using it in my game because the use-case for it is niche enough that I haven&#x27;t actually &lt;em&gt;needed&lt;&#x2F;em&gt; it.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h1&gt;
+&lt;p&gt;So in conclusion... wait -- now that I think about it... a set that you always want to iterate over is... a Vec.
+So this is basically nothing!
+This is just Vec with more steps!&lt;&#x2F;p&gt;
+&lt;p&gt;Happy hacking~&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>🐦 flappy bird (with rewind)⏳</title>
+        <published>2025-09-01T00:00:00+00:00</published>
+        <updated>2025-09-01T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Elijah Voigt
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://elijah.run/games/flappy/"/>
+        <id>https://elijah.run/games/flappy/</id>
+        
+        <content type="html" xml:base="https://elijah.run/games/flappy/">&lt;video autoplay=true&gt;
+  &lt;source src=&quot;&#x2F;images&#x2F;games&#x2F;flappy.mp4&quot;&gt;&lt;&#x2F;source&gt;
+&lt;&#x2F;video&gt;
+&lt;ul&gt;
+&lt;li&gt;free (in-browser): &lt;a href=&quot;https:&#x2F;&#x2F;popgame.itch.io&#x2F;flappy&quot;&gt;popgame.itch.io&#x2F;flappy&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;tools: &lt;a href=&quot;https:&#x2F;&#x2F;bevy.org&quot;&gt;bevy&lt;&#x2F;a&gt; (engine), &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Jondolf&#x2F;avian&quot;&gt;avian&lt;&#x2F;a&gt; (physics), &lt;a href=&quot;https:&#x2F;&#x2F;www.blender.org&#x2F;&quot;&gt;blender&lt;&#x2F;a&gt; (visuals)&lt;&#x2F;li&gt;
+&lt;li&gt;developed: july - august 2025, released: september 2025&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Around June of 2025 I decided to focus on making many small games by copying existing ideas and adding a fun twist.
+&lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Flappy_Bird&quot;&gt;Flappy Bird&lt;&#x2F;a&gt; came to mind as a simple game to start with, and because I was playing &lt;a href=&quot;https:&#x2F;&#x2F;store.steampowered.com&#x2F;app&#x2F;499180&#x2F;Braid_Anniversary_Edition&#x2F;&quot;&gt;Braid, Anniversery Edition&lt;&#x2F;a&gt; the idea of using rewind in some way came about naturally.
+I was especially interested because rewind seemed easy to implement given the limited mechanics and I was genuinely curious if it would make the game more or less fun.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>🎴 set</title>
+        <published>2025-01-31T00:00:00+00:00</published>
+        <updated>2025-01-31T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Elijah Voigt
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://elijah.run/games/set/"/>
+        <id>https://elijah.run/games/set/</id>
+        
+        <content type="html" xml:base="https://elijah.run/games/set/">&lt;style&gt; p&gt;img { width: 100%; } &lt;&#x2F;style&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;games&#x2F;set.gif&quot; alt=&quot;set gameplay&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;free (in-browser): &lt;a href=&quot;https:&#x2F;&#x2F;popgame.itch.io&#x2F;set&quot;&gt;popgame.itch.io&#x2F;set&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;tools: &lt;a href=&quot;https:&#x2F;&#x2F;bevy.org&quot;&gt;bevy&lt;&#x2F;a&gt; (engine), &lt;a href=&quot;https:&#x2F;&#x2F;rx.cloudhead.io&#x2F;&quot;&gt;rx&lt;&#x2F;a&gt; (visuals)&lt;&#x2F;li&gt;
+&lt;li&gt;developed: january 2025, released: january 31, 2025&lt;&#x2F;li&gt;
+&lt;li&gt;music by &lt;a href=&quot;https:&#x2F;&#x2F;greatmist.bandcamp.com&#x2F;&quot;&gt;Sam Hall&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;For a house art show I put together this very rudimentary single-player version of &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Set_(card_game)&quot;&gt;Set!&lt;&#x2F;a&gt; and setup a laptop in the corner for people to play.
+Every single introvert played a few rounds and gave me some great feedback.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>🪐 martian chess♟️</title>
+        <published>2024-05-01T00:00:00+00:00</published>
+        <updated>2024-05-01T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Elijah Voigt
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://elijah.run/games/martian-chess/"/>
+        <id>https://elijah.run/games/martian-chess/</id>
+        
+        <content type="html" xml:base="https://elijah.run/games/martian-chess/">&lt;style&gt; p&gt;img { width: 100%; } &lt;&#x2F;style&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;games&#x2F;martian-chess.gif&quot; alt=&quot;martian chess gameplay&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;free (download): &lt;a href=&quot;https:&#x2F;&#x2F;liquidmirror.itch.io&#x2F;martian-chess&quot;&gt;liquidmirror.itch.io&#x2F;martian-chess&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;tools: &lt;a href=&quot;https:&#x2F;&#x2F;bevy.org&quot;&gt;bevy&lt;&#x2F;a&gt; (engine), &lt;a href=&quot;https:&#x2F;&#x2F;www.fmod.com&#x2F;&quot;&gt;fmod&lt;&#x2F;a&gt; (audio), [blender] (visuals)&lt;&#x2F;li&gt;
+&lt;li&gt;developed: late 2023 - early 2024, released: may 2024&lt;&#x2F;li&gt;
+&lt;li&gt;visuals and music by &lt;a href=&quot;https:&#x2F;&#x2F;greatmist.bandcamp.com&#x2F;&quot;&gt;Sam Hall&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;After failing for more than a year to make progess on an original game idea, I brought the idea of implementing &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Martian_chess&quot;&gt;Martian Chess&lt;&#x2F;a&gt; to Sam.
+The idea being the game design was &quot;done&quot; and the value we were adding was appealing visuals and music.
+Sam agreed and we spent a few months making on our first finished game: Martian Chess.
+We contacted the publishers of the original board game and let them know of the project; they agreed to let us develop the game with the caveat that we not make money from it.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>
