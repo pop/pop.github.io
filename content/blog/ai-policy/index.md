@@ -45,7 +45,7 @@ Guiding principles:
 
 ![b1v5ne.jpg](b1v5ne.jpg)
 
-Example: "It's better to have crappy MS Paint art than to have nice clean Generated art."
+Example: "It's better to have crappy MS Paint art than to have nice clean AI Generated art."
 
 # 3. Disclosure
 
