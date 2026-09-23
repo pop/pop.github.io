@@ -7,7 +7,7 @@ path = "/gen-ai-policy"
 +++
 
 > This is my personal Generative AI Policy.
-> Unless otherwise specified, this policy applies to all content on this website, or the content this was linked alongside.
+> Unless otherwise specified, this policy applies to all content on this website, or the media this was linked alongside.
 
 # 0. Scope of Policy
 
