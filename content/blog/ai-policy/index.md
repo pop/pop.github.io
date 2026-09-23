@@ -1,7 +1,7 @@
 +++
 title = "Generative AI Policy"
-date = "2026-09-04"
-description = "My personal AI usage policy"
+date = "2026-09-23"
+description = "Elijah Voigt's AI usage policy"
 taxonomies.tags = ["gen-ai"]
 path = "/gen-ai-policy"
 +++
