@@ -18,6 +18,7 @@ This policy promises limits on how much, if any, Generative AI is used in publis
 * Fiction
 * Images
 * Movies
+* Videos
 
 You know... art.
 
