@@ -50,7 +50,7 @@ Example: "It's better to have crappy MS Paint art than to have nice clean AI Gen
 # 3. Disclosure
 
 Any time Generative AI is included in the final product in any way, that usage must be disclosed.
-Disclosure should be specific as to what was generated. 
+Disclosure should be specific about what was generated.
 
 Guiding principle: *The audience should not need to "guess" if something was made using AI*
 
