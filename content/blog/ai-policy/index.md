@@ -30,23 +30,29 @@ You know... art.
 2. Generating or refactoring tedious, time consuming, or error prone code.
 3. Editing pros for written content like blog posts.
 
-The guiding principle is "I can do these things myself, this just gets me there faster".
+Guiding principle: *I can do these things myself, this just gets me there faster*.
 
-# 2. Where Generative AI will not be used
+Example: *I used an LLM to upgrade my game to the latest version of the Bevy game engine after reviewing the change announcements*.
+
+# 2. Where Generative AI is not used
 
 Generative AI may *never* be used to generate final art nor placeholder art; including visual, audio, and written pros.
 
-The guiding principles being
+Guiding principles:
 
-1. Where the art is the point, a person should be making it.
-2. If you can't do it yourself, you shouldn't have an AI model do it for you.
+1. *Where the art is the point, a person should be making it.*
+2. *If you can't do it yourself, you shouldn't have an AI model do it for you.*
 
 ![b1v5ne.jpg](b1v5ne.jpg)
+
+Example: "It's better to have crappy MS Paint art than to have nice clean Generated art."
 
 # 3. Disclosure
 
 Any time Generative AI is included in the final product in any way, that usage must be disclosed.
 Disclosure should be specific as to what was generated. 
 
-Example: *Generative AI was used to copy-edit this chapter*
+Guiding principle: *The audience should not need to "guess" if something was made using AI*
+
+Example: *Generative AI was used as an editor for the opening of this book*
 
