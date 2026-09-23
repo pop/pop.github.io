@@ -11,15 +11,13 @@ path = "/gen-ai-policy"
 
 # 0. Scope of Policy
 
-This policy is meant to set limits on where and how much Generative AI may be used in published creative works.
-
-These can include:
-* Blog posts.
-* Video games.
-* Websites.
-* Fiction.
-* Images.
-* Movies.
+This policy promises limits on how much, if any, Generative AI is used in published creative works such as
+* Blog posts
+* Video games
+* Websites
+* Fiction
+* Images
+* Movies
 
 You know... art.
 
