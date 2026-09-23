@@ -30,13 +30,16 @@ You know... art.
 2. Generating or refactoring tedious, time consuming, or error prone code.
 3. Editing pros for written content like blog posts.
 
-The guiding principle is "It gets me where I'm going, just faster".
+The guiding principle is "I can do these things myself, this just gets me there faster".
 
 # 2. Where Generative AI will not be used
 
 Generative AI may *never* be used to generate final art nor placeholder art; including visual, audio, and written pros.
 
-The guiding principle is "If you can't do it yourself, you shouldn't have an LLM do it for you".
+The guiding principles being
+
+1. Where the art is the point, a person should be making it.
+2. If you can't do it yourself, you shouldn't have an AI model do it for you.
 
 ![b1v5ne.jpg](b1v5ne.jpg)
 
