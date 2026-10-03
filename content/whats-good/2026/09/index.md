@@ -1,7 +1,7 @@
 +++
 title = "What's Good #24"
 date = "2026-10-02"
-description = ""
+description = "Dragon Boat races, Steam Frame, and Twisted Tower"
 taxonomies.tags = ["whats-good"]
 +++
 
