@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>elijah.run - set</title>
+    <subtitle>A blog about tech, media, and art</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://elijah.run/tags/set/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://elijah.run"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2025-01-31T00:00:00+00:00</updated>
+    <id>https://elijah.run/tags/set/atom.xml</id>
+    <entry xml:lang="en">
+        <title>🎴 set</title>
+        <published>2025-01-31T00:00:00+00:00</published>
+        <updated>2025-01-31T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Elijah Voigt
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://elijah.run/games/set/"/>
+        <id>https://elijah.run/games/set/</id>
+        
+        <content type="html" xml:base="https://elijah.run/games/set/">&lt;style&gt; p&gt;img { width: 100%; } &lt;&#x2F;style&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;games&#x2F;set.gif&quot; alt=&quot;set gameplay&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;free (in-browser): &lt;a href=&quot;https:&#x2F;&#x2F;popgame.itch.io&#x2F;set&quot;&gt;popgame.itch.io&#x2F;set&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;tools: &lt;a href=&quot;https:&#x2F;&#x2F;bevy.org&quot;&gt;bevy&lt;&#x2F;a&gt; (engine), &lt;a href=&quot;https:&#x2F;&#x2F;rx.cloudhead.io&#x2F;&quot;&gt;rx&lt;&#x2F;a&gt; (visuals)&lt;&#x2F;li&gt;
+&lt;li&gt;developed: january 2025, released: january 31, 2025&lt;&#x2F;li&gt;
+&lt;li&gt;music by &lt;a href=&quot;https:&#x2F;&#x2F;greatmist.bandcamp.com&#x2F;&quot;&gt;Sam Hall&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;For a house art show I put together this very rudimentary single-player version of &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Set_(card_game)&quot;&gt;Set!&lt;&#x2F;a&gt; and setup a laptop in the corner for people to play.
+Every single introvert played a few rounds and gave me some great feedback.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

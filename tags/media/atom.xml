@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>elijah.run - media</title>
+    <subtitle>A blog about tech, media, and art</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://elijah.run/tags/media/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://elijah.run"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2025-12-25T00:00:00+00:00</updated>
+    <id>https://elijah.run/tags/media/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Media Mono-Tasking</title>
+        <published>2025-12-25T00:00:00+00:00</published>
+        <updated>2025-12-25T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Elijah Voigt
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://elijah.run/blog/media-monotasking/"/>
+        <id>https://elijah.run/blog/media-monotasking/</id>
+        
+        <content type="html" xml:base="https://elijah.run/blog/media-monotasking/">&lt;p&gt;I, like many people in 2025, have a looooong list of games, movies, tv, and books that I want to enjoy sometime between now and death.&lt;&#x2F;p&gt;
+&lt;p&gt;Some tools I have created to deal with this problem include a &lt;a href=&quot;&#x2F;backlog&#x2F;&quot;&gt;backlog&lt;&#x2F;a&gt;, and a &lt;a href=&quot;&#x2F;whats-good&#x2F;&quot;&gt;monthly reflection on what I enjoyed&lt;&#x2F;a&gt;.
+These both help me focus; I either finish a piece of media or I give up entirely.
+None of this &quot;Oh I started five books and two shows and a dozen games this month&quot; no: either finish what you started, or basnish it to the shadow realm; there is too much good stuff to drag a bunch of half finish &lt;em&gt;stuff&lt;&#x2F;em&gt; around too.&lt;&#x2F;p&gt;
+&lt;p&gt;Between work, taking care of the kids, walking the dog, keeping the house tidy, eating, sleeping, keeping up with friends, and exercising I have ~1-2 hours of &quot;me time&quot; per day to spend on &lt;em&gt;whatever&lt;&#x2F;em&gt;.
+In the past I woud mindlessly scroll for &lt;em&gt;hours&lt;&#x2F;em&gt; after work and on the weekends, but I had to &lt;a href=&quot;&#x2F;whats-good&#x2F;2024&#x2F;10&#x2F;#tech-screenzen&quot;&gt;lock that shit down&lt;&#x2F;a&gt; pretty quick after having a kid; life&#x27;s too short to waste perfectly good free time.&lt;&#x2F;p&gt;
+&lt;p&gt;Ok here&#x27;s the thing: between What&#x27;s Good and The Backlog I feel &lt;em&gt;ok&lt;&#x2F;em&gt; about my media focus, but I think I can do better.
+I still find myself starting games I never finish, starting a book on the 1st of the month that&#x27;s barely half way done by the end, and mindlessly scrolling the one app I didn&#x27;t lock down yet-- am I really scrolling Libby?&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;the-proposal&quot;&gt;The Proposal&lt;&#x2F;h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Do One Thing at a Time.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;If you start reading a book, watching a show, listening to a podcast, &lt;em&gt;whatever&lt;&#x2F;em&gt;, that&#x27;s the only media you consume until you either complete it or abandon that forever.&lt;&#x2F;p&gt;
+&lt;p&gt;Not one &lt;strong&gt;book&lt;&#x2F;strong&gt; at a time, or one &lt;strong&gt;movie&lt;&#x2F;strong&gt; at a time, but one &lt;em&gt;thing&lt;&#x2F;em&gt; at a time, across all media.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Start a movie? You cannot stop half way through and listen to a podcast while you do dishes.&lt;&#x2F;li&gt;
+&lt;li&gt;Start a videogame? Git gud or you&#x27;re gonna get really bored.&lt;&#x2F;li&gt;
+&lt;li&gt;Start reading a book? Get cozy af because you&#x27;re locked in.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Of course you can go about your life eating and sleeping and working, but the only &lt;em&gt;media&lt;&#x2F;em&gt; you can consume is &lt;em&gt;the thing&lt;&#x2F;em&gt; until it is done or you call it quits.&lt;&#x2F;p&gt;
+&lt;p&gt;Done is subjective, but you get the idea.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Roll credits on a movie.&lt;&#x2F;li&gt;
+&lt;li&gt;Finish the last chapter in a book.&lt;&#x2F;li&gt;
+&lt;li&gt;Finish a season of television.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;it-s-not-quite-that-simple&quot;&gt;It&#x27;s not quite that simple&lt;&#x2F;h2&gt;
+&lt;p&gt;I mean you totally could just do that, but you&#x27;d spend a lot of time driving in silence because you started playing Elden Ring and it&#x27;s good but you&#x27;re &lt;em&gt;really bad&lt;&#x2F;em&gt; at souls-likes.&lt;&#x2F;p&gt;
+&lt;p&gt;And honestly truly doing one thing at a time is like the &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Jain_vegetarianism&quot;&gt;Jain vegetarianism&lt;&#x2F;a&gt; of media diets, it&#x27;s the most intense version.&lt;&#x2F;p&gt;
+&lt;p&gt;I propose, and will personally strive, for a more moderate version which is going to use the following categories to guide our media decisions:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Active Media: (Videogames) media that requires your participation.
+&lt;ul&gt;
+&lt;li&gt;Solving puzzles, shooting zombies, stuff like that.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Active Visual Media: (Books) media that requires your attention.
+&lt;ul&gt;
+&lt;li&gt;You don&#x27;t need to solve puzzles, but you do need to flip pages.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Passive Visual Media: (Movies&#x2F;TV&#x2F;Videos) benefits from attention.
+&lt;ul&gt;
+&lt;li&gt;The media will move on without you, but you should be keeping up.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Passive Media: (Music&#x2F;Podcasts&#x2F;Audiobooks) you can put it on in the background.
+&lt;ul&gt;
+&lt;li&gt;This is &quot;Doing the Dishes&quot; stuff.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;elijah.run&#x2F;blog&#x2F;media-monotasking&#x2F;flow-diagram.jpg&quot; alt=&quot;A diagram showing the decision tree of what media to consume when&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I&#x27;m going to call these &quot;Media Moods&quot; because &quot;Media Situations&quot; feels clunky.
+You totally &lt;em&gt;can&lt;&#x2F;em&gt; do these based on mood, it&#x27;s just simpler to describe situations that limit what you &lt;em&gt;can&lt;&#x2F;em&gt; do rather than the more fuzzy &lt;em&gt;what you want to do&lt;&#x2F;em&gt;.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;For each of these moods I would pick a single piece of media to engage with.
+Any time you are in that mood, you are reading&#x2F;watching&#x2F;listening to that thing, until that thing is done.&lt;&#x2F;p&gt;
+&lt;p&gt;For example:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;While I am rowing I finish a movie (passive visual) I started yesterday.&lt;&#x2F;li&gt;
+&lt;li&gt;Later I am cleaning up the house, so I finish a podcast (passive) I stared that morning.&lt;&#x2F;li&gt;
+&lt;li&gt;In the evening I play a puzzle game (active) I have been working on for a few days.&lt;&#x2F;li&gt;
+&lt;li&gt;Until I decide my brain is tired and I want to do something else, so I read this month&#x27;s book (active visual).&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Yes, I am drawing an arbitrary line between &quot;Active&quot; and &quot;Active Visual&quot; for convenience; you could totally merge those to simplify things even further.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;This means that you have &lt;em&gt;some&lt;&#x2F;em&gt; choice of media based on your circumstances, but there is still a prescriptive framework around what you &lt;em&gt;should&lt;&#x2F;em&gt; be doing media-wise to avoid getting easily distracted.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;this-is-not-for-everybody&quot;&gt;This is not for everybody&lt;&#x2F;h2&gt;
+&lt;p&gt;It goes without saying, this is a framework for burning down a backlog.
+Even more so, it is for people who have very little time to burn that backlog, and they need to squeeze every minute out of their days to make any progress on that project.&lt;&#x2F;p&gt;
+&lt;p&gt;If you don&#x27;t have a backlog, or you already have a healthy way of handling your backlog, this is probably not for you.&lt;&#x2F;p&gt;
+&lt;p&gt;It&#x27;s also not compatible with like... roommates.
+You should definitely make an exception to whatever your media backlog dictates if it means having a good time with friends and&#x2F;or family.
+Don&#x27;t be weird about it please.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;this-is-a-thing-i-am-trying&quot;&gt;This is a thing I am trying&lt;&#x2F;h2&gt;
+&lt;p&gt;It would be awesome if I could say this is something I&#x27;ve been doing for a year and it&#x27;s worked flawlessly -- but no.
+This is just a thing I am starting and trying in hopes that it will improve my backlog burn rate.&lt;&#x2F;p&gt;
+&lt;p&gt;And if it doesn&#x27;t we&#x27;ll learn something too.
+Either way, I&#x27;ll keep you posted.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

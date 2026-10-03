@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>elijah.run - history</title>
+    <subtitle>A blog about tech, media, and art</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://elijah.run/tags/history/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://elijah.run"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2026-03-12T00:00:00+00:00</updated>
+    <id>https://elijah.run/tags/history/atom.xml</id>
+    <entry xml:lang="en">
+        <title>pop</title>
+        <published>2026-03-12T00:00:00+00:00</published>
+        <updated>2026-03-12T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Elijah Voigt
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://elijah.run/blog/pop/"/>
+        <id>https://elijah.run/blog/pop/</id>
+        
+        <content type="html" xml:base="https://elijah.run/blog/pop/">&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;elijah.run&#x2F;blog&#x2F;pop&#x2F;github.com.pop.png&quot; alt=&quot;github.com&#x2F;pop&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;every time i start a new job folks slowly realize that my github is &lt;code&gt;pop&lt;&#x2F;code&gt;.
+one might expect &lt;code&gt;elijahvoigt&lt;&#x2F;code&gt; (simple and to the point) or &lt;code&gt;evoigt-companyname&lt;&#x2F;code&gt; if i created a new account for each job, or even &lt;code&gt;pop-n-fresh&lt;&#x2F;code&gt; if i wanted to be funny.&lt;&#x2F;p&gt;
+&lt;p&gt;i take more pride in having the name &lt;code&gt;pop&lt;&#x2F;code&gt; than i probably should -- it&#x27;s just a github account after all -- but i have a [very open] secret: i&#x27;m not the first person to have github.com&#x2F;pop.
+&lt;em&gt;&lt;strong&gt;i stole it.&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;ok that&#x27;s a bit dramatic.
+here&#x27;s the story.&lt;&#x2F;p&gt;
+&lt;p&gt;originally i had &lt;code&gt;popnfresh&lt;&#x2F;code&gt; because that was my freenode irc handle, it was available, i thought the name was funny, and i liked making deep cut references to red vs blue.
+eventually i scooped up &lt;code&gt;pop&lt;&#x2F;code&gt; on freenode (i don&#x27;t have receipts for that one unfortunately) because it&#x27;s short and short usernames are a flex.&lt;&#x2F;p&gt;
+&lt;p&gt;after being pop on freenode for a bit, the thought crossed my mind &quot;i wonder if i can be pop... everywhere.&quot;
+this was 2016 so of course i was too late for the big sites like twitter but maybe... was github.com&#x2F;pop taken?
+i checked and... yes &lt;em&gt;but&lt;&#x2F;em&gt; the account was inactive; at least publicly.
+so i submitted a support ticket requesting the username.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;elijah.run&#x2F;blog&#x2F;pop&#x2F;rejection.png&quot; alt=&quot;rejection.png&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;...and was promptly rejected.
+womp womp.
+oh well, maybe i can just settle for popnfresh.&lt;&#x2F;p&gt;
+&lt;p&gt;but it kept bugging me.
+that &lt;code&gt;pop&lt;&#x2F;code&gt; wasn&#x27;t using it.
+i would be a &lt;code&gt;pop&lt;&#x2F;code&gt; for good.
+i &lt;em&gt;deserved&lt;&#x2F;em&gt; that username.
+it was my precocious...&lt;&#x2F;p&gt;
+&lt;p&gt;so a little over a year later i submitted &lt;em&gt;another&lt;&#x2F;em&gt; request and this time...&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;elijah.run&#x2F;blog&#x2F;pop&#x2F;redemption.png&quot; alt=&quot;thank you laurie&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;it worked!
+the &lt;code&gt;pop&lt;&#x2F;code&gt; name was freed and i did a little digital land-grab and scooped it up!&lt;&#x2F;p&gt;
+&lt;p&gt;fun fact: about once a year &lt;code&gt;@pop&lt;&#x2F;code&gt;, usually some programming syntax, gets included in a github discussion i get pinged. &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;btmartin721&#x2F;ClineHelpR&#x2F;issues&#x2F;34#issue-2553371911&quot;&gt;this is the latest one&lt;&#x2F;a&gt; as of writing.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>
