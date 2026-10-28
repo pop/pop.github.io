@@ -6,7 +6,7 @@ taxonomies.tags = ["backlog", "movies"]
 +++
 
 In the spirit of Halloween, I've been watching horror movies.
-I picked this horror movie from my "to watch" list sort of at random, sort of based on the post.
+I picked this one from my "to watch" list sort of at random, sort of based on the post.
 
 ![The House That Jack Built (2018)](the_house_that_jack_built.png)
 
