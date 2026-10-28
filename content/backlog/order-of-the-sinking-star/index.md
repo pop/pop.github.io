@@ -1,10 +1,14 @@
 +++
-title = "Order of the Sinking Star (demo)"
+title = "Order of the Sinking Star (2026)"
 date = "2026-07-11"
-# updated = "2026-12-31" ??
-description = "I spent 16 hours playing this DEMO so you gotta trust me it's good"
+updated = "2026-10-28"
+description = "The full game..."
 taxonomies.tags = ["games", "backlog"]
 +++
+
+
+
+# Demo
 
 The description is correct, I did in fact play the demo of this game for 16 hours.
 I am incredibly hyped for this game if you couldn't already tell.
