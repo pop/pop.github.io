@@ -12,7 +12,10 @@ I picked this horror movie from my "to watch" list sort of at random, sort of ba
 
 I went in with no expectations and was surprised to find a truly rotten movie, which was a pleasant surprise.
 
-Rotten media is an interesting subgenre of horror.
-This movie, for example, is told from the perspective of a serial killer.
-He's the main character but, obviously, not the hero.
+I'm not sure what else to add.
+I really like Rotten media, as a subgenre of Horror, but I haven't figured out why I like it more than other horror.
 
+Yes the main character is a piece of shit, yes he kills people, don't worry he gets what he deserves.
+
+I especially like the visuals at the end where Jack... let's say he goes on a journey.
+It's a very painterly scene.
