@@ -17,4 +17,4 @@ There's a scene where the main protagonist is searching for something, anything,
 At each step she's like "Nope nope nope" which felt _very_ video-gamey.
 Ever single horror game I've played I find where I need to go, but there's a big monster or creepy hallway in the way so I need like... convince myself to do it even though I really don't want to.
 
-Also Zach Cregger ended up doing a good Resident Evil movie so I think it's fair to assume he's a fan of games and video games have informed his filmmaking at least a little bit.
+Also Zach Cregger ended up doing a good Resident Evil movie so I'm choosing to believe he's a fan of games and that video games have informed his filmmaking at least a little bit.
