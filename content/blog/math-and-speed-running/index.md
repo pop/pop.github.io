@@ -18,6 +18,8 @@ The connection being in speed running a game doesn't just have one speed run, it
 
 To further draw a connection, speed running also has tool assisted runs, which feels similar to using Lean proof assistance, or LLMs to build a proof. Using tools in speed running is usually a different category but it's not better or worse than other categories and still involves lots of work and research and refinement.
 
-3Blue1Brown is generally optimistic about gen-ai in math, and this model of collaboration seems to be the direction he's pointing in for where mathematics can go as we enter into a post proof scarcity era. 
+3Blue1Brown is generally optimistic about gen-ai in math, and this model of collaboration seems to be the direction he's pointing in for where mathematics can go as we enter into a post proof scarcity era. Instead of mathematicians being expected to "get" a proof, they should focus on finding meaning in proofs to build the foundations of knowledge. I'm a fan of this optimistic angle on the state and future of math.
 
 So there you have it. Area man draws broad conclusions about two fields he has only a relatively simplistic understanding of. Thank you for reading. 
+
+Side note: in this interview I was exposed to the idea of AI veganism which implies AI vegetarianism and I think that accurately describes my personal use of AI. 
