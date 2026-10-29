@@ -13,7 +13,7 @@ In [a recent interview](https://youtu.be/LvvG21CpaS4?t=3149) between Hank Green 
 > [...] Why don't we just say [Author 1] and [Author 2] really helped push forward our knowledge on this subject. 
 
 
-I really like this point and it reminded me of speed running. I'm not an active participant in speed running, but I'm a fan of the community and especially like [this video by Marblr about a Portal glitch and its impact on Portal speed running](https://youtu.be/a9c4jrgfhsk).
+I really like this point and it reminded me of speed running. I'm not an active participant in speed running, but I'm a fan of the community and especially like [this video by Marblr about a Portal glitch and its impact on Portal speed running](https://youtu.be/a9c4jrgfhsk). It's a great watch and a good intro to speed running. 
 
 The connection, because I'm sure it's not self evident, is that in speed running a game doesn't just have one speed run, it has many speed runs all contributing different techniques and building on each other's work. One run may add a new glitch, another run may use that glitch in a different level or with a little more fines to shave off a second or two. Every record is expected to be broken at some point, likely using lessons from the previous records.
 
