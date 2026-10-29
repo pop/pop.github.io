@@ -1,7 +1,7 @@
 +++
 title = "Math and speed running"
 date = "2026-10-29"
-description = ""
+description = "Not to be confused with speed running math... "
 taxonomies.tags = ["connections", "math", "gen-ai", "speed-running"] 
 +++
 
