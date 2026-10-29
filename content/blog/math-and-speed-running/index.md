@@ -10,7 +10,8 @@ In [a recent interview](https://youtu.be/LvvG21CpaS4?t=3149) between Hank Green 
 > (... on the topic of proofs no longer being the difficult part of mathematics...) 
 > Green: Now its like just write the great paper and we'll choose which one we think is the better one?
 > Sanders: Why do you have to choose the best?
-> [...] Why don't we just say [Author 1] and [Author 2] really helped push forward our knowledge on this subject. 
+> This is where the age of heros is dead and maybe it should be dead.
+> Why don't we just say [Author 1] and [Author 2] really helped push forward our knowledge on this subject. 
 
 I really like this point and it reminded me of speed running. I'm not an active participant in speed running, but I'm a fan of the community and especially like [this video by Marblr about a Portal glitch and its impact on Portal speed running](https://youtu.be/a9c4jrgfhsk). It's a great watch and a good intro to speed running. 
 
