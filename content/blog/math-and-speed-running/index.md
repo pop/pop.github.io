@@ -8,10 +8,10 @@ taxonomies.tags = ["connections", "math", "gen-ai", "speed-running"]
 In [a recent interview](https://youtu.be/LvvG21CpaS4?t=3149) between Hank Green and Grant Sanders (3Blue1Brown), Sanders mentioned his take that given where LLMs are and their rate of progress its likely that finding proofs in math should be less focused on "First Past the Post", i.e., who proved it first gets credit for the discovery. Finding proofs will be relatively easy, the hard part will be finding meaning and conveying that to others so they can  synthesize meaning and build on that knowledge effectively. What's important stops being who proves something first, but rather who, or what combination of people, understand it best.
 
 > (... on the topic of proofs no longer being the difficult part of mathematics...) 
-> Green: Now its like just write the great paper and we'll choose which one we think is the better one?
-> Sanders: Why do you have to choose the best?
-> This is where the age of heros is dead and maybe it should be dead.
-> Why don't we just say [Author 1] and [Author 2] really helped push forward our knowledge on this subject. 
+> * Green: Now its like just write the great paper and we'll choose which one we think is the better one?
+> * Sanders: Why do you have to choose the best?
+>   This is where the age of heros is dead and maybe it should be dead.
+>   Why don't we just say [Author 1] and [Author 2] really helped push forward our knowledge on this subject. 
 
 I really like this point and it reminded me of speed running. I'm not an active participant in speed running, but I'm a fan of the community and especially like [this video by Marblr about a Portal glitch and its impact on Portal speed running](https://youtu.be/a9c4jrgfhsk). It's a great watch and a good intro to speed running. 
 
