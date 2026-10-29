@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>elijah.run</title>
+  <meta name="title" content="How I use typst">
+<meta name="og:title" content="How I use typst">
+
+<meta name="og:type" content="article">
+
+
+
+
+<meta name="description" content="Is typst objectively better than LaTeX? Maybe!">
+<meta name="og:description" content="Is typst objectively better than LaTeX? Maybe!">
+
+<meta name="referrer" content="strict-origin-when-cross-origin">
+  
+  <link rel="alternate" type="application/atom+xml" title="elijah.run" href="https://elijah.run/atom.xml">
+  <style>
+/* http://bettermotherfuckingwebsite.com/ */
+body {
+    margin: 40px auto;
+    max-width: 650px;
+    line-height: 1.6;
+    font-size: 18px;
+    color: #000;
+    padding: 0 10px
+}
+h1,h2,h3{
+    line-height:1.2
+}
+
+ul.stuff>li {
+    padding-left: 0;
+    list-style: none;
+}
+
+blockquote {
+    margin: 0;
+    border-left: 3px solid black;
+    padding-left: 16px;
+}
+
+div.note {
+    margin: 0;
+    border-left: 3px solid blue;
+    padding-left: 16px;
+}
+.note-title {
+    font-weight: bold;
+}
+
+div.warning {
+    margin: 0;
+    border-left: 3px solid orange;
+    padding-left: 16px;
+}
+.warning-title {
+    font-weight: bold;
+}
+
+div.ai-disclosure {
+    margin: 0 0 16px 0;
+    border-left: 3px solid magenta;
+    padding-left: 16px;
+}
+.ai-disclosure-title {
+    font-weight: bold;
+}
+
+ul {
+    padding-left: 1ch;
+    list-style: square;
+}
+
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+header {
+    /* todo */
+}
+
+nav {
+    /* todo */
+}
+
+main {
+    max-width: 100%;
+    padding: 1ch;
+}
+
+footer{
+    /* todo */
+}
+
+h1,h2,h3,h4,h5,.console,ul.stuff {
+    font-family:
+        /* Modern macOS & iOS system monospace */
+        "SFMono-Regular",
+        /* Windows system monospace (newer) */
+        "Consolas",
+        /* Windows legacy monospace fallback */
+        "Courier New",
+        /* Generic monospace fallback */
+        monospace;
+}
+
+li.post {
+    padding-top: 1ch;
+}
+p.description {
+    margin: 0px;
+}
+a.post {
+    font-weight: bold;
+}
+
+.side {
+    color: #333;
+}
+
+.description {
+    color: #333;
+}
+
+
+p>img {
+    max-width: 100%;
+    display: block;
+    margin: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+img.bg {
+    float: right;
+    width: 100%;
+}
+
+</style>
+
+</head>
+<body>
+<style>
+main {
+    width: 100ch;
+}
+</style>
+<main>
+  
+<header>
+  
+    <!-- this is a single page -->
+    
+  
+
+  <span class="console">
+  
+  <a href="/">elijah.run</a>/<a href="&#x2F;blog/">blog</a>/how-i-use-typst</span>
+</header>
+
+
+  <h1>How I use typst</h1>
+  <p class="console" class="side">
+    published 2025-07-17
+      | tags: 
+  <a href="/tags/how-i-use">#how-i-use</a>
+
+  <a href="/tags/typst">#typst</a>
+
+
+</p>
+  
+    <details>
+    <summary>Table of Contents</summary>
+    <ul>
+    
+        <li>
+            <a href="https://elijah.run/blog/how-i-use-typst/#anguished-typst-is-not-just-a-better-latex">😧 typst is not (just) a better LaTeX</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/how-i-use-typst/#adult-computer-typst-is-just-programming-for-me">🧑‍💻 typst is just programming (for me)</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/how-i-use-typst/#rabbit2-typst-is-fast">🐇 typst is fast</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/how-i-use-typst/#monocle-face-closing-thoughts">🧐 Closing Thoughts</a>
+            
+        </li>
+    
+    </ul>
+  </details>
+  
+  <p>This week I re-wrote <a href="/Elijah%20Voigt.pdf">my resume</a>  in <a href="https://typst.app/">typst</a>.</p>
+<p><a href="https://elijah.run/blog/how-i-use-typst/old.pdf">Old</a>:
+<img src="https://elijah.run/blog/how-i-use-typst/old.png" alt="old resume" /></p>
+<p><a href="https://elijah.run/blog/how-i-use-typst/new.pdf">New</a>:
+<img src="https://elijah.run/blog/how-i-use-typst/new.png" alt="new resume" /></p>
+<p><em>Can you tell the difference? No? Excellent!</em></p>
+<p>Since graduating college I don't write a lot of LaTeX, but so far I prefer typst!</p>
+<h1 id="anguished-typst-is-not-just-a-better-latex">😧 typst is not (just) a better LaTeX</h1>
+<p>I posted some first impressions on <a href="https://bsky.app/profile/elijah.run">Bluesky</a>:</p>
+<blockquote class="bluesky-embed" data-bluesky-uri="at://did:plc:srziwhupeikb2bcnyndug2ga/app.bsky.feed.post/3ltx7vsqt3s2m" data-bluesky-cid="bafyreid2ol6s3bji2jkyiaxnwdgylql7qja72wojpnno5y2eohxahggswu" data-bluesky-embed-color-mode="system"><p lang="en">LaTeX being compatible with TeX makes it feel like the C++ of typesetting; a rich ecosystem with lots of bloat.
+<p>typst not being constrained in that way makes it feel like the Zig of typesetting; smaller ecosystem but a much smoother writing experience.</p>— Elijah Voigt (<a href="https://bsky.app/profile/did:plc:srziwhupeikb2bcnyndug2ga?ref_src=embed">@elijah.run</a>) <a href="https://bsky.app/profile/did:plc:srziwhupeikb2bcnyndug2ga/post/3ltx7vsqt3s2m?ref_src=embed">July 14, 2025 at 1:25 PM</a></blockquote><script async src="https://embed.bsky.app/static/embed.js" charset="utf-8"></script></p>
+<p>To elaborate: typst doesn't feel like an <em>improvement</em> on LaTeX, it feels like a from-the-ground-up typsestter that learns from the past uhh -- wait <a href="https://en.wikipedia.org/wiki/LaTeX">LaTeX</a> came out in 1984? and <a href="https://en.wikipedia.org/wiki/TeX">TeX</a> came out in 1978?? So yeah it learns from the past 41+ years.</p>
+<h1 id="adult-computer-typst-is-just-programming-for-me">🧑‍💻 typst is just programming (for me)</h1>
+<p>To be fair, so is LaTeX.
+If you give me a programming language I'm gonna program.</p>
+<p>The typst docs make it seem like it's <code>markdown</code> with functions, which is somewhat true:</p>
+<pre data-lang="typ" style="background-color:#191919;color:#f8f8f2;" class="language-typ "><code class="language-typ" data-lang="typ"><span>== this is a title
+</span><span>
+</span><span>this is a paragraph.
+</span><span>
+</span><span>- this
+</span><span>- is
+</span><span>- a
+</span><span>- list
+</span></code></pre>
+<p>But my resume is more... function heavy than advertised.
+For example, this:</p>
+<p><img src="https://elijah.run/blog/how-i-use-typst/example.png" alt="example styled section" /></p>
+<p>Came from this function:</p>
+<pre data-lang="typ" style="background-color:#191919;color:#f8f8f2;" class="language-typ "><code class="language-typ" data-lang="typ"><span>// Function for printing a role
+</span><span>#let role(org: none, location: none, title: none, date: none, description: ntypone) = {
+</span><span>[
+</span><span>  #set text(weight: &quot;bold&quot;)
+</span><span>  #org
+</span><span>  #set text(weight: &quot;regular&quot;)
+</span><span>  (
+</span><span>    #text(13pt, location)
+</span><span>  )
+</span><span>  #h(1fr)
+</span><span>  #set text(weight: &quot;bold&quot;)
+</span><span>  #title
+</span><span>  #set text(weight: &quot;regular&quot;)
+</span><span>  #date
+</span><span>];
+</span><span>text(12pt, description);
+</span><span>};
+</span></code></pre>
+<p>Invoked like this:</p>
+<pre data-lang="typ" style="background-color:#191919;color:#f8f8f2;" class="language-typ "><code class="language-typ" data-lang="typ"><span>#role(
+</span><span>  org: [CoreOS],
+</span><span>  location: [San Francisco, CA/Remote],
+</span><span>  title: [Documentarian],
+</span><span>  date: [09/2016 - 05/2017],
+</span><span>  description: [
+</span><span>    - #xp([Migration Docs.], [Reviewed, tested, and contributed to public facing Kubernetes developer docs.])
+</span><span>  ]
+</span><span>)
+</span></code></pre>
+<p>The result looks good, but it certainly doesn't "feel like markdown"... that's OK!
+I know how to program and the functions are simple!</p>
+<pre data-lang="typ" style="background-color:#191919;color:#f8f8f2;" class="language-typ "><code class="language-typ" data-lang="typ"><span>// function definition:
+</span><span>#myfn(a, b, c) = {
+</span><span>  [
+</span><span>    #set foo(bar=&quot;thing&quot;)
+</span><span>    #a
+</span><span>    #set foo(other=&quot;stuff&quot;)
+</span><span>    #b -- #c
+</span><span>  ]
+</span><span>}
+</span><span>
+</span><span>// called like so:
+</span><span>#myfn([asdf], [abcd123], [hello world])
+</span><span>
+</span><span>// produces:
+</span><span>// asdf abcd123 -- hello world
+</span></code></pre>
+<h1 id="rabbit2-typst-is-fast">🐇 typst is fast</h1>
+<p>Which is... not surprising.
+Not just because it's written in Rust and I'm a voluntary Rust shill -- any new typesetter would probably be an improvement!
+Any time you do a full rewrite, and ignore legacy usage, you're gonna go sonic-levels of fast.
+And again... LaTeX is 41 years old; there's a lot of cruft in that ecosystem.</p>
+<p>LaTeX's output looks <em>gorgeous</em> but it is SLOW and BULKY.
+To build my old resume I needed:</p>
+<ul>
+<li>A 12GB+ docker container.</li>
+<li>Bunch of style files I copied from a friend 10 years ago.</li>
+<li>A bunch of build phases I frankly did not understand.</li>
+</ul>
+<p>This was my Makefile which was <em>as simple as I could get it</em>:</p>
+<pre data-lang="make" style="background-color:#191919;color:#f8f8f2;" class="language-make "><code class="language-make" data-lang="make"><span style="color:#e9fdac;">TARGET</span><span style="color:#ff5e5e;">=</span><span style="color:#fbe3bf;">resume
+</span><span>
+</span><span style="color:#8cdaff;">default</span><span style="color:#ff5e5e;">: </span><span style="color:#fbe3bf;">pdf
+</span><span>
+</span><span style="color:#8cdaff;">dvi</span><span style="color:#ff5e5e;">: </span><span style="font-style:italic;color:#ff5e5e;">${</span><span style="font-style:italic;color:#fc9354;">TARGET</span><span style="font-style:italic;color:#ff5e5e;">}</span><span style="color:#fbe3bf;">.tex
+</span><span>	</span><span style="color:#e9fdac;">latex </span><span style="font-style:italic;color:#ff5e5e;">${</span><span style="font-style:italic;color:#fc9354;">TARGET</span><span style="font-style:italic;color:#ff5e5e;">}</span><span>.tex
+</span><span>
+</span><span style="color:#8cdaff;">ps</span><span style="color:#ff5e5e;">: </span><span style="color:#fbe3bf;">dvi
+</span><span>	</span><span style="font-style:italic;color:#ff5e5e;">${</span><span style="font-style:italic;color:#fc9354;">DOCKER</span><span style="font-style:italic;color:#ff5e5e;">} </span><span style="color:#e9fdac;">dvips</span><span style="font-style:italic;color:#fc9354;"> -R -Poutline -t</span><span> letter </span><span style="font-style:italic;color:#ff5e5e;">${</span><span style="font-style:italic;color:#fc9354;">TARGET</span><span style="font-style:italic;color:#ff5e5e;">}</span><span>.dvi</span><span style="font-style:italic;color:#fc9354;"> -o </span><span style="font-style:italic;color:#ff5e5e;">${</span><span style="font-style:italic;color:#fc9354;">TARGET</span><span style="font-style:italic;color:#ff5e5e;">}</span><span>.ps
+</span><span>
+</span><span>
+</span><span style="color:#8cdaff;">pdf</span><span style="color:#ff5e5e;">: </span><span style="color:#fbe3bf;">ps
+</span><span>	</span><span style="color:#e9fdac;">ps2pdf </span><span style="font-style:italic;color:#ff5e5e;">${</span><span style="font-style:italic;color:#fc9354;">TARGET</span><span style="font-style:italic;color:#ff5e5e;">}</span><span>.ps resume.pdf
+</span><span>	</span><span style="color:#e9fdac;">ps2pdf </span><span style="font-style:italic;color:#ff5e5e;">${</span><span style="font-style:italic;color:#fc9354;">TARGET</span><span style="font-style:italic;color:#ff5e5e;">}</span><span>.ps </span><span style="color:#ffffff;">&quot;</span><span style="color:#fbe3bf;">Elijah Caine McDade Voigt resume.pdf</span><span style="color:#ffffff;">&quot;
+</span><span>	</span><span style="color:#e9fdac;">ps2pdf </span><span style="font-style:italic;color:#ff5e5e;">${</span><span style="font-style:italic;color:#fc9354;">TARGET</span><span style="font-style:italic;color:#ff5e5e;">}</span><span>.ps </span><span style="color:#ffffff;">&quot;</span><span style="color:#fbe3bf;">Elijah Caine M. Voigt resume.pdf</span><span style="color:#ffffff;">&quot;
+</span><span>
+</span><span style="color:#8cdaff;">clean</span><span style="color:#ff5e5e;">:
+</span><span>	</span><span style="color:#e9fdac;">rm </span><span style="color:#ff5e5e;">*</span><span>.aux
+</span><span>	</span><span style="color:#e9fdac;">rm </span><span style="color:#ff5e5e;">*</span><span>.log
+</span><span>	</span><span style="color:#e9fdac;">rm </span><span style="color:#ff5e5e;">*</span><span>.dvi
+</span><span>	</span><span style="color:#e9fdac;">rm </span><span style="color:#ff5e5e;">*</span><span>.ps
+</span><span>
+</span><span style="color:#8cdaff;">veryclean</span><span style="color:#ff5e5e;">:
+</span><span>	</span><span style="color:#e9fdac;">rm </span><span style="color:#ff5e5e;">*</span><span>.aux
+</span><span>	</span><span style="color:#e9fdac;">rm </span><span style="color:#ff5e5e;">*</span><span>.log
+</span><span>	</span><span style="color:#e9fdac;">rm </span><span style="color:#ff5e5e;">*</span><span>.dvi
+</span><span>	</span><span style="color:#e9fdac;">rm </span><span style="color:#ff5e5e;">*</span><span>.ps
+</span><span>	</span><span style="color:#e9fdac;">rm </span><span style="color:#ff5e5e;">*</span><span>.pdf
+</span><span>
+</span><span style="color:#8cdaff;">shell</span><span style="color:#ff5e5e;">:
+</span><span>	</span><span style="font-style:italic;color:#ff5e5e;">${</span><span style="font-style:italic;color:#fc9354;">DOCKER</span><span style="font-style:italic;color:#ff5e5e;">} </span><span style="color:#e9fdac;">/bin/sh
+</span></code></pre>
+<p>What is this <code>dvips</code> program?
+What's a <code>dvi</code> file?
+And <code>.aux</code>??
+Why do I need to build a <code>.ps</code> and a <code>.pdf</code>??</p>
+<p>Anyway, LaTeX is heavy and (for obvious reasons) typst is relatively light weight.</p>
+<p>For comparison here's how I build my current resume:</p>
+<pre style="background-color:#191919;color:#f8f8f2;"><code><span>$ typst compile resume.typ
+</span></code></pre>
+<p>My dependencies are... <code>typst</code> and the <code>FreeMono</code> font.</p>
+<h1 id="monocle-face-closing-thoughts">🧐 Closing Thoughts</h1>
+<p>But like I said, I don't write a lot of LaTeX so why re-write my resume -- my only actively maintained LaTeX doc -- in a new typesetter?</p>
+<p>Basically: I <em>dread</em> updating my resume <em>because</em> LaTeX is so heavy.
+Every time I think to add it or tweak it or god forsake make a style change I find about a dozen reasons <em>not</em> to sink <em>hours</em> into that task.</p>
+<p>I'm still in the honeymoon phase, but I feel a lot more <em>excited</em> to write with typst.
+Maybe I'll update my resume more than once a year!</p>
+
+  <footer class=console>
+    <hr>
+    © 2026 by <a href="/about">Elijah Voigt</a> licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a><img src="/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+    <br>not written by ai
+</footer>
+</main>
+</body>
+</html>

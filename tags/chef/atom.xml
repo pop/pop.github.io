@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>elijah.run - chef</title>
+    <subtitle>A blog about tech, media, and art</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://elijah.run/tags/chef/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://elijah.run"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2018-06-23T00:00:00+00:00</updated>
+    <id>https://elijah.run/tags/chef/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Dynamic Attributes in Chef</title>
+        <published>2018-06-23T00:00:00+00:00</published>
+        <updated>2018-06-23T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Elijah Voigt
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://elijah.run/blog/chef-dynamic-attributes/"/>
+        <id>https://elijah.run/blog/chef-dynamic-attributes/</id>
+        
+        <content type="html" xml:base="https://elijah.run/blog/chef-dynamic-attributes/">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;&#x2F;h2&gt;
+&lt;p&gt;You are trying to set a node attribute in a resource block but it isn&#x27;t working.&lt;&#x2F;p&gt;
+&lt;p&gt;For example you have the following code:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;ruby&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-ruby &quot;&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span&gt;ruby_block &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;foo&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;#39; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;do
+&lt;&#x2F;span&gt;&lt;span&gt;  block &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;do
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;# some ruby
+&lt;&#x2F;span&gt;&lt;span&gt;    node.override[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;var&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;value&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;  action &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;:run
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;if&lt;&#x2F;span&gt;&lt;span&gt; node[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;var&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;value&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;  notifies &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;:run&lt;&#x2F;span&gt;&lt;span&gt;, some_resource[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;name&lt;&#x2F;span&gt;&lt;span&gt;]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;else
+&lt;&#x2F;span&gt;&lt;span&gt;  notifies &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;:run&lt;&#x2F;span&gt;&lt;span&gt;, other_resource[whatever]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;end
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Even though you&#x27;re setting &lt;code&gt;node[&#x27;var&#x27;]&lt;&#x2F;code&gt;, &lt;code&gt;other_resource[whatever]&lt;&#x2F;code&gt; is getting notified to &lt;code&gt;:run&lt;&#x2F;code&gt;.
+What gives?&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;&#x2F;h2&gt;
+&lt;p&gt;To jump ahead, because you&#x27;re skimming this post for the answer, you&#x27;re going to want to do something like this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;diff&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-diff &quot;&gt;&lt;code class=&quot;language-diff&quot; data-lang=&quot;diff&quot;&gt;&lt;span&gt;# go-go-gadget diffs
+&lt;&#x2F;span&gt;&lt;span&gt;# Chef Version 13.5.8
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  ruby_block &amp;#39;foo&amp;#39; do
+&lt;&#x2F;span&gt;&lt;span&gt;    block do
+&lt;&#x2F;span&gt;&lt;span&gt;      # some ruby
+&lt;&#x2F;span&gt;&lt;span&gt;      node.override[&amp;#39;var&amp;#39;] = &amp;#39;value&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;    end
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f92672;&quot;&gt;-   action :run
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a6e22e;&quot;&gt;+   action :nothing
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f92672;&quot;&gt;- end
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a6e22e;&quot;&gt;+ end.run_action(:run)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;if node[&amp;#39;var&amp;#39;] == &amp;#39;value&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;  notifies :run, some_resource[name]
+&lt;&#x2F;span&gt;&lt;span&gt;else
+&lt;&#x2F;span&gt;&lt;span&gt;  notifies :run, other_resource[whatever]
+&lt;&#x2F;span&gt;&lt;span&gt;end
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Basically you want to execute the &lt;code&gt;ruby_block&lt;&#x2F;code&gt; that sets your attribute &lt;strong&gt;now&lt;&#x2F;strong&gt; so the rest of your code can consume the value either later in the compilation phase or during the execution phase of the Chef run.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;how-why-did-that-work&quot;&gt;How&#x2F;why did that work?&lt;&#x2F;h2&gt;
+&lt;p&gt;If you&#x27;ve read his far you&#x27;re actually reading.
+Welcome to the post!
+Let&#x27;s begin.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s dig into &lt;em&gt;exactly&lt;&#x2F;em&gt; what my problem was, because sometimes examples aren&#x27;t good enough.
+You know... for fun.&lt;&#x2F;p&gt;
+&lt;p&gt;I was trying to trigger an application upgrade based on the current installed version.
+I was &lt;em&gt;not&lt;&#x2F;em&gt; installing a package-manager-managed package&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#1&quot;&gt;1&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt; so I couldn&#x27;t just pin the version a &lt;code&gt;yum&lt;&#x2F;code&gt; resource, I had to do this kludge of a solution.&lt;&#x2F;p&gt;
+&lt;p&gt;So for me &lt;code&gt;some_resource[name]&lt;&#x2F;code&gt; was downloading the latest version of the app (a &lt;code&gt;.tar.gz2&lt;&#x2F;code&gt; file from GitHub) and &lt;code&gt;other_resource[whatever]&lt;&#x2F;code&gt; was a no-op. The as part of the package download I unconditionally trigger a &lt;code&gt;:delayed&lt;&#x2F;code&gt; service restart.
+Chef was &#x27;upgrading&#x27; and restarting my app every thirty minutes which broke core functionality.&lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#2&quot;&gt;2&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;shit-i-tried-before-stumbling-upon-the-solution&quot;&gt;Shit I tried before stumbling upon the solution&lt;&#x2F;h2&gt;
+&lt;p&gt;I tried a bunch of things, but they can all kinda be summed up in this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;diff&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-diff &quot;&gt;&lt;code class=&quot;language-diff&quot; data-lang=&quot;diff&quot;&gt;&lt;span&gt;# yay more diffs
+&lt;&#x2F;span&gt;&lt;span&gt;  ruby_block &amp;#39;foo&amp;#39; do
+&lt;&#x2F;span&gt;&lt;span&gt;    block do
+&lt;&#x2F;span&gt;&lt;span&gt;      # some ruby
+&lt;&#x2F;span&gt;&lt;span&gt;      node.override[&amp;#39;var&amp;#39;] = &amp;#39;value&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;    end
+&lt;&#x2F;span&gt;&lt;span&gt;    notifies :create, &amp;#39;tar[my-app]&amp;#39;, :immediately # Triggers tar[my-app] to run now
+&lt;&#x2F;span&gt;&lt;span&gt;  end
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f92672;&quot;&gt;- if node[&amp;#39;var&amp;#39;] == &amp;#39;value&amp;#39;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f92672;&quot;&gt;-   notify :run, some_resource[name]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f92672;&quot;&gt;- else
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f92672;&quot;&gt;-   notify :run, other_resource[whatever]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f92672;&quot;&gt;- end
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  tar &amp;#39;my-app&amp;#39; do
+&lt;&#x2F;span&gt;&lt;span&gt;    action  :nothing # Unless triggered this does nothing
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a6e22e;&quot;&gt;+   only_if { node[&amp;#39;var&amp;#39;] == &amp;#39;value&amp;#39; } # This should also do nothing if this isn&amp;#39;t true
+&lt;&#x2F;span&gt;&lt;span&gt;    # The rest of the resource block
+&lt;&#x2F;span&gt;&lt;span&gt;  end
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Which ultimately didn&#x27;t work either.&lt;&#x2F;p&gt;
+&lt;p&gt;I... I have no idea why this didn&#x27;t work.&lt;&#x2F;p&gt;
+&lt;p&gt;Something something Chef is complicated.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;why-the-solution-works-and-the-other-stuff-didn-t&quot;&gt;Why the solution works (and the other stuff didn&#x27;t)&lt;&#x2F;h2&gt;
+&lt;p&gt;The reason my ultimate solution &lt;em&gt;did&lt;&#x2F;em&gt; work is best summed up by this quote from the &lt;a href=&quot;https:&#x2F;&#x2F;docs.chef.io&#x2F;resource_common.html#run-action&quot;&gt;Chef Docs&lt;&#x2F;a&gt;:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Use &lt;code&gt;.run_action(:some_action)&lt;&#x2F;code&gt; at the end of a resource block to run
+the specified action during the compile phase.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;My original code (read: broken code) was running the &lt;code&gt;if&lt;&#x2F;code&gt; block during the compilation phase (happens earlier) and running the &lt;code&gt;ruby_block&lt;&#x2F;code&gt; in the execution phase (happens later).
+By telling it to run my &lt;code&gt;ruby_block&lt;&#x2F;code&gt; during the compilation phase we were ensuring it happened before the &lt;code&gt;if&lt;&#x2F;code&gt; block, and in a way running it like you would &#x27;expect&#x27; a script to run.&lt;&#x2F;p&gt;
+&lt;p&gt;It ain&#x27;t idiomatic but it gets the job done.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;errata&quot;&gt;Errata&lt;&#x2F;h2&gt;
+&lt;div class=&quot;footnote-definition&quot; id=&quot;1&quot;&gt;&lt;sup class=&quot;footnote-definition-label&quot;&gt;1&lt;&#x2F;sup&gt;
+&lt;p&gt;Say that three times fast.&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;
+&lt;div class=&quot;footnote-definition&quot; id=&quot;2&quot;&gt;&lt;sup class=&quot;footnote-definition-label&quot;&gt;2&lt;&#x2F;sup&gt;
+&lt;p&gt;The service was in question was Prometheus.
+When Chef ran every 30 minutes, it killed the Prometheus process and thus killed all of our pending alerts.
+TLDR we didn&#x27;t get any alerts that took more than 30 minutes to trigger We also &lt;em&gt;kept&lt;&#x2F;em&gt; getting alerts that should taken a few hours to re-notify.&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;
+</content>
+        
+    </entry>
+</feed>

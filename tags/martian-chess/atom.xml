@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>elijah.run - martian chess</title>
+    <subtitle>A blog about tech, media, and art</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://elijah.run/tags/martian-chess/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://elijah.run"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-05-01T00:00:00+00:00</updated>
+    <id>https://elijah.run/tags/martian-chess/atom.xml</id>
+    <entry xml:lang="en">
+        <title>🪐 martian chess♟️</title>
+        <published>2024-05-01T00:00:00+00:00</published>
+        <updated>2024-05-01T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Elijah Voigt
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://elijah.run/games/martian-chess/"/>
+        <id>https://elijah.run/games/martian-chess/</id>
+        
+        <content type="html" xml:base="https://elijah.run/games/martian-chess/">&lt;style&gt; p&gt;img { width: 100%; } &lt;&#x2F;style&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;games&#x2F;martian-chess.gif&quot; alt=&quot;martian chess gameplay&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;free (download): &lt;a href=&quot;https:&#x2F;&#x2F;liquidmirror.itch.io&#x2F;martian-chess&quot;&gt;liquidmirror.itch.io&#x2F;martian-chess&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;tools: &lt;a href=&quot;https:&#x2F;&#x2F;bevy.org&quot;&gt;bevy&lt;&#x2F;a&gt; (engine), &lt;a href=&quot;https:&#x2F;&#x2F;www.fmod.com&#x2F;&quot;&gt;fmod&lt;&#x2F;a&gt; (audio), [blender] (visuals)&lt;&#x2F;li&gt;
+&lt;li&gt;developed: late 2023 - early 2024, released: may 2024&lt;&#x2F;li&gt;
+&lt;li&gt;visuals and music by &lt;a href=&quot;https:&#x2F;&#x2F;greatmist.bandcamp.com&#x2F;&quot;&gt;Sam Hall&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;After failing for more than a year to make progess on an original game idea, I brought the idea of implementing &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Martian_chess&quot;&gt;Martian Chess&lt;&#x2F;a&gt; to Sam.
+The idea being the game design was &quot;done&quot; and the value we were adding was appealing visuals and music.
+Sam agreed and we spent a few months making on our first finished game: Martian Chess.
+We contacted the publishers of the original board game and let them know of the project; they agreed to let us develop the game with the caveat that we not make money from it.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>
