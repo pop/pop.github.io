@@ -1,5 +1,5 @@
 +++
-title = "Math and speed running"
+title = "Math, Speed Running, and a culture of collaboration" 
 date = "2026-10-29"
 description = "Not to be confused with speed running math... "
 taxonomies.tags = ["connections", "math", "gen-ai", "speed-running"] 
