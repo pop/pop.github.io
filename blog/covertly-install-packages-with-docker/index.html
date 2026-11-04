@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>elijah.run</title>
+  <meta name="title" content="Covertly Installing Packages with Docker">
+<meta name="og:title" content="Covertly Installing Packages with Docker">
+
+<meta name="og:type" content="article">
+
+
+
+
+<meta name="description" content="A simple guide on install $PACKAGE with $CONTAINER_RUNTIME.">
+<meta name="og:description" content="A simple guide on install $PACKAGE with $CONTAINER_RUNTIME.">
+
+<meta name="referrer" content="strict-origin-when-cross-origin">
+  
+  <link rel="alternate" type="application/atom+xml" title="elijah.run" href="https://elijah.run/atom.xml">
+  <style>
+/* http://bettermotherfuckingwebsite.com/ */
+body {
+    margin: 40px auto;
+    max-width: 650px;
+    line-height: 1.6;
+    font-size: 18px;
+    color: #000;
+    padding: 0 10px
+}
+h1,h2,h3{
+    line-height:1.2
+}
+
+ul.stuff>li {
+    padding-left: 0;
+    list-style: none;
+}
+
+blockquote {
+    margin: 0;
+    border-left: 3px solid black;
+    padding-left: 16px;
+}
+
+div.note {
+    margin: 0;
+    border-left: 3px solid blue;
+    padding-left: 16px;
+}
+.note-title {
+    font-weight: bold;
+}
+
+div.warning {
+    margin: 0;
+    border-left: 3px solid orange;
+    padding-left: 16px;
+}
+.warning-title {
+    font-weight: bold;
+}
+
+div.ai-disclosure {
+    margin: 0 0 16px 0;
+    border-left: 3px solid magenta;
+    padding-left: 16px;
+}
+.ai-disclosure-title {
+    font-weight: bold;
+}
+
+ul {
+    padding-left: 1ch;
+    list-style: square;
+}
+
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+header {
+    /* todo */
+}
+
+nav {
+    /* todo */
+}
+
+main {
+    max-width: 100%;
+    padding: 1ch;
+}
+
+footer{
+    /* todo */
+}
+
+h1,h2,h3,h4,h5,.console,ul.stuff {
+    font-family:
+        /* Modern macOS & iOS system monospace */
+        "SFMono-Regular",
+        /* Windows system monospace (newer) */
+        "Consolas",
+        /* Windows legacy monospace fallback */
+        "Courier New",
+        /* Generic monospace fallback */
+        monospace;
+}
+
+li.post {
+    padding-top: 1ch;
+}
+p.description {
+    margin: 0px;
+}
+a.post {
+    font-weight: bold;
+}
+
+.side {
+    color: #333;
+}
+
+.description {
+    color: #333;
+}
+
+
+p>img {
+    max-width: 100%;
+    display: block;
+    margin: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+img.bg {
+    float: right;
+    width: 100%;
+}
+
+</style>
+
+</head>
+<body>
+<style>
+main {
+    width: 100ch;
+}
+</style>
+<main>
+  
+<header>
+  
+    <!-- this is a single page -->
+    
+  
+
+  <span class="console">
+  
+  <a href="/">elijah.run</a>/<a href="&#x2F;blog/">blog</a>/covertly-install-packages-with-docker</span>
+</header>
+
+
+  <h1>Covertly Installing Packages with Docker</h1>
+  <p class="console" class="side">
+    published 2015-10-07
+      | tags: 
+  <a href="/tags/docker">#docker</a>
+
+  <a href="/tags/archive">#archive</a>
+
+
+</p>
+  
+    <details>
+    <summary>Table of Contents</summary>
+    <ul>
+    
+        <li>
+            <a href="https://elijah.run/blog/covertly-install-packages-with-docker/#the-problem-workstations">The Problem: Workstations</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/covertly-install-packages-with-docker/#enter-docker">Enter: Docker</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/covertly-install-packages-with-docker/#the-deets-dockerfile-and-commands">The Deets: Dockerfile and Commands</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/covertly-install-packages-with-docker/#pro-tip-add-an-alias">Pro-Tip: Add an Alias</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/covertly-install-packages-with-docker/#wait-this-is-overly-complicated">Wait This is Overly Complicated</a>
+            
+        </li>
+    
+    </ul>
+  </details>
+  
+  <p><a href="https://elijah.run/blog/covertly-install-packages-with-docker/#the-deets-dockerfile-and-commands">Jump to the codey bits</a></p>
+<h2 id="the-problem-workstations">The Problem: Workstations</h2>
+<p>At the OSL I use workstations which are provisioned by
+<a href="https://en.wikipedia.org/wiki/Chef_%28software%29">Chef</a> to look more
+or less identical (packages are the same and global config files are
+consistent from machine to machine). This is nice because it allows
+everybody at the lab to jump from workstation to workstation without
+dreading the inevitable setup that usually comes with going to a new
+computer.</p>
+<p>The only downside here is that to install a package you have to make a
+pull request to a GitHub Repository in which you modify a JSON file.
+This is almost always for my own good, but as a dev I am prone to
+avoiding things that the admins say are good for me (like broccoli,
+milk, and consistent workstation environments).</p>
+<p>For instance, yesterday I wanted to use
+<a href="http://rg3.github.io/youtube-dl/">youtube-dl</a> to grab a video I was
+watching on repeat*. I could have made a pull request to add the
+package, waited until 30 after for the workstations to refresh, used the
+package, and went about my day. This would have been the correct and
+bureaucratic way to do things.</p>
+<p>I <em>could</em> have, and probably <em>should</em> have, done that... but I didn't.</p>
+<p>* firefox kept crashing, I wasn't just stealing music for the sake of
+it.</p>
+<h2 id="enter-docker">Enter: Docker</h2>
+<p>In this case the solution to the 'problem' was
+<a href="https://en.wikipedia.org/wiki/Docker_%28software%29">Docker</a>. I wrote a
+Dockerfile which provisioned a container to have <code>youtube-dl</code> installed,
+spun up the container with a shared directory (<code>$PWD:/home/</code>), and
+executed the youtube-dl command. The .mp4 video was downloaded to my
+current working directory and I was able to play it with my media player
+of choice, all without installing <code>youtube-dl</code> locally.</p>
+<h2 id="the-deets-dockerfile-and-commands">The Deets: Dockerfile and Commands</h2>
+<p><code>Dockerfile</code></p>
+<pre data-lang="txt" style="background-color:#191919;color:#f8f8f2;" class="language-txt "><code class="language-txt" data-lang="txt"><span>FROM ubuntu:latest
+</span><span>
+</span><span>RUN apt-get -y update
+</span><span>RUN apt-get -y upgrade
+</span><span>RUN apt-get -y install python-pip
+</span><span>RUN pip install youtube-dl
+</span><span>
+</span><span>WORKDIR /home
+</span><span>RUN alias youtube-dl=&#39;/usr/local/bin/youtube-dl&#39;
+</span></code></pre>
+<p>If you are in the directory containing the above Dockerfile, build the
+container with:</p>
+<pre data-lang="txt" style="background-color:#191919;color:#f8f8f2;" class="language-txt "><code class="language-txt" data-lang="txt"><span>$ docker build -t yt-dl .
+</span></code></pre>
+<p>and run it with:</p>
+<pre data-lang="txt" style="background-color:#191919;color:#f8f8f2;" class="language-txt "><code class="language-txt" data-lang="txt"><span>$ docker run -v $PWD:/home/ yt-dl youtube-dl &lt;YOUTUBE-VID-URL&gt;
+</span></code></pre>
+<p>This will download any url's video into the current working directory.</p>
+<h2 id="pro-tip-add-an-alias">Pro-Tip: Add an <code>Alias</code></h2>
+<p>Add the following content to your <code>~/.bashrc</code> file and then run
+<code>source ~/.bashrc</code> to get rid the of long Docker bits of the above
+command.</p>
+<pre data-lang="bash" style="background-color:#191919;color:#f8f8f2;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#ff5e5e;">export </span><span style="color:#e9fdac;">$VID_DIR</span><span style="color:#ff5e5e;">=</span><span style="color:#fbe3bf;">/path/to/downloaded/videos/
+</span><span style="color:#6699cc;">alias </span><span style="color:#8cdaff;">yt-dl</span><span style="color:#ff5e5e;">=</span><span style="color:#ffffff;">&#39;</span><span style="color:#fbe3bf;">docker run -v $VID_DIR:/home/ yt-dl youtube-dl</span><span style="color:#ffffff;">&#39;
+</span></code></pre>
+<h2 id="wait-this-is-overly-complicated">Wait This is Overly Complicated</h2>
+<p>You're probably thinking: "Hey, couldn't you have just run
+<code>pip install --user youtube-dl</code>?</p>
+<p>Yes. I could have. But that wouldn't be fun and wouldn't have given me
+an excuse to write a blog, post now would it Ms. Smarty Pantz.</p>
+<hr />
+<p><strong>drink the coolaid. come to the docker side.</strong></p>
+
+  <footer class=console>
+    <hr>
+    © 2026 by <a href="/about">Elijah Voigt</a> licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a><img src="/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+    <br>not written by ai
+</footer>
+</main>
+</body>
+</html>

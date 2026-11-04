@@ -1,0 +1,911 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>elijah.run - gamedev</title>
+    <subtitle>A blog about tech, media, and art</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://elijah.run/tags/gamedev/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://elijah.run"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2026-07-29T00:00:00+00:00</updated>
+    <id>https://elijah.run/tags/gamedev/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Conway&#x27;s Game of Life with sound</title>
+        <published>2026-07-29T00:00:00+00:00</published>
+        <updated>2026-07-29T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Elijah Voigt
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://elijah.run/blog/life-with-sound/"/>
+        <id>https://elijah.run/blog/life-with-sound/</id>
+        
+        <content type="html" xml:base="https://elijah.run/blog/life-with-sound/">&lt;blockquote&gt;
+&lt;p&gt;Play it on itch.io right now! &lt;a href=&quot;https:&#x2F;&#x2F;popgame.itch.io&#x2F;life-with-sound&quot;&gt;popgame.itch.io&#x2F;life-with-sound&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;elijah.run&#x2F;blog&#x2F;life-with-sound&#x2F;life.png&quot; alt=&quot;life.png&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;This was a side-quest.&lt;&#x2F;p&gt;
+&lt;p&gt;I was hitting a wall on another gamedev project and thought &quot;I should try coding up Conway&#x27;s Game of Life&quot;.
+It&#x27;s a pretty simple game, but there&#x27;s some fun challenges like infinite grids and such, let&#x27;s give it a go!&lt;&#x2F;p&gt;
+&lt;p&gt;As I was playing an early build I thought &quot;This is so epic, I wonder if I can sync up some orchestral music to this!&quot;&lt;&#x2F;p&gt;
+&lt;p&gt;I don&#x27;t know the first thing about music, but my friend Sam does!
+During our weekly co-op gaming session we brainstormed some ideas and landed on something that had promise:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Assign a pitch (Note + Octave) to each coordinate in the game.&lt;&#x2F;li&gt;
+&lt;li&gt;When a cell is Alive at that coordinate, play the sound.&lt;&#x2F;li&gt;
+&lt;li&gt;When no cell is Alive at that coordinate, do not play the sound.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;Now the grid is infinite in Game of Life, so this had to be a repeating grid, similar to tiling a picture over and over and over on an infinite plane.&lt;&#x2F;p&gt;
+&lt;p&gt;I was able to whip that addition up pretty quick and it was good enough to show promise, so I added a few more fun features&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Visualizing each pitch with a different color (note) + brightness (octave)&lt;&#x2F;li&gt;
+&lt;li&gt;Allow customization for:
+&lt;ul&gt;
+&lt;li&gt;Which notes are active.&lt;&#x2F;li&gt;
+&lt;li&gt;Which octaves are active.&lt;&#x2F;li&gt;
+&lt;li&gt;The speed of the simulation.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;A &quot;camera follow&quot; feature that pans and zooms so everything stays in view automatically&lt;&#x2F;li&gt;
+&lt;li&gt;Support touch controls so it actually works on mobile.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;This is my first game written in bevy 0.19 and I really like the new &lt;code&gt;bsn! { ... }&lt;&#x2F;code&gt; syntax.
+It is a pretty concise way to express the contents of a scene, and I really like the &lt;code&gt;system.spawn()&lt;&#x2F;code&gt; scheduler method which makes it easy at a glance to see what is spawning my initial world state.
+The implicit &lt;code&gt;..default()&lt;&#x2F;code&gt; is a really nice quality of life improvement, not needing to &lt;em&gt;specify&lt;&#x2F;em&gt; that I want it to fill in the rest because obviously I do.
+My only gripe is that macro-heavy workflows tend to cause headaches because of magic compilation hidden behind pretty syntax; I burned a few hours trying to &quot;fix&quot; a compiler error that was caused by me &lt;code&gt;derive&lt;&#x2F;code&gt;&#x27;ing something I didn&#x27;t need to -- rude!&lt;&#x2F;p&gt;
+&lt;p&gt;There are plenty more features and polish I &lt;em&gt;could&lt;&#x2F;em&gt; add but I&#x27;m calling it here.
+It provides an interesting, thought-provoking, experience (for me) and that was my goal.
+I could tweak the sound, sand UX rough edges, add &lt;del&gt;micro-transactions&lt;&#x2F;del&gt; make it prettier to look at, but it works and I feel thoroughly un-blocked on my initial project.&lt;&#x2F;p&gt;
+&lt;p&gt;This took longer than I wanted, but I&#x27;m happy with how this side quest turned out.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>is linear search faster than HashMap&#x2F;HashSet for small sets?</title>
+        <published>2026-07-24T00:00:00+00:00</published>
+        <updated>2026-07-24T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Elijah Voigt
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://elijah.run/blog/linear-search/"/>
+        <id>https://elijah.run/blog/linear-search/</id>
+        
+        <content type="html" xml:base="https://elijah.run/blog/linear-search/">&lt;p&gt;I&#x27;ve heard from multiple sources that when you are operating on small sets, performance matters, like in the hot-path in a game that runs every frame, it is often better to use a &lt;code&gt;Vec&lt;&#x2F;code&gt; or some sort of array and to linearly search through the data through the data instead of using a &lt;code&gt;HashSet&lt;&#x2F;code&gt; or &lt;code&gt;HashMap&lt;&#x2F;code&gt;.
+The rationale is that while hash-based fetches and inserts are constant time, that may be a &lt;em&gt;high enough&lt;&#x2F;em&gt; constant time that just ripping through the array is faster.
+At some [small] size it must be faster to just iterate through the array instead of hashing a value...&lt;&#x2F;p&gt;
+&lt;p&gt;So is it?&lt;&#x2F;p&gt;
+&lt;p&gt;To test this out I made simple &lt;code&gt;VecSet&lt;&#x2F;code&gt; and &lt;code&gt;VecMap&lt;&#x2F;code&gt; that implement a limited subset of the &lt;code&gt;HashSet&lt;&#x2F;code&gt; and &lt;code&gt;HashMap&lt;&#x2F;code&gt; API, namely &lt;code&gt;insert&lt;&#x2F;code&gt;, &lt;code&gt;remove&lt;&#x2F;code&gt;, &lt;code&gt;get&lt;&#x2F;code&gt;, and &lt;code&gt;iter&lt;&#x2F;code&gt;.
+My implementation also went the route of storing &lt;code&gt;Option&amp;lt;T&amp;gt;&lt;&#x2F;code&gt; and &lt;code&gt;Option&amp;lt;(K,V)&amp;gt;&lt;&#x2F;code&gt; for &lt;code&gt;Set&lt;&#x2F;code&gt; and &lt;code&gt;Map&lt;&#x2F;code&gt; respectively, so I added a &lt;code&gt;compact()&lt;&#x2F;code&gt; method to remove &lt;code&gt;None&lt;&#x2F;code&gt; values from the storage; I could have done a &lt;code&gt;swap_remove&lt;&#x2F;code&gt; instead of Option&lt;T&gt;, since order doesn&#x27;t matter, but I don&#x27;t think it will really matter; our tests don&#x27;t do much get &lt;em&gt;and&lt;&#x2F;em&gt; set so we don&#x27;t generate many empty holes.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;aside-why-are-we-using-maps-and-sets-in-a-game&quot;&gt;Aside: Why are we using Maps and Sets in a game?&lt;&#x2F;h1&gt;
+&lt;p&gt;Both Hash and Vec Map&#x2F;Sets tend to allocate memory on the &lt;em&gt;heap&lt;&#x2F;em&gt; which I &lt;em&gt;also&lt;&#x2F;em&gt; hear is bad for games.
+Especially if you are allocating new memory every frame, the time to allocate memory (it is said) can dominate your frame time, drastically lowering your FPS.&lt;&#x2F;p&gt;
+&lt;p&gt;In Bevy it&#x27;s &lt;em&gt;much&lt;&#x2F;em&gt; more idiomatic to just make everything a Query, and do a &lt;code&gt;for (a, b, c) in query.iter()&lt;&#x2F;code&gt; or &lt;code&gt;for (mut a, b, c) in query.iter_mut()&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;So why do we need a Map or a Set?
+Basically: memoization.&lt;&#x2F;p&gt;
+&lt;p&gt;I often want to ask questions like &quot;What entities are &lt;em&gt;near&lt;&#x2F;em&gt; this entity?&quot; which falls into the category of &quot;You can derive this from existing components, but there isn&#x27;t a component to make this a &lt;code&gt;Query&lt;&#x2F;code&gt;&#x27;able directly.&quot;&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8cdaff;&quot;&gt;my_system&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;query&lt;&#x2F;span&gt;&lt;span&gt;: Query&amp;lt;Entity, With&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#f92649;color:#f8f8f0;&quot;&gt;??&lt;&#x2F;span&gt;&lt;span&gt;?&amp;gt;&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; ...
+&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; What would this look like??
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; ...
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;so instead we build a little cache every time the system executes:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8cdaff;&quot;&gt;my_system&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;foos&lt;&#x2F;span&gt;&lt;span&gt;: Query&amp;lt;(Entity, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span&gt;Coordinates), With&amp;lt;Foo&amp;gt;&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;bars&lt;&#x2F;span&gt;&lt;span&gt;: Query&amp;lt;(Entity, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span&gt;Coordinates), With&amp;lt;Foo&amp;gt;&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;mut &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;near_map&lt;&#x2F;span&gt;&lt;span&gt;: Local&amp;lt;HashMap&amp;lt;Entity, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;usize&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; Build the HashMap of Entity -&amp;gt; Number of neighbors
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; (Yes I prefer `query.iter().chain().things(|foo| ...)` over `for thing in query`)
+&lt;&#x2F;span&gt;&lt;span&gt;  near_map &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; foos.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;iter&lt;&#x2F;span&gt;&lt;span&gt;().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(|(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;e_foo&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;c_foo&lt;&#x2F;span&gt;&lt;span&gt;)| {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; Filter to just bar coordinates near foo&amp;#39;s coordinates
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; Sum the resulting set of 1s
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; near_foo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; bars
+&lt;&#x2F;span&gt;&lt;span&gt;      .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;iter&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;      .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;filter_map&lt;&#x2F;span&gt;&lt;span&gt;(|(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;e_bar&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;c_bar&lt;&#x2F;span&gt;&lt;span&gt;)| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;do_check&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;c_foo&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;c_bar&lt;&#x2F;span&gt;&lt;span&gt;).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;then_some&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;))
+&lt;&#x2F;span&gt;&lt;span&gt;      .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;sum&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; Return a tuple of (Entity, usize)
+&lt;&#x2F;span&gt;&lt;span&gt;    ( e_foo, near_foo )
+&lt;&#x2F;span&gt;&lt;span&gt;  }).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;collect&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; ... use near_map ...
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This both gives me a nice computed lookup table, and using Bevy&#x27;s &lt;code&gt;Local&amp;lt;T&amp;gt;&lt;&#x2F;code&gt; ensures I don&#x27;t re-allocate memory every frame, assuming I don&#x27;t you know... overlook something.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;benchmarking&quot;&gt;Benchmarking&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;I got Claude to write some benchmarks comparing VecSet vs HashSet and VecMap vs HashMap at different data volumes, 4, 8, etc up to 1024 elements&lt;&#x2F;li&gt;
+&lt;li&gt;Data was always u64s for keys and values&lt;&#x2F;li&gt;
+&lt;li&gt;Comparing against Bevy&#x27;s collections library which uses the non-standard &lt;a href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;bevy&#x2F;0.19.0&#x2F;bevy&#x2F;platform&#x2F;hash&#x2F;struct.FixedHasher.html&quot;&gt;FixedHasher&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;Optimizations turned &lt;em&gt;on&lt;&#x2F;em&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;All value are in nanoseconds.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h1 id=&quot;vecset-vs-hashset&quot;&gt;&lt;code&gt;VecSet&lt;&#x2F;code&gt; vs &lt;code&gt;HashSet&lt;&#x2F;code&gt;&lt;&#x2F;h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Winner is the fast implementation.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Operation&lt;&#x2F;th&gt;&lt;th&gt;Impl&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;4&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;8&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;16&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;32&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;64&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;128&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;256&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;512&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;1024&lt;&#x2F;th&gt;&lt;th&gt;Winner&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;iterate&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;6.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;11.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;21.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;42.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;89.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;172.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;337.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;670.2&lt;&#x2F;td&gt;&lt;td&gt;&lt;strong&gt;Vec, every N (~2×)&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;6.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;10.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;20.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;40.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;81.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;161.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;322.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;652.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1289.3&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;build (&lt;code&gt;collect&lt;&#x2F;code&gt;)&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;13.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;18.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;22.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;33.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;59.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;157.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;262.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;467.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;853.1&lt;&#x2F;td&gt;&lt;td&gt;&lt;strong&gt;Vec, every N (~4–6×)&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;55.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;88.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;139.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;232.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;454.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;738.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1346.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2767.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;5281.8&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;contains — hit&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;6.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;10.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;19.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;38.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;81.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;155.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;302.3&lt;&#x2F;td&gt;&lt;td&gt;Vec ≲8, else &lt;strong&gt;Hash&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;contains — miss&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;5.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;10.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;19.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;37.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;79.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;153.4&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;301.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;595.0&lt;&#x2F;td&gt;&lt;td&gt;&lt;strong&gt;Hash, every N&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.7&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;remove one&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;24.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;38.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;44.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;60.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;112.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;219.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;376.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;685.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1273.5&lt;&#x2F;td&gt;&lt;td&gt;Vec ≲8, else &lt;strong&gt;Hash&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;25.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;35.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;38.4&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;45.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;42.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;45.4&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;46.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;45.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;50.1&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;build (checked &lt;code&gt;insert&lt;&#x2F;code&gt;)&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;26.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;136.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;244.4&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;596.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1859.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;5916.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;21085&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;79255&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;308808&lt;&#x2F;td&gt;&lt;td&gt;Vec ≲48, else &lt;strong&gt;Hash&lt;&#x2F;strong&gt; (O(n²))&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;101.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;212.4&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;404.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;694.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1305.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2418.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4608.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;8849.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;17437.6&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;h1 id=&quot;vecmap-vs-hashmap&quot;&gt;&lt;code&gt;VecMap&lt;&#x2F;code&gt; vs &lt;code&gt;HashMap&lt;&#x2F;code&gt;&lt;&#x2F;h1&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Operation&lt;&#x2F;th&gt;&lt;th&gt;Impl&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;4&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;8&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;16&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;32&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;64&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;128&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;256&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;512&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;1024&lt;&#x2F;th&gt;&lt;th&gt;Winner&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;build (&lt;code&gt;collect&lt;&#x2F;code&gt;)&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecMap&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;15.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;17.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;25.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;42.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;129.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;201.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;353.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;651.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1240.7&lt;&#x2F;td&gt;&lt;td&gt;&lt;strong&gt;Vec, every N (~4×)&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashMap&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;51.4&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;88.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;137.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;298.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;468.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;794.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1428.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2874.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;5613.2&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;get — hit&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecMap&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.6&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;6.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;10.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;26.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;45.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;81.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;155.4&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;302.7&lt;&#x2F;td&gt;&lt;td&gt;Vec ≲8, else &lt;strong&gt;Hash&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashMap&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.2&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;get — miss&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecMap&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;4.3&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;5.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;10.1&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;25.2&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;37.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;80.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;155.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;301.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;596.9&lt;&#x2F;td&gt;&lt;td&gt;&lt;strong&gt;Hash, every N&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashMap&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.5&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;h1 id=&quot;just-use-rayon&quot;&gt;jUsT uSe RaYoN&lt;&#x2F;h1&gt;
+&lt;p&gt;After the initial results I thought &quot;surely we can parallelize the linear search right? Rayon makes things fast right?!&quot; and did a side-quest adding a &lt;code&gt;par_*&lt;&#x2F;code&gt; version of the &lt;code&gt;VecSet&lt;&#x2F;code&gt;&#x2F;&lt;code&gt;VecMap&lt;&#x2F;code&gt; types using Rayon as the underlying engine.
+Here are those results:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Operation&lt;&#x2F;th&gt;&lt;th&gt;Impl&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;64&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;1024&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;16384&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;262144&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;1048576&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;contains — miss&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecSet seq&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;57&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;892&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;14152&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;290913&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1281114&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecSet par&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;11330&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;17063&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;41296&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;308584&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1169997&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.9&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.7&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;strong&gt;remove one&lt;&#x2F;strong&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecSet seq&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;72&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;787&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;11928&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;266622&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;—&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;VecSet par&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;12485&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;18052&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;32334&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;244978&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;—&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;HashSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;34&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;49&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;112&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;928&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;—&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;As it turns out, Rayon has &lt;em&gt;hella&lt;&#x2F;em&gt; overhead so for small sets like this the startup cost &lt;em&gt;way&lt;&#x2F;em&gt; overshadows the compute time.
+Rayon took &lt;em&gt;at least&lt;&#x2F;em&gt; 11-12 µs which makes it &lt;em&gt;much&lt;&#x2F;em&gt; slower at these small sizes.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Takeway: Rayon is great for processing &lt;em&gt;lots&lt;&#x2F;em&gt; of data, like in batch jobs.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;h2 id=&quot;what-about-micropool&quot;&gt;wHaT aBoUt MiCroPoOl&lt;&#x2F;h2&gt;
+&lt;p&gt;I heard about a cool library that&#x27;s basically &quot;Rayon for Games&quot; called &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;DouglasDwyer&#x2F;micropool&quot;&gt;micropool&lt;&#x2F;a&gt;.
+The main selling point is that it avoids some of the pitfalls of Rayon.&lt;&#x2F;p&gt;
+&lt;p&gt;The results were interesting!&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;contains — miss&lt;&#x2F;strong&gt; (ns):&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Impl&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;64&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;1024&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;16384&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;262144&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;1048576&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;VecSet seq&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;57&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;932&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;14834&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;306833&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1320048&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;VecSet par (rayon)&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;11330&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;17063&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;41296&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;308584&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1169997&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;VecSet par (micropool)&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;519&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1028&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;8141&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;173009&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1131319&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;HashSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.7&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.8&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;3.0&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;2.8&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;&lt;strong&gt;remove one&lt;&#x2F;strong&gt; (ns):&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Impl&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;64&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;1024&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;16384&lt;&#x2F;th&gt;&lt;th style=&quot;text-align: right&quot;&gt;262144&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;VecSet seq&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;78&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;802&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;12041&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;283219&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;VecSet par (rayon)&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;12485&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;18052&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;32334&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;244978&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;VecSet par (micropool)&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;608&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;1455&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;12005&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;248263&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;HashSet&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;34&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;57&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;98&lt;&#x2F;td&gt;&lt;td style=&quot;text-align: right&quot;&gt;948&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;Micropool was &lt;em&gt;better&lt;&#x2F;em&gt; than Rayon but still not &lt;em&gt;nearly&lt;&#x2F;em&gt; good enough to beat an optimized build for either Hash nor Vec implementation.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;takeaways&quot;&gt;Takeaways&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Use &lt;code&gt;VecMap&lt;&#x2F;code&gt; and &lt;code&gt;VecSet&lt;&#x2F;code&gt; when I want to memoize a set and iterate over every element sequentally.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Use &lt;code&gt;HashMap&lt;&#x2F;code&gt; and &lt;code&gt;HashSet&lt;&#x2F;code&gt; if you intend to search for specific elements in the set.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h1 id=&quot;notes&quot;&gt;Notes&lt;&#x2F;h1&gt;
+&lt;p&gt;A few admissions:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;I didn&#x27;t test this against Bevy&#x27;s &lt;code&gt;Query&lt;&#x2F;code&gt; nor did I test it against Rust&#x27;s stdlib &lt;code&gt;DefaultHasher&lt;&#x2F;code&gt;, which I expect to perform worse but that would just move the line not change the story.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;We could probably improve search performance in the &lt;code&gt;Vec*&lt;&#x2F;code&gt; implementations to get better performance, like sorting elements or... something. That wasn&#x27;t the point of this exploration though. The bit is to see if we are leaving an obvoius naive optimization on the table.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;It&#x27;s tempting to turn &lt;code&gt;VecSet&lt;&#x2F;code&gt; and &lt;code&gt;VecMap&lt;&#x2F;code&gt; into a library, if it isn&#x27;t already, but I promise it was a &lt;em&gt;very&lt;&#x2F;em&gt; quick type to implement, and even after building it out I&#x27;m &lt;em&gt;not&lt;&#x2F;em&gt; using it in my game because the use-case for it is niche enough that I haven&#x27;t actually &lt;em&gt;needed&lt;&#x2F;em&gt; it.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h1&gt;
+&lt;p&gt;So in conclusion... wait -- now that I think about it... a set that you always want to iterate over is... a Vec.
+So this is basically nothing!
+This is just Vec with more steps!&lt;&#x2F;p&gt;
+&lt;p&gt;Happy hacking~&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Let&#x27;s Build a Game with Rust</title>
+        <published>2020-11-13T00:00:00+00:00</published>
+        <updated>2020-11-13T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Elijah Voigt
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://elijah.run/blog/seagl-2020-lets-build-a-game-with-rust/"/>
+        <id>https://elijah.run/blog/seagl-2020-lets-build-a-game-with-rust/</id>
+        
+        <content type="html" xml:base="https://elijah.run/blog/seagl-2020-lets-build-a-game-with-rust/">&lt;div class=&quot;note&quot;&gt;
+    &lt;span class=&quot;note-title&quot;&gt;
+        Note
+    &lt;&#x2F;span&gt;
+
+    &lt;span class=&quot;note-body&quot;&gt;
+        &lt;p&gt;This is the outline for a talk I gave at the Seattle GNU Linux
+conference (SeaGL) 2020. Once the video is posted I will link it here.&lt;&#x2F;p&gt;
+
+    &lt;&#x2F;span&gt;
+&lt;&#x2F;span&gt;
+&lt;div class=&quot;note&quot;&gt;
+    &lt;span class=&quot;note-title&quot;&gt;
+        Note
+    &lt;&#x2F;span&gt;
+
+    &lt;span class=&quot;note-body&quot;&gt;
+        &lt;p&gt;The code for this post can be found at https:&#x2F;&#x2F;github.com&#x2F;pop&#x2F;lets-make-games-with-rust.&lt;&#x2F;p&gt;
+
+    &lt;&#x2F;span&gt;
+&lt;&#x2F;span&gt;
+&lt;p&gt;Like many of you, I really like games.
+I enjoy playing games, talking about games, and a few times I&#x27;ve even tried making games.
+I enjoy making games for a few reasons:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Games are an interesting technical challenge.&lt;&#x2F;li&gt;
+&lt;li&gt;They are a flexible artistic outlet.&lt;&#x2F;li&gt;
+&lt;li&gt;I don&#x27;t make games in my day-job (yay hobbies).&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;I&#x27;m also interested in this programming language called Rust!
+You might have heard of it.
+Rust is a maturing systems programming language which aims to be performant, reliable, and productive.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Performant in that it often goes head to head with C and C++ in benchmarks.&lt;&#x2F;li&gt;
+&lt;li&gt;Reliable in that it refuses to compile memory unsafe code.&lt;&#x2F;li&gt;
+&lt;li&gt;Productive because it includes &quot;zero cost abstractions&quot; (link &lt;code&gt;filter&lt;&#x2F;code&gt; and &lt;code&gt;map&lt;&#x2F;code&gt;) and awesome tooling.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;The community is pretty good too!&lt;&#x2F;p&gt;
+&lt;p&gt;This post is about bringing those two interests together.
+Let&#x27;s learn how to build a videogame with the Rust programming language.&lt;&#x2F;p&gt;
+&lt;div class=&quot;warning&quot;&gt;
+    &lt;span class=&quot;warning-title&quot;&gt;
+        Warning
+    &lt;&#x2F;span&gt;
+
+    &lt;span class=&quot;warning-body&quot;&gt;
+        &lt;p&gt;This post is for folks who have a passing familiarity with Rust.
+If Rust is new to you, you get a little confused.&lt;&#x2F;p&gt;
+&lt;p&gt;You&#x27;re a smart cookie though, I&#x27;m sure you&#x27;ll keep up.&lt;&#x2F;p&gt;
+
+    &lt;&#x2F;span&gt;
+&lt;&#x2F;div&gt;
+&lt;h2 id=&quot;making-games-entities-components-systems-gear&quot;&gt;Making Games: Entities, Components, Systems ⚙️&lt;&#x2F;h2&gt;
+&lt;p&gt;Games are an incredibly fun and flexible type of project to work on.&lt;&#x2F;p&gt;
+&lt;p&gt;At it&#x27;s core, all games need a &quot;game loop&quot;:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Process input&lt;&#x2F;li&gt;
+&lt;li&gt;Transforms state&lt;&#x2F;li&gt;
+&lt;li&gt;Display new state&lt;&#x2F;li&gt;
+&lt;li&gt;Repeat&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;Outside of that, the possibilities are endless.
+But while the &lt;em&gt;possibilities&lt;&#x2F;em&gt; are endless, there are a few &lt;em&gt;patterns&lt;&#x2F;em&gt; that lots of folks seem to gravitate toward.&lt;&#x2F;p&gt;
+&lt;p&gt;You could write a whole book on game programming patterns (and somebody has, links at the bottom).
+Today we&#x27;re going to talk about one popular pattern: &lt;strong&gt;ECS: Entity Component System&lt;&#x2F;strong&gt;.
+Here&#x27;s what that looks like:&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;components&quot;&gt;Components&lt;&#x2F;h3&gt;
+&lt;p&gt;Pieces of data mixed, matched, and queried on.&lt;&#x2F;p&gt;
+&lt;p&gt;Example: Some components needed to simulate physics might be &quot;Mass&quot;, &quot;Movable&quot;, and &quot;Friction&quot;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;entities&quot;&gt;Entities&lt;&#x2F;h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A Unique ID associated with a collection of Components.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;Example: Potted plant you can break have the following components:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Sprite(&quot;&#x2F;path&#x2F;to&#x2F;plant.png&quot;)&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;Mass(6.8)&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;Movable(True)&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;Location((2, 5, 2))&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Each of these components are reusable. Instead of creating a &quot;PottedPlant&quot; class in code, we can define each entity in a config file like this:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#191919;color:#f8f8f2;&quot;&gt;&lt;code&gt;&lt;span&gt;potted-plant.txt:
+&lt;&#x2F;span&gt;&lt;span&gt;Sprite &#x2F;path&#x2F;to&#x2F;plant.png
+&lt;&#x2F;span&gt;&lt;span&gt;Mass 6.8
+&lt;&#x2F;span&gt;&lt;span&gt;Movable True
+&lt;&#x2F;span&gt;&lt;span&gt;Location 2 5 2
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This makes our engine much more reusable and separates our content from our logic.&lt;&#x2F;p&gt;
+&lt;p&gt;But how do we use these components?&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;systems&quot;&gt;Systems&lt;&#x2F;h3&gt;
+&lt;p&gt;Functions that operate on entities with specific components.&lt;&#x2F;p&gt;
+&lt;p&gt;A System queries for all entities with a specific subset of components and does some transformation on it.&lt;&#x2F;p&gt;
+&lt;p&gt;Example: a system that applies fire damage to an entity might look like this:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#191919;color:#f8f8f2;&quot;&gt;&lt;code&gt;&lt;span&gt;entities_on_fire = entities.query(on_fire=True, health &amp;gt; 0)
+&lt;&#x2F;span&gt;&lt;span&gt;for entity in entities_on_fire:
+&lt;&#x2F;span&gt;&lt;span&gt;    entity.health -= 5
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This is nice compared with a classes-based approach where we would need to manage inheritance to manually make sure everything interacted
+correctly.
+Here we define systems based on what features an entity has.
+The resulting systems and components interact with eachother in interesting and potentially unexpected ways.&lt;&#x2F;p&gt;
+&lt;p&gt;ECS is a popular pattern for creating interactive games and simulations.
+Engines like Unity have some ECS patterns built in, and almost every big game engine uses ECS in some way.&lt;&#x2F;p&gt;
+&lt;p&gt;Of course ECS isn&#x27;t a silver bullet, but for this blog post it&#x27;s good enough.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;tools-of-the-trade-c-and-c-hammer-pick&quot;&gt;Tools of the Trade: C and C++ ⚒️&lt;&#x2F;h2&gt;
+&lt;p&gt;C and C++ are very popular languages in games programming.
+They are defacto in the industry and many large engines, both internal and licensed engines, are written in C++.&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;m not here to bash on C and C++, but it can be useful to point out why you would bother using Rust if the norm is C++.&lt;&#x2F;p&gt;
+&lt;p&gt;The usual arguments in favor of Rust go a little something like this:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Rust is memory safe; in Rust it is very difficult to reference freed memory, mutate memory in two threads, and dereference a null pointer.&lt;&#x2F;li&gt;
+&lt;li&gt;Rust is expressive; a lot of functional-programming language features exist in Rust without the usual run-time cost of those languages.&lt;&#x2F;li&gt;
+&lt;li&gt;Rust doesn&#x27;t have any of the C&#x2F;C++ legacy baggage but &lt;em&gt;can&lt;&#x2F;em&gt; inter-operate with C&#x2F;C++ codebases.&lt;&#x2F;li&gt;
+&lt;li&gt;Rust has a kick-ass community and an ecosystem of battle-tested and safe code.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;So why does this all matter for games? I think of it it like this: Any project when it gets sufficiently complex benefits from Rust.
+Rust, by preventing a whole class of memory bugs, makes it easier to maintain a complex codebase over time.
+It might not be life or death, or as mission critical as security software, but completely avoiding null-pointer bugs, at essentially no performance cost, sounds like a huge weight off my shoulders.&lt;&#x2F;p&gt;
+&lt;p&gt;Games are by their nature huge and sprawling codebases.
+Many bugs in games are caught by a compiler, but even more errors would be caught by the Rust borrow-checker.
+And being able to use some of the nice functional-programming features would be nice too.&lt;&#x2F;p&gt;
+&lt;p&gt;Of course Rust is a relatively new language so your mileage may vary.
+If I ran a big game studio I don&#x27;t think I would throw out my C++ code and start fresh with Rust, but I would definitely put some research and development into it for new projects (said the Rust fanboy).&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;rusty-games-hello-amethyst-gem&quot;&gt;Rusty Games: Hello Amethyst 💎&lt;&#x2F;h2&gt;
+&lt;p&gt;Writing games in a safe, expressive, not C&#x2F;C++ language sounds great; where do I start?&lt;&#x2F;p&gt;
+&lt;p&gt;You could write a game from scratch, but there are engines written in Rust you can use today!
+Some of these focus on ease of use, some are for 2D games, some focus on compiling for the web.
+Most of these engines require you to write Rust, as opposed to using a GUI, but even that is changing.&lt;&#x2F;p&gt;
+&lt;p&gt;For a comprehensive list check out &lt;a href=&quot;https:&#x2F;&#x2F;www.arewegameyet.rs&quot;&gt;https:&#x2F;&#x2F;www.arewegameyet.rs&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;You could write this talk for almost any Rust Game Engine, but my personal favorite is Amethyst, so we&#x27;ll use that.
+Amethyst has a solid API, very active community, and is a good mix of flexible, convenient, and powerful.&lt;&#x2F;p&gt;
+&lt;p&gt;Amethyst checks off a few other boxes:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Implements an ECS runtime. Register Components, create Entities, and run Systems in Amethyst.&lt;&#x2F;li&gt;
+&lt;li&gt;Data driven design. Almost all data in Amethyst can be read in from a Config file.&lt;&#x2F;li&gt;
+&lt;li&gt;Apache + MIT licensed. Free as in speech is always nice.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h3 id=&quot;step-0-join-the-cargo-cult&quot;&gt;Step 0: Join the Cargo Cult&lt;&#x2F;h3&gt;
+&lt;p&gt;In this step we&#x27;re going to get Rust setup and create a &quot;hello world&quot; Rust project.&lt;&#x2F;p&gt;
+&lt;p&gt;If you haven&#x27;t already, setup your Rust toolchain and start a Rust project.&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Install &lt;code&gt;rustup&lt;&#x2F;code&gt;, the Rust toolchain manager.&lt;&#x2F;li&gt;
+&lt;li&gt;Run &lt;code&gt;rustup toolchain install stable&lt;&#x2F;code&gt; to install the latest stable Rust.&lt;&#x2F;li&gt;
+&lt;li&gt;Run &lt;code&gt;cargo new seagl-game&lt;&#x2F;code&gt; to create a &quot;hello world&quot; Rust application.&lt;&#x2F;li&gt;
+&lt;li&gt;Navigate to the new &lt;code&gt;seagl-game&lt;&#x2F;code&gt; folder.
+Add this to the end of our project&#x27;s metadata file, &lt;code&gt;Cargo.toml&lt;&#x2F;code&gt;:&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;pre style=&quot;background-color:#191919;color:#f8f8f2;&quot;&gt;&lt;code&gt;&lt;span&gt;# Cargo.toml
+&lt;&#x2F;span&gt;&lt;span&gt;[dependencies.amethyst]
+&lt;&#x2F;span&gt;&lt;span&gt;version = &amp;quot;0.15.1&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;features = [&amp;quot;vulkan&amp;quot;]  # &amp;quot;metal&amp;quot; on MacOS
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;ol start=&quot;5&quot;&gt;
+&lt;li&gt;Run &lt;code&gt;cargo build&lt;&#x2F;code&gt; to build and cache our dependencies.
+You should see a &lt;strong&gt;bunch&lt;&#x2F;strong&gt; of output like this:&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;pre style=&quot;background-color:#191919;color:#f8f8f2;&quot;&gt;&lt;code&gt;&lt;span&gt;$ cargo build
+&lt;&#x2F;span&gt;&lt;span&gt;...
+&lt;&#x2F;span&gt;&lt;span&gt;Compiling either v1.6.1
+&lt;&#x2F;span&gt;&lt;span&gt;Compiling gimli v0.23.0
+&lt;&#x2F;span&gt;&lt;span&gt;Compiling adler v0.2.3
+&lt;&#x2F;span&gt;&lt;span&gt;Compiling object v0.22.0
+&lt;&#x2F;span&gt;&lt;span&gt;...
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Now we have a &quot;hello world&quot; Rust project we can start building on.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;step-1-draw-a-window-triangular-ruler&quot;&gt;Step 1: Draw a Window 📐&lt;&#x2F;h3&gt;
+&lt;p&gt;Before we run, we need to walk.
+And before we walk we crawl.
+And before we crawl we draw a window.
+This is, of course, a little harder than just asking your computer &quot;Please draw me a window&quot;.&lt;&#x2F;p&gt;
+&lt;p&gt;First we need to add a bunch of imports to our project:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;amethyst::{
+&lt;&#x2F;span&gt;&lt;span&gt;    assets::{AssetStorage, Loader},
+&lt;&#x2F;span&gt;&lt;span&gt;    core::{
+&lt;&#x2F;span&gt;&lt;span&gt;        timing::Time,
+&lt;&#x2F;span&gt;&lt;span&gt;        transform::{Transform, TransformBundle},
+&lt;&#x2F;span&gt;&lt;span&gt;    },
+&lt;&#x2F;span&gt;&lt;span&gt;    derive::SystemDesc,
+&lt;&#x2F;span&gt;&lt;span&gt;    ecs::{
+&lt;&#x2F;span&gt;&lt;span&gt;        Component, DenseVecStorage, Entities, Join, Read, ReadStorage, System, SystemData,
+&lt;&#x2F;span&gt;&lt;span&gt;        WriteStorage,
+&lt;&#x2F;span&gt;&lt;span&gt;    },
+&lt;&#x2F;span&gt;&lt;span&gt;    input::{InputBundle, InputHandler, StringBindings},
+&lt;&#x2F;span&gt;&lt;span&gt;    prelude::&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    renderer::{
+&lt;&#x2F;span&gt;&lt;span&gt;        plugins::{RenderFlat2D, RenderToWindow},
+&lt;&#x2F;span&gt;&lt;span&gt;        types::DefaultBackend,
+&lt;&#x2F;span&gt;&lt;span&gt;        Camera, ImageFormat, RenderingBundle, SpriteRender, SpriteSheet, SpriteSheetFormat,
+&lt;&#x2F;span&gt;&lt;span&gt;        Texture,
+&lt;&#x2F;span&gt;&lt;span&gt;    },
+&lt;&#x2F;span&gt;&lt;span&gt;    utils::application_root_dir,
+&lt;&#x2F;span&gt;&lt;span&gt;};
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This is every dependency we will need for the entire project, so if &lt;code&gt;cargo build|run&lt;&#x2F;code&gt; complains about unused dependencies, don&#x27;t worry... we&#x27;ll get there.&lt;&#x2F;p&gt;
+&lt;p&gt;Here we are including a few useful&lt;&#x2F;p&gt;
+&lt;p&gt;Then we need to add some boiler-plate to our &lt;code&gt;main&lt;&#x2F;code&gt; function:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; This is necessary to make Rust&amp;#39;s type-checker happy
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; Our main function technically returns an Amethyst Result
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; It can either return an Amethyst error or a unit value
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8cdaff;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;() -&amp;gt; amethyst::&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;Result&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;()&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; Not required, but a logger very useful
+&lt;&#x2F;span&gt;&lt;span&gt;    amethyst::start_logger(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;Default&lt;&#x2F;span&gt;&lt;span&gt;::default());
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; Declare some useful variables used to tell Amethyst where our asset files and config files live
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; app_root &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;application_root_dir&lt;&#x2F;span&gt;&lt;span&gt;()&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;?&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; assets_dir &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; app_root.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;join&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;assets&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; display_config_path &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; app_root.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;join&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;config&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;join&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;display.ron&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; Declare a renderer bundle
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; Amethyst adds this collection of 2D Render systems to our game&amp;#39;s runtime
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; renderer &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;RenderingBundle::&amp;lt;DefaultBackend&amp;gt;::new()
+&lt;&#x2F;span&gt;&lt;span&gt;        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;with_plugin&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;            RenderToWindow::from_config_path(display_config_path)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;?
+&lt;&#x2F;span&gt;&lt;span&gt;                .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;with_clear&lt;&#x2F;span&gt;&lt;span&gt;([&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;1.00&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;0.33&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;0.00&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;1.0&lt;&#x2F;span&gt;&lt;span&gt;]),
+&lt;&#x2F;span&gt;&lt;span&gt;        ).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;with_plugin&lt;&#x2F;span&gt;&lt;span&gt;(RenderFlat2D::default());
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; Build the game&amp;#39;s systems
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; game_data &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;GameDataBuilder::default()
+&lt;&#x2F;span&gt;&lt;span&gt;        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;with_bundle&lt;&#x2F;span&gt;&lt;span&gt;(renderer)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;?&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; Build our application, which includes our game data, where our assets live, and our starting state
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; game &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;Application::new(assets_dir, SeaglState, game_data)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;?&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; Run the game!
+&lt;&#x2F;span&gt;&lt;span&gt;    game.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;run&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; Nothing bad happened, so return `()`
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;Ok&lt;&#x2F;span&gt;&lt;span&gt;(())
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;That won&#x27;t compile because we haven&#x27;t defined our &lt;code&gt;SeaglState&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#191919;color:#f8f8f2;&quot;&gt;&lt;code&gt;&lt;span&gt;$ cargo run
+&lt;&#x2F;span&gt;&lt;span&gt;...
+&lt;&#x2F;span&gt;&lt;span&gt;error[E0425]: cannot find value `SeaglState` in this scope
+&lt;&#x2F;span&gt;&lt;span&gt;  --&amp;gt; src&#x2F;main.rs:17:49
+&lt;&#x2F;span&gt;&lt;span&gt;   |
+&lt;&#x2F;span&gt;&lt;span&gt;30 |     let mut game = Application::new(assets_dir, SeaglState, game_data)?;
+&lt;&#x2F;span&gt;&lt;span&gt;   |                                                 ^^^^^^^^^^ not found in this scope
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Let&#x27;s add &lt;code&gt;SeaglState&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; States can store values, but for now we can use a unit-struct
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;struct &lt;&#x2F;span&gt;&lt;span&gt;SeaglState;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; We get a working state for free by rubber-stamping the &amp;quot;SimpleState&amp;quot; struct onto our SeaglState
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; We will implement our own logic for handling state start-up in the next step
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;impl &lt;&#x2F;span&gt;&lt;span&gt;SimpleState &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;SeaglState { }
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We will add some methods to &lt;code&gt;SeaglState&lt;&#x2F;code&gt; later, but for now this makes Rust and Amethyst happy enough to compile.&lt;&#x2F;p&gt;
+&lt;p&gt;But if we run our code we get a wonderfully cryptic error message:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#191919;color:#f8f8f2;&quot;&gt;&lt;code&gt;&lt;span&gt;Compiling seagl-talk v0.1.0 (&#x2F;home&#x2F;pop&#x2F;seagl-talk)
+&lt;&#x2F;span&gt;&lt;span&gt; Finished dev [unoptimized + debuginfo] target(s) in 24.81s
+&lt;&#x2F;span&gt;&lt;span&gt;  Running `target&#x2F;debug&#x2F;seagl-talk`
+&lt;&#x2F;span&gt;&lt;span&gt;Error: Error { inner: Inner { source: None, backtrace: None, error: File(Os { code: 2, kind: NotFound, message: &amp;quot;No such file or directory&amp;quot; }) } }
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We get errors like this when we have an unhandled exception in our code.
+In our &lt;code&gt;main&lt;&#x2F;code&gt; function, that is any place where we call a function with a &lt;code&gt;?&lt;&#x2F;code&gt;, e.g., &lt;code&gt;foo(...)?;&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;TLDT (Too Long Didn&#x27;t Troubleshoot) this is because we haven&#x27;t created our display config file!&lt;&#x2F;p&gt;
+&lt;p&gt;Add a new file &lt;code&gt;display.ron&lt;&#x2F;code&gt; in a new folder called &lt;code&gt;config&#x2F;&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; config&#x2F;display.ron
+&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;    title: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;SeaGL!&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    dimensions: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;Some&lt;&#x2F;span&gt;&lt;span&gt;((&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;500&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;500&lt;&#x2F;span&gt;&lt;span&gt;)),
+&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Now when we &lt;code&gt;cargo run&lt;&#x2F;code&gt; we should get a wonderful orange window:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;seagl-2020&#x2F;blank-window.png&quot; alt=&quot;It worked! We drew a window.&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;step-2-draw-a-seagl-dove&quot;&gt;Step 2: Draw a SeaGL 🕊️&lt;&#x2F;h3&gt;
+&lt;p&gt;Alas, we have a window but no game! Let&#x27;s draw our first character to the screen.&lt;&#x2F;p&gt;
+&lt;div class=&quot;note&quot;&gt;
+    &lt;span class=&quot;note-title&quot;&gt;
+        Note
+    &lt;&#x2F;span&gt;
+
+    &lt;span class=&quot;note-body&quot;&gt;
+        &lt;p&gt;Did you know that SeaGL&#x27;s mascot is named Patch?
+https:&#x2F;&#x2F;seagl.org&#x2F;news&#x2F;2020&#x2F;09&#x2F;10&#x2F;naming-contest.html&lt;&#x2F;p&gt;
+
+    &lt;&#x2F;span&gt;
+&lt;&#x2F;span&gt;
+&lt;p&gt;First we&#x27;ll create a Component for our Seagl.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;derive&lt;&#x2F;span&gt;&lt;span&gt;(Default)]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;pub &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;struct &lt;&#x2F;span&gt;&lt;span&gt;Seagl;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;impl &lt;&#x2F;span&gt;&lt;span&gt;Component &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;Seagl {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;type &lt;&#x2F;span&gt;&lt;span&gt;Storage &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;DenseVecStorage&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;Self&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Next we&#x27;ll create a Seagl entity.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;impl &lt;&#x2F;span&gt;&lt;span&gt;SimpleState &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;SeaglState {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8cdaff;&quot;&gt;on_start&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;amp;mut &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;data&lt;&#x2F;span&gt;&lt;span&gt;: StateData&amp;lt;GameData&amp;gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; transform &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;Transform::default();
+&lt;&#x2F;span&gt;&lt;span&gt;        transform.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;set_translation_xyz&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;50.0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;50.0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;0.0&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; seagl &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;Seagl::default();
+&lt;&#x2F;span&gt;&lt;span&gt;        data.world
+&lt;&#x2F;span&gt;&lt;span&gt;            .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;create_entity&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;            .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;with&lt;&#x2F;span&gt;&lt;span&gt;(seagl)
+&lt;&#x2F;span&gt;&lt;span&gt;            .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;with&lt;&#x2F;span&gt;&lt;span&gt;(transform)
+&lt;&#x2F;span&gt;&lt;span&gt;            .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;build&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This is a good start, but our Seagl is a spriteless ghost!&lt;&#x2F;p&gt;
+&lt;div class=&quot;warning&quot;&gt;
+    &lt;span class=&quot;warning-title&quot;&gt;
+        Warning
+    &lt;&#x2F;span&gt;
+
+    &lt;span class=&quot;warning-body&quot;&gt;
+        &lt;p&gt;Seagull ghosts are terrifying.
+Add a sprite!&lt;&#x2F;p&gt;
+
+    &lt;&#x2F;span&gt;
+&lt;&#x2F;div&gt;
+&lt;p&gt;First we need to load the spritesheet into memory.
+Add this in our &lt;em&gt;on_start&lt;&#x2F;em&gt; function above where we added the seagl:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; sprite_sheet_handle &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; loader &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; data.world.read_resource::&amp;lt;Loader&amp;gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; texture_storage &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; data.world.read_resource::&amp;lt;AssetStorage&amp;lt;Texture&amp;gt;&amp;gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; texture_handle &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; loader.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;load&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;texture&#x2F;spritesheet.png&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;        ImageFormat::default(),
+&lt;&#x2F;span&gt;&lt;span&gt;        (),
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span&gt;texture_storage,
+&lt;&#x2F;span&gt;&lt;span&gt;    );
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; sprite_sheet_store &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; data.world.read_resource::&amp;lt;AssetStorage&amp;lt;SpriteSheet&amp;gt;&amp;gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;    loader.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;load&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;texture&#x2F;spritesheet.ron&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;        SpriteSheetFormat(texture_handle),
+&lt;&#x2F;span&gt;&lt;span&gt;        (),
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span&gt;sprite_sheet_store,
+&lt;&#x2F;span&gt;&lt;span&gt;    )
+&lt;&#x2F;span&gt;&lt;span&gt;};
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Then modify our Seagl entity like so:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;diff&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-diff &quot;&gt;&lt;code class=&quot;language-diff&quot; data-lang=&quot;diff&quot;&gt;&lt;span style=&quot;color:#a6e22e;&quot;&gt;++ main.rs
+&lt;&#x2F;span&gt;&lt;span&gt;@@ impl SimpleState for SeaglState
+&lt;&#x2F;span&gt;&lt;span&gt;@@ fn on_start(...)
+&lt;&#x2F;span&gt;&lt;span&gt;  let mut transform = Transform::default();
+&lt;&#x2F;span&gt;&lt;span&gt;  transform.set_translation_xyz(50.0, 50.0, 0.0);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a6e22e;&quot;&gt;+ let sprite = SpriteRender::new(sprite_sheet_handle.clone(), 0);
+&lt;&#x2F;span&gt;&lt;span&gt;  let seagl = Seagl::default();
+&lt;&#x2F;span&gt;&lt;span&gt;  data.world
+&lt;&#x2F;span&gt;&lt;span&gt;      .create_entity()
+&lt;&#x2F;span&gt;&lt;span&gt;      .with(seagl)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a6e22e;&quot;&gt;+     .with(sprite)
+&lt;&#x2F;span&gt;&lt;span&gt;      .with(transform)
+&lt;&#x2F;span&gt;&lt;span&gt;      .build();
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Let&#x27;s see.
+We created a Seagl entity. Let&#x27;s try running this thing:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#191919;color:#f8f8f2;&quot;&gt;&lt;code&gt;&lt;span&gt;$ cargo run
+&lt;&#x2F;span&gt;&lt;span&gt;...
+&lt;&#x2F;span&gt;&lt;span&gt;thread &amp;#39;main&amp;#39; panicked at &amp;#39;Tried to fetch resource of type `MaskedStorage&amp;lt;Seagl&amp;gt;`[^1] from the `World`, but the resource does not exist.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;You may ensure the resource exists through one of the following methods:
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;* Inserting it when the world is created: `world.insert(..)`.
+&lt;&#x2F;span&gt;&lt;span&gt;* If the resource implements `Default`, include it in a system&amp;#39;s `SystemData`, and ensure the system is registered in the dispatcher.
+&lt;&#x2F;span&gt;&lt;span&gt;* If the resource does not implement `Default`, insert it in the world during `System::setup`.
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Hmm.
+It seems like our &lt;code&gt;Seagl&lt;&#x2F;code&gt; Component isn&#x27;t registered with Amethyst.
+This happens implicitly when we add a system that uses our component, but until we write a System, we&#x27;ll have to explicitly register our Component with Amethyst.&lt;&#x2F;p&gt;
+&lt;p&gt;Add this toward the top of our &lt;code&gt;on_start&lt;&#x2F;code&gt; method:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span&gt;data.world.register::&amp;lt;Seagl&amp;gt;();
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Let&#x27;s try running again:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#191919;color:#f8f8f2;&quot;&gt;&lt;code&gt;&lt;span&gt;$ cargo run
+&lt;&#x2F;span&gt;&lt;span&gt;...
+&lt;&#x2F;span&gt;&lt;span&gt;Error { inner: Inner { source: Some(Error { inner: Inner { source: None, backtrace: None,
+&lt;&#x2F;span&gt;&lt;span&gt;error: Os { code: 2, kind: NotFound, message: &amp;quot;No such file or directory&amp;quot; } } }), backtrace: None,
+&lt;&#x2F;span&gt;&lt;span&gt;error: StringError(&amp;quot;Failed to fetch metadata for \&amp;quot;&#x2F;home&#x2F;pop&#x2F;seagl-talk&#x2F;assets&#x2F;texture&#x2F;spritesheet.ron\&amp;quot;&amp;quot;) } }
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Ah, a different runtime error.
+This time we forgot to add our spritesheet image and spritesheet config file.
+Lets add those.&lt;&#x2F;p&gt;
+&lt;p&gt;Add this code to a file in &lt;code&gt;assets&#x2F;texture&#x2F;spritesheet.ron&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; assets&#x2F;texture&#x2F;spritesheet.ron
+&lt;&#x2F;span&gt;&lt;span&gt;List((
+&lt;&#x2F;span&gt;&lt;span&gt;    texture_width: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;32&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    texture_height: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;16&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    sprites: [
+&lt;&#x2F;span&gt;&lt;span&gt;        ( &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; Seagl
+&lt;&#x2F;span&gt;&lt;span&gt;            x: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;            y: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;            width: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;16&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;            height: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;16&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;        ),
+&lt;&#x2F;span&gt;&lt;span&gt;        ( &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; Burger
+&lt;&#x2F;span&gt;&lt;span&gt;            x: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;16&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;            y: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;            width: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;10&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;            height: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;8&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;        ),
+&lt;&#x2F;span&gt;&lt;span&gt;    ],
+&lt;&#x2F;span&gt;&lt;span&gt;))
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;And save this image to &lt;code&gt;assets&#x2F;texture&#x2F;spritesheet.png&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;seagl-2020&#x2F;spritesheet.png&quot; alt=&quot;Seagl and Burger. 32x16. Pixel on LCD.&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Now if we run &lt;code&gt;cargo run&lt;&#x2F;code&gt; we get the same blank orange window.
+This happened because we forgot to add a Camera to the scene!&lt;&#x2F;p&gt;
+&lt;p&gt;Add this to the end of our &lt;code&gt;on_start&lt;&#x2F;code&gt; function:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; transform &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;Transform::default();
+&lt;&#x2F;span&gt;&lt;span&gt;transform.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;set_translation_xyz&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;50.0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;50.0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;1.0&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;data.world
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;create_entity&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;with&lt;&#x2F;span&gt;&lt;span&gt;(Camera::standard_2d(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;100.0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;100.0&lt;&#x2F;span&gt;&lt;span&gt;))
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;with&lt;&#x2F;span&gt;&lt;span&gt;(transform)
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;build&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;seagl-2020&#x2F;window-with-seagl.png&quot; alt=&quot;That&amp;#39;s a nice looking Seagl there...&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;div class=&quot;note&quot;&gt;
+    &lt;span class=&quot;note-title&quot;&gt;
+        Note
+    &lt;&#x2F;span&gt;
+
+    &lt;span class=&quot;note-body&quot;&gt;
+        &lt;p&gt;It&#x27;s so beautifull...&lt;&#x2F;p&gt;
+
+    &lt;&#x2F;span&gt;
+&lt;&#x2F;span&gt;
+&lt;h3 id=&quot;step-3-move-around-horse-racing&quot;&gt;Step 3: Move Around 🏇&lt;&#x2F;h3&gt;
+&lt;p&gt;Thinking back to our ECS discussion, we have two of the three ingredients: an Entity, some Components, but no Systems!&lt;&#x2F;p&gt;
+&lt;p&gt;First, we need to create a System struct and implement &lt;code&gt;System&lt;&#x2F;code&gt; on it.&lt;&#x2F;p&gt;
+&lt;p&gt;Our System&#x27;s run function looks like this in psuedocode:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;txt&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-txt &quot;&gt;&lt;code class=&quot;language-txt&quot; data-lang=&quot;txt&quot;&gt;&lt;span&gt;for every seagl that can move:
+&lt;&#x2F;span&gt;&lt;span&gt;    If the user input was to move horizontal:
+&lt;&#x2F;span&gt;&lt;span&gt;        Move the seagl horizontally
+&lt;&#x2F;span&gt;&lt;span&gt;    If the user input was to move vertical:
+&lt;&#x2F;span&gt;&lt;span&gt;        Move the seagl vertically
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This doesn&#x27;t look &lt;em&gt;exactly&lt;&#x2F;em&gt; the same in Rust, but it&#x27;s pretty close.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;derive&lt;&#x2F;span&gt;&lt;span&gt;(SystemDesc)]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;pub &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;struct &lt;&#x2F;span&gt;&lt;span&gt;MoveSystem;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;impl&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;#39;s&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt; System&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;#39;s&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;MoveSystem {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;type &lt;&#x2F;span&gt;&lt;span&gt;SystemData &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;        WriteStorage&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;#39;s&lt;&#x2F;span&gt;&lt;span&gt;, Transform&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;        ReadStorage&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;#39;s&lt;&#x2F;span&gt;&lt;span&gt;, Seagl&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;        Read&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;#39;s&lt;&#x2F;span&gt;&lt;span&gt;, Time&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;        Read&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;#39;s&lt;&#x2F;span&gt;&lt;span&gt;, InputHandler&amp;lt;StringBindings&amp;gt;&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    );
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8cdaff;&quot;&gt;run&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;amp;mut &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;, (&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;mut transforms&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;seagls&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;time&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;input&lt;&#x2F;span&gt;&lt;span&gt;): &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;Self::&lt;&#x2F;span&gt;&lt;span&gt;SystemData) {
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; speed: &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;f32 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;50.0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;(_seagl, transform) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;in &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span&gt;seagls, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;amp;mut&lt;&#x2F;span&gt;&lt;span&gt; transforms).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;join&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;Some&lt;&#x2F;span&gt;&lt;span&gt;(horizontal) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; input.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;axis_value&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;horizontal&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;                transform.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;prepend_translation_x&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;                    horizontal &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; time.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;delta_seconds&lt;&#x2F;span&gt;&lt;span&gt;() &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; speed  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;as &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;f32
+&lt;&#x2F;span&gt;&lt;span&gt;                );
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;            };
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;Some&lt;&#x2F;span&gt;&lt;span&gt;(vertical) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; input.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;axis_value&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;vertical&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;                transform.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;prepend_translation_y&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;                    vertical &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; time.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;delta_seconds&lt;&#x2F;span&gt;&lt;span&gt;() &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; speed &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;as &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;f32
+&lt;&#x2F;span&gt;&lt;span&gt;                );
+&lt;&#x2F;span&gt;&lt;span&gt;            };
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We declare a &lt;code&gt;SystemData&lt;&#x2F;code&gt; type which is a tuple of components.
+The &lt;code&gt;Transform&lt;&#x2F;code&gt; component will be modified, so we require it as &lt;code&gt;mut&lt;&#x2F;code&gt;, but everything else is &lt;code&gt;Read&lt;&#x2F;code&gt; for stuff that Amethyst provides and &lt;code&gt;ReadStorage&lt;&#x2F;code&gt; for things we created.&lt;&#x2F;p&gt;
+&lt;p&gt;We loop over every entity with the &lt;code&gt;Seagl&lt;&#x2F;code&gt; and &lt;code&gt;Transform&lt;&#x2F;code&gt; components, then we match against any user input:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;If we had &quot;vertical&quot; input, move the entity on the x axis.&lt;&#x2F;li&gt;
+&lt;li&gt;If we had &quot;horizontal&quot; input, move the entity on the y axis.&lt;&#x2F;li&gt;
+&lt;li&gt;We don&#x27;t need to explicitly say &quot;move left&quot;&#x2F;&quot;move right&quot; because the horizontal&#x2F;vertical inputs can be positive or negative.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Next we need to register this system with out game.
+Because we are using Inputs we also need to register the inputs bundle with the game.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;diff&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-diff &quot;&gt;&lt;code class=&quot;language-diff&quot; data-lang=&quot;diff&quot;&gt;&lt;span style=&quot;color:#75715e;&quot;&gt;+++ main.rs
+&lt;&#x2F;span&gt;&lt;span&gt;@@ fn main() -&amp;gt; amethyst::Result&amp;lt;()&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;     )
+&lt;&#x2F;span&gt;&lt;span&gt;     .with_plugin(RenderFlat2D::default());
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a6e22e;&quot;&gt;+    let bindings_path = app_root.join(&amp;quot;config&amp;quot;).join(&amp;quot;bindings.ron&amp;quot;);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a6e22e;&quot;&gt;+    let inputs = InputBundle::&amp;lt;StringBindings&amp;gt;::new().with_bindings_from_file(bindings_path)?;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a6e22e;&quot;&gt;+
+&lt;&#x2F;span&gt;&lt;span&gt;     let game_data = GameDataBuilder::default()
+&lt;&#x2F;span&gt;&lt;span&gt;         .with_bundle(transform)?
+&lt;&#x2F;span&gt;&lt;span&gt;         .with_bundle(renderer)?
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a6e22e;&quot;&gt;+        .with_bundle(inputs)?
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a6e22e;&quot;&gt;+        .with(MoveSystem, &amp;quot;move_system&amp;quot;, &amp;amp;[&amp;quot;input_system&amp;quot;]);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;     let mut game = Application::new(assets_dir, SeaglState, game_data)?;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We have a dependency on the &lt;code&gt;input_system&lt;&#x2F;code&gt;, so Amethyst will ensure that system runs before &lt;code&gt;move_system&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Next we need to create a config file for our movement bindings.
+Instead of hard-coding &quot;Up arrow means move up, down arrow means down&quot; we put that in config files:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; config&#x2F;bindings.ron
+&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;    axes: {
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;horizontal&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;: Emulated(pos: Key(Right), neg: Key(Left)),
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fbe3bf;&quot;&gt;vertical&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ffffff;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;: Emulated(pos: Key(Up), neg: Key(Down)),
+&lt;&#x2F;span&gt;&lt;span&gt;    },
+&lt;&#x2F;span&gt;&lt;span&gt;    actions: {},
+&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;![It moves!](&#x2F;images&#x2F;seagl-2020&#x2F;SeaGL-move.gif&quot; class=&quot;align-center)&lt;&#x2F;p&gt;
+&lt;p&gt;This is a good start, but you&#x27;ll notice the Seagl doesn&#x27;t turn left and right, this &lt;em&gt;totally&lt;&#x2F;em&gt; breaks my suspension of disbelief so we&#x27;re gonna need to fix that in our &lt;code&gt;run&lt;&#x2F;code&gt; method:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;diff&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-diff &quot;&gt;&lt;code class=&quot;language-diff&quot; data-lang=&quot;diff&quot;&gt;&lt;span&gt;diff --git a&#x2F;src&#x2F;main.rs b&#x2F;src&#x2F;main.rs
+&lt;&#x2F;span&gt;&lt;span&gt;@@ impl&amp;lt;&amp;#39;s&amp;gt; System&amp;lt;&amp;#39;s&amp;gt; for MoveSystem
+&lt;&#x2F;span&gt;&lt;span&gt;@@ run(...)
+&lt;&#x2F;span&gt;&lt;span&gt;  if let Some(vertical) = input.axis_value(&amp;quot;vertical&amp;quot;) {
+&lt;&#x2F;span&gt;&lt;span&gt;      transform.prepend_translation_x(
+&lt;&#x2F;span&gt;&lt;span&gt;        horizontal * time.delta_seconds() * speed  as f32
+&lt;&#x2F;span&gt;&lt;span&gt;      );
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a6e22e;&quot;&gt;+     if horizontal &amp;gt; 0.0 {
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a6e22e;&quot;&gt;+       transform.set_rotation_y_axis(std::f32::consts::PI);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a6e22e;&quot;&gt;+     }
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a6e22e;&quot;&gt;+     if horizontal &amp;lt; 0.0 {
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a6e22e;&quot;&gt;+       transform.set_rotation_y_axis(0.0);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a6e22e;&quot;&gt;+     }
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a6e22e;&quot;&gt;+
+&lt;&#x2F;span&gt;&lt;span&gt;  };
+&lt;&#x2F;span&gt;&lt;span&gt;  if let Some(vertical) = input.axis_value(&amp;quot;vertical&amp;quot;) {
+&lt;&#x2F;span&gt;&lt;span&gt;      transform.prepend_translation_y(
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;In our &quot;horizontal&quot; check we added:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;If the input was greater than 0, flip our sprite on the Y axis.&lt;&#x2F;li&gt;
+&lt;li&gt;If the input was less than 0, reset our sprite on the Y axis.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;This makes it look like our Seagl is facing the direction they&#x27;re moving which should help boost our Metacritic score when we publish this at the end of the blogpost.&lt;&#x2F;p&gt;
+&lt;div class=&quot;note&quot;&gt;
+    &lt;span class=&quot;note-title&quot;&gt;
+        Note
+    &lt;&#x2F;span&gt;
+
+    &lt;span class=&quot;note-body&quot;&gt;
+        &lt;p&gt;We rotate by PI because our 2D sprite is in the 3D world and we&#x27;re rotating it in radians.&lt;&#x2F;p&gt;
+&lt;p&gt;Do you ever feel like a 2D sprite in a 3D world? I know I do...&lt;&#x2F;p&gt;
+
+    &lt;&#x2F;span&gt;
+&lt;&#x2F;span&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;seagl-2020&#x2F;SeaGL-move-look.gif&quot; alt=&quot;It moves!&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;step-4-eat-some-food-hamburger&quot;&gt;Step 4: Eat some food! 🍔&lt;&#x2F;h3&gt;
+&lt;p&gt;I&#x27;m sure we could all get &lt;em&gt;minutes&lt;&#x2F;em&gt; of fun out of moving our seagl around the screen, but this game could really use something else... Something tastier.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s add burgers.&lt;&#x2F;p&gt;
+&lt;p&gt;This will require us to do everything we just did, again:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Add a Food Compnent.&lt;&#x2F;li&gt;
+&lt;li&gt;Create a Burger entity with the food component.&lt;&#x2F;li&gt;
+&lt;li&gt;Add an Eat system.&lt;&#x2F;li&gt;
+&lt;li&gt;Register our Eat system with the game.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;First we need to add a food Component.&lt;&#x2F;p&gt;
+&lt;p&gt;Add this component anywhere that feels right:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;derive&lt;&#x2F;span&gt;&lt;span&gt;(Default)]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;pub &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;struct &lt;&#x2F;span&gt;&lt;span&gt;Food;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;impl &lt;&#x2F;span&gt;&lt;span&gt;Component &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;Food {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;type &lt;&#x2F;span&gt;&lt;span&gt;Storage &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;DenseVecStorage&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;Self&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;It&#x27;s structurally identical to our Seagl, but with a different &lt;code&gt;struct&lt;&#x2F;code&gt; it&#x27;s a totally different component.&lt;&#x2F;p&gt;
+&lt;p&gt;With a Food component we can add our Burger entity.
+Add this code to our &lt;code&gt;on_setup&lt;&#x2F;code&gt; function at the end:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; burger_sprite &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;SpriteRender::new(sprite_sheet_handle.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;clone&lt;&#x2F;span&gt;&lt;span&gt;(), &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; transform &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;Transform::default();
+&lt;&#x2F;span&gt;&lt;span&gt;transform.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;set_translation_xyz&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;75.0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;75.0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;1.0&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;data.world
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;create_entity&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;with&lt;&#x2F;span&gt;&lt;span&gt;(Food::default())
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;with&lt;&#x2F;span&gt;&lt;span&gt;(burger_sprite)
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;with&lt;&#x2F;span&gt;&lt;span&gt;(transform)
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;build&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We create an entity spawning it at the point (75, 75, -1).&lt;&#x2F;p&gt;
+&lt;div class=&quot;note&quot;&gt;
+    &lt;span class=&quot;note-title&quot;&gt;
+        Note
+    &lt;&#x2F;span&gt;
+
+    &lt;span class=&quot;note-body&quot;&gt;
+        &lt;p&gt;We spawn the burger at &lt;code&gt;z=-1&lt;&#x2F;code&gt; to ensure the Seagl sprite is closer to
+the camera and thus is drawn on top of the burger.&lt;&#x2F;p&gt;
+&lt;p&gt;Have you ever seen a Seagull &lt;em&gt;behind&lt;&#x2F;em&gt; a burger? That&#x27;s ridiculous.&lt;&#x2F;p&gt;
+
+    &lt;&#x2F;span&gt;
+&lt;&#x2F;span&gt;
+&lt;div class=&quot;note&quot;&gt;
+    &lt;span class=&quot;note-title&quot;&gt;
+        Note
+    &lt;&#x2F;span&gt;
+
+    &lt;span class=&quot;note-body&quot;&gt;
+        &lt;p&gt;A few exercises left to the reader:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;How would you spawn multiple burgers?&lt;&#x2F;li&gt;
+&lt;li&gt;How would you re-spawn burgers when one is eaten?&lt;&#x2F;li&gt;
+&lt;li&gt;How would you keep track of how many burgers were eaten?&lt;&#x2F;li&gt;
+&lt;li&gt;How would you display the number of burgers eaten?&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;I&#x27;ve only covered enough in this post to answer the first two.&lt;&#x2F;p&gt;
+
+    &lt;&#x2F;span&gt;
+&lt;&#x2F;span&gt;
+&lt;p&gt;And finally an &quot;eat&quot; system.&lt;&#x2F;p&gt;
+&lt;p&gt;This system&#x27;s pseudocode looks like this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;txt&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-txt &quot;&gt;&lt;code class=&quot;language-txt&quot; data-lang=&quot;txt&quot;&gt;&lt;span&gt;For each seagl with a location:
+&lt;&#x2F;span&gt;&lt;span&gt;    For each Food with a location:
+&lt;&#x2F;span&gt;&lt;span&gt;        If the Seagl overlaps with the Food:
+&lt;&#x2F;span&gt;&lt;span&gt;            Destory that food
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This is a bit of a hack.
+If this were a real game we would keep track of how many burgers the Seagl ate, but for this demo, we&#x27;ll be lazy:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;pub &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;struct &lt;&#x2F;span&gt;&lt;span&gt;EatSystem;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;impl&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;#39;s&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt; System&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;#39;s&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;EatSystem {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;type &lt;&#x2F;span&gt;&lt;span&gt;SystemData &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;        ReadStorage&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;#39;s&lt;&#x2F;span&gt;&lt;span&gt;, Transform&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;        ReadStorage&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;#39;s&lt;&#x2F;span&gt;&lt;span&gt;, Seagl&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;        ReadStorage&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;#39;s&lt;&#x2F;span&gt;&lt;span&gt;, Food&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;        Entities&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;#39;s&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    );
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8cdaff;&quot;&gt;run&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;amp;mut &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;, (&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;transforms&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;seagls&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;foods&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fc9354;&quot;&gt;entities&lt;&#x2F;span&gt;&lt;span&gt;): &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#fbdfb5;&quot;&gt;Self::&lt;&#x2F;span&gt;&lt;span&gt;SystemData) {
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;(_seagl, seagl_pos) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;in &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span&gt;seagls, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span&gt;transforms).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;join&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;(_food, food_pos, entity) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;in &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span&gt;foods, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span&gt;transforms, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span&gt;entities).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;join&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;                &lt;&#x2F;span&gt;&lt;span style=&quot;color:#6d6d6d;&quot;&gt;&#x2F;&#x2F; https:&#x2F;&#x2F;developer.mozilla.org&#x2F;en-US&#x2F;docs&#x2F;Games&#x2F;Techniques&#x2F;2D_collision_detection
+&lt;&#x2F;span&gt;&lt;span&gt;                &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;(seagl_pos.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;translation&lt;&#x2F;span&gt;&lt;span&gt;().x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span&gt; food_pos.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;translation&lt;&#x2F;span&gt;&lt;span&gt;().x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;+ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;5.0&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;amp;&amp;amp;
+&lt;&#x2F;span&gt;&lt;span&gt;                   (seagl_pos.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;translation&lt;&#x2F;span&gt;&lt;span&gt;().x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;+ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;8.0 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span&gt; food_pos.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;translation&lt;&#x2F;span&gt;&lt;span&gt;().x) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;amp;&amp;amp;
+&lt;&#x2F;span&gt;&lt;span&gt;                   (seagl_pos.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;translation&lt;&#x2F;span&gt;&lt;span&gt;().y &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span&gt; food_pos.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;translation&lt;&#x2F;span&gt;&lt;span&gt;().y &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;+ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;4.0&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;amp;&amp;amp;
+&lt;&#x2F;span&gt;&lt;span&gt;                   (seagl_pos.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;translation&lt;&#x2F;span&gt;&lt;span&gt;().y &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;+ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#fdb082;&quot;&gt;8.0 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#ff5e5e;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span&gt; food_pos.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;translation&lt;&#x2F;span&gt;&lt;span&gt;().y)
+&lt;&#x2F;span&gt;&lt;span&gt;                {
+&lt;&#x2F;span&gt;&lt;span&gt;                    entities.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;delete&lt;&#x2F;span&gt;&lt;span&gt;(entity).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#6699cc;&quot;&gt;unwrap&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;                }
+&lt;&#x2F;span&gt;&lt;span&gt;            }
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;And last but not least, we need to register this system with our game:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;diff&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-diff &quot;&gt;&lt;code class=&quot;language-diff&quot; data-lang=&quot;diff&quot;&gt;&lt;span style=&quot;color:#75715e;&quot;&gt;+++ main.rs
+&lt;&#x2F;span&gt;&lt;span&gt;@@ fn main() -&amp;gt; amethyst::Result&amp;lt;()&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;     let game_data = GameDataBuilder::default()
+&lt;&#x2F;span&gt;&lt;span&gt;         .with_bundle(transform)?
+&lt;&#x2F;span&gt;&lt;span&gt;         .with_bundle(renderer)?
+&lt;&#x2F;span&gt;&lt;span&gt;         .with_bundle(inputs)?
+&lt;&#x2F;span&gt;&lt;span&gt;         .with(MoveSystem, &amp;quot;move_system&amp;quot;, &amp;amp;[&amp;quot;input_system&amp;quot;])
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a6e22e;&quot;&gt;+        .with(EatSystem, &amp;quot;eat_system&amp;quot;, &amp;amp;[&amp;quot;move_system&amp;quot;]);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;img src=&quot;&#x2F;images&#x2F;seagl-2020&#x2F;SeaGL-move-look-burger.gif&quot;
+class=&quot;align-center&quot; alt=&quot;It moves!&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;conclusions&quot;&gt;Conclusions&lt;&#x2F;h2&gt;
+&lt;p&gt;We did it. We made a lil&#x27; game. It had a Seagl and a burger. And we had
+fun making it.&lt;&#x2F;p&gt;
+&lt;p&gt;I wouldn&#x27;t say it&#x27;s &lt;em&gt;easy&lt;&#x2F;em&gt; to make games in Rust, but we are &lt;em&gt;very far&lt;&#x2F;em&gt;
+from having to write games from scratch.&lt;&#x2F;p&gt;
+&lt;p&gt;If this post piqued your interest I hope you check out &lt;a href=&quot;https:&#x2F;&#x2F;arewegameyet.rs&quot;&gt;https:&#x2F;&#x2F;arewegameyet.rs&lt;&#x2F;a&gt; to learn more about the Rust Games ecosystem, and &lt;a href=&quot;https:&#x2F;&#x2F;amethyst.rs&quot;&gt;https:&#x2F;&#x2F;amethyst.rs&lt;&#x2F;a&gt; to learn more about this budding Game Engine.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;links&quot;&gt;Links&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;SeaGL conference website: &lt;a href=&quot;https:&#x2F;&#x2F;seagl.org&#x2F;&quot;&gt;https:&#x2F;&#x2F;seagl.org&#x2F;&lt;&#x2F;a&gt; (You should go if you&#x27;re in the Pacific Northwest)&lt;&#x2F;li&gt;
+&lt;li&gt;The code for this post is avaliable at &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;pop&#x2F;lets-make-games-with-rust&quot;&gt;https:&#x2F;&#x2F;github.com&#x2F;pop&#x2F;lets-make-games-with-rust&lt;&#x2F;a&gt;. I even tagged each step so you can see exactly what we added!&lt;&#x2F;li&gt;
+&lt;li&gt;Rust Language: &lt;a href=&quot;https:&#x2F;&#x2F;www.rust-lang.org&#x2F;&quot;&gt;https:&#x2F;&#x2F;www.rust-lang.org&#x2F;&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;Are We Game Yet?: &lt;a href=&quot;https:&#x2F;&#x2F;arewegameyet.rs&#x2F;&quot;&gt;https:&#x2F;&#x2F;arewegameyet.rs&#x2F;&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;Amethyst Game Engine website: &lt;a href=&quot;https:&#x2F;&#x2F;amethyst.rs&#x2F;&quot;&gt;https:&#x2F;&#x2F;amethyst.rs&#x2F;&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;Amethyst Game Engine book has a great introduction and overview: &lt;a href=&quot;https:&#x2F;&#x2F;book.amethyst.rs&#x2F;stable&#x2F;&quot;&gt;https:&#x2F;&#x2F;book.amethyst.rs&#x2F;stable&#x2F;&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;Bevy Game Engine is an interesting iteration on Game Engines in Rust: &lt;a href=&quot;https:&#x2F;&#x2F;bevyengine.org&#x2F;&quot;&gt;https:&#x2F;&#x2F;bevyengine.org&#x2F;&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;My Source that C++ is the defacto language in the games industry: &lt;a href=&quot;https:&#x2F;&#x2F;youtu.be&#x2F;rX0ItVEVjHc&quot;&gt;https:&#x2F;&#x2F;youtu.be&#x2F;rX0ItVEVjHc&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;Game Programming Patterns is an awesome book with a free &amp;amp; legal copy online: &lt;a href=&quot;https:&#x2F;&#x2F;gameprogrammingpatterns.com&#x2F;&quot;&gt;https:&#x2F;&#x2F;gameprogrammingpatterns.com&#x2F;&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;rustup&lt;&#x2F;code&gt; homepage for installation instructions: &lt;a href=&quot;https:&#x2F;&#x2F;rustup.rs&#x2F;&quot;&gt;https:&#x2F;&#x2F;rustup.rs&#x2F;&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+        
+    </entry>
+</feed>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>elijah.run - podcast</title>
+    <subtitle>A blog about tech, media, and art</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://elijah.run/tags/podcast/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://elijah.run"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2026-02-20T00:00:00+00:00</updated>
+    <id>https://elijah.run/tags/podcast/atom.xml</id>
+    <entry xml:lang="en">
+        <title>In This Economy?: How Money &amp; Markets Really Work by Kyla Scanlon (Audiobook)</title>
+        <published>2026-02-20T00:00:00+00:00</published>
+        <updated>2026-02-20T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Elijah Voigt
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://elijah.run/backlog/in-this-economy/"/>
+        <id>https://elijah.run/backlog/in-this-economy/</id>
+        
+        <content type="html" xml:base="https://elijah.run/backlog/in-this-economy/">&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;elijah.run&#x2F;backlog&#x2F;in-this-economy&#x2F;in-this-economy.jpg&quot; alt=&quot;in-this-economy.jpg&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Kyla Scanlon shows up regularly in my video feeds, across both TikTok and YouTube, so when I saw she wrote a book -- thanks to a Hank Green interview -- I requested it from my Library on Libby.
+I was pleasently surprised to see that she read the book, which as a personality I trust I appreciated her giving voice to her words; it lended an air of credibility.&lt;&#x2F;p&gt;
+&lt;p&gt;The economics in the book are solid, at least to a normie economics nerd like myself.
+I appreciate that, similar to the Marketplace radio show&#x2F;podcast a running theme of &quot;The Stock Market is not The Economy, People are the Economy&quot;, focusing on how the economy fails people but how it can serve people better.&lt;&#x2F;p&gt;
+&lt;p&gt;Over all I think it&#x27;s a sold introduction to economics for folks looking to get into the topic.
+It is a little dense compared to other pop-sci-type books, but much much much lighter than actual economics textbooks.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Shell game</title>
+        <published>2026-02-20T00:00:00+00:00</published>
+        <updated>2026-02-20T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Elijah Voigt
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://elijah.run/backlog/shell-game/"/>
+        <id>https://elijah.run/backlog/shell-game/</id>
+        
+        <content type="html" xml:base="https://elijah.run/backlog/shell-game/">&lt;p&gt;Shell Game is a podcast about things that aren&#x27;t what they seem, which in both cases are AI agents acting like real human people.
+The show is funny and shocking with the hosts willingness to push things just a bit further than most people would for the sake of journalist rigor.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;elijah.run&#x2F;backlog&#x2F;shell-game&#x2F;shell-game-s1.jpg&quot; alt=&quot;shell-game-s1.jpg&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;I think everybody should listen to this podcast.
+It does a perfect job of describing the AI landscape &lt;em&gt;as it is&lt;&#x2F;em&gt; with all of it&#x27;s strengths and limitations without any of the hype that clouds the conversation.
+If you keep hearing about AI and think it&#x27;ll steal your job or fizzle out (or somewhere between those extremes) check this out, it will ground you I promise.&lt;&#x2F;p&gt;
+&lt;p&gt;In Season 1 the host, Evan Ratliff, creates an AI &quot;clone&quot; of his voice and wires it up to receive phone calls.
+He then plays the most chaotic neutral game ever: let the bot talk to customer service folks.
+He escalates the game from there to scammers, work meetings, friends and family, and the entire time he&#x27;s sharing these calls in podcast form of &lt;em&gt;his&lt;&#x2F;em&gt; voice but &lt;em&gt;not him&lt;&#x2F;em&gt; so you have to really listen to figure out if this is the robot Evan (it usually is) or real Evan.&lt;&#x2F;p&gt;
+&lt;p&gt;One fun side-effect of listening to this show is that I am better at identifying the &quot;tells&quot; of a robo-voice.
+Even if it sounds convincing and has responsive converstaions, the latency and &quot;what a weird way to say a normal thing&quot; word choice is a dead giveaway.
+Of course tech is changing and my keen sense of what a robot sounds like will probably be out of date in like... a week.&lt;&#x2F;p&gt;
+&lt;p&gt;The other side effect is that I have started to sound like the robot voice &lt;em&gt;just a little bit&lt;&#x2F;em&gt;.
+It&#x27;s like when you listen to an audiobook and start to think in the reader&#x27;s voice; that happens to you too right?
+Right?&lt;&#x2F;p&gt;
+&lt;p&gt;I have finished Season 1.
+I will update this post when I complete Season 2.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>
