@@ -1,7 +1,7 @@
 +++
 title = "What's Good #25"
 date = "2026-11-03"
-description = "Spooky month, spooky movies:"
+description = "Spooky month, spooky movies: Barbarian, The House that Jack Built, I Saw the TV Glow, and Late Night with the Devil"
 taxonomies.tags = ["whats-good"]
 +++
 
