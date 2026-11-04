@@ -25,5 +25,8 @@ The story is basically this:
 I appreciated the metaphor of the film.
 Obviously having never transitioned I understand in the abstract what goes into that decision, but I appreciate it making it feel so concrete both the fear of not being able to make the leap, but also the crushing weight of living a life trying to deny who you are.
 
-I am not a useful voice to contribute in any meaningful way to a conversation about this film, so I don't think any of this is New (TM).
+I certainly wouldn't call it a _scary_ movie, but it was suspenseful and had me engaged with the material the whole way through.
+If the rest of the movie seemed interesting but you "Don't watch horror" I think you should give it a try.
+
+I am not a meaningful voice to contribute in any way to a conversation about this film -- surely none of this is New (TM).
 I enjoyed the vibes, I appreciated the metaphor, I'm excited to watch more films by Jane Schoenbrun.
