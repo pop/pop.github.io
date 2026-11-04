@@ -29,4 +29,4 @@ I certainly wouldn't call it a _scary_ movie, but it was suspenseful and had me 
 If the rest of the movie seemed interesting but you "Don't watch horror" I think you should give it a try.
 
 I am not a meaningful voice to contribute in any way to a conversation about this film -- surely none of this is New (TM).
-I enjoyed the vibes, I appreciated the metaphor, I'm excited to watch more films by Jane Schoenbrun.
+I enjoyed the vibes, I appreciated the metaphor, I'm excited to watch more films by [Jane Schoenbrun](https://en.wikipedia.org/wiki/Jane_Schoenbrun).
