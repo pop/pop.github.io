@@ -28,5 +28,9 @@ Obviously having never transitioned I understand in the abstract what goes into 
 I certainly wouldn't call it a _scary_ movie, but it was suspenseful and had me engaged with the material the whole way through.
 If the rest of the movie seemed interesting but you "Don't watch horror" I think you should give it a try.
 
+Before I wrap up, I wanted to say this movie reminded me of another vibe-heavy piece of media: [Kentucky Route Zero](https://en.wikipedia.org/wiki/Kentucky_Route_Zero).
+That might not be the two directly relating, but more just that they are both really vibe-ey.
+-- buut, there is a scene where two characters are talking and book-ending the conversation are basically music videos of a band playing a song and that felt very reminiscent of a scene in (I think?) chapter 4 of KRZ which I liked.
+
 I am not a meaningful voice to contribute in any way to a conversation about this film -- surely none of this is New (TM).
 I enjoyed the vibes, I appreciated the metaphor, I'm excited to watch more films by [Jane Schoenbrun](https://en.wikipedia.org/wiki/Jane_Schoenbrun).
