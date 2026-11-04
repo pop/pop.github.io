@@ -19,4 +19,4 @@ The acting is solid, the special effects weren't flawless but given the budget I
 * Is it, as according to Wikipedia, an independent postmodernist supernatural horror film?  I guess so... that feels like it's in reference to the analogue horror elements sprinkled throughout so if you want to put a fancy label on that go for it.
 * Is it a solid horror movie, and a solid way to spend your Halloween while you fold laundry? Yes. Of course.
 
-Mostly I'm realizing I'm a fan of [David Dastmalchian](https://en.wikipedia.org/wiki/David_Dastmalchian)
+As an aside, I'm realizing I'm a fan of [David Dastmalchian](https://en.wikipedia.org/wiki/David_Dastmalchian)
