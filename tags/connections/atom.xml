@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>elijah.run - connections</title>
+    <subtitle>A blog about tech, media, and art</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://elijah.run/tags/connections/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://elijah.run"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2026-10-29T00:00:00+00:00</updated>
+    <id>https://elijah.run/tags/connections/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Math, Speed Running, and a culture of collaboration</title>
+        <published>2026-10-29T00:00:00+00:00</published>
+        <updated>2026-10-29T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Elijah Voigt
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://elijah.run/blog/math-and-speed-running/"/>
+        <id>https://elijah.run/blog/math-and-speed-running/</id>
+        
+        <content type="html" xml:base="https://elijah.run/blog/math-and-speed-running/">&lt;p&gt;In &lt;a href=&quot;https:&#x2F;&#x2F;youtu.be&#x2F;LvvG21CpaS4?t=3149&quot;&gt;a recent interview&lt;&#x2F;a&gt; between Hank Green and Grant Sanders (3Blue1Brown), Sanders mentioned his take that given where LLMs are and their rate of progress its likely that finding proofs in math should be less focused on &quot;First Past the Post&quot;, i.e., who proved it first gets credit for the discovery. Finding proofs will be relatively easy, the hard part will be finding meaning and conveying that to others so they can  synthesize meaning and build on that knowledge effectively. What&#x27;s important stops being who proves something first, but rather who, or what combination of people, understand it best.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;(... on the topic of proofs no longer being the difficult part of mathematics...)&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Green: Now its like just write the great paper and we&#x27;ll choose which one we think is the better one?&lt;&#x2F;li&gt;
+&lt;li&gt;Sanders: Why do you have to choose the best?
+This is where the age of heros is dead and maybe it should be dead.
+Why don&#x27;t we just say [Author 1] and [Author 2] really helped push forward our knowledge on this subject.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;I really like this point and it reminded me of speed running. I&#x27;m not an active participant in speed running, but I&#x27;m a fan of the community and especially like &lt;a href=&quot;https:&#x2F;&#x2F;youtu.be&#x2F;a9c4jrgfhsk&quot;&gt;this video by Marblr about a Portal glitch and its impact on Portal speed running&lt;&#x2F;a&gt;. It&#x27;s a great watch and a good intro to speed running.&lt;&#x2F;p&gt;
+&lt;p&gt;The connection being in speed running a game doesn&#x27;t just have one speed run, it has many speed runs all contributing different techniques and building on each other&#x27;s work. One run may add a new glitch, another run may use that glitch in a different level or with a little more fines to shave off a second or two. Every record is expected to be broken at some point, likely using lessons from the previous records.&lt;&#x2F;p&gt;
+&lt;p&gt;To further draw a connection, speed running also has tool assisted runs, which feels similar to using Lean proof assistance, or LLMs to build a proof. Using tools in speed running is usually a different category but it&#x27;s not better or worse than other categories and still involves lots of work and research and refinement.&lt;&#x2F;p&gt;
+&lt;p&gt;3Blue1Brown is generally optimistic about gen-ai in math, and this model of collaboration seems to be the direction he&#x27;s pointing in for where mathematics can go as we enter into a post proof scarcity era. Instead of mathematicians being expected to &quot;get&quot; a proof, they should focus on finding meaning in proofs to build the foundations of knowledge. I&#x27;m a fan of this optimistic angle on the state and future of math.&lt;&#x2F;p&gt;
+&lt;p&gt;So there you have it. Area man draws broad conclusions about two fields he has only a relatively simplistic understanding of. Thank you for reading.&lt;&#x2F;p&gt;
+&lt;p&gt;Side note: in this interview I was exposed to the idea of AI veganism which implies AI vegetarianism and I think that accurately describes my personal use of AI.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

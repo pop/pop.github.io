@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>elijah.run</title>
+  <meta name="title" content="Circular Imports">
+<meta name="og:title" content="Circular Imports">
+
+<meta name="og:type" content="article">
+
+
+
+
+<meta name="description" content="Nothing is that simple...">
+<meta name="og:description" content="Nothing is that simple...">
+
+<meta name="referrer" content="strict-origin-when-cross-origin">
+  
+  <link rel="alternate" type="application/atom+xml" title="elijah.run" href="https://elijah.run/atom.xml">
+  <style>
+/* http://bettermotherfuckingwebsite.com/ */
+body {
+    margin: 40px auto;
+    max-width: 650px;
+    line-height: 1.6;
+    font-size: 18px;
+    color: #000;
+    padding: 0 10px
+}
+h1,h2,h3{
+    line-height:1.2
+}
+
+ul.stuff>li {
+    padding-left: 0;
+    list-style: none;
+}
+
+blockquote {
+    margin: 0;
+    border-left: 3px solid black;
+    padding-left: 16px;
+}
+
+div.note {
+    margin: 0;
+    border-left: 3px solid blue;
+    padding-left: 16px;
+}
+.note-title {
+    font-weight: bold;
+}
+
+div.warning {
+    margin: 0;
+    border-left: 3px solid orange;
+    padding-left: 16px;
+}
+.warning-title {
+    font-weight: bold;
+}
+
+div.ai-disclosure {
+    margin: 0 0 16px 0;
+    border-left: 3px solid magenta;
+    padding-left: 16px;
+}
+.ai-disclosure-title {
+    font-weight: bold;
+}
+
+ul {
+    padding-left: 1ch;
+    list-style: square;
+}
+
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+header {
+    /* todo */
+}
+
+nav {
+    /* todo */
+}
+
+main {
+    max-width: 100%;
+    padding: 1ch;
+}
+
+footer{
+    /* todo */
+}
+
+h1,h2,h3,h4,h5,.console,ul.stuff {
+    font-family:
+        /* Modern macOS & iOS system monospace */
+        "SFMono-Regular",
+        /* Windows system monospace (newer) */
+        "Consolas",
+        /* Windows legacy monospace fallback */
+        "Courier New",
+        /* Generic monospace fallback */
+        monospace;
+}
+
+li.post {
+    padding-top: 1ch;
+}
+p.description {
+    margin: 0px;
+}
+a.post {
+    font-weight: bold;
+}
+
+.side {
+    color: #333;
+}
+
+.description {
+    color: #333;
+}
+
+
+p>img {
+    max-width: 100%;
+    display: block;
+    margin: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+img.bg {
+    float: right;
+    width: 100%;
+}
+
+</style>
+
+</head>
+<body>
+<style>
+main {
+    width: 100ch;
+}
+</style>
+<main>
+  
+<header>
+  
+    <!-- this is a single page -->
+    
+  
+
+  <span class="console">
+  
+  <a href="/">elijah.run</a>/<a href="&#x2F;blog/">blog</a>/circular-imports</span>
+</header>
+
+
+  <h1>Circular Imports</h1>
+  <p class="console" class="side">
+    published 2021-01-31
+      | tags: 
+  <a href="/tags/python">#python</a>
+
+
+</p>
+  
+    <details>
+    <summary>Table of Contents</summary>
+    <ul>
+    
+        <li>
+            <a href="https://elijah.run/blog/circular-imports/#welcome-to-my-ted-talk">welcome to my ted talk</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/circular-imports/#fuck-plastic">fuck plastic</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/circular-imports/#from-plastics-import-lobbying">from plastics import lobbying</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/circular-imports/#from-lobbying-import-profit">from lobbying import profit</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/circular-imports/#from-profit-import">from profit import ???</a>
+            
+        </li>
+    
+        <li>
+            <a href="https://elijah.run/blog/circular-imports/#soapbox-intensifies">soapbox intensifies</a>
+            
+        </li>
+    
+    </ul>
+  </details>
+  
+  <p>Don't you hate when you're writing a python program and you get hit with one of these?</p>
+<pre data-lang="txt" style="background-color:#191919;color:#f8f8f2;" class="language-txt "><code class="language-txt" data-lang="txt"><span>Traceback (most recent call last):
+</span><span>  File &quot;a.py&quot;, line 1, in &lt;module&gt;
+</span><span>    from b import g
+</span><span>  File &quot;/home/pop/Projects/src/localhost/circular/b.py&quot;, line 1, in &lt;module&gt;
+</span><span>    from a import f
+</span><span>  File &quot;/home/pop/Projects/src/localhost/circular/a.py&quot;, line 1, in &lt;module&gt;
+</span><span>    from b import g
+</span><span>ImportError: cannot import name &#39;g&#39; from partially initialized module &#39;b&#39; (most likely due to a circular import) (/home/pop/Projects/src/localhost/circular/b.py)
+</span></code></pre>
+<p>What a drag.</p>
+<p>Circular imports are of course the literal devel in programming, but in a Godel Escher Bach sort of way they are all around us.</p>
+<h2 id="welcome-to-my-ted-talk">welcome to my ted talk</h2>
+<p>There are a lot of problems in the world that everybody agrees are problems<sup class="footnote-reference"><a href="#1">1</a></sup>, but we can sometimes disagree about what the solution is.</p>
+<p>Many of these problems stem can be thought of as emergent properties of other phenomena.</p>
+<p>Take for example, plastic.</p>
+<h2 id="fuck-plastic">fuck plastic</h2>
+<p>Remember the good old days in America when women tended to the house while PTSD ridden white men worked a 40 minute drive away and the ethnically, racially, sexually, abally discriminated minorities were repressed?</p>
+<p>Well something that actually was pretty sweet was milk delivery.</p>
+<p>Milk, delivered regularly in reusable glass bottles had incredibly ecological benefits compared with how we get milk<sup class="footnote-reference"><a href="#2">2</a></sup> today.</p>
+<p>Deliveries are an incredibly efficient means of distriuting goods<sup class="footnote-reference"><a href="#3">3</a></sup> and re-using glass bottles requires far less energy than say, melting a bottle down or worse creating a plastic single-use bottle.</p>
+<p>I really want to focus on the glass bottles because they are <em>so</em> efficient, why did we ever stop?</p>
+<p>Lobbying.</p>
+<h2 id="from-plastics-import-lobbying">from plastics import lobbying</h2>
+<p>That's right: lobbying, not the free market, gave us the fucking horrific amount of single-use plastic we have today.</p>
+<p>For sure there are a million things we need to cut the fuck out if we want this planet to be anything close to what we were born into in 100 years, but plastics are worth spending a few hundred words.</p>
+<p>The plastics industry spent millions<sup class="footnote-reference"><a href="#4">4</a></sup> lobbying to allow the use of single use plastics instead of reusable containers.</p>
+<p>Instead of identifying the inevitable crisis of too much fucking plastic and shutting that shit down, governments across the world wer just like "yeah this is cool, pour up my dude".</p>
+<p>Congress, given no external input, very well could have legislated against the use of single-use plastics, but because they were convinced... with money... otherwise here we are in a world full of single use plastics, and just like a virus it's spread so far that it feels impossible to slow it's spread.</p>
+<p>So clearly we need to stop lobbying.
+We need to think of some clever way to prevent corruptable government officials from being bought off to vote against the interests of their constituents, their country, and future generations...</p>
+<p>Well that's clearly impossible.</p>
+<p>Let's dig deeper.
+What causes lobbying?</p>
+<p>Profit.</p>
+<h2 id="from-lobbying-import-profit">from lobbying import profit</h2>
+<p>It is clear that profit is the reason lobbying exists.</p>
+<p>Some lobbying is good. If you own a farm and you hear about legislation that will like... just straight up dump a bunch of nuclear waste on your property, you're probably going to knock on some doors and grease some palms to prevent that from happening.</p>
+<p>Arithmetically it makes sense that lobbying is tied to profit.
+If a piece of legislation is projected to decrease profits by 30 million USD, you're probably willing to spend 2 million USD to prevent it from going through.</p>
+<p>Lobbying, like swordfishing<sup class="footnote-reference"><a href="#5">5</a></sup>, is a targeted, and therefore monetarily effective, way to influence change.</p>
+<p>Maximizing profit has a lot of other problems<sup class="footnote-reference"><a href="#6">6</a></sup> like supressing wages despite productivity going up, and cock-blocking public alternatives to private services like healthcare... Where was I?</p>
+<p>Oh right, so this begs the question, where does profit come from?</p>
+<h2 id="from-profit-import">from profit import ???</h2>
+<h2 id="soapbox-intensifies">soapbox intensifies</h2>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>All <em>good faith actors</em> actors agree are a problem.</p>
+</div>
+<div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
+<p>Yes, also mylks.</p>
+</div>
+<div class="footnote-definition" id="3"><sup class="footnote-definition-label">3</sup>
+<p>Citation needed?</p>
+</div>
+<div class="footnote-definition" id="4"><sup class="footnote-definition-label">4</sup>
+<p>... <em>sigh</em> citation needed.</p>
+</div>
+<div class="footnote-definition" id="5"><sup class="footnote-definition-label">5</sup>
+<p>The internet phishing scam not the oceanic activity.</p>
+</div>
+<div class="footnote-definition" id="6"><sup class="footnote-definition-label">6</sup>
+<p>... citation... needed...?</p>
+</div>
+
+  <footer class=console>
+    <hr>
+    © 2026 by <a href="/about">Elijah Voigt</a> licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a><img src="/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+    <br>not written by ai
+</footer>
+</main>
+</body>
+</html>

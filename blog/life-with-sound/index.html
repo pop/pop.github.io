@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>elijah.run</title>
+  <meta name="title" content="Conway&#x27;s Game of Life with sound">
+<meta name="og:title" content="Conway&#x27;s Game of Life with sound">
+
+<meta name="og:type" content="article">
+
+
+
+
+<meta name="description" content="The classic zero-player game, now with color and sound!">
+<meta name="og:description" content="The classic zero-player game, now with color and sound!">
+
+<meta name="referrer" content="strict-origin-when-cross-origin">
+  
+  <link rel="alternate" type="application/atom+xml" title="elijah.run" href="https://elijah.run/atom.xml">
+  <style>
+/* http://bettermotherfuckingwebsite.com/ */
+body {
+    margin: 40px auto;
+    max-width: 650px;
+    line-height: 1.6;
+    font-size: 18px;
+    color: #000;
+    padding: 0 10px
+}
+h1,h2,h3{
+    line-height:1.2
+}
+
+ul.stuff>li {
+    padding-left: 0;
+    list-style: none;
+}
+
+blockquote {
+    margin: 0;
+    border-left: 3px solid black;
+    padding-left: 16px;
+}
+
+div.note {
+    margin: 0;
+    border-left: 3px solid blue;
+    padding-left: 16px;
+}
+.note-title {
+    font-weight: bold;
+}
+
+div.warning {
+    margin: 0;
+    border-left: 3px solid orange;
+    padding-left: 16px;
+}
+.warning-title {
+    font-weight: bold;
+}
+
+div.ai-disclosure {
+    margin: 0 0 16px 0;
+    border-left: 3px solid magenta;
+    padding-left: 16px;
+}
+.ai-disclosure-title {
+    font-weight: bold;
+}
+
+ul {
+    padding-left: 1ch;
+    list-style: square;
+}
+
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+header {
+    /* todo */
+}
+
+nav {
+    /* todo */
+}
+
+main {
+    max-width: 100%;
+    padding: 1ch;
+}
+
+footer{
+    /* todo */
+}
+
+h1,h2,h3,h4,h5,.console,ul.stuff {
+    font-family:
+        /* Modern macOS & iOS system monospace */
+        "SFMono-Regular",
+        /* Windows system monospace (newer) */
+        "Consolas",
+        /* Windows legacy monospace fallback */
+        "Courier New",
+        /* Generic monospace fallback */
+        monospace;
+}
+
+li.post {
+    padding-top: 1ch;
+}
+p.description {
+    margin: 0px;
+}
+a.post {
+    font-weight: bold;
+}
+
+.side {
+    color: #333;
+}
+
+.description {
+    color: #333;
+}
+
+
+p>img {
+    max-width: 100%;
+    display: block;
+    margin: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+img.bg {
+    float: right;
+    width: 100%;
+}
+
+</style>
+
+</head>
+<body>
+<style>
+main {
+    width: 100ch;
+}
+</style>
+<main>
+  
+<header>
+  
+    <!-- this is a single page -->
+    
+  
+
+  <span class="console">
+  
+  <a href="/">elijah.run</a>/<a href="&#x2F;blog/">blog</a>/life-with-sound</span>
+</header>
+
+
+  <h1>Conway&#x27;s Game of Life with sound</h1>
+  <p class="console" class="side">
+    published 2026-07-29
+      | tags: 
+  <a href="/tags/gamedev">#gamedev</a>
+
+  <a href="/tags/prototype">#prototype</a>
+
+  <a href="/tags/bevy">#bevy</a>
+
+  <a href="/tags/rust">#rust</a>
+
+  <a href="/tags/game-of-life">#game-of-life</a>
+
+
+</p>
+  
+  <blockquote>
+<p>Play it on itch.io right now! <a href="https://popgame.itch.io/life-with-sound">popgame.itch.io/life-with-sound</a></p>
+</blockquote>
+<p><img src="https://elijah.run/blog/life-with-sound/life.png" alt="life.png" /></p>
+<p>This was a side-quest.</p>
+<p>I was hitting a wall on another gamedev project and thought "I should try coding up Conway's Game of Life".
+It's a pretty simple game, but there's some fun challenges like infinite grids and such, let's give it a go!</p>
+<p>As I was playing an early build I thought "This is so epic, I wonder if I can sync up some orchestral music to this!"</p>
+<p>I don't know the first thing about music, but my friend Sam does!
+During our weekly co-op gaming session we brainstormed some ideas and landed on something that had promise:</p>
+<ol>
+<li>Assign a pitch (Note + Octave) to each coordinate in the game.</li>
+<li>When a cell is Alive at that coordinate, play the sound.</li>
+<li>When no cell is Alive at that coordinate, do not play the sound.</li>
+</ol>
+<p>Now the grid is infinite in Game of Life, so this had to be a repeating grid, similar to tiling a picture over and over and over on an infinite plane.</p>
+<p>I was able to whip that addition up pretty quick and it was good enough to show promise, so I added a few more fun features</p>
+<ul>
+<li>Visualizing each pitch with a different color (note) + brightness (octave)</li>
+<li>Allow customization for:
+<ul>
+<li>Which notes are active.</li>
+<li>Which octaves are active.</li>
+<li>The speed of the simulation.</li>
+</ul>
+</li>
+<li>A "camera follow" feature that pans and zooms so everything stays in view automatically</li>
+<li>Support touch controls so it actually works on mobile.</li>
+</ul>
+<p>This is my first game written in bevy 0.19 and I really like the new <code>bsn! { ... }</code> syntax.
+It is a pretty concise way to express the contents of a scene, and I really like the <code>system.spawn()</code> scheduler method which makes it easy at a glance to see what is spawning my initial world state.
+The implicit <code>..default()</code> is a really nice quality of life improvement, not needing to <em>specify</em> that I want it to fill in the rest because obviously I do.
+My only gripe is that macro-heavy workflows tend to cause headaches because of magic compilation hidden behind pretty syntax; I burned a few hours trying to "fix" a compiler error that was caused by me <code>derive</code>'ing something I didn't need to -- rude!</p>
+<p>There are plenty more features and polish I <em>could</em> add but I'm calling it here.
+It provides an interesting, thought-provoking, experience (for me) and that was my goal.
+I could tweak the sound, sand UX rough edges, add <del>micro-transactions</del> make it prettier to look at, but it works and I feel thoroughly un-blocked on my initial project.</p>
+<p>This took longer than I wanted, but I'm happy with how this side quest turned out.</p>
+
+  <footer class=console>
+    <hr>
+    © 2026 by <a href="/about">Elijah Voigt</a> licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a><img src="/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+    <br>not written by ai
+</footer>
+</main>
+</body>
+</html>
