@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>elijah.run - prototype</title>
+    <subtitle>A blog about tech, media, and art</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://elijah.run/tags/prototype/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://elijah.run"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2026-07-29T00:00:00+00:00</updated>
+    <id>https://elijah.run/tags/prototype/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Conway&#x27;s Game of Life with sound</title>
+        <published>2026-07-29T00:00:00+00:00</published>
+        <updated>2026-07-29T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Elijah Voigt
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://elijah.run/blog/life-with-sound/"/>
+        <id>https://elijah.run/blog/life-with-sound/</id>
+        
+        <content type="html" xml:base="https://elijah.run/blog/life-with-sound/">&lt;blockquote&gt;
+&lt;p&gt;Play it on itch.io right now! &lt;a href=&quot;https:&#x2F;&#x2F;popgame.itch.io&#x2F;life-with-sound&quot;&gt;popgame.itch.io&#x2F;life-with-sound&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;elijah.run&#x2F;blog&#x2F;life-with-sound&#x2F;life.png&quot; alt=&quot;life.png&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;This was a side-quest.&lt;&#x2F;p&gt;
+&lt;p&gt;I was hitting a wall on another gamedev project and thought &quot;I should try coding up Conway&#x27;s Game of Life&quot;.
+It&#x27;s a pretty simple game, but there&#x27;s some fun challenges like infinite grids and such, let&#x27;s give it a go!&lt;&#x2F;p&gt;
+&lt;p&gt;As I was playing an early build I thought &quot;This is so epic, I wonder if I can sync up some orchestral music to this!&quot;&lt;&#x2F;p&gt;
+&lt;p&gt;I don&#x27;t know the first thing about music, but my friend Sam does!
+During our weekly co-op gaming session we brainstormed some ideas and landed on something that had promise:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Assign a pitch (Note + Octave) to each coordinate in the game.&lt;&#x2F;li&gt;
+&lt;li&gt;When a cell is Alive at that coordinate, play the sound.&lt;&#x2F;li&gt;
+&lt;li&gt;When no cell is Alive at that coordinate, do not play the sound.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;Now the grid is infinite in Game of Life, so this had to be a repeating grid, similar to tiling a picture over and over and over on an infinite plane.&lt;&#x2F;p&gt;
+&lt;p&gt;I was able to whip that addition up pretty quick and it was good enough to show promise, so I added a few more fun features&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Visualizing each pitch with a different color (note) + brightness (octave)&lt;&#x2F;li&gt;
+&lt;li&gt;Allow customization for:
+&lt;ul&gt;
+&lt;li&gt;Which notes are active.&lt;&#x2F;li&gt;
+&lt;li&gt;Which octaves are active.&lt;&#x2F;li&gt;
+&lt;li&gt;The speed of the simulation.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;A &quot;camera follow&quot; feature that pans and zooms so everything stays in view automatically&lt;&#x2F;li&gt;
+&lt;li&gt;Support touch controls so it actually works on mobile.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;This is my first game written in bevy 0.19 and I really like the new &lt;code&gt;bsn! { ... }&lt;&#x2F;code&gt; syntax.
+It is a pretty concise way to express the contents of a scene, and I really like the &lt;code&gt;system.spawn()&lt;&#x2F;code&gt; scheduler method which makes it easy at a glance to see what is spawning my initial world state.
+The implicit &lt;code&gt;..default()&lt;&#x2F;code&gt; is a really nice quality of life improvement, not needing to &lt;em&gt;specify&lt;&#x2F;em&gt; that I want it to fill in the rest because obviously I do.
+My only gripe is that macro-heavy workflows tend to cause headaches because of magic compilation hidden behind pretty syntax; I burned a few hours trying to &quot;fix&quot; a compiler error that was caused by me &lt;code&gt;derive&lt;&#x2F;code&gt;&#x27;ing something I didn&#x27;t need to -- rude!&lt;&#x2F;p&gt;
+&lt;p&gt;There are plenty more features and polish I &lt;em&gt;could&lt;&#x2F;em&gt; add but I&#x27;m calling it here.
+It provides an interesting, thought-provoking, experience (for me) and that was my goal.
+I could tweak the sound, sand UX rough edges, add &lt;del&gt;micro-transactions&lt;&#x2F;del&gt; make it prettier to look at, but it works and I feel thoroughly un-blocked on my initial project.&lt;&#x2F;p&gt;
+&lt;p&gt;This took longer than I wanted, but I&#x27;m happy with how this side quest turned out.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>elijah.run - opinion</title>
+    <subtitle>A blog about tech, media, and art</subtitle>
+    <link rel="self" type="application/atom+xml" href="https://elijah.run/tags/opinion/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://elijah.run"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2026-11-26T00:00:00+00:00</updated>
+    <id>https://elijah.run/tags/opinion/atom.xml</id>
+    <entry xml:lang="en">
+        <title>You Are Not Smart. You Are Not Dumb.</title>
+        <published>2026-11-26T00:00:00+00:00</published>
+        <updated>2026-11-26T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Elijah Voigt
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://elijah.run/blog/smart-dumb/"/>
+        <id>https://elijah.run/blog/smart-dumb/</id>
+        
+        <content type="html" xml:base="https://elijah.run/blog/smart-dumb/">&lt;p&gt;As a general rule I don&#x27;t call people &quot;smart&quot; or &quot;dumb&quot;.
+I also feel uncomfortable when people call me &quot;smart&quot; or &quot;dumb&quot; although admittedly that happens less often.&lt;&#x2F;p&gt;
+&lt;p&gt;First because smart and dumb are inaccurate.
+Second because they are negatively reinforcing.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;smart-and-dumb-are-inaccurate&quot;&gt;Smart and Dumb are Inaccurate&lt;&#x2F;h1&gt;
+&lt;p&gt;Nobody is entirely dumb, or entirely smart.&lt;&#x2F;p&gt;
+&lt;p&gt;The dumbest person on the planet, with a 100% guarantee, is above average at &lt;em&gt;something&lt;&#x2F;em&gt;.
+Take for example the character Reese from Malcolm in the Middle.
+He&#x27;s the epitome of a dumb guy, but he&#x27;s revealed to be a savant at cooking.&lt;&#x2F;p&gt;
+&lt;p&gt;Likewise, the smartest person, with a 100% guarantee, is below average at something.
+I went to college with a lot of &quot;smart&quot; people, the kind of people that did Calculus 2 grades early and were programming at the age of 10, but they had absolutely no common sense.
+One of my roommates, who was a great programmer, once cooked a meal and then left the apartment with the electric stove top still on full blast.
+Brilliant programmer, totally incapable of basic home economics.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;smart-a-dumb-are-negatively-reinforcing&quot;&gt;Smart a Dumb are Negatively Reinforcing&lt;&#x2F;h1&gt;
+&lt;p&gt;Calling somebody smart or dumb, yes both, are negatively reinforcing.&lt;&#x2F;p&gt;
+&lt;p&gt;Obviously, calling somebody dumb is negative because you&#x27;re punching down.
+Convincing somebody they&#x27;re dumb, in general, is going to force that person to give up on &quot;smart&quot; things that they otherwise would be good at.
+I have plenty of friends that never tried math or programming despite being good at logic puzzles, just because they thought they were bad at math (well and also because programming is annoyingly gendered).&lt;&#x2F;p&gt;
+&lt;p&gt;Smart, similarly, can convince somebody they&#x27;re smart at &lt;em&gt;everything&lt;&#x2F;em&gt; which can cause them to be an asshole, or think that their expertise is the solution to all of the worlds problems -- and that&#x27;s how you get CryptoBros and Effective Altruism -- do you &lt;em&gt;want&lt;&#x2F;em&gt; Effective Altruism?!?&lt;&#x2F;p&gt;
+&lt;p&gt;But seriously, I think even when you call somebody smart, it&#x27;s inflating somebody&#x27;s ego unnecessarily which ultimately doesn&#x27;t serve them.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;what-to-say-instead&quot;&gt;What to say instead&lt;&#x2F;h1&gt;
+&lt;p&gt;Raising two little boys I think about this a lot.
+I don&#x27;t want my kids to think they&#x27;re smart or dumb, especially at such a young age, since that can close off a lot of possibilities and force them to give up on things they would otherwise try at.
+They might struggle or be bad at things when they first start off, but that&#x27;s not a reason to dismiss it entirely.&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;m not opposed to using the words &quot;Smart&quot; or &quot;Dumb&quot; when they are specific.
+I, for example, and pretty dumb at musical instruments, or word games.&lt;&#x2F;p&gt;
+&lt;p&gt;That said, I would avoid these terms because they are reinforcing and imply you are incapable of changing.
+Just because I don&#x27;t currently know how to play an instrument doesn&#x27;t mean I never will; if I work hard I might get really good at the didgeridoo.&lt;&#x2F;p&gt;
+&lt;p&gt;Instead I would be as specific as possible.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&quot;I&#x27;m dumb at music&quot; would instead be &quot;I haven&#x27;t learned how to play any instruments&quot;.&lt;&#x2F;li&gt;
+&lt;li&gt;&quot;You&#x27;re so smart&quot; turns into &quot;I really liked how you solved that problem. Good job.&quot;&lt;&#x2F;li&gt;
+&lt;li&gt;&quot;That guy is a dumb driver&quot; is instead &quot;Cutting me off was really dangerous, I bet they have to take a poop real bad or they wouldn&#x27;t be speeding like that.&quot;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Using specific language is no just &quot;PC&quot; but is more actionable and productive to encourage you and the people around you to grow.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>
