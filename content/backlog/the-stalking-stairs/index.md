@@ -1,7 +1,7 @@
 +++
 title = "Jaden Williams' The Stalking Stairs"
 date = "2026-11-09"
-description = ""
+description = "A nice game from an established youtuber and an aspiring game developer"
 taxonomies.tags = ["games", "backlog"]
 +++
 
